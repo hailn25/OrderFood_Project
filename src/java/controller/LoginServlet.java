@@ -5,21 +5,22 @@
 
 package controller;
 
-import dal.ProductDAO;
+import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Product;
+import jakarta.servlet.http.HttpSession;
+import model.Account;
+import util.EncodePassword;
 
 /**
  *
- * @author ADMIN
+ * @author hailt
  */
-public class HomeServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,14 +32,31 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        //get data from dao
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getAllProduct();
-        //set data to jsp
-        request.setAttribute("listP", list);
+        try (PrintWriter out = response.getWriter()) {
+             response.setContentType("text/html;charset=UTF-8");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+//            String hashedPassword = EncodePassword.toSHA1(password);
 
-        //add Restaurant
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+            AccountDAO acc = new AccountDAO();
+            Account a = acc.checkLogin(email, password);
+
+            if (a == null) {
+                request.setAttribute("err", "Bạn đã nhập sai password hoặc email");
+                request.setAttribute("email", email);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+            } else if (a.getStatus() == 0) {
+                request.setAttribute("err", "Tài khoản của bạn đã bị chặn");
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+            } else {
+                
+                acc.UpdateLastDateLogin(email);
+                HttpSession session = request.getSession();
+                session.setAttribute("account", a);
+                request.getRequestDispatcher("Home.jsp").forward(request, response);
+            }
+       
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
