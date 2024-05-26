@@ -35,11 +35,6 @@
     </head>
 
     <body>
-        <!-- Spinner Start -->
-        <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
-            <div class="spinner-grow text-primary" role="status"></div>
-        </div>
-        <!-- Spinner End -->
 
 
         <!-- Navbar start -->
@@ -51,9 +46,12 @@
                         <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
                     </div>
                     <div class="top-link pe-2">
-                        <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-                        <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-                        <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+                        <c:if test = "${sessionScope.account == null}"> 
+                        <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
+                        </c:if> 
+                         <c:if test = "${sessionScope.account != null}"> 
+                        <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
+                        </c:if> 
                     </div>
                 </div>
             </div>
@@ -66,7 +64,7 @@
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <a href="Home.jsp" class="nav-item nav-link active">Home</a>
-                            <a href="Shop.jsp" class="nav-item nav-link">Shop</a>
+                            <a href="Shop.jsp" class="nav-item nav-link ">Shop</a>
                             <a href="ShopDetail.jsp" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -85,9 +83,10 @@
                                 <i class="fa fa-shopping-bag fa-2x"></i>
                                 <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                             </a>
-                            <a href="#" class="my-auto">
+                            <a href="Profile.jsp" class="my-auto" >
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
+                      
                         </div>
                     </div>
                 </nav>
