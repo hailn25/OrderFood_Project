@@ -24,7 +24,7 @@ public class ProductDAO {
 
     public List<Product> getAllProduct() {
         List<Product> listProduct = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status \n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -46,7 +46,8 @@ public class ProductDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)
+                        rs.getBoolean(12),
+                        rs.getDouble(13)
                 ));
             }
         } catch (Exception e) {
@@ -74,7 +75,7 @@ public class ProductDAO {
 
     public List<Product> getProductByCID(String cid) {
         List<Product> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -98,7 +99,8 @@ public class ProductDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)
+                        rs.getBoolean(12),
+                        rs.getDouble(13)
                 ));
             }
         } catch (Exception e) {
@@ -107,7 +109,7 @@ public class ProductDAO {
     }
 
     public Product getProductById(String id) {
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -131,7 +133,8 @@ public class ProductDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)
+                        rs.getBoolean(12),
+                        rs.getDouble(13)
                 );
             }
         } catch (Exception e) {
@@ -139,12 +142,46 @@ public class ProductDAO {
         return null;
     }
 
+    public List<Product> getAllBestSellerProduct() {
+        List<Product> listBestSellerProduct = new ArrayList<>();
+        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Product p\n"
+                + "join Restaurant r\n"
+                + "on p.RestaurantId = r.RestaurantId\n"
+                + "join Category c\n"
+                + "on p.CategoryId = c.CategoryId";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listBestSellerProduct.add(new Product(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getNString(7),
+                        rs.getBoolean(8),
+                        rs.getInt(9),
+                        rs.getDate(10),
+                        rs.getDate(11),
+                        rs.getBoolean(12),
+                        rs.getDouble(13)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listBestSellerProduct;
+    }
+
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();
         List<Product> listProduct = dao.getAllProduct();
         List<Category> listCategory = dao.getAllCategory();
         for (Category category : listCategory) {
-            System.out.println(listCategory);
+            System.out.println(category);
+            
         }
     }
 }

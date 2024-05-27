@@ -23,11 +23,12 @@ public class Product {
     private Date createDate;
     private Date updateDate;
     private boolean status;
+    private double rateStar;
 
     public Product() {
     }
 
-    public Product(int id, String name, double price, String decription, String image, String categoryName, String restaurantName, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status) {
+    public Product(int id, String name, double price, String decription, String image, String categoryName, String restaurantName, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -40,6 +41,7 @@ public class Product {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.status = status;
+        this.rateStar = rateStar;
     }
 
     public int getId() {
@@ -138,10 +140,19 @@ public class Product {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryName=" + categoryName + ", restaurantName=" + restaurantName + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + '}';
+    public double getRateStar() {
+        return rateStar;
     }
 
+    public void setRateStar(double rateStar) {
+        this.rateStar = rateStar;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryName=" + categoryName + ", restaurantName=" + restaurantName + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
+    }
+    
+    
     
 }

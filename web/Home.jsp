@@ -264,20 +264,21 @@
             <div class="container py-5">
                 <h1 class="mb-0">List Product</h1>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
-                    <c:forEach begin="1" end="10">
+                    <c:forEach begin="1" end="5">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="img/best-product-2.jpg" class="img-fluid w-100 rounded-top" alt="name">
+                                <img src="img/new/goi_cuon_sala.png" class="img-fluid w-100 rounded-top" alt="name">
                             </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">category</div>
                             <div class="p-4 rounded-bottom">
                                 <h4>name</h4>
                                 <p>decription</p>
                                 <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <p class="text-dark fs-5 fw-bold mb-0">20.0</p>
+                                    <p class="text-dark fs-5 fw-bold mb-0">20</p>
                                     <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                                 </div>
                             </div>
+
                         </div>
                     </c:forEach>
                 </div>
@@ -322,27 +323,26 @@
             <div class="container py-5">
                 <div class="text-center mx-auto mb-5" style="max-width: 700px;">
                     <h1 class="display-4">Bestseller Products</h1>
-                    <p>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>
                 </div>
                 <div class="row g-4">
-                    <c:forEach begin="1" end="9">
+                    <c:forEach items="${listB}" var="b">
                         <div class="col-lg-6 col-xl-4">
                             <div class="p-4 rounded bg-light">
                                 <div class="row align-items-center">
                                     <div class="col-6">
-                                        <img src="img/Icecream.png" class="img-fluid rounded-circle w-100" alt="${product.name}">
+                                        <img src="img/new/${b.image}" class="img-fluid rounded-circle w-100" alt="${b.name}">
                                     </div>
                                     <div class="col-6">
-                                        <a href="#" class="h5">Name</a>
+                                        <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
                                         <div class="d-flex my-3">
-                                            <c:forEach begin="1" end="${product.rating}" var="star">
+                                            <c:forEach begin="1" end="${b.rateStar}" var="star">
                                                 <i class="fas fa-star text-primary"></i>
                                             </c:forEach>
-                                            <c:forEach begin="1" end="${5 - product.rating}" var="star">
+                                            <c:forEach begin="1" end="${5 - b.rateStar}" var="star">
                                                 <i class="fas fa-star"></i>
                                             </c:forEach>
                                         </div>
-                                        <h4 class="mb-3">50$</h4>
+                                        <h4 class="mb-3">${b.price}$</h4>
                                         <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
                                             <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                                         </a>
