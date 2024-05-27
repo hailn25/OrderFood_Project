@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import model.Category;
+import model.ListProduct;
 import model.Product;
 
 /**
@@ -41,7 +42,7 @@ public class ProductDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getNString(7),
+                        rs.getString(7),
                         rs.getBoolean(8),
                         rs.getInt(9),
                         rs.getDate(10),
@@ -94,7 +95,7 @@ public class ProductDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getNString(7),
+                        rs.getString(7),
                         rs.getBoolean(8),
                         rs.getInt(9),
                         rs.getDate(10),
@@ -128,7 +129,7 @@ public class ProductDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getNString(7),
+                        rs.getString(7),
                         rs.getBoolean(8),
                         rs.getInt(9),
                         rs.getDate(10),
@@ -161,7 +162,7 @@ public class ProductDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getNString(7),
+                        rs.getString(7),
                         rs.getBoolean(8),
                         rs.getInt(9),
                         rs.getDate(10),
@@ -175,13 +176,39 @@ public class ProductDAO {
         return listBestSellerProduct;
     }
 
+    public List<ListProduct> getListProductP() {
+        List<ListProduct> listProductP = new ArrayList<>();
+        String query = "select p.ProductId, p.Name, p.Description, p.Price, p.ImageURL, c.Name, p.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status\n"
+                + "from Product p\n"
+                + "join Category c\n"
+                + "on p.CategoryId = c.CategoryId";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listProductP.add(new ListProduct(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getInt(7),
+                        rs.getBoolean(8),
+                        rs.getInt(9),
+                        rs.getDate(10),
+                        rs.getDate(11),
+                        rs.getBoolean(12)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listProductP;
+    }
+
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();
-        List<Product> listProduct = dao.getAllProduct();
-        List<Category> listCategory = dao.getAllCategory();
-        for (Category category : listCategory) {
-            System.out.println(category);
-            
-        }
+
+        System.out.println(dao.getListProductP());
     }
 }

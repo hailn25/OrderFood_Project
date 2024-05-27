@@ -38,12 +38,14 @@ public class DetailServlet extends HttpServlet {
         ProductDAO dao = new ProductDAO();
         ProductSaleDAO dao1 = new ProductSaleDAO();
         Product p = dao.getProductById(id);
-        List<Product> lis = dao.getProductByCID(id);
+        List<Product> list = dao.getProductByCID(id);
         List<ProductSale> listProductSale = dao1.getProductSale();
+        List<Product> listProduct = dao.getAllProduct();
 
-        request.setAttribute("category", lis);
+        request.setAttribute("category", list);
         request.setAttribute("detail", p);
-        request.setAttribute("listPS", listProductSale);
+        request.setAttribute("listProductSale", listProductSale);
+        request.setAttribute("listProduct", listProduct);
         request.getRequestDispatcher("ShopDetail.jsp").forward(request, response);
     }
 

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Category;
+import model.ListProduct;
 import model.Product;
 
 
@@ -38,9 +39,10 @@ public class HomeServlet extends HttpServlet {
         List<Product> list = dao.getAllProduct();
         List<Category> listC = dao.getAllCategory();
         List<Product> listBestSellerProduct  = dao.getAllBestSellerProduct();
-        
+        List<ListProduct> listProductP = dao.getListProductP();
 
         request.setAttribute("listP", list);
+        request.setAttribute("listV", listProductP);
         request.setAttribute("listC", listC);
         request.setAttribute("listB", listBestSellerProduct);
         

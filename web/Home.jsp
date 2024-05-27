@@ -264,26 +264,26 @@
             <div class="container py-5">
                 <h1 class="mb-0">List Product</h1>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
-                    <c:forEach begin="1" end="5">
+                    <c:forEach var="v" items="${listV}">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="img/new/goi_cuon_sala.png" class="img-fluid w-100 rounded-top" alt="name">
+                                <img style="height: 280px;" src="img/new/${v.image}" class="img-fluid w-100 rounded-top" alt="${v.name}">
                             </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">category</div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${v.cateName}</div>
                             <div class="p-4 rounded-bottom">
-                                <h4>name</h4>
-                                <p>decription</p>
+                                <h4>${v.name}</h4>
+                                <p>${v.decription}</p>
                                 <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <p class="text-dark fs-5 fw-bold mb-0">20</p>
+                                    <p class="text-dark fs-5 fw-bold mb-0">${v.price}</p>
                                     <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                                 </div>
                             </div>
-
                         </div>
                     </c:forEach>
                 </div>
             </div>
         </div>
+
 
         <!-- Vesitable Shop End -->
 

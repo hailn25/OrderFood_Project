@@ -3,7 +3,7 @@
     Created on : May 25, 2024, 10:31:14 PM
     Author     : hailt
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -215,45 +215,44 @@
                                 <div class="mb-4">
                                     <h4>Categories</h4>
                                     <ul class="list-unstyled fruite-categorie">
-                                        <li>
-                                            <div class="d-flex justify-content-between fruite-name">
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>${detail.categoryName}</a>
-                                                <span>${detail.quantity}</span>
-                                            </div>
-                                        </li>
+                                        <c:forEach var="listProduct" items="${listProduct}">
+                                            <li>
+                                                <div class="d-flex justify-content-between fruite-name">
+                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>${listProduct.categoryName}</a>
+                                                    <span>${listProduct.quantity}</span>
+                                                </div>
+                                            </li>
+                                        </c:forEach>
                                     </ul>
                                 </div>
+
                             </div>
                             <div class="col-lg-12">
-                                <h4 class="mb-4">Featured Products</h4>
-                                <div class="row">
-                                    <c:forEach items="${listPS}" var="ps">
-                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                                            <div class="card h-100">
-                                                <img src="img/new/${ps.image}" class="card-img-top img-fluid rounded" alt="${ps.name}">
-                                                <div class="card-body">
-                                                    <h6 class="card-title">${ps.name}</h6>
-                                                    <div class="d-flex mb-2">
-                                                        <c:forEach begin="1" end="${ps.rateStar}">
-                                                            <i class="fa fa-star"></i>
-                                                        </c:forEach>
-                                                        <c:forEach begin="${ps.rateStar + 1}" end="5">
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                        </c:forEach>
-                                                    </div>
-                                                    <div class="d-flex mb-2">
-                                                        <h5 class="fw-bold me-2">${ps.price} $</h5>
-                                                        <h5 class="text-danger text-decoration-line-through">${ps.discount} $</h5>
-                                                    </div>
-                                                </div>
+                                <h4 class="mb-4">Featured products</h4>
+                                <c:forEach var="listProductSale" items="${listProductSale}">
+                                    <div class="d-flex align-items-center justify-content-start mb-4">
+                                        <div class="rounded" style="width: 100px; height: 100px;">
+                                            <img src="img/new/${listProductSale.image}" class="img-fluid rounded" alt="${listProductSale.name}">
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-2">${listProductSale.name}</h6>
+                                            <div class="d-flex mb-2">
+                                                <c:forEach begin="1" end="5" varStatus="status">
+                                                    <i class="fa fa-star ${status.index <= listProductSale.rateStar ? 'text-secondary' : ''}"></i>
+                                                </c:forEach>
+                                            </div>
+                                            <div class="d-flex mb-2">
+                                                <h5 class="fw-bold me-2">${listProductSale.salePrice} $</h5>
+                                                <h5 class="text-danger text-decoration-line-through">${listProductSale.discount} $</h5>
                                             </div>
                                         </div>
-                                    </c:forEach>
-                                </div>
+                                    </div>
+                                </c:forEach>
                                 <div class="d-flex justify-content-center my-4">
-                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary">View More</a>
+                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">View More</a>
                                 </div>
                             </div>
+
                             <div class="col-lg-12">
                                 <div class="position-relative">
                                     <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
