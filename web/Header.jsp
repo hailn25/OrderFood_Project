@@ -47,10 +47,10 @@
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
-                        <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
                         </c:if> 
-                         <c:if test = "${sessionScope.account != null}"> 
-                        <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
+                        <c:if test = "${sessionScope.account != null}"> 
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
                         </c:if> 
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <div class="navbar-nav mx-auto">
                             <a href="home" class="nav-item nav-link active">Home</a>
                             <a href="Shop.jsp" class="nav-item nav-link ">Shop</a>
-                            <a href="ShopDetail.jsp" class="nav-item nav-link">Shop Detail</a>
+                            <a href="ShopDetail.jsp" class="nav-item nav-link"></a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
@@ -78,22 +78,27 @@
                             <a href="Contact.jsp" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="d-flex m-3 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
+                            
+                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                <i class="fas fa-search text-primary"></i>
+                            </button>
+
                             <a href="#" class="position-relative me-4 my-auto">
                                 <i class="fa fa-shopping-bag fa-2x"></i>
                                 <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                             </a>
+
                             <a href="Profile.jsp" class="my-auto" >
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
-                      
+
                         </div>
                     </div>
                 </nav>
             </div>
         </div>
         <!-- Navbar End -->
-        
+
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -4,7 +4,8 @@
  */
 package controller;
 
-import dal.ProductDAO;
+import dao.FeedbackDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Category;
+import model.Feedback;
 import model.ListProduct;
 import model.Product;
 
@@ -35,16 +37,21 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ProductDAO dao = new ProductDAO();
+        FeedbackDAO dao1 = new FeedbackDAO();
         
         List<Product> list = dao.getAllProduct();
         List<Category> listC = dao.getAllCategory();
         List<Product> listBestSellerProduct  = dao.getAllBestSellerProduct();
         List<ListProduct> listProductP = dao.getListProductP();
+        List<Feedback> listFeedback = dao1.getFeedback();
+        request.setAttribute("listFeedback", listFeedback);
+        
 
         request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
         request.setAttribute("listC", listC);
+        request.setAttribute("listV", listProductP);
         request.setAttribute("listB", listBestSellerProduct);
+        
         
         
         

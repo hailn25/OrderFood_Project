@@ -2,14 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dal;
+package dao;
 
+import dal.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import model.Category;
+import model.CategoryListDetail;
 import model.ListProduct;
 import model.Product;
 
@@ -58,15 +60,20 @@ public class ProductDAO {
 
     public List<Category> getAllCategory() {
         List<Category> listCategory = new ArrayList<>();
-        String query = "select c.CategoryId, c.Name\n"
-                + "from Category c";
+        String query = "select c.CategoryId, c.Name, p.Name, p.Description, p.Price\n"
+                + "from Category c\n"
+                + "join Product p\n"
+                + "on c.CategoryId = p.CategoryId";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listCategory.add(new Category(rs.getInt(1),
-                        rs.getString(2)
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getDouble(5)
                 ));
             }
         } catch (Exception e) {
@@ -204,6 +211,62 @@ public class ProductDAO {
         } catch (Exception e) {
         }
         return listProductP;
+    }
+
+    public List<CategoryListDetail> getCategoryListDetail() {
+        List<CategoryListDetail> listCategoryListDetail = new ArrayList<>();
+        String query = "SELECT c.CategoryId, c.Name, MIN(p.Quantity) AS Quantity\n"
+                + "FROM Product p\n"
+                + "JOIN Category c ON p.CategoryId = c.CategoryId\n"
+                + "GROUP BY c.CategoryId, c.Name;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listCategoryListDetail.add(new CategoryListDetail(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listCategoryListDetail;
+    }
+
+    public List<Product> getProductBySearchName(String txtSearch) {
+        List<Product> list = new ArrayList<>();
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Product p\n"
+                + "join Restaurant r\n"
+                + "on p.RestaurantId = r.RestaurantId\n"
+                + "join Category c\n"
+                + "on p.CategoryId = c.CategoryId\n"
+                + "where p.[name] like ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%" + txtSearch + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Product(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getBoolean(8),
+                        rs.getInt(9),
+                        rs.getDate(10),
+                        rs.getDate(11),
+                        rs.getBoolean(12),
+                        rs.getDouble(13)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return list;
     }
 
     public static void main(String[] args) {

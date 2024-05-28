@@ -215,11 +215,11 @@
                                 <div class="mb-4">
                                     <h4>Categories</h4>
                                     <ul class="list-unstyled fruite-categorie">
-                                        <c:forEach var="listProduct" items="${listProduct}">
+                                        <c:forEach var="listCategoryListDetail" items="${listCategoryListDetail}">
                                             <li>
                                                 <div class="d-flex justify-content-between fruite-name">
-                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>${listProduct.categoryName}</a>
-                                                    <span>${listProduct.quantity}</span>
+                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>${listCategoryListDetail.name}</a>
+                                                    <span>${listCategoryListDetail.quantity}</span>
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -264,23 +264,26 @@
                         </div>
                     </div>
                 </div>
-                <h1 class="fw-bold mb-0">Related products</h1>
+                <!-- Related products -->
+                <h1 class="fw-bold mb-0">Products</h1>
                 <div class="vesitable">
                     <div class="owl-carousel vegetable-carousel justify-content-center">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="img/new/${detail.image}" class="img-fluid w-100 rounded-top" alt="name">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${detail.categoryName}</div>
-                            <div class="p-4 pb-0 rounded-bottom">
-                                <h4>${detail.name}</h4>
-                                <p>${detail.decription}</p>
-                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <p class="text-dark fs-5 fw-bold">${detail.price}</p>
-                                    <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                        <c:forEach var="listbestseller" items="${listBSL}">
+                            <div class="border border-primary rounded position-relative vesitable-item">
+                                <div class="vesitable-img">
+                                    <img src="img/new/${listbestseller.image}" class="img-fluid w-100 rounded-top" alt="${listbestseller.name}">
+                                </div>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${listbestseller.categoryName}</div>
+                                <div class="p-4 pb-0 rounded-bottom">
+                                    <h4>${listbestseller.name}</h4>
+                                    <p>${listbestseller.decription}</p>
+                                    <div class="d-flex justify-content-between flex-lg-wrap">
+                                        <p class="text-dark fs-5 fw-bold">${listbestseller.price}</p>
+                                        <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
