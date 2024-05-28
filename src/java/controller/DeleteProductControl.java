@@ -4,8 +4,11 @@
  */
 package controller;
 
-import dao.AccountDAO;
+import dal.DBContext;
+import dao.ProductDAO;
+import model.Category;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,14 +18,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Account;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "ManagerAccountControl", urlPatterns = {"/managerAccount"})
-public class ManagerAccountControl extends HttpServlet {
+@WebServlet(name = "DeleteControl", urlPatterns = {"/deleteProduct"})
+public class DeleteProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,15 +38,12 @@ public class ManagerAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-//        HttpSession session = request.getSession();
-//        Account a = (Account) session.getAttribute("acc");
-//        int id = a.getAccountId();
-        AccountDAO dao = new AccountDAO();
-        ArrayList<Account> list = dao.getAllAccount();
-        request.setAttribute("listA", list);
-        request.getRequestDispatcher("ManagerAccount.jsp").forward(request, response);
+        int pid = Integer.parseInt(request.getParameter("pid"));
+        ProductDAO dao = new ProductDAO();
+
+        dao.deleteProduct(pid);
+        response.sendRedirect("managerProduct");
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -61,7 +60,7 @@ public class ManagerAccountControl extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ManagerAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeleteProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -79,7 +78,7 @@ public class ManagerAccountControl extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ManagerAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeleteProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

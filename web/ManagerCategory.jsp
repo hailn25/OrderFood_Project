@@ -27,8 +27,8 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="Dashboard.jsp">
-                    <h1 class="tm-site-title mb-0">Product Admin</h1>
+                <a class="navbar-brand" href="ManagerDashboard.jsp">
+                    <h1 class="tm-site-title mb-0">Admin</h1>
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"
@@ -45,27 +45,27 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
                         <li class="nav-item">
-                            <a class="nav-link" href="Dashboard.jsp">
-                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            <a class="nav-link" href="ManagerDashboard.jsp">
+                                <i class="fas fa-tachometer-alt"></i> Thống kê
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link active" href="managerCategory">
-                                <i class="far fa-file-alt"></i> Categories
+                                <i class="far fa-file-alt"></i> Loại sản phẩm
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="managerProduct">
-                                <i class="fas fa-shopping-cart"></i> Products
+                                <i class="fas fa-shopping-cart"></i> Sản phẩm
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="managerAccount">
-                                <i class="far fa-user"></i> Accounts
+                                <i class="far fa-user"></i> Tài khoản
                             </a>
                         </li>
 
@@ -73,7 +73,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link d-block" href="Login.jsp">
-                                Admin, <b>Logout</b>
+                                <b>Đăng xuất</b>
                             </a>
                         </li>
                     </ul>
@@ -83,12 +83,22 @@
 
         <div class="container">
             <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Quản lý <b>loại sản phẩm</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="AddCategory.jsp"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm loại sản phẩm mới</span></a>
+                        </div>
+                    </div>
+                </div>
                 <table id="example" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Actions</th>
+                            <th>Tên loại sản phẩm</th>
+                            <th>Tác vụ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,8 +107,8 @@
                                 <td>${o.categoryId}</td>
                                 <td>${o.name}</td>
                                 <td>
-                                    <a href="#"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="loadCategory?cid=${o.categoryId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="deleteCategory?cid=${o.categoryId}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -106,9 +116,8 @@
                 </table>
             </div>
             <!-- table container -->
-            <button class="btn btn-primary btn-block text-uppercase mb-3">
-                Add new category
-            </button>
+            <a href="AddCategory.jsp" class="btn btn-primary btn-block text-uppercase mb-3">Thêm loại sản phẩm mới</a>
+
         </table>
     </div>
 </div>

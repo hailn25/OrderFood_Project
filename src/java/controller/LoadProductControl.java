@@ -4,8 +4,13 @@
  */
 package controller;
 
-import dao.AccountDAO;
+import dal.DBContext;
+import dao.CategoryDAO;
+import dao.ProductDAO;
+import model.Category;
+import model.Product;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,14 +20,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Account;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "ManagerAccountControl", urlPatterns = {"/managerAccount"})
-public class ManagerAccountControl extends HttpServlet {
+@WebServlet(name = "LoadControl", urlPatterns = {"/loadProduct"})
+public class LoadProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,17 +38,26 @@ public class ManagerAccountControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
-//        HttpSession session = request.getSession();
-//        Account a = (Account) session.getAttribute("acc");
-//        int id = a.getAccountId();
-        AccountDAO dao = new AccountDAO();
-        ArrayList<Account> list = dao.getAllAccount();
-        request.setAttribute("listA", list);
-        request.getRequestDispatcher("ManagerAccount.jsp").forward(request, response);
+            throws ServletException, IOException, Exception {
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            String pID = request.getParameter("pid");
+            String cID = request.getParameter("cid");
+            ProductDAO dao = new ProductDAO();
+            CategoryDAO dao1 = new CategoryDAO();
+            Product p = dao.getProductByPID(pID);
+            ArrayList<Category> listC = dao1.getAllCategory();
+
+            request.setAttribute("detail", p);
+            request.setAttribute("cid", cID);
+            request.setAttribute("listC", listC);
+
+            request.getRequestDispatcher("EditProduct.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoadProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -60,8 +73,8 @@ public class ManagerAccountControl extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManagerAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(LoadProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -78,8 +91,8 @@ public class ManagerAccountControl extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManagerAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(LoadProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

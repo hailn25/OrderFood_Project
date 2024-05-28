@@ -30,7 +30,7 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="Dashboard.jsp">
-                    <h1 class="tm-site-title mb-0">Nhà hàng</h1>
+                    <h1 class="tm-site-title mb-0">Admin</h1>
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"
@@ -54,13 +54,13 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="managerCategory">
+                            <a class="nav-link active" href="managerCategory">
                                 <i class="far fa-file-alt"></i> Loại sản phẩm
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="managerProduct">
+                            <a class="nav-link" href="managerProduct">
                                 <i class="fas fa-shopping-cart"></i> Sản phẩm
                             </a>
                         </li>
@@ -89,59 +89,23 @@
                 <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <div class="row">
-                            <div class="col-12">
-                                <h2 class="tm-block-title d-inline-block text-uppercase">Chỉnh sửa sản phẩm</h2>
+                            <div class="col-6">
+                                <h2 class="tm-block-title d-inline-block text-uppercase">Thêm loại sản phẩm mới</h2>
                             </div>
                         </div>
-                        <form action="editProduct" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                        <form action="addCategory" method="post">
                             <div class="row tm-edit-product-row">
-                                <div class="col-xl-6 col-lg-6 col-md-12">
-                                    <div>
-                                        <input id="id" name="id" type="hidden" value="${detail.productId}" class="form-control validate" />
-                                        <input id="currentImage" name="currentImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />
-                                    </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12">
                                     <div class="form-group mb-3">
-                                        <label for="name">Tên sản phẩm</label>
-                                        <input id="name" name="name" type="text" required value="${detail.name}" class="form-control validate" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="description">Mô tả</label>
-                                        <textarea class="form-control validate tm-small" rows="5" name="description" required>${detail.description}</textarea>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="category">Loại sản phẩm</label>
-                                        <select class="custom-select tm-select-accounts" name="category" required>
-                                            <c:forEach items="${listC}" var="o">
-                                                <option value="${o.categoryId}" ${o.categoryId == cid ? "selected" : ""}>${o.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                                            <label for="price">Đơn giá</label>
-                                            <input id="price" name="price" type="text" required value="${detail.price}" class="form-control validate" />
-                                        </div>
-                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                                            <label for="quantity">Số lượng</label>
-                                            <input id="quantity" name="quantity" type="text" required value="${detail.quantity}" class="form-control validate" />
-                                        </div>
+                                        <label for="name">Tên loại sản phảm</label>
+                                        <input id="name" name="name" type="text" required" class="form-control validate" />
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                                    <div class="tm-product-img-edit mx-auto">
-                                        <img src="img/${detail.imageURL}" alt="Product image" class="img-fluid d-block mx-auto">
-                                        <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
-                                    </div>
-                                    <div class="custom-file mt-3 mb-3">
-                                        <input id="fileInput" name="image" type="file" style="display:none;" />
-                                        <input type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
-                                    </div>
-                                </div>
-                                <div class="col-6">
+                                <div class="col-xl-6 col-lg-6 ">
                                     <input type="button" class="btn btn-primary btn-block text-uppercase" value="Huỷ bỏ" onclick="window.history.back();" />
                                 </div>
-                                <div class="col-6">
-                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Cập nhật ngay" />
+                                <div class="col-xl-6 col-lg-6 ">
+                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" />
                                 </div>
                             </div>
                         </form>
@@ -151,7 +115,7 @@
         </div>
 
 
-
+     
 
         <script src="js/jquery-3.3.1.min.js"></script>
         <!-- https://jquery.com/download/ -->

@@ -152,6 +152,10 @@ public class Account {
     public String toString() {
         return "Account{" + "accountId=" + accountId + ", email=" + email + ", password=" + password + ", fullName=" + fullName + ", gender=" + gender + ", phone=" + phone + ", address=" + address + ", imageAvatar=" + imageAvatar + ", status=" + status + ", lastDateLogin=" + lastDateLogin + ", createDate=" + createDate + ", updateDate=" + updateDate + ", roleId=" + roleId + '}';
     }
+
+    public int getId() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     
     

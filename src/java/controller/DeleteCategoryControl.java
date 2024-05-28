@@ -4,25 +4,25 @@
  */
 package controller;
 
-import dao.AccountDAO;
+import dao.CategoryDAO;
+import dao.ProductDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Account;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "ManagerAccountControl", urlPatterns = {"/managerAccount"})
-public class ManagerAccountControl extends HttpServlet {
+@WebServlet(name = "DeleteCategoryControl", urlPatterns = {"/deleteCategory"})
+public class DeleteCategoryControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,17 +34,18 @@ public class ManagerAccountControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
-//        HttpSession session = request.getSession();
-//        Account a = (Account) session.getAttribute("acc");
-//        int id = a.getAccountId();
-        AccountDAO dao = new AccountDAO();
-        ArrayList<Account> list = dao.getAllAccount();
-        request.setAttribute("listA", list);
-        request.getRequestDispatcher("ManagerAccount.jsp").forward(request, response);
+            throws ServletException, IOException {
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            int cid = Integer.parseInt(request.getParameter("cid"));
+            CategoryDAO dao = new CategoryDAO();
+
+            dao.deleteCategory(cid);
+            response.sendRedirect("managerCategory");
+        } catch (SQLException ex) {
+            Logger.getLogger(DeleteCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -58,11 +59,7 @@ public class ManagerAccountControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManagerAccountControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -76,11 +73,7 @@ public class ManagerAccountControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManagerAccountControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
