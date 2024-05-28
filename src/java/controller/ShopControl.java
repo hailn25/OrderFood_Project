@@ -4,8 +4,8 @@
  */
 package controller;
 
-import dao.DAOFunctionShop;
-import dao.DAOShop;
+import dao.FunctionShopDAO;
+import dao.ShopDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,22 +23,13 @@ import model.*;
 @WebServlet(name = "ShopControl", urlPatterns = {"/shop"})
 public class ShopControl extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        DAOShop dao = new DAOShop();
-        DAOFunctionShop daofunction = new DAOFunctionShop();
-        ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
-        listProductDTO = dao.getAllProductDTO();
+        ShopDAO dao = new ShopDAO();
+        FunctionShopDAO daofunction = new FunctionShopDAO();
+
+        ArrayList<ProductDTO> listProductDTO = dao.getAllProductDTO();
         request.setAttribute("listProductDTO", listProductDTO);
 
         ArrayList<Category> listAllCategory = dao.getAllCategory();
@@ -46,6 +37,9 @@ public class ShopControl extends HttpServlet {
 
         ArrayList<CategoryDTO> listTotalQuantityByCategory = dao.getTotalQuantityByCategory();
         request.setAttribute("listTotalQuantityByCategory", listTotalQuantityByCategory);
+
+        ArrayList<RestaurantDTO> listRestaurantDTO = dao.getAllRestaurantDTO();
+        request.setAttribute("listRestaurantDTO", listRestaurantDTO);
 
         String categoryName = request.getParameter("categoryName");
         if (categoryName != null) {
@@ -53,63 +47,32 @@ public class ShopControl extends HttpServlet {
             request.setAttribute("listProductDTO", listProductDTO);
         }
 
+        String productName = request.getParameter("productName");
+        String maxPriceStr = request.getParameter("rangeInput");
+
+        if (productName != null || maxPriceStr != null) {
+            try {
+                int maxPrice = maxPriceStr != null ? Integer.parseInt(maxPriceStr) : 0;
+                listProductDTO = daofunction.searchProductByAttribute(productName, maxPrice);
+                request.setAttribute("listProductDTO", listProductDTO);
+            } catch (NumberFormatException ex) {
+                // Xử lý ngoại lệ: ghi log hoặc thông báo lỗi cho người dùng
+            }
+        }
+
         request.getRequestDispatcher("Shop.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAOShop dao = new DAOShop();
-        DAOFunctionShop daofunction = new DAOFunctionShop();
-        ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
-        listProductDTO = dao.getAllProductDTO();
-        request.setAttribute("listProductDTO", listProductDTO);
-
-        ArrayList<Category> listAllCategory = dao.getAllCategory();
-        request.setAttribute("listAllCategory", listAllCategory);
-
-        ArrayList<CategoryDTO> listTotalQuantityByCategory = dao.getTotalQuantityByCategory();
-        request.setAttribute("listTotalQuantityByCategory", listTotalQuantityByCategory);
-        String productName = request.getParameter("productName");
-        try {
-            int maxPrice = Integer.parseInt(request.getParameter("rangeInput"));
-
-            if (productName != null && maxPrice == 0) {
-                listProductDTO = daofunction.searchProductByAttribute(productName, 0);
-                request.setAttribute("listProductDTO", listProductDTO);
-                request.getRequestDispatcher("Shop.jsp").forward(request, response);
-            } else {
-                listProductDTO = daofunction.searchProductByAttribute(productName, maxPrice);
-                request.setAttribute("listProductDTO", listProductDTO);
-                request.getRequestDispatcher("Shop.jsp").forward(request, response);
-            }
-            request.getRequestDispatcher("Shop.jsp").forward(request, response);
-
-        } catch (NumberFormatException ex) {
-        }
+        processRequest(request, response);
     }
 
     /**

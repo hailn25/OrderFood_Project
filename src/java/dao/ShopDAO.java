@@ -18,7 +18,7 @@ import model.*;
  *
  * @author quoch
  */
-public class DAOShop {
+public class ShopDAO {
 
     Connection con = null;
     PreparedStatement ps = null;
@@ -48,9 +48,9 @@ public class DAOShop {
                         rs.getBoolean(12)));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listProduct;
     }
@@ -71,9 +71,9 @@ public class DAOShop {
                         rs.getDate(4)));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listCategory;
     }
@@ -99,9 +99,9 @@ public class DAOShop {
                         rs.getInt(2)));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listCategoryDTO;
     }
@@ -132,15 +132,40 @@ public class DAOShop {
                         rs.getBoolean(12)));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listProductDTO;
     }
 
+    public ArrayList<RestaurantDTO> getAllRestaurantDTO() {
+        ArrayList<RestaurantDTO> listRestaurant = new ArrayList<>();
+        try {
+            String sql = "SELECT Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar\n"
+                    + "FROM     Account INNER JOIN\n"
+                    + "                  Restaurant ON Account.AccountId = Restaurant.AccountId\n"
+                    + "ORDER BY Restaurant.RateStar DESC";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listRestaurant.add(new RestaurantDTO(rs.getString(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRestaurant;
+    }
+
     public static void main(String[] args) {
-        DAOShop dao = new DAOShop();
+        ShopDAO dao = new ShopDAO();
 
 //        for (Product p : dao.getAllProduct()) {
 //            System.out.println(p.toString());
@@ -151,8 +176,11 @@ public class DAOShop {
 //        for (CategoryDTO c : dao.getTotalQuantityByCategory()) {
 //              System.out.println(c.toString());
 //        }
-        for (ProductDTO pt : dao.getAllProductDTO()) {
-            System.out.println(pt.toString());
+//        for (ProductDTO pt : dao.getAllProductDTO()) {
+//            System.out.println(pt.toString());
+//        }
+        for (RestaurantDTO rs : dao.getAllRestaurantDTO()) {
+            System.out.println(rs.toString());
         }
     }
 }

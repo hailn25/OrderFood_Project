@@ -68,7 +68,7 @@
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
                                     <a href="Cart.jsp" class="dropdown-item">Cart</a>
                                     <a href="Checkout.jsp" class="dropdown-item">Checkout</a>
-                                    <a href="Testimonial.jsp" class="dropdown-item">Testimonial</a>
+                                    <a href="blog" class="dropdown-item">Blog</a>
                                     <a href="404.jsp" class="dropdown-item">404 Page</a>
                                 </div>
                             </div>

@@ -18,7 +18,7 @@ import model.ProductDTO;
  *
  * @author quoch
  */
-public class DAOFunctionShop {
+public class FunctionShopDAO {
 
     Connection con = null;
     PreparedStatement ps = null;
@@ -53,9 +53,9 @@ public class DAOFunctionShop {
                         rs.getBoolean(12)));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listProductDTO;
     }
@@ -101,15 +101,15 @@ public class DAOFunctionShop {
                         rs.getBoolean(12)));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DAOShop.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listProductDTO;
     }
 
     public static void main(String[] args) {
-        DAOFunctionShop dao = new DAOFunctionShop();
+        FunctionShopDAO dao = new FunctionShopDAO();
 
 //        for (ProductDTO pt : dao.getAllProductDTOByCategoryName("Bánh kem")) {
 //            System.out.println(pt.toString());

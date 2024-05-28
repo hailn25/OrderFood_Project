@@ -495,3 +495,31 @@
 }
 /*** Footer End ***/
 
+
+.blog-post {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.blog-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.blog-meta {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+.blog-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.blog-content {
+    font-size: 16px;
+    color: #343a40;
+}
+
