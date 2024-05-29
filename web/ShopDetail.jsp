@@ -105,7 +105,12 @@
                                         </button>
                                     </div>
                                 </div>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                 <form action="addtocart" method="post">
+                                                        <input type="hidden" name="productId" value="${detail.id}">
+                                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                                        </button>
+                                                    </form>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
