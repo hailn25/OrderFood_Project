@@ -75,7 +75,7 @@
 
             <!-- Single Page Header start -->
             <div class="container-fluid page-header py-5">
-                <h1 class="text-center text-white display-6">Shop Detail</h1>
+                <h1 class="text-center text-white display-6">Chi tiết sản phẩm </h1>
                 <ol class="breadcrumb justify-content-center mb-0">
                     <li class="breadcrumb-item"><a href="home" style="color: white">Home</a></li>
                     <!--                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
@@ -228,27 +228,7 @@
                     <div class="col-lg-4 col-xl-3">
                         <div class="row g-4 fruite">
                             <div class="col-lg-12">
-                                <div class="input-group w-100 mx-auto d-flex mb-4">
-                                    <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                                    <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                                </div>
-                                <div class="mb-4">
-                                    <h4>Categories</h4>
-                                    <ul class="list-unstyled fruite-categorie">
-                                        <c:forEach var="listCategoryListDetail" items="${listCategoryListDetail}">
-                                            <li>
-                                                <div class="d-flex justify-content-between fruite-name">
-                                                    <a href="category?cid=${listCategoryListDetail.id}"><i class="fas fa-apple-alt me-2"></i>${listCategoryListDetail.name}</a>
-                                                    <span>${listCategoryListDetail.quantity}</span>
-                                                </div>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-12">
-                                <h4 class="mb-4">Featured products</h4>
+                                <h4 class="mb-4">Sản phẩm nổi bật</h4>
                                 <c:forEach var="listProductSale" items="${listProductSale}">
                                     <div class="d-flex align-items-center justify-content-start mb-4">
                                         <div class="rounded" style="width: 100px; height: 100px;">
@@ -269,7 +249,7 @@
                                     </div>
                                 </c:forEach>
                                 <div class="d-flex justify-content-center my-4">
-                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">View More</a>
+                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem thêm </a>
                                 </div>
                             </div>
 
@@ -316,23 +296,7 @@
         <jsp:include page="Footer.jsp"></jsp:include>
             <!-- Footer End -->
 
-            <!-- Copyright Start -->
-            <div class="container-fluid copyright bg-dark py-4">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
-                        </div>
-                        <div class="col-md-6 my-auto text-center text-md-end text-white">
-                            <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                            <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                            <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Copyright End -->
+           
 
 
 
