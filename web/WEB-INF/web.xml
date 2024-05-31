@@ -56,11 +56,5 @@
         <servlet-name>SearchController</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CheckoutServlet</servlet-name>
-        <url-pattern>/checkout</url-pattern>
-    </servlet-mapping><servlet>
-        <servlet-name>CheckoutServlet</servlet-name>
-        <servlet-class>controller.CheckoutServlet</servlet-class>
-    </servlet>
+    
 </web-app>

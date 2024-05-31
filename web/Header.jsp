@@ -65,7 +65,6 @@
                         <div class="navbar-nav mx-auto">
                             <a href="home" class="nav-item nav-link active">Trang chủ</a>
                             <a href="shop" class="nav-item nav-link ">Cửa hàng</a>
-                            <a href="detail" class="nav-item nav-link"></a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
@@ -98,6 +97,25 @@
             </div>
         </div>
         <!-- Navbar End -->
+        
+        <!-- Modal Search Start -->
+            <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex align-items-center">
+                            <form id="searchForm" action="search" method="get" class="w-75 mx-auto d-flex">
+                                <input type="search" id="searchInput" class="form-control p-3" placeholder="keywords" name="txt" aria-describedby="search-icon-1">
+                                <button type="submit" class="input-group-text p-3"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

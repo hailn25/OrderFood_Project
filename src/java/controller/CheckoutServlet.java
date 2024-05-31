@@ -9,18 +9,19 @@ import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
 import model.Cart;
-import model.Order;
 
 /**
  *
  * @author ADMIN
  */
+@WebServlet(name="CheckoutServlet", urlPatterns={"/checkout"})
 public class CheckoutServlet extends HttpServlet {
    
     /** 
@@ -58,8 +59,18 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          request.getRequestDispatcher("Checkout.jsp").forward(request, response);
+        
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
 
+        if (account == null) {
+
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+
+        request.getRequestDispatcher("Checkout.jsp").forward(request, response);
+    
     } 
 
     /** 
@@ -72,32 +83,33 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession(true);
-        Cart cart = null;
-        Object o = session.getAttribute("cart");
-        if(o != null){
-            cart = (Cart)o;
-        } else {
-            cart = new Cart();
-        }
-       Account account = null;
-        Object a = session.getAttribute("account");
-        if(a!=null){
-            account = (Account)a;
-            OrderDAO dao = new OrderDAO();
-            dao.addOrder(cart, account);
-            session.removeAttribute("cart");
-            session.setAttribute("size", 0);
-           request.getRequestDispatcher("Home.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("Login.jsp");
-        }
-        
-        
-        
-        
+         HttpSession session = request.getSession(true);
+    Cart cart = null;
+    Object o = session.getAttribute("cart");
+    if (o != null) {
+        cart = (Cart) o;
+    } else {
+        cart = new Cart();
     }
-        
+    
+    Account account = null;
+    Object a = session.getAttribute("account");
+    if (a != null) {
+        account = (Account) a;
+        // Ensure account exists before accessing its properties
+        int id = account.getAccountId();
+        OrderDAO dao = new OrderDAO();
+        dao.addOrder(cart, account);
+        session.removeAttribute("cart");
+        session.setAttribute("size", 0);
+        request.getRequestDispatcher("home").forward(request, response);
+    } else {
+        response.sendRedirect("Login.jsp");
+    }
+
+    }
+    
+
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description

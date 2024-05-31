@@ -181,15 +181,19 @@
                                                 </c:if>
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                     <h4 style="height: 80px">${p.name}</h4>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                        <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+
+
+                                                    <div style="display: flex">
+                                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                        </div>
+                                                        <form action="addtocart" method="post">
+                                                            <input type="hidden" name="productId" value="${p.producId}">
+                                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                                            </button>
+                                                        </form>
                                                     </div>
-                                                    <form action="addtocart" method="post">
-                                                        <input type="hidden" name="productId" value="${p.producId}">
-                                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                                        </button>
-                                                    </form>
 
                                                 </div>
                                             </div>
