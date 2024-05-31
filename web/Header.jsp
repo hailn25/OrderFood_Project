@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>4FOODHD</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -42,8 +42,8 @@
             <div class="container topbar bg-primary d-none d-lg-block">
                 <div class="d-flex justify-content-between">
                     <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">123 Street, New York</a></small>
-                        <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
+                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
+                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
@@ -57,25 +57,24 @@
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="Home.jsp" class="navbar-brand"><h1 class="text-primary display-6">Fruitables</h1></a>
+                    <a href="home" class="navbar-brand"><h1 class="text-primary display-6">4FOODHD</h1></a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a href="home" class="nav-item nav-link active">Home</a>
-                            <a href="Shop.jsp" class="nav-item nav-link ">Shop</a>
-                            <a href="ShopDetail.jsp" class="nav-item nav-link"></a>
+                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="shop" class="nav-item nav-link ">Cửa hàng</a>
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="Cart.jsp" class="dropdown-item">Cart</a>
-                                    <a href="Checkout.jsp" class="dropdown-item">Checkout</a>
-                                    <a href="Testimonial.jsp" class="dropdown-item">Testimonial</a>
-                                    <a href="404.jsp" class="dropdown-item">404 Page</a>
+                                    <a href="Cart.jsp" class="dropdown-item">Giỏ hàng</a>
+                                    <a href="Checkout.jsp" class="dropdown-item">Thanh toán</a>
+                                    <a href="blog" class="dropdown-item">Blog</a>
+                                    <!--<a href="404.jsp" class="dropdown-item">404 Page</a>-->
                                 </div>
                             </div>
-                            <a href="Contact.jsp" class="nav-item nav-link">Contact</a>
+                            <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">
                             
@@ -83,11 +82,11 @@
                                 <i class="fas fa-search text-primary"></i>
                             </button>
 
-                            <a href="#" class="position-relative me-4 my-auto">
+                          <c:set value="${sessionScope.size}" var="size"></c:set>
+                            <a href="Cart.jsp" class="position-relative me-4 my-auto">
                                 <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
                             </a>
-
                             <a href="Profile.jsp" class="my-auto" >
                                 <i class="fas fa-user fa-2x"></i>
                             </a>

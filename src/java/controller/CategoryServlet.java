@@ -6,7 +6,7 @@
 package controller;
 
 import dao.FeedbackDAO;
-import dao.ProductDAO;
+import dao.ProductHomeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,10 +14,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import model.Category;
+import model.CategoryListDetail;
 import model.Feedback;
 import model.ListProduct;
-import model.Product;
+import model.ProductHome;
 
 /**
  *
@@ -36,16 +36,16 @@ public class CategoryServlet extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String cateID = request.getParameter("cid");
-        ProductDAO dao = new ProductDAO();
+        ProductHomeDAO dao = new ProductHomeDAO();
         FeedbackDAO dao1 = new FeedbackDAO();
-        List<Product> list = dao.getProductByCID(cateID);
-        List<Category> listC = dao.getAllCategory();
-        List<Product> listBestSellerProduct  = dao.getAllBestSellerProduct();
+        List<ProductHome> list = dao.getProductByCID(cateID);
+        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
+        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
         List<ListProduct> listProductP = dao.getListProductP();
          List<Feedback> listFeedback = dao1.getFeedback();
         request.setAttribute("listFeedback", listFeedback);
         
-        request.setAttribute("listC", listC);
+        request.setAttribute("listC", listAllCategory);
         request.setAttribute("listP", list);
         request.setAttribute("listV", listProductP);
         request.setAttribute("listB", listBestSellerProduct);

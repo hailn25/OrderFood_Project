@@ -9,7 +9,7 @@
 
 <html>
     <head>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+           <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
 
@@ -73,10 +73,6 @@
                                             <div class="col-6 mb-3">
                                                 <h6>Most Viewed</h6>
                                                 <p class="text-muted">Dolor sit amet</p>
-
-                                            </div>
-                                            <div>
-                                                <a href="#">Edit Password</a>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-start">
@@ -84,7 +80,6 @@
                                             <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>
                                             <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

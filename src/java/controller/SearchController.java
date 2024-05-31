@@ -5,7 +5,7 @@
 
 package controller;
 
-import dao.ProductDAO;
+import dao.ProductHomeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.ListProduct;
-import model.Product;
+import model.ProductHome;
 
 /**
  *
@@ -34,9 +34,9 @@ public class SearchController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String txtSearch = request.getParameter("txt");
         request.setCharacterEncoding("UTF-8");
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getProductBySearchName(txtSearch);
-        List<Product> listBestSellerProduct  = dao.getAllBestSellerProduct();
+        ProductHomeDAO dao = new ProductHomeDAO();
+        List<ProductHome> list = dao.getProductBySearchName(txtSearch);
+        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
         List<ListProduct> listProductP = dao.getListProductP();
         
         request.setAttribute("listP", list);

@@ -5,6 +5,7 @@
 package controller;
 
 import dao.ProductDAO;
+import dao.ProductHomeDAO;
 import dao.ProductSaleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.CategoryListDetail;
 import model.Product;
+import model.ProductHome;
 import model.ProductSale;
 
 /**
@@ -36,12 +38,12 @@ public class DetailServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("pid");
-        ProductDAO dao = new ProductDAO();
+        ProductHomeDAO dao = new ProductHomeDAO();
         ProductSaleDAO dao1 = new ProductSaleDAO();
-        Product p = dao.getProductById(id);
+        ProductHome p = dao.getProductById(id);
         List<ProductSale> listProductSale = dao1.getProductSale();
         List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
-        List<Product> listBestSellerProduct  = dao.getAllBestSellerProduct();
+        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
 
         
         request.setAttribute("listBSL", listBestSellerProduct);

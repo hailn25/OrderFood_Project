@@ -10,7 +10,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>4FOODHD</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -34,6 +34,21 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <style>
+            .description {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: normal;
+            }
+
+            .container-fluid.page-header.py-5 {
+                background-color: greenyellow;
+                border-radius: 15px; /* Điều chỉnh giá trị này để thay đổi độ bo tròn */
+            }
+        </style>
     </head>
 
     <body>
@@ -62,9 +77,9 @@
             <div class="container-fluid page-header py-5">
                 <h1 class="text-center text-white display-6">Shop Detail</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="home">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active text-white">Shop Detail</li>
+                    <li class="breadcrumb-item"><a href="home" style="color: white">Home</a></li>
+                    <!--                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                                        <li class="breadcrumb-item active text-white">Shop Detail</li>-->
                 </ol>
             </div>
             <!-- Single Page Header End -->
@@ -79,7 +94,7 @@
                                 <div class="col-lg-6">
                                     <div class="border rounded">
                                         <a href="#">
-                                            <img src="img/new/${detail.image}" class="img-fluid rounded" alt="Image">
+                                            <img src="img/${detail.image}" class="img-fluid rounded" alt="Image">
                                     </a>
                                 </div>
                             </div>
@@ -105,7 +120,12 @@
                                         </button>
                                     </div>
                                 </div>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                <form action="addtocart" method="post">
+                                    <input type="hidden" name="productId" value="${detail.id}">
+                                    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                    </button>
+                                </form>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -218,7 +238,7 @@
                                         <c:forEach var="listCategoryListDetail" items="${listCategoryListDetail}">
                                             <li>
                                                 <div class="d-flex justify-content-between fruite-name">
-                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>${listCategoryListDetail.name}</a>
+                                                    <a href="category?cid=${listCategoryListDetail.id}"><i class="fas fa-apple-alt me-2"></i>${listCategoryListDetail.name}</a>
                                                     <span>${listCategoryListDetail.quantity}</span>
                                                 </div>
                                             </li>
@@ -232,7 +252,7 @@
                                 <c:forEach var="listProductSale" items="${listProductSale}">
                                     <div class="d-flex align-items-center justify-content-start mb-4">
                                         <div class="rounded" style="width: 100px; height: 100px;">
-                                            <img src="img/new/${listProductSale.image}" class="img-fluid rounded" alt="${listProductSale.name}">
+                                            <img src="img/${listProductSale.image}" class="img-fluid rounded" alt="${listProductSale.name}">
                                         </div>
                                         <div class="ms-3">
                                             <h6 class="mb-2">${listProductSale.name}</h6>
@@ -271,12 +291,12 @@
                         <c:forEach var="listbestseller" items="${listBSL}">
                             <div class="border border-primary rounded position-relative vesitable-item">
                                 <div class="vesitable-img">
-                                    <img src="img/new/${listbestseller.image}" class="img-fluid w-100 rounded-top" alt="${listbestseller.name}">
+                                    <img src="img/${listbestseller.image}" class="img-fluid w-100 rounded-top" alt="${listbestseller.name}">
                                 </div>
                                 <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${listbestseller.categoryName}</div>
                                 <div class="p-4 pb-0 rounded-bottom">
                                     <h4>${listbestseller.name}</h4>
-                                    <p>${listbestseller.decription}</p>
+                                    <p class="description">${listbestseller.decription}</p>
                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                         <p class="text-dark fs-5 fw-bold">${listbestseller.price}</p>
                                         <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
@@ -338,10 +358,14 @@
                 for (var i = 1; i <= 5; i++) {
                     var star = document.createElement('i');
                     star.className = 'fa fa-star';
-                    if (i <= rating) {
+                    if (i <= Math.floor(rating)) {
                         star.classList.add('text-primary'); // Đổi màu sao được đánh giá
                     } else {
                         star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
+                    }
+                    if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                        star.className = 'fa fa-star-half'; // Nửa sao
+                        star.classList.add('text-primary');
                     }
                     starContainer.appendChild(star);
                 }

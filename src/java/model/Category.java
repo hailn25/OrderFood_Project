@@ -4,26 +4,27 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
 public class Category {
+
     private int categoryId;
     private String name;
-    private String nameProduct;
-    private String decription;
-    private double price;
+    private Date createDate;
+    private Date updateDate;
 
     public Category() {
     }
 
-    public Category(int categoryId, String name, String nameProduct, String decription, double price) {
+    public Category(int categoryId, String name, Date createDate, Date updateDate) {
         this.categoryId = categoryId;
         this.name = name;
-        this.nameProduct = nameProduct;
-        this.decription = decription;
-        this.price = price;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
     public int getCategoryId() {
@@ -42,33 +43,21 @@ public class Category {
         this.name = name;
     }
 
-    public String getNameProduct() {
-        return nameProduct;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setNameProduct(String nameProduct) {
-        this.nameProduct = nameProduct;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public String getDecription() {
-        return decription;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setDecription(String decription) {
-        this.decription = decription;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" + "categoryId=" + categoryId + ", name=" + name + ", nameProduct=" + nameProduct + ", decription=" + decription + ", price=" + price + '}';
-    }
-
+    
+    
 }

@@ -11,45 +11,46 @@ import java.util.Date;
  * @author ADMIN
  */
 public class Product {
-    private int id;
+
+    private int productId;
     private String name;
     private double price;
-    private String decription;
-    private String image;
-    private String categoryName;
-    private String restaurantName;
+    private String description;
+    private String imageURL;
+    private int categoryId;
+    private int restaurantId;
     private boolean isSale;
     private int quantity;
     private Date createDate;
     private Date updateDate;
     private boolean status;
-    private double rateStar;
 
     public Product() {
     }
 
-    public Product(int id, String name, double price, String decription, String image, String categoryName, String restaurantName, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
-        this.id = id;
+    public Product(int productId, String name, double price, String description, String imageURL, int categoryId, int restaurantId, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
-        this.decription = decription;
-        this.image = image;
-        this.categoryName = categoryName;
-        this.restaurantName = restaurantName;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.categoryId = categoryId;
+        this.restaurantId = restaurantId;
         this.isSale = isSale;
         this.quantity = quantity;
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.status = status;
-        this.rateStar = rateStar;
     }
 
-    public int getId() {
-        return id;
+    
+
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getName() {
@@ -68,36 +69,36 @@ public class Product {
         this.price = price;
     }
 
-    public String getDecription() {
-        return decription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDecription(String decription) {
-        this.decription = decription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getRestaurantName() {
-        return restaurantName;
+    public int getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public boolean isIsSale() {
@@ -140,19 +141,4 @@ public class Product {
         this.status = status;
     }
 
-    public double getRateStar() {
-        return rateStar;
-    }
-
-    public void setRateStar(double rateStar) {
-        this.rateStar = rateStar;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryName=" + categoryName + ", restaurantName=" + restaurantName + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
-    }
-    
-    
-    
 }

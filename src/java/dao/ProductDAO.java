@@ -6,13 +6,13 @@ package dao;
 
 import dal.DBContext;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import model.Category;
-import model.CategoryListDetail;
-import model.ListProduct;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Product;
 
 /**
@@ -25,181 +25,107 @@ public class ProductDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<Product> getAllProduct() {
-        List<Product> listProduct = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listProduct.add(new Product(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
-                        rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
-                ));
-            }
-        } catch (Exception e) {
-        }
-        return listProduct;
-    }
-
-    public List<Category> getAllCategory() {
-        List<Category> listCategory = new ArrayList<>();
-        String query = "select c.CategoryId, c.Name, p.Name, p.Description, p.Price\n"
-                + "from Category c\n"
-                + "join Product p\n"
-                + "on c.CategoryId = p.CategoryId";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listCategory.add(new Category(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getDouble(5)
-                ));
-            }
-        } catch (Exception e) {
-        }
-        return listCategory;
-    }
-
-    public List<Product> getProductByCID(String cid) {
-        List<Product> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId\n"
-                + "where c.CategoryId = ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, cid);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Product(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
-                        rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
-                ));
-            }
-        } catch (Exception e) {
+    public ArrayList<Product> getProductByRestaurantId(int restaurantId) throws SQLException, Exception {
+        ArrayList<Product> list = new ArrayList<>();
+        String sql = "SELECT *\n"
+                + "FROM [dbo].[Product]\n"
+                + "WHERE [RestaurantId] = ?";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int productId = rs.getInt(1);
+            String name = rs.getString(2);
+            double price = rs.getDouble(3);
+            String description = rs.getString(4);
+            String imageURL = rs.getString(5);
+            int categoryId = rs.getInt(6);
+            int restaurantId1 = rs.getInt(7);
+            boolean isSale = rs.getBoolean(8);
+            int quantity = rs.getInt(9);
+            Date createDate = rs.getDate(10);
+            Date updateDate = rs.getDate(11);
+            boolean status = rs.getBoolean(12);
+            Product s = new Product(productId, name, price, description, imageURL,
+                    categoryId, restaurantId1, isSale, quantity, createDate,
+                    updateDate, status);
+            list.add(s);
         }
         return list;
     }
 
-    public Product getProductById(String id) {
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId\n"
-                + "where p.ProductId = ?";
+    public void deleteProduct(int pid) throws SQLException {
+        try {
+            String sql = "delete from [dbo].[Product]\n"
+                    + "where [ProductId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, pid);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void editProduct(String name, String price, String description,
+            String img, String categoryId, String quantity,
+            String productId) throws SQLException {
+        try {
+            String sql = "update [dbo].[Product]\n"
+                    + "set [Name] = ?, [Price] = ?, [Description] = ?, [ImageURL] = ?, [CategoryId] = ?, [Quantity] = ?\n"
+                    + "where [ProductId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, price);
+            ps.setString(3, description);
+            ps.setString(4, img);
+            ps.setString(5, categoryId);
+            ps.setString(6, quantity);
+            ps.setString(7, productId);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String quantity) throws SQLException {
+        try {
+            String sql = "insert into [dbo].[Product] ([Name], [Price], [Description], [ImageURL], [CategoryId], [RestaurantId], [Quantity])\n"
+                    + "values (?,?,?,?,?,?,?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, price);
+            ps.setString(3, description);
+            ps.setString(4, img);
+            ps.setString(5, category);
+            ps.setInt(6, RestaurantId);
+            ps.setString(7, quantity);
+
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public ArrayList<Product> getAllProduct() {
+        ArrayList<Product> listProduct = new ArrayList<>();
+        String sql = "select * from Product";
         try {
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, id);
+            ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                return new Product(rs.getInt(1),
+                listProduct.add(new Product(
+                        rs.getInt(1),
                         rs.getString(2),
                         rs.getDouble(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
-                        rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
-                );
-            }
-        } catch (Exception e) {
-        }
-        return null;
-    }
-
-    public List<Product> getAllBestSellerProduct() {
-        List<Product> listBestSellerProduct = new ArrayList<>();
-        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listBestSellerProduct.add(new Product(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
-                        rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
-                ));
-            }
-        } catch (Exception e) {
-        }
-        return listBestSellerProduct;
-    }
-
-    public List<ListProduct> getListProductP() {
-        List<ListProduct> listProductP = new ArrayList<>();
-        String query = "select p.ProductId, p.Name, p.Description, p.Price, p.ImageURL, c.Name, p.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status\n"
-                + "from Product p\n"
-                + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listProductP.add(new ListProduct(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getDouble(4),
-                        rs.getString(5),
-                        rs.getString(6),
+                        rs.getInt(6),
                         rs.getInt(7),
                         rs.getBoolean(8),
                         rs.getInt(9),
@@ -210,68 +136,41 @@ public class ProductDAO {
             }
         } catch (Exception e) {
         }
-        return listProductP;
+        return listProduct;
     }
 
-    public List<CategoryListDetail> getCategoryListDetail() {
-        List<CategoryListDetail> listCategoryListDetail = new ArrayList<>();
-        String query = "SELECT c.CategoryId, c.Name, MIN(p.Quantity) AS Quantity\n"
-                + "FROM Product p\n"
-                + "JOIN Category c ON p.CategoryId = c.CategoryId\n"
-                + "GROUP BY c.CategoryId, c.Name;";
+    public Product getProductByID(int id) {
         try {
+            String query = "select * from Product where ProductId = ?";
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listCategoryListDetail.add(new CategoryListDetail(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getInt(3)
-                ));
-            }
-        } catch (Exception e) {
-        }
-        return listCategoryListDetail;
-    }
 
-    public List<Product> getProductBySearchName(String txtSearch) {
-        List<Product> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId\n"
-                + "where p.[name] like ?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txtSearch + "%");
-            rs = ps.executeQuery();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Product(rs.getInt(1),
+
+                return new Product(
+                        rs.getInt(1),
                         rs.getString(2),
                         rs.getDouble(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
+                        rs.getInt(6),
+                        rs.getInt(7),
                         rs.getBoolean(8),
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
-                ));
+                        rs.getBoolean(12)
+                );
             }
         } catch (Exception e) {
         }
-        return list;
+        return null;
     }
 
     public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
-
-        System.out.println(dao.getListProductP());
+        ProductDAO db = new ProductDAO();
+        System.out.println(db.getProductByID(1));
     }
 }
