@@ -1,40 +1,45 @@
 package dal;
 
-import dao.AccountDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author FPT University - PRJ30X
- */
 public class DBContext {
-    public Connection connection;
-    public DBContext()
-    {
-        //@Students: You are allowed to edit user, pass, url variables to fit 
-        //your system configuration
-        //You can also add more methods for Database Interaction tasks. 
-        //But we recommend you to do it in another class
-        // For example : StudentDBContext extends DBContext , 
-        //where StudentDBContext is located in dal package, 
+
+    private static final Logger LOGGER = Logger.getLogger(DBContext.class.getName());
+    private static final String SERVER_NAME = "localhost";
+    private static final String DATABASE_NAME = "orderfoodnewversion3";
+    private static final String PORT_NUMBER = "1433";
+    private static final String USER_ID = "sa";
+    private static final String PASSWORD = "123";
+    protected Connection connection;
+
+    public DBContext() {
         try {
-            String user = "sa";
-            String pass = "123";
-            String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=orderfoodnewversion3";
+            String connectionUrl
+                    = "jdbc:sqlserver://" + SERVER_NAME + ":" + PORT_NUMBER + ";databaseName=" + DATABASE_NAME;
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection(url, user, pass);
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+            connection = DriverManager.getConnection(connectionUrl, USER_ID, PASSWORD);
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
-  
+
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
+        String url
+                = "jdbc:sqlserver://" + SERVER_NAME + ":" + PORT_NUMBER + ";databaseName=" + DATABASE_NAME;
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        return DriverManager.getConnection(url, USER_ID, PASSWORD);
+    }
+    
+    public static void main(String[] args) {
+        try {
+            System.out.println(new DBContext().getConnection());
+        } catch (Exception e) {
+        }
+    }
 }
