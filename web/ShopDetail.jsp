@@ -208,7 +208,7 @@
                     <div class="col-lg-4 col-xl-3">
                         <div class="row g-4 fruite">   
                             <div class="col-lg-12">
-                                <h4 class="mb-4">Featured products</h4>
+                                <h4 class="mb-4">Sản phẩm nổi bật</h4>
                                 <c:forEach var="listProductSale" items="${listProductSale}">
                                     <div class="d-flex align-items-center justify-content-start mb-4">
                                         <div class="rounded" style="width: 100px; height: 100px;">
@@ -245,7 +245,7 @@
                     </div>
                 </div>
                 <!-- Related products -->
-                <h1 class="fw-bold mb-0">Products</h1>
+                <h1 class="fw-bold mb-0">Sản phẩm liên quan</h1>
                 <div class="vesitable">
                     <div class="owl-carousel vegetable-carousel justify-content-center">
                         <c:forEach var="listbestseller" items="${listBSL}">
