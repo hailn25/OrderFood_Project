@@ -145,7 +145,7 @@
                     <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                         <div class="bg-light rounded">
                             <div class="p-4">
-                                <h1 class="display-6 mb-4">Giỏ hàng <span class="fw-normal">Tổng</span></h1>
+                                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
                                 <c:set var="subtotal" value="0"/>
                                 <c:forEach var="i" items="${o.items}">
                                     <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
@@ -155,12 +155,15 @@
                                     <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="mb-0 me-4">Ship</h5>
+                                    <h5 class="mb-0 me-4">Shipping</h5>
+                                    <div class="">
+                                        <p class="mb-0">Flat rate: 3.00</p>
+                                    </div>
                                 </div>
                                 <p class="mb-0 text-end">Shipping to Ukraine.</p>
                             </div>
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                <h5 class="mb-0 ps-4 me-4">Tổng</h5>
+                                <h5 class="mb-0 ps-4 me-4">Total</h5>
                                 <fmt:formatNumber value="${subtotal + 3.00}" maxFractionDigits="2"/>
                             </div>
                             <form action="checkout" method="get">

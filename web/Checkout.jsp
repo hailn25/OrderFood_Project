@@ -112,11 +112,11 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Sản phẩm</th>
-                                        <th scope="col">Tên</th>
-                                        <th scope="col">Giá</th>
-                                        <th scope="col">Số lượng</th>
-                                        <th scope="col">Tổng</th>
+                                        <th scope="col">Products</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -145,7 +145,7 @@
                                         <td class="py-5"></td>
                                         <td class="py-5"></td>
                                         <td class="py-5">
-                                            <p class="mb-0 text-dark py-3">Tổng phụ</p>
+                                            <p class="mb-0 text-dark py-3">Subtotal</p>
                                         </td>
                                         <td class="py-5">
                                             <div class="py-3 border-bottom border-top">
@@ -162,7 +162,7 @@
                                         <th scope="row">
                                         </th>
                                         <td class="py-5">
-                                            <p class="mb-0 text-dark py-4">Ship</p>
+                                            <p class="mb-0 text-dark py-4">Shipping</p>
                                         </td>
                                         <td colspan="3" class="py-5">
                                             <div class="form-check text-start">
@@ -183,7 +183,7 @@
                                         <th scope="row">
                                         </th>
                                         <td class="py-5">
-                                            <p class="mb-0 text-dark text-uppercase py-3">Tổng</p>
+                                            <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
                                         </td>
                                         <td class="py-5"></td>
                                         <td class="py-5"></td>

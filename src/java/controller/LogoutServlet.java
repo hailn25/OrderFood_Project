@@ -35,7 +35,7 @@ public class LogoutServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
            HttpSession session = request.getSession();
            session.removeAttribute("account");
-           request.getRequestDispatcher("home").forward(request, response);
+           request.getRequestDispatcher("Home.jsp").forward(request, response);
         }
     } 
 

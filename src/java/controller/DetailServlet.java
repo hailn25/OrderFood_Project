@@ -45,13 +45,11 @@ public class DetailServlet extends HttpServlet {
         List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
         List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
 
-
         
         request.setAttribute("listBSL", listBestSellerProduct);
         request.setAttribute("detail", p);
         request.setAttribute("listProductSale", listProductSale);
         request.setAttribute("listCategoryListDetail", listCategoryListDetail);
-
         request.getRequestDispatcher("ShopDetail.jsp").forward(request, response);
     }
 

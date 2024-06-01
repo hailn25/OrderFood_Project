@@ -44,6 +44,14 @@ public class Account {
         this.updateDate = updateDate;
         this.roleId = roleId;
     }
+     public Account(String email, String password, String name, boolean gender, String phone, String address) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.phone = phone;
+        this.address = address;
+    }
 
     public int getAccountId() {
         return accountId;

@@ -16,10 +16,10 @@ public class ProductHome {
     private double price;
     private String decription;
     private String image;
-    private String categoryName;
     private int categoryId;
-    private String restaurantName;
+    private String categoryName;
     private int restaurantId;
+    private String restaurantName;
     private boolean isSale;
     private int quantity;
     private Date createDate;
@@ -30,16 +30,16 @@ public class ProductHome {
     public ProductHome() {
     }
 
-    public ProductHome(int id, String name, double price, String decription, String image, String categoryName, int categoryId, String restaurantName, int restaurantId, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
+    public ProductHome(int id, String name, double price, String decription, String image, int categoryId, String categoryName, int restaurantId, String restaurantName, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.decription = decription;
         this.image = image;
-        this.categoryName = categoryName;
         this.categoryId = categoryId;
-        this.restaurantName = restaurantName;
+        this.categoryName = categoryName;
         this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
         this.isSale = isSale;
         this.quantity = quantity;
         this.createDate = createDate;
@@ -88,14 +88,6 @@ public class ProductHome {
         this.image = image;
     }
 
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -104,12 +96,12 @@ public class ProductHome {
         this.categoryId = categoryId;
     }
 
-    public String getRestaurantName() {
-        return restaurantName;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public int getRestaurantId() {
@@ -118,6 +110,14 @@ public class ProductHome {
 
     public void setRestaurantId(int restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
     public boolean isIsSale() {
@@ -170,6 +170,8 @@ public class ProductHome {
 
     @Override
     public String toString() {
-        return "ProductHome{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryName=" + categoryName + ", categoryId=" + categoryId + ", restaurantName=" + restaurantName + ", restaurantId=" + restaurantId + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
+        return "ProductHome{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryId=" + categoryId + ", categoryName=" + categoryName + ", restaurantId=" + restaurantId + ", restaurantName=" + restaurantName + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
     }
+
+    
 }
