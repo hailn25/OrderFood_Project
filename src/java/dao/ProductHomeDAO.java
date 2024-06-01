@@ -19,13 +19,14 @@ import model.ProductHome;
  * @author ADMIN
  */
 public class ProductHomeDAO {
+
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
 
     public List<ProductHome> getAllProduct() {
         List<ProductHome> listProduct = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, c.CategoryId, r.Name, r.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -42,13 +43,15 @@ public class ProductHomeDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
+                        rs.getInt(7),
+                        rs.getString(8),
                         rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
                 ));
             }
         } catch (Exception e) {
@@ -79,7 +82,7 @@ public class ProductHomeDAO {
 
     public List<ProductHome> getProductByCID(String cid) {
         List<ProductHome> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, c.CategoryId, r.Name, r.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -98,13 +101,15 @@ public class ProductHomeDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
+                        rs.getInt(7),
+                        rs.getString(8),
                         rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
                 ));
             }
         } catch (Exception e) {
@@ -113,7 +118,7 @@ public class ProductHomeDAO {
     }
 
     public ProductHome getProductById(String id) {
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, c.CategoryId, r.Name, r.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -132,13 +137,15 @@ public class ProductHomeDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
+                        rs.getInt(7),
+                        rs.getString(8),
                         rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
                 );
             }
         } catch (Exception e) {
@@ -148,12 +155,13 @@ public class ProductHomeDAO {
 
     public List<ProductHome> getAllBestSellerProduct() {
         List<ProductHome> listBestSellerProduct = new ArrayList<>();
-        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+        String query = "select top 6 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, c.CategoryId, r.Name, r.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
                 + "join Category c\n"
-                + "on p.CategoryId = c.CategoryId";
+                + "on p.CategoryId = c.CategoryId\n"
+                + "order by r.RateStar desc";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -165,13 +173,15 @@ public class ProductHomeDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
+                        rs.getInt(7),
+                        rs.getString(8),
                         rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
                 ));
             }
         } catch (Exception e) {
@@ -232,7 +242,7 @@ public class ProductHomeDAO {
 
     public List<ProductHome> getProductBySearchName(String txtSearch) {
         List<ProductHome> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.Name, c.CategoryId, r.Name, r.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
                 + "join Restaurant r\n"
                 + "on p.RestaurantId = r.RestaurantId\n"
@@ -251,13 +261,15 @@ public class ProductHomeDAO {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
-                        rs.getBoolean(8),
+                        rs.getInt(7),
+                        rs.getString(8),
                         rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12),
-                        rs.getDouble(13)
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
                 ));
             }
         } catch (Exception e) {

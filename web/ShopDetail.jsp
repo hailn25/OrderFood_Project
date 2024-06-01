@@ -10,7 +10,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>4FOODHD</title>
+        <title>Fruitables - Vegetable Website Template</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -34,21 +34,6 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
-        <style>
-            .description {
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: normal;
-            }
-
-            .container-fluid.page-header.py-5 {
-                background-color: greenyellow;
-                border-radius: 15px; /* Điều chỉnh giá trị này để thay đổi độ bo tròn */
-            }
-        </style>
     </head>
 
     <body>
@@ -62,10 +47,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body d-flex align-items-center">
-                            <div class="input-group w-75 mx-auto d-flex">
-                                <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                                <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                            </div>
+                            <form id="searchForm" action="search" method="get" class="w-75 mx-auto d-flex">
+                                <input type="search" id="searchInput" class="form-control p-3" placeholder="keywords" name="txt" aria-describedby="search-icon-1">
+                                <button type="submit" class="input-group-text p-3"><i class="fa fa-search"></i></button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -75,11 +60,11 @@
 
             <!-- Single Page Header start -->
             <div class="container-fluid page-header py-5">
-                <h1 class="text-center text-white display-6">Chi tiết sản phẩm </h1>
+                <h1 class="text-center text-white display-6">Shop Detail</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="home" style="color: white">Home</a></li>
-                    <!--                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                                        <li class="breadcrumb-item active text-white">Shop Detail</li>-->
+                    <li class="breadcrumb-item"><a href="home">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                    <li class="breadcrumb-item active text-white">Shop Detail</li>
                 </ol>
             </div>
             <!-- Single Page Header End -->
@@ -94,7 +79,7 @@
                                 <div class="col-lg-6">
                                     <div class="border rounded">
                                         <a href="#">
-                                            <img src="img/${detail.image}" class="img-fluid rounded" alt="Image">
+                                            <img src="img/new/${detail.image}" class="img-fluid rounded" alt="Image">
                                     </a>
                                 </div>
                             </div>
@@ -120,12 +105,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <form action="addtocart" method="post">
-                                    <input type="hidden" name="productId" value="${detail.id}">
-                                    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                    </button>
-                                </form>
+                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -226,13 +206,13 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-xl-3">
-                        <div class="row g-4 fruite">
+                        <div class="row g-4 fruite">   
                             <div class="col-lg-12">
-                                <h4 class="mb-4">Sản phẩm nổi bật</h4>
+                                <h4 class="mb-4">Featured products</h4>
                                 <c:forEach var="listProductSale" items="${listProductSale}">
                                     <div class="d-flex align-items-center justify-content-start mb-4">
                                         <div class="rounded" style="width: 100px; height: 100px;">
-                                            <img src="img/${listProductSale.image}" class="img-fluid rounded" alt="${listProductSale.name}">
+                                            <img src="img/new/${listProductSale.image}" class="img-fluid rounded" alt="${listProductSale.name}">
                                         </div>
                                         <div class="ms-3">
                                             <h6 class="mb-2">${listProductSale.name}</h6>
@@ -249,7 +229,7 @@
                                     </div>
                                 </c:forEach>
                                 <div class="d-flex justify-content-center my-4">
-                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem thêm </a>
+                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">View More</a>
                                 </div>
                             </div>
 
@@ -271,12 +251,12 @@
                         <c:forEach var="listbestseller" items="${listBSL}">
                             <div class="border border-primary rounded position-relative vesitable-item">
                                 <div class="vesitable-img">
-                                    <img src="img/${listbestseller.image}" class="img-fluid w-100 rounded-top" alt="${listbestseller.name}">
+                                    <img src="img/new/${listbestseller.image}" class="img-fluid w-100 rounded-top" alt="${listbestseller.name}">
                                 </div>
                                 <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${listbestseller.categoryName}</div>
                                 <div class="p-4 pb-0 rounded-bottom">
                                     <h4>${listbestseller.name}</h4>
-                                    <p class="description">${listbestseller.decription}</p>
+                                    <p>${listbestseller.decription}</p>
                                     <div class="d-flex justify-content-between flex-lg-wrap">
                                         <p class="text-dark fs-5 fw-bold">${listbestseller.price}</p>
                                         <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
@@ -296,7 +276,23 @@
         <jsp:include page="Footer.jsp"></jsp:include>
             <!-- Footer End -->
 
-           
+            <!-- Copyright Start -->
+            <div class="container-fluid copyright bg-dark py-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
+                        </div>
+                        <div class="col-md-6 my-auto text-center text-md-end text-white">
+                            <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
+                            <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
+                            <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Copyright End -->
 
 
 
@@ -322,14 +318,10 @@
                 for (var i = 1; i <= 5; i++) {
                     var star = document.createElement('i');
                     star.className = 'fa fa-star';
-                    if (i <= Math.floor(rating)) {
+                    if (i <= rating) {
                         star.classList.add('text-primary'); // Đổi màu sao được đánh giá
                     } else {
                         star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
-                    }
-                    if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                        star.className = 'fa fa-star-half'; // Nửa sao
-                        star.classList.add('text-primary');
                     }
                     starContainer.appendChild(star);
                 }

@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>4FOODHD</title>
+        <title>Fruitables - Vegetable Website Template</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -42,39 +42,40 @@
             <div class="container topbar bg-primary d-none d-lg-block">
                 <div class="d-flex justify-content-between">
                     <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
-                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
+                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">123 Street, New York</a></small>
+                        <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
                         </c:if> 
                         <c:if test = "${sessionScope.account != null}"> 
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
                         </c:if> 
                     </div>
                 </div>
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="home" class="navbar-brand"><h1 class="text-primary display-6">4FOODHD</h1></a>
+                    <a href="Home.jsp" class="navbar-brand"><h1 class="text-primary display-6">Fruitables</h1></a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="shop" class="nav-item nav-link ">Cửa hàng</a>
+                            <a href="home" class="nav-item nav-link active">Home</a>
+                            <a href="Shop.jsp" class="nav-item nav-link ">Shop</a>
+                            <a href="ShopDetail.jsp" class="nav-item nav-link"></a>
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="Cart.jsp" class="dropdown-item">Giỏ hàng</a>
-                                    <a href="Checkout.jsp" class="dropdown-item">Thanh toán</a>
-                                    <a href="blog" class="dropdown-item">Blog</a>
-                                    <!--<a href="404.jsp" class="dropdown-item">404 Page</a>-->
+                                    <a href="Cart.jsp" class="dropdown-item">Cart</a>
+                                    <a href="Checkout.jsp" class="dropdown-item">Checkout</a>
+                                    <a href="Testimonial.jsp" class="dropdown-item">Testimonial</a>
+                                    <a href="404.jsp" class="dropdown-item">404 Page</a>
                                 </div>
                             </div>
-                            <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
+                            <a href="Contact.jsp" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="d-flex m-3 me-0">
                             
@@ -82,11 +83,11 @@
                                 <i class="fas fa-search text-primary"></i>
                             </button>
 
-                          <c:set value="${sessionScope.size}" var="size"></c:set>
-                            <a href="Cart.jsp" class="position-relative me-4 my-auto">
+                            <a href="#" class="position-relative me-4 my-auto">
                                 <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
+                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                             </a>
+
                             <a href="Profile.jsp" class="my-auto" >
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
@@ -97,24 +98,7 @@
             </div>
         </div>
         <!-- Navbar End -->
-    <!-- Modal Search Start -->
-            <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-fullscreen">
-                    <div class="modal-content rounded-0">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex align-items-center">
-                            <div class="input-group w-75 mx-auto d-flex">
-                                <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                                <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal Search End -->
+
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
