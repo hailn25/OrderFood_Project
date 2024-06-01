@@ -8,9 +8,10 @@ import java.util.Date;
 
 /**
  *
- * @author quoch
+ * @author Vu Huy
  */
 public class Category {
+
     private int categoryId;
     private String name;
     private Date createDate;
@@ -56,11 +57,6 @@ public class Category {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" + "categoryId=" + categoryId + ", name=" + name + ", createDate=" + createDate + ", updateDate=" + updateDate + '}';
     }
     
     

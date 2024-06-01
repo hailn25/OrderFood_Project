@@ -96,15 +96,15 @@
                                 </form>
                             </div>
                             <div class="col-6"></div>
-<!--                            <div class="col-xl-3">
-                                <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
-                                    <label for="fruits">Sắp xếp:</label>
-                                    <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                                        <option value="volvo">Không có</option>
-                                        <option value="volvo">Theo ngày cập nhật</option>
-                                    </select>
-                                </div>
-                            </div>-->
+                            <!--                            <div class="col-xl-3">
+                                                            <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
+                                                                <label for="fruits">Sắp xếp:</label>
+                                                                <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
+                                                                    <option value="volvo">Không có</option>
+                                                                    <option value="volvo">Theo ngày cập nhật</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>-->
                         </div>
                         <div class="row g-4">
                             <div class="col-lg-3">
@@ -169,6 +169,7 @@
                             </div>
                             <div class="col-lg-9">
                                 <div class="row g-4 justify-content-center">
+
                                     <c:forEach items="${listProductDTO}" var="p">
                                         <div class="col-md-6 col-lg-6 col-xl-4">
                                             <div class="rounded position-relative fruite-item">
@@ -180,14 +181,25 @@
                                                 </c:if>
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                     <h4 style="height: 80px">${p.name}</h4>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                        <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                        <a href=" " class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng</a>
+
+
+                                                    <div style="display: flex">
+                                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                        </div>
+                                                        <form action="addtocart" method="post">
+                                                            <input type="hidden" name="productId" value="${p.producId}">
+                                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                                            </button>
+                                                        </form>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </c:forEach>
+
                                     <!--                                    <div class="col-12">
                                                                             <div class="pagination d-flex justify-content-center mt-5">
                                                                                 <a href="#" class="rounded">&laquo;</a>

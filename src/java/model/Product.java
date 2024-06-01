@@ -8,10 +8,11 @@ import java.util.Date;
 
 /**
  *
- * @author quoch
+ * @author ADMIN
  */
 public class Product {
-    private int producId;
+
+    private int productId;
     private String name;
     private double price;
     private String description;
@@ -27,8 +28,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(int producId, String name, double price, String description, String imageURL, int categoryId, int restaurantId, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status) {
-        this.producId = producId;
+    public Product(int productId, String name, double price, String description, String imageURL, int categoryId, int restaurantId, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
         this.description = description;
@@ -42,12 +43,14 @@ public class Product {
         this.status = status;
     }
 
-    public int getProducId() {
-        return producId;
+    
+
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProducId(int producId) {
-        this.producId = producId;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getName() {
@@ -138,12 +141,4 @@ public class Product {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" + "producId=" + producId + ", name=" + name + ", price=" + price + ", description=" + description + ", imageURL=" + imageURL + ", categoryId=" + categoryId + ", restaurantId=" + restaurantId + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + '}';
-    }
-
-   
-    
-    
 }
