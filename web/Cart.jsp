@@ -159,38 +159,47 @@
                 </div>
                 <div class="row g-4 justify-content-end">
                     <div class="col-8"></div>
-                    <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
-                        <div class="bg-light rounded">
-                            <div class="p-4">
-                                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
-                                <c:set var="subtotal" value="0"/>
-                                <c:forEach var="i" items="${o.items}">
-                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
-                                </c:forEach>
-                                <div class="d-flex justify-content-between mb-4">
-                                    <h5 class="mb-0 me-4">Subtotal:</h5>
-                                    <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-0 me-4">Shipping</h5>
-                                    <div class="">
-                                        <p class="mb-0">Flat rate: 3.00</p>
+                    <div class="row g-4 justify-content-end">
+                        <div class="col-8"></div>
+                        <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                            <div class="bg-light rounded">
+                                <div class="p-4">
+                                    <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                                    <c:set var="subtotal" value="0"/>
+                                    <c:forEach var="i" items="${o.items}">
+                                        <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
+                                    </c:forEach>
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="mb-0 me-4">Subtotal:</h5>
+                                        <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
+                                    </div>
+                                    <div class="mb-4">
+                                        <p class="mb-0 text-dark py-4">Shipping</p>
+                                        <div class="form-check text-start">
+                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping" value="Free">
+                                            <label class="form-check-label" for="Shipping-1">Free Shipping</label>
+                                        </div>
+                                        <div class="form-check text-start">
+                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping" value="FlatRate">
+                                            <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                                        </div>
+                                        <div class="form-check text-start">
+                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping" value="LocalPickup">
+                                            <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <p class="mb-0 text-end">Shipping to Ukraine.</p>
+                                <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                    <h5 class="mb-0 ps-4 me-4">Total</h5>
+                                    <fmt:formatNumber value="${subtotal + 3.00}" maxFractionDigits="2"/>
+                                </div>
+                                <form action="checkout" method="get">
+                                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                                </form>
                             </div>
-                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                <h5 class="mb-0 ps-4 me-4">Total</h5>
-                                <fmt:formatNumber value="${subtotal + 3.00}" maxFractionDigits="2"/>
-                            </div>
-                            <form action="checkout" method="get">
-                                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
-
-                            </form>
-
-
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

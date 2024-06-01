@@ -101,21 +101,9 @@
                                 <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
                                 <input type="tel" class="form-control" name="phoneNumber" value="${account.phone}">
                             </div>
-                            <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address" onchange="redirectToCheckout()">
-                                <label class="form-check-label" for="Address-1">Ship to a different address?</label>
-                            </div>
+                           
 
-                            <script>
-                                function redirectToCheckout() {
-                                    var checkbox = document.getElementById("Address-1");
-                                    if (checkbox.checked) {
-                                        window.location.href = "Checkout_1.jsp";
-                                    }
-                                }
-                            </script>
-
-                            <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi  chú (thêm)"></textarea>
+                            <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú  (thêm)"></textarea>
 
                         </form>
 
@@ -211,18 +199,20 @@
                             </table>
                         </div>
 
-                      
+
                         <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
-                                    <input type="radio" class="form-check-input bg-primary border-0" id="cod" name="payment" value="cod" onclick="updatePaymentInfo('COD')" checked="">
+                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
                                     <label class="form-check-label" for="Delivery-1">Ship COD </label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
-                                    <input type="radio" class="form-check-input bg-primary border-0" id="vnpay" name="payment" value="vnpay" onclick="updatePaymentInfo('VNPay')">
-                                    <label class="form-check-label" for="Paypal-1">Chuyển khoản bằng VNPay</label>
+                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1" name="Paypal" value="Paypal">
+                                    <label class="form-check-label" for="Paypal-1">Chuyển khoản </label>
                                 </div>
                             </div>
                         </div>
@@ -239,55 +229,7 @@
             </div>
         </div>
         <!-- Checkout Page End -->
-<script>
-            function validateForm() {
-                var email = document.getElementsByName("email")[0];
-                var fullname = document.getElementsByName("fullname")[0];
-                var phonenumber = document.getElementsByName("phonenumber")[0];
-                var address = document.getElementsByName("address")[0];
 
-
-                if ((fullname.value == "" && fullname.value.length != 0) || (fullname.value.trim().length == 0 && fullname.value.length != 0)) {
-                    document.getElementById("errorMessage").innerHTML = "Vui lòng điền tên của bạn";
-                    return false;
-                }
-
-                var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-                if (!email.value.match(emailPattern)) {
-                    document.getElementById("errorMessage").innerHTML = "Vui lòng nhập đúng định dạng email";
-                    return false;
-                }
-
-
-                if (phonenumber.value.length != 10 && phonenumber.value.length > 0) {
-                    document.getElementById("errorMessage").innerHTML = "Số điện thoại phải có 10 số";
-                    return false;
-                }
-
-                if ((address.value == "" && address.value.length != 0) || (address.value.trim().length == 0 && address.value.length != 0)) {
-                    document.getElementById("errorMessage").innerHTML = "Vui lòng điền đúng địa chỉ";
-                    return false;
-                }
-
-            }
-            function updatePaymentInfo(paymentMethod) {
-                var paymentInfo = document.getElementById("paymentInfo");
-                var vnpayButton = document.getElementById("vnpay-button");
-                var codButton = document.getElementById("cod-button");
-                if (paymentMethod == 'COD') {
-                    paymentInfo.innerHTML = "Nhận hàng thanh toán";
-                    vnpayButton.style.display = "none";
-                    codButton.style.display = "block";
-                } else if (paymentMethod == 'VNPay') {
-                    paymentInfo.innerHTML = "Quý khách chuyển khoản trước";
-                    vnpayButton.style.display = "block";
-                    codButton.style.display = "none";
-                }
-            }
-            document.getElementById("order").addEventListener("click", function () {
-                document.getElementById("form").scrollIntoView({behavior: "smooth"});
-            });
-        </script>                               
 
         <jsp:include page="Footer.jsp"></jsp:include>
 
