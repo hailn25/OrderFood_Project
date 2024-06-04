@@ -50,7 +50,7 @@ public class ManagerCategoryControl extends HttpServlet {
             request.setAttribute("listC", listC);
             request.getRequestDispatcher("ManagerCategory.jsp").forward(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(ManagerProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManagerOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

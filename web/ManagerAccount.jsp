@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <link rel="stylesheet" href="css/fontawesome.min.css" />
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/bootstrap.min_1.css" />
         <link rel="stylesheet" href="css/templatemo-style.css">
     </head>
 
@@ -39,37 +39,54 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
-                            <li class="nav-item">
-                                <a class="nav-link" href="ManagerDashboard.jsp">
-                                    <i class="fas fa-tachometer-alt"></i> Thống kê
-                                    <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
+                            <c:if test="${sessionScope.account.roleId == 1}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="ManagerDashboard.jsp">
+                                        <i class="fas fa-tachometer-alt"></i> Thống kê
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerCategory">
-                                    <i class="far fa-file-alt"></i> Loại sản phẩm
-                                </a>
-                            </li>
+                            <c:if test="${sessionScope.account.roleId == 1}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerCategory">
+                                        <i class="far fa-file-alt"></i> Loại sản phẩm
+                                    </a>
+                                </li>
+                            </c:if>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerProduct">
-                                    <i class="fas fa-shopping-cart"></i> Sản phẩm
-                                </a>
-                            </li>
+                            <c:if test="${sessionScope.account.roleId == 4}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerProduct">
+                                        <i class="fas fa-shopping-cart"></i> Sản phẩm
+                                    </a>
+                                </li>
+                            </c:if>
 
-                            <li class="nav-item">
-                                <a class="nav-link active" href="managerAccount">
-                                    <i class="far fa-user"></i> Tài khoản
-                                </a>
-                            </li>
+                            <c:if test="${sessionScope.account.roleId == 1}">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="managerAccount">
+                                        <i class="far fa-user"></i> Tài khoản
+                                    </a>
+                                </li>
+                            </c:if>
+
 
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link d-block" href="Login.jsp">
-                                    <b>Đăng xuất</b>
-                                </a>
+                                <c:if test = "${sessionScope.account == null}"> 
+                                    <a class="nav-link d-block" href="Login.jsp">
+                                        <b>Đăng nhập</b>
+                                    </a>
+
+                                </c:if> 
+                                <c:if test = "${sessionScope.account != null}"> 
+                                    <a class="nav-link d-block" href="logout">
+                                        <b>Đăng xuất</b>
+                                    </a>
+                                </c:if> 
                             </li>
                         </ul>
                     </div>
@@ -84,7 +101,7 @@
                         <div class="col-sm-6">
                             <h2>Quản lý <b>tài khoản</b></h2>
                         </div>
-                        
+
                     </div>
                 </div>
                 <table id="example" class="display" style="width:100%">
@@ -103,9 +120,9 @@
                             <tr>
                                 <td>${o.accountId}</td>
                                 <td>${o.email}</td>
-                                <td>${o.fullName}</td>
+                                <td>${o.name}</td>
                                 <td>
-                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Customer" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Restaurant" : "Unknown role")))}
+                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Customer" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Restaurant" : (o.roleId == 5 ? "Staff" : "Unknown role"))))}
                                 </td>
                                 <td>${o.status ? "Active" : "Banned"}</td>
                                 <td>
@@ -127,7 +144,7 @@
 
 
         <!--cai nay cua ProGear-->
-        <script src="js/manager.js" type="text/javascript"></script>
+        <script src="js/manager_1.js" type="text/javascript"></script>
 
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>

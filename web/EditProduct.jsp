@@ -16,7 +16,7 @@
         <!-- https://fontawesome.com/ -->
         <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
         <!-- http://api.jqueryui.com/datepicker/ -->
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/bootstrap.min_1.css" />
         <!-- https://getbootstrap.com/ -->
         <link rel="stylesheet" href="css/templatemo-style.css">
         <!--
@@ -27,10 +27,12 @@
 
     <body style="background-color: #F6F6F6">
 
-        <nav class="navbar navbar-expand-xl">
+<!--        <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="Dashboard.jsp">
-                    <h1 class="tm-site-title mb-0">Nhà hàng</h1>
+                    <c:if test="${not empty sessionScope.account.name}">
+                        <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
+                        </c:if>
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"
@@ -46,42 +48,59 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
-                        <li class="nav-item">
-                            <a class="nav-link" href="Dashboard.jsp">
-                                <i class="fas fa-tachometer-alt"></i> Thống kê
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="managerCategory">
-                                <i class="far fa-file-alt"></i> Loại sản phẩm
-                            </a>
-                        </li>
+                        <c:if test="${sessionScope.account.roleId == 1}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="Dashboard.jsp">
+                                    <i class="fas fa-tachometer-alt"></i> Thống kê
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        </c:if>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="managerProduct">
-                                <i class="fas fa-shopping-cart"></i> Sản phẩm
-                            </a>
-                        </li>
+                        <c:if test="${sessionScope.account.roleId == 1}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerCategory">
+                                    <i class="far fa-file-alt"></i> Loại sản phẩm
+                                </a>
+                            </li>
+                        </c:if>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="managerAccount">
-                                <i class="far fa-user"></i> Tài khoản
-                            </a>
-                        </li>
+                        <c:if test="${sessionScope.account.roleId == 4}">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="managerProduct">
+                                    <i class="fas fa-shopping-cart"></i> Sản phẩm
+                                </a>
+                            </li>
+                        </c:if>
+
+                        <c:if test="${sessionScope.account.roleId == 1}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerAccount">
+                                    <i class="far fa-user"></i> Tài khoản
+                                </a>
+                            </li>
+                        </c:if>
 
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link d-block" href="Login.jsp">
-                                <b>Đăng xuất</b>
-                            </a>
+                            <c:if test = "${sessionScope.account == null}"> 
+                                <a class="nav-link d-block" href="Login.jsp">
+                                    <b>Đăng nhập</b>
+                                </a>
+
+                            </c:if> 
+                            <c:if test = "${sessionScope.account != null}"> 
+                                <a class="nav-link d-block" href="logout">
+                                    <b>Đăng xuất</b>
+                                </a>
+                            </c:if> 
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>-->
 
 
         <div class="container tm-mt-big tm-mb-big">
@@ -93,7 +112,7 @@
                                 <h2 class="tm-block-title d-inline-block text-uppercase">Chỉnh sửa sản phẩm</h2>
                             </div>
                         </div>
-                        <form action="editProduct" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                        <form action="editOpenProduct" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
                                     <div>
@@ -114,6 +133,15 @@
                                             <c:forEach items="${listC}" var="o">
                                                 <option value="${o.categoryId}" ${o.categoryId == cid ? "selected" : ""}>${o.name}</option>
                                             </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="category">Trạng thái</label>
+                                        <select class="custom-select tm-select-accounts" name="status" required>
+<!--                                            <option value="1">Bật</option>
+                                            <option value="0">Tắt</option>-->
+                                                <option value="1" ${status == true ? "selected" : ""}>Bán hàng</option>
+                                                <option value="0" ${status == false  ? "selected" : ""}>Ẩn</option>
                                         </select>
                                     </div>
                                     <div class="row">

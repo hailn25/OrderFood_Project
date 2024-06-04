@@ -43,14 +43,16 @@ public class LoadProductControl extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             String pID = request.getParameter("pid");
             String cID = request.getParameter("cid");
+            String status = request.getParameter("status");
             ProductDAO dao = new ProductDAO();
             CategoryDAO dao1 = new CategoryDAO();
-            Product p = dao.getProductByPID(pID);
+            Product p = dao.getProductByID(Integer.parseInt(pID));
             ArrayList<Category> listC = dao1.getAllCategory();
 
             request.setAttribute("detail", p);
             request.setAttribute("cid", cID);
             request.setAttribute("listC", listC);
+            request.setAttribute("status", status);
 
             request.getRequestDispatcher("EditProduct.jsp").forward(request, response);
         } catch (SQLException ex) {

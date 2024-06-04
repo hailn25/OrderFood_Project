@@ -11,10 +11,11 @@ import java.util.Date;
  * @author Vu Huy
  */
 public class Account {
+
     private int accountId;
     private String email;
     private String password;
-    private String fullName;
+    private String name;
     private boolean gender;
     private String phone;
     private String address;
@@ -24,15 +25,15 @@ public class Account {
     private Date createDate;
     private Date updateDate;
     private int roleId;
-    
+
     public Account() {
     }
-    
-    public Account(int accountId, String email, String password, String fullName, boolean gender, String phone, String address, String imageAvatar, boolean status, Date lastDateLogin, Date createDate, Date updateDate, int roleId) {
+
+    public Account(int accountId, String email, String password, String name, boolean gender, String phone, String address, String imageAvatar, boolean status, Date lastDateLogin, Date createDate, Date updateDate, int roleId) {
         this.accountId = accountId;
         this.email = email;
         this.password = password;
-        this.fullName = fullName;
+        this.name = name;
         this.gender = gender;
         this.phone = phone;
         this.address = address;
@@ -42,6 +43,14 @@ public class Account {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.roleId = roleId;
+    }
+     public Account(String email, String password, String name, boolean gender, String phone, String address) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.phone = phone;
+        this.address = address;
     }
 
     public int getAccountId() {
@@ -68,12 +77,12 @@ public class Account {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isGender() {
@@ -148,16 +157,8 @@ public class Account {
         this.roleId = roleId;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" + "accountId=" + accountId + ", email=" + email + ", password=" + password + ", fullName=" + fullName + ", gender=" + gender + ", phone=" + phone + ", address=" + address + ", imageAvatar=" + imageAvatar + ", status=" + status + ", lastDateLogin=" + lastDateLogin + ", createDate=" + createDate + ", updateDate=" + updateDate + ", roleId=" + roleId + '}';
-    }
-
     public int getId() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    
-    
-    
+
 }

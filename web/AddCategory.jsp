@@ -16,7 +16,7 @@
         <!-- https://fontawesome.com/ -->
         <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
         <!-- http://api.jqueryui.com/datepicker/ -->
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/bootstrap.min_1.css" />
         <!-- https://getbootstrap.com/ -->
         <link rel="stylesheet" href="css/templatemo-style.css">
         <!--
@@ -27,7 +27,7 @@
 
     <body style="background-color: #F6F6F6">
 
-        <nav class="navbar navbar-expand-xl">
+<!--        <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="Dashboard.jsp">
                     <h1 class="tm-site-title mb-0">Admin</h1>
@@ -81,7 +81,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>-->
 
 
         <div class="container tm-mt-big tm-mb-big">

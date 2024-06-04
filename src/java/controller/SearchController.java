@@ -5,27 +5,22 @@
 
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.ProductHomeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Category;
-import model.Product;
+import java.util.List;
+import model.ListProduct;
+import model.ProductHome;
 
 /**
  *
- * @author Vu Huy
+ * @author ADMIN
  */
-@WebServlet(name="ManagerAddProductControl", urlPatterns={"/managerAddProduct"})
-public class ManagerAddProductControl extends HttpServlet {
+public class SearchController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,24 +32,17 @@ public class ManagerAddProductControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            response.setContentType("text/html;charset=UTF-8");
-
-//            HttpSession session = request.getSession();
-//            Account a = (Account) session.getAttribute("acc");
-//            int id = a.getAccountId();
-            int id = 3;
-            ProductDAO dao = new ProductDAO();
-            CategoryDAO dao1 = new CategoryDAO();
-            ArrayList<Product> listP = dao.getProductByRestaurantId(id);
-            ArrayList<Category> listC = dao1.getAllCategory();
-
-            request.setAttribute("listC", listC);
-            request.setAttribute("listP", listP);
-            request.getRequestDispatcher("AddProduct.jsp").forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ManagerProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        String txtSearch = request.getParameter("txt");
+        request.setCharacterEncoding("UTF-8");
+        ProductHomeDAO dao = new ProductHomeDAO();
+        List<ProductHome> list = dao.getProductBySearchName(txtSearch);
+        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
+        List<ListProduct> listProductP = dao.getListProductP();
+        
+        request.setAttribute("listP", list);
+        request.setAttribute("listV", listProductP);
+        request.setAttribute("listB", listBestSellerProduct);
+        request.getRequestDispatcher("Home.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

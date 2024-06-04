@@ -1,6 +1,7 @@
 package controller;
 
 import dao.ProductDAO;
+import dao.RestaurantDAO;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -13,11 +14,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import model.Account;
 
-@WebServlet(name = "AddControl", urlPatterns = {"/addProduct"})
+@WebServlet(name = "AddControl", urlPatterns = {"/addOpenProduct"})
 @MultipartConfig
-public class AddProductControl extends HttpServlet {
+public class AddOpenProductControl extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,33 +32,9 @@ public class AddProductControl extends HttpServlet {
             String quantity = request.getParameter("quantity");
             String description = request.getParameter("description");
             String category = request.getParameter("category");
+            String status = request.getParameter("status");
 
-//            // Xử lý file upload
-//            Part filePart = request.getPart("image"); // Lấy file từ request
-//            if (filePart != null && filePart.getSize() > 0) {
-//                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-//
-//                // Đường dẫn thư mục lưu ảnh
-//                String uploadPath = getServletContext().getRealPath("") + File.separator + "img";
-//                File uploadDir = new File(uploadPath);
-//                if (!uploadDir.exists()) uploadDir.mkdir();
-//
-//                // Lưu file
-//                filePart.write(uploadPath + File.separator + fileName);
-//
-//                // Đường dẫn ảnh sau khi upload
-//                String img = "img/" + fileName;
-//
-//                // Thay bằng lấy từ session nếu cần
-//                int restaurantId = 3;
-//
-//                ProductDAO dao = new ProductDAO();
-//                dao.insertProduct(name, price, description, img, category, restaurantId, quantity);
-//            } else {
-//                // Xử lý khi không có file được upload
-//                // Bạn có thể thêm thông báo lỗi hoặc xử lý khác tùy theo yêu cầu của bạn
-//                response.getWriter().println("No file uploaded or file is empty");
-//            }
+
 // Xử lý file upload
             Part filePart = request.getPart("image");
             String fileName = filePart.getSubmittedFileName();
@@ -71,14 +50,18 @@ public class AddProductControl extends HttpServlet {
             }
 
 // Thay bằng lấy từ session nếu cần
-            int restaurantId = 3;
+            HttpSession session = request.getSession();
+            Account a = (Account) session.getAttribute("account");
+            int accountId = a.getAccountId();
+            RestaurantDAO dao2 = new RestaurantDAO();
+            int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
 
             ProductDAO dao = new ProductDAO();
-            dao.insertProduct(name, price, description, img, category, restaurantId, quantity);
+            dao.insertProduct(name, price, description, img, category, restaurantId, quantity, status);
 
-            response.sendRedirect("managerProduct");
+            response.sendRedirect("managerOpenProduct");
         } catch (SQLException ex) {
-            Logger.getLogger(AddProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

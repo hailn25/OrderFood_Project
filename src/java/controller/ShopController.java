@@ -4,27 +4,27 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
-import model.Category;
-import model.Product;
+import dao.FunctionShopDAO;
+import dao.ShopDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import model.Category;
+import model.CategoryDTO;
+import model.ProductDTO;
+import model.RestaurantDTO;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "ManagerControl", urlPatterns = {"/managerProduct"})
-public class ManagerProductControl extends HttpServlet {
+@WebServlet(name = "ShopController", urlPatterns = {"/shop"})
+public class ShopController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,35 +36,45 @@ public class ManagerProductControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        try {
-            response.setContentType("text/html;charset=UTF-8");
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        ShopDAO dao = new ShopDAO();
+        FunctionShopDAO daofunction = new FunctionShopDAO();
 
-//            HttpSession session = request.getSession();
-//            Account a = (Account) session.getAttribute("acc");
-//            int id = a.getAccountId();
-            int id = 3;
-            ProductDAO dao = new ProductDAO();
-            CategoryDAO dao1 = new CategoryDAO();
+        ArrayList<ProductDTO> listProductDTO = dao.getAllProductDTO();
+        request.setAttribute("listProductDTO", listProductDTO);
 
-            ArrayList<Product> listP = dao.getProductByRestaurantId(id);
-            ArrayList<Category> listC = dao1.getAllCategory();
+        ArrayList<Category> listAllCategory = dao.getAllCategory();
+        request.setAttribute("listAllCategory", listAllCategory);
 
-            request.setAttribute("listC", listC);
-            request.setAttribute("listP", listP);
-            request.getRequestDispatcher("ManagerProduct.jsp").forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ManagerProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        ArrayList<CategoryDTO> listTotalQuantityByCategory = dao.getTotalQuantityByCategory();
+        request.setAttribute("listTotalQuantityByCategory", listTotalQuantityByCategory);
+
+        ArrayList<RestaurantDTO> listRestaurantDTO = dao.getAllRestaurantDTO();
+        request.setAttribute("listRestaurantDTO", listRestaurantDTO);
+
+        String categoryName = request.getParameter("categoryName");
+        if (categoryName != null) {
+            listProductDTO = daofunction.getAllProductDTOByCategoryName(categoryName);
+            request.setAttribute("listProductDTO", listProductDTO);
         }
+
+        String productName = request.getParameter("productName");
+        String maxPriceStr = request.getParameter("rangeInput");
+
+        if (productName != null || maxPriceStr != null) {
+            try {
+                int maxPrice = maxPriceStr != null ? Integer.parseInt(maxPriceStr) : 0;
+                listProductDTO = daofunction.searchProductByAttribute(productName, maxPrice);
+                request.setAttribute("listProductDTO", listProductDTO);
+            } catch (NumberFormatException ex) {
+                // Xử lý ngoại lệ: ghi log hoặc thông báo lỗi cho người dùng
+            }
+        }
+
+        request.getRequestDispatcher("Shop.jsp").forward(request, response);
     }
 
-//    public static void main(String[] args) throws Exception {
-//        ProductDAO dao = new ProductDAO();
-//
-//        ArrayList<Category> listC = dao.getAllCategory();
-//        System.out.println(listC);
-//
-//    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -77,11 +87,7 @@ public class ManagerProductControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManagerProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -95,11 +101,7 @@ public class ManagerProductControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManagerProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

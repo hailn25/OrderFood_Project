@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-@WebServlet(name = "EditProductControl", urlPatterns = {"/editProduct"})
+@WebServlet(name = "EditProductControl", urlPatterns = {"/editOpenProduct"})
 @MultipartConfig
 public class EditProductControl extends HttpServlet {
 
@@ -29,7 +29,8 @@ public class EditProductControl extends HttpServlet {
             String description = request.getParameter("description");
             String category = request.getParameter("category");
             String price = request.getParameter("price");
-            String stock = request.getParameter("quantity");
+            String quantity = request.getParameter("quantity");
+            String status = request.getParameter("status");
 
             // Xử lý file upload
             Part filePart = request.getPart("image");
@@ -47,10 +48,10 @@ public class EditProductControl extends HttpServlet {
 
             // Gọi DAO để cập nhật sản phẩm
             ProductDAO dao = new ProductDAO();
-            dao.editProduct(name, price, description, img, category, stock, id);
+            dao.editProduct(name, price, description, img, category, quantity, status, id);
 
             // Chuyển hướng sau khi cập nhật thành công
-            response.sendRedirect("managerProduct");
+            response.sendRedirect("managerOpenProduct");
         } catch (SQLException ex) {
             Logger.getLogger(EditProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }

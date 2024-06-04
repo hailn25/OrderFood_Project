@@ -11,6 +11,7 @@ import java.util.Date;
  * @author ADMIN
  */
 public class Product {
+
     private int productId;
     private String name;
     private double price;
@@ -42,45 +43,6 @@ public class Product {
         this.status = status;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public int getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(int restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public boolean isIsSale() {
-        return isSale;
-    }
-
-    public void setIsSale(boolean isSale) {
-        this.isSale = isSale;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
     
 
     public int getProductId() {
@@ -115,6 +77,13 @@ public class Product {
         this.description = description;
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
     public int getCategoryId() {
         return categoryId;
@@ -124,6 +93,21 @@ public class Product {
         this.categoryId = categoryId;
     }
 
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public boolean isIsSale() {
+        return isSale;
+    }
+
+    public void setIsSale(boolean isSale) {
+        this.isSale = isSale;
+    }
 
     public int getQuantity() {
         return quantity;
@@ -131,6 +115,22 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public boolean isStatus() {

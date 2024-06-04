@@ -16,7 +16,7 @@
         <!-- https://fontawesome.com/ -->
         <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
         <!-- http://api.jqueryui.com/datepicker/ -->
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/bootstrap.min_1.css" />
         <!-- https://getbootstrap.com/ -->
         <link rel="stylesheet" href="css/templatemo-style.css">
         <!--
@@ -27,7 +27,7 @@
 
     <body style="background-color: #F6F6F6">
 
-        <nav class="navbar navbar-expand-xl">
+<!--        <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="Dashboard.jsp">
                     <h1 class="tm-site-title mb-0">Nhà hàng</h1>
@@ -81,7 +81,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>-->
 
 
         <div class="container tm-mt-big tm-mb-big">
@@ -93,7 +93,7 @@
                                 <h2 class="tm-block-title d-inline-block text-uppercase">Thêm sản phẩm mới</h2>
                             </div>
                         </div>
-                        <form action="addProduct" method="post" enctype="multipart/form-data">
+                        <form action="addOpenProduct" method="post" enctype="multipart/form-data">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
                                     <div>
@@ -116,6 +116,13 @@
                                             </c:forEach>
                                         </select>
                                     </div>
+                                    <div class="form-group mb-3">
+                                        <label for="category">Trạng thái</label>
+                                        <select class="custom-select tm-select-accounts" name="status" required>
+                                                <option value="1">Bật</option>
+                                                <option value="0">Tắt</option>
+                                        </select>
+                                    </div>
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="price">Đơn giá</label>
@@ -127,15 +134,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--                                <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                                                                    <div class="tm-product-img-dummy mx-auto">
-                                                                        <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
-                                                                    </div>
-                                                                    <div class="custom-file mt-3 mb-3">
-                                                                        <input id="fileInput" name="image" type="file" style="display:none;" />
-                                                                        <input type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
-                                                                    </div>
-                                                                </div>-->
 
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <div class="tm-product-img-dummy mx-auto">
