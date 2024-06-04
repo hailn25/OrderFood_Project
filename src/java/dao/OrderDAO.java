@@ -27,9 +27,9 @@ public class OrderDAO {
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(insertOrderSQL, PreparedStatement.RETURN_GENERATED_KEYS);
 
-        ps.setInt(1, u.getAccountId()); // accountId ở vị trí thứ nhất trong câu lệnh SQL
-        ps.setDouble(2, cart.getTotalMoney()); // totalMoney ở vị trí thứ hai trong câu lệnh SQL
-        ps.setDate(3, sqlDate); // createDate ở vị trí thứ ba trong câu lệnh SQL
+        ps.setInt(1, u.getAccountId()); 
+        ps.setDouble(2, cart.getTotalMoney()); 
+        ps.setDate(3, sqlDate); 
 
         ps.executeUpdate();
 

@@ -118,7 +118,7 @@
 
                                     </td>
                                     <td>
-                                        <div class="input-group quantity mt-4" style="width: 100px; border: none">
+                                        <div class="input-group  mt-4" style="width: 100px; border: none">
                                             <div class="input-group-btn" style="border: none;">
                                                 <button><a href="process?num=-1&id=${i.product.productId}" style="border: none">-</a></button>
                                             </div>

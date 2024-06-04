@@ -108,7 +108,7 @@
     <body>
         <jsp:include page="Header.jsp"></jsp:include>
 
-            
+
             <!-- Modal Search End -->
 
 
@@ -247,7 +247,7 @@
                                                     <p>${p.restaurantName}</p>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                                         <p class="text-dark fs-5 fw-bold mb-0">${p.price}</p>
-                                                        <form action="addtocart" method="post" class="btn-add-to-cart">
+                                                        <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
                                                             <input type="hidden" name="productId" value="${p.id}">
                                                             <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary w-100">
                                                                 <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng</button>
@@ -265,7 +265,6 @@
             </div>      
         </div>
         <!-- Fruits Shop End-->
-
 
 
         <!-- Vesitable Shop Start-->
@@ -347,7 +346,7 @@
                     <h4 class="text-primary">Phản hồi</h4>
                     <h1 class="display-5 mb-5 text-dark">Họ nói gì về chúng tôi!</h1>
                 </div>
-             
+
 
             </div>
         </div>
@@ -371,9 +370,8 @@
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
         <!-- Template Javascript -->
-        <script src="js/main.js"></script>
 
-
+        <script src="js/add.js"></script>
     </body>
 
 </html>

@@ -68,8 +68,9 @@ public class CheckoutServlet extends HttpServlet {
             response.sendRedirect("Login.jsp");
             return;
         }
-
-        request.getRequestDispatcher("Checkout.jsp").forward(request, response);
+      String currentURL = request.getRequestURI();
+    session.setAttribute("redirectURL", currentURL);
+      response.sendRedirect("Checkout.jsp");
     
     } 
 
@@ -96,9 +97,10 @@ public class CheckoutServlet extends HttpServlet {
     Object a = session.getAttribute("account");
     if (a != null) {
         account = (Account) a;
-        // Ensure account exists before accessing its properties
+        
         int id = account.getAccountId();
         OrderDAO dao = new OrderDAO();
+        
         dao.addOrder(cart, account);
         session.removeAttribute("cart");
         session.setAttribute("size", 0);

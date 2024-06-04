@@ -222,7 +222,7 @@
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
                                     <input type="radio" class="form-check-input bg-primary border-0" id="vnpay" name="payment" value="vnpay" onclick="updatePaymentInfo('VNPay')">
-                                    <label class="form-check-label" for="Paypal-1">Chuyển khoản bằng VNPay</label>
+                                    <label class="form-check-label" for="Paypal-1">Thanh toán  bằng VNPay</label>
                                 </div>
                             </div>
                         </div>
