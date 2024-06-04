@@ -48,15 +48,15 @@ public class ShopControl extends HttpServlet {
         }
 
         String productName = request.getParameter("productName");
-        String maxPriceStr = request.getParameter("rangeInput");
+        String minPriceSTR = request.getParameter("rangeInput");
 
-        if (productName != null || maxPriceStr != null) {
+        if (productName != null || minPriceSTR != null) {
             try {
-                int maxPrice = maxPriceStr != null ? Integer.parseInt(maxPriceStr) : 0;
-                listProductDTO = daofunction.searchProductByAttribute(productName, maxPrice);
+                int minPrice = Integer.parseInt(minPriceSTR);
+                listProductDTO = daofunction.searchProductByAttribute(productName, minPrice);
                 request.setAttribute("listProductDTO", listProductDTO);
             } catch (NumberFormatException ex) {
-                // Xử lý ngoại lệ: ghi log hoặc thông báo lỗi cho người dùng
+
             }
         }
 

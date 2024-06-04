@@ -11,7 +11,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>4FOODHD</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -84,14 +84,14 @@
                             <div class="col-xl-3">
                                 <form action="shop">
                                     <div class="input-group w-100 mx-auto d-flex">
-                                        <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName">
+                                        <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName" required >
                                         <button id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                                     </div>
 
                                     <div class="mb-3" style="margin: 10px">
                                         <h4 class="mb-2">Giá sản phẩm</h4>
                                         <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000" value="0" oninput="updateAmount()">
-                                        <output id="amount" name="amount" min-velue="0" max-value="1000" for="rangeInput">0 VND </output>
+                                        <output id="amount" name="amount" min-velue="0" max-value="1000" for="rangeInput">0 VND - 1.000.000 VND</output>
                                     </div>
                                 </form>
                             </div>
@@ -245,12 +245,13 @@
                 var value = rangeInput.value;
 
                 // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND';
+                var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
                 // Cập nhật nội dung hiển thị
                 amount.value = formattedValue;
                 amount.innerText = formattedValue;
             }
+
         </script>
     </body>
 

@@ -60,31 +60,18 @@ public class FunctionShopDAO {
         return listProductDTO;
     }
 
-    public ArrayList<ProductDTO> searchProductByAttribute(String productName, int maxPrice) {
+    public ArrayList<ProductDTO> searchProductByAttribute(String productName, int minPrice) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            if (productName != null &&  maxPrice == 0) {
-                String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
-                        + "FROM     Product INNER JOIN\n"
-                        + "                  Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
-                        + "                  Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
-                        + "                  Account ON Restaurant.AccountId = Account.AccountId\n"
-                        + "WHERE Product.Name like N'%" + productName + "%'";
-                con = new DBContext().getConnection();
-                ps = con.prepareStatement(sql);
-                rs = ps.executeQuery();
-            } else {
-                String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
-                        + "FROM     Product INNER JOIN\n"
-                        + "                  Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
-                        + "                  Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
-                        + "                  Account ON Restaurant.AccountId = Account.AccountId\n"
-                        + "WHERE Product.Name like '%" + productName + "%' and Product.Price <= ?";
-                con = new DBContext().getConnection();
-                ps = con.prepareStatement(sql);
-                ps.setInt(1, maxPrice);
-                rs = ps.executeQuery();
-            }
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
+                    + "FROM     Product INNER JOIN\n"
+                    + "Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
+                    + "Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
+                    + "Account ON Restaurant.AccountId = Account.AccountId\n"
+                    + "WHERE Product.Name like N'%"+ productName +"%'  and (Product.Price between "+ minPrice +" and 1000)";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 listProductDTO.add(new ProductDTO(rs.getInt(1),
@@ -114,11 +101,11 @@ public class FunctionShopDAO {
 //        for (ProductDTO pt : dao.getAllProductDTOByCategoryName("Bánh kem")) {
 //            System.out.println(pt.toString());
 //        }
-//        for (ProductDTO pt : dao.searchProductByAttribute("Bánh", "", 0)) {
+        for (ProductDTO pt : dao.searchProductByAttribute("Bạc xỉu", 10)) {
+            System.out.println(pt.toString());
+        }
+//        for (ProductDTO pt : dao.searchProductByAttribute("Cơm ", 0)) {
 //            System.out.println(pt.toString());
 //        }
-         for (ProductDTO pt : dao.searchProductByAttribute("Cơm ", 0)) {
-             System.out.println(pt.toString());
-        }
     }
 }
