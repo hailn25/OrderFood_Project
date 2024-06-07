@@ -34,13 +34,17 @@
                                         <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
                                     </div>
                                     <!-- Forgot password -->
-                                    <p class="small mb-5 pb-lg-2"><a class="text-muted" href="forgetPassword.jsp">Forgot password?</a></p>
+                                    <p class="small mb-5 pb-lg-2"><a class="text-muted" href="ForgetPassword.jsp">Forgot password?</a></p>
                                     <hr class="my-4">
 
                                     <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 
                                     <hr class="my-4">
                                 </form>
+                                
+<a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force">
+                                    <button class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;"                                                                                                         >
+                                        Sign in with google</button></a>
 
                                 <hr class="my-4">
 
