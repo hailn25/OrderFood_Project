@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.OrderDAO;
+import dao.OrderDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,41 +16,45 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
 import model.Cart;
+import model.Item;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name="CheckoutServlet", urlPatterns={"/checkout"})
+@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
 public class CheckoutServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckoutServlet</title>");  
+            out.println("<title>Servlet CheckoutServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -58,8 +62,8 @@ public class CheckoutServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        
+            throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
@@ -68,14 +72,15 @@ public class CheckoutServlet extends HttpServlet {
             response.sendRedirect("Login.jsp");
             return;
         }
-      String currentURL = request.getRequestURI();
-    session.setAttribute("redirectURL", currentURL);
-      response.sendRedirect("Checkout.jsp");
-    
-    } 
+        String currentURL = request.getRequestURI();
+        session.setAttribute("redirectURL", currentURL);
+        response.sendRedirect("Checkout.jsp");
 
-    /** 
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -83,37 +88,48 @@ public class CheckoutServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-         HttpSession session = request.getSession(true);
-    Cart cart = null;
-    Object o = session.getAttribute("cart");
-    if (o != null) {
-        cart = (Cart) o;
-    } else {
-        cart = new Cart();
-    }
-    
-    Account account = null;
-    Object a = session.getAttribute("account");
-    if (a != null) {
-        account = (Account) a;
-        
-        int id = account.getAccountId();
-        OrderDAO dao = new OrderDAO();
-        
-        dao.addOrder(cart, account);
-        session.removeAttribute("cart");
-        session.setAttribute("size", 0);
-        request.getRequestDispatcher("home").forward(request, response);
-    } else {
-        response.sendRedirect("Login.jsp");
-    }
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+        String email = request.getParameter("email");
+        String name = request.getParameter("name");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        String note = request.getParameter("note");
+        String payment = request.getParameter("payment");
+        String total = request.getParameter("cost");
+
+        Cart cart = null;
+        Object o = session.getAttribute("cart");
+        if (o != null) {
+            cart = (Cart) o;
+        } else {
+            cart = new Cart();
+        }
+
+        Account account = null;
+        Object a = session.getAttribute("account");
+        if (a != null) {
+
+            account = (Account) a;
+            int id = account.getAccountId();
+            OrderDTO dao = new OrderDTO();
+            dao.insertNewOrder(id, Double.parseDouble(total), name, email, phone, address, note);
+            int oid = dao.getOrderID();
+            for (Item item : cart.getItems()) {
+                dao.insertNewOrderDetail(oid, item.getProduct().getProductId(), item.getQuantity(), item.getPrice() * item.getQuantity(), payment, true);
+            }
+            session.removeAttribute("cart");
+            session.setAttribute("size", 0);
+            request.getRequestDispatcher("home").forward(request, response);
+        } else {
+            response.sendRedirect("Login.jsp");
+        }
 
     }
-    
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

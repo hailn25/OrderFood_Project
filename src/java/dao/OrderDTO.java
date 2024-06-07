@@ -51,33 +51,33 @@ public class OrderDTO {
         return 0;
     }
 
-    public void insertNewOrderDetail(int oderId, int productId,  int quantity, double totalMoney, String paymentBy, boolean  paymentStatus, int status) {
-        String sql = "INSERT INTO [dbo].[OrderDetail]\n"
-                + "           ([OrderID]\n"
-                + "           ,[ProductID]\n"
-                + "           ,[size]\n"
-                + "           ,[quantity]\n"
-                + "           ,[totalMoney]\n"
-                + "           ,[Payment]\n"
-                + "           ,[PaymentStatus]\n"
-                + "           ,[Status])\n"
-                + "     VALUES (?,?,?,?,?,?,?,?)";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, oderId);
-            ps.setInt(2, productId);
-           
-            ps.setInt(3, quantity);
-           
-            ps.setDouble(4, totalMoney);
-            ps.setString(5, paymentBy);
-            ps.setBoolean(7, paymentStatus);
-            ps.setInt(8, status);
-            ps.executeUpdate();
-        } catch (Exception e) {
-        }
+ public void insertNewOrderDetail(int orderId, int productId, int quantity, double totalMoney, String paymentBy, boolean paymentStatus) {
+    LocalDate curDate = LocalDate.now();
+    Date sqlDate = Date.valueOf(curDate);
+    String sql = "INSERT INTO [dbo].[OrderDetail]\n"
+            + "           ([OrderID]\n"
+            + "           ,[ProductID]\n"
+            + "           ,[Quantity]\n"
+            + "           ,[TotalMoney]\n"
+            + "           ,[PaymentBy]\n"
+            + "           ,[PaymentStatus]\n"
+            + "           ,[UpdateDate])\n"
+            + "     VALUES (?,?,?,?,?,?,?)"; 
+    try {
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, orderId);
+        ps.setInt(2, productId);
+        ps.setInt(3, quantity);
+        ps.setDouble(4, totalMoney);
+        ps.setString(5, paymentBy);
+        ps.setBoolean(6, paymentStatus); 
+        ps.setDate(7, sqlDate);
+        ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace(); 
     }
+}
 
     
 }
