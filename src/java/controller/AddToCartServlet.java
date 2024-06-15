@@ -92,7 +92,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             id = Integer.parseInt(productId);
             ProductDAO dao = new ProductDAO();
             Product p = dao.getProductByID(id);
-            double price = p.getPrice() * 1.2;
+            double price = p.getPrice();
             Item t = new Item(p, num, price);
             cart.addItem(t);
         } else {
