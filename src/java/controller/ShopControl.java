@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import model.*;
+import utils.Validation;
 
 /**
  *
@@ -47,19 +48,6 @@ public class ShopControl extends HttpServlet {
             request.setAttribute("listProductDTO", listProductDTO);
         }
 
-        String productName = request.getParameter("productName");
-        String minPriceSTR = request.getParameter("rangeInput");
-
-        if (productName != null || minPriceSTR != null) {
-            try {
-                int minPrice = Integer.parseInt(minPriceSTR);
-                listProductDTO = daofunction.searchProductByAttribute(productName, minPrice);
-                request.setAttribute("listProductDTO", listProductDTO);
-            } catch (NumberFormatException ex) {
-
-            }
-        }
-
         request.getRequestDispatcher("Shop.jsp").forward(request, response);
     }
 
@@ -72,7 +60,33 @@ public class ShopControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ShopDAO dao = new ShopDAO();
+        FunctionShopDAO daofunction = new FunctionShopDAO();
+
+        ArrayList<ProductDTO> listProductDTO = dao.getAllProductDTO();
+        request.setAttribute("listProductDTO", listProductDTO);
+        
+        String productName = request.getParameter("productName");
+        String minPriceSTR = request.getParameter("rangeInput");
+
+        if (productName != null) {
+            int lengthProductName = Validation.removeAllBlank(productName).length();
+            if (lengthProductName > 0) {
+                try {
+                    productName = Validation.removeUnnecessaryBlank(productName);
+                    int minPrice = Integer.parseInt(minPriceSTR);
+                    listProductDTO = daofunction.searchProductByAttribute(productName, minPrice);
+                    request.setAttribute("productName", productName);
+                    request.setAttribute("listProductDTO", listProductDTO);
+                } catch (NumberFormatException ex) {
+
+                }
+            } else {
+                request.setAttribute("error", "Tên tìm kiếm không hợp lệ!");
+            }
+        }
+
+        request.getRequestDispatcher("Shop.jsp").forward(request, response);
     }
 
     /**

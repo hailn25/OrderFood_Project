@@ -64,10 +64,10 @@
 
         <!-- Single Page Header start -->
         <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Sản phẩm</h1>
+            <h1 class="text-center text-white display-6">Lọc Sản phẩm</h1>
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item"><a href="Home.jsp">Trang chủ</a></li>
-                <li class="breadcrumb-item active text-white">Sản phẩm</li>
+                <li class="breadcrumb-item active text-white">Lọc Sản phẩm</li>
             </ol>
         </div>
         <!-- Single Page Header End -->
@@ -82,9 +82,12 @@
                     <div class="col-lg-12">
                         <div class="row g-4">
                             <div class="col-xl-3">
-                                <form action="shop">
+                                <c:if test="${not empty error}">
+                                    <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                                </c:if>
+                                    <form action="shop" method="post">
                                     <div class="input-group w-100 mx-auto d-flex">
-                                        <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName" required >
+                                        <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName" required="" value="${productName}">
                                         <button id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                                     </div>
 
@@ -184,7 +187,7 @@
 
 
                                                     <div style="display: flex">
-                                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                                        <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
                                                             <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
                                                         </div>
                                                         <form action="addtocart" method="post">

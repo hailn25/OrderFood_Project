@@ -64,16 +64,8 @@
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <a href="home" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="shop" class="nav-item nav-link ">Cửa hàng</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
-                                <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="Cart.jsp" class="dropdown-item">Giỏ hàng</a>
-                                    <a href="Checkout.jsp" class="dropdown-item">Thanh toán</a>
-                                    <a href="blog" class="dropdown-item">Blog</a>
-                                    <!--<a href="404.jsp" class="dropdown-item">404 Page</a>-->
-                                </div>
-                            </div>
+                            <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
+                            <a href="blog" class="nav-item nav-link">Blog</a>
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">

@@ -102,6 +102,23 @@
                 flex-direction: column;
                 justify-content: space-between;
             }
+            
+            @keyframes appear{
+                from{
+                    opactity: 0;
+                    scale: 0.5;
+                }
+                to {
+                    opacity: 1;
+                    scale: 1;
+                }
+            }
+            
+                    #Block{
+                    animation: appear linear;
+                    animation-timeline: view();
+                    animation-range: entry 0% cover 40%;
+                    }
         </style>
     </head>
 
@@ -227,14 +244,14 @@
                 <div class="container py-5">
                     <div class="tab-class text-center">
                         <div class="row g-4">
-                            <div class="col-lg-4 text-start">
+                            <div class="col-lg-4 text-start" id="Block">
                                 <h1>Danh mục sản phẩm</h1>
                             </div>
                             <div class="col-lg-8 text-end">
                                 <ul class="nav nav-pills d-inline-flex text-center mb-5">
                                 <c:forEach items="${listC}" var="c">
                                     <li class="nav-item">
-                                        <div class="d-flex m-2 py-2 bg-light rounded-pill active">
+                                        <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
                                             <a class="text-dark" style="width: 130px;" href="category?cid=${c.id}">${c.name}</a>
                                         </div>
                                     </li>
@@ -250,7 +267,7 @@
                             <div class="col-lg-12">
                                 <div class="row g-4">
                                     <c:forEach items="${listP}" var="p">
-                                        <div class="col-md-6 col-lg-4 col-xl-3">
+                                        <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
                                                     <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
@@ -334,11 +351,11 @@
 
         <!-- Vesitable Shop Start-->
         <div class="container-fluid vesitable py-5">
-            <div class="container py-5">
+            <div class="container py-5"id="Block" >
                 <h1 class="mb-0">Sản phẩm</h1>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
                     <c:forEach var="v" items="${listV}">
-                        <div class="border border-primary rounded position-relative vesitable-item">
+                        <div class="border border-primary rounded position-relative vesitable-item" >
                             <div class="vesitable-img">
                                 <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="${v.name}">
                             </div>
@@ -406,9 +423,9 @@
                 </div>
                 <div class="row g-4">
                     <c:forEach items="${listB}" var="b">
-                        <div class="col-lg-6 col-xl-4">
+                        <div class="col-lg-6 col-xl-4" id="Block">
                             <div class="p-4 rounded bg-light">
-                                <div class="row align-items-center">
+                                <div class="row align-items-center" >
                                     <div class="col-6">
                                         <img src="img/${b.image}" class="img-fluid rounded-circle w-100" alt="${b.name}">
                                     </div>
@@ -490,8 +507,8 @@
                 </div>
                 <div class="owl-carousel testimonial-carousel">
                     <c:forEach items="${listFeedback}" var="listFeedback">
-                        <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                            <div class="position-relative">
+                        <div class="testimonial-item img-border-radius bg-light rounded p-4" >
+                            <div class="position-relative" >
                                 <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
                                 <div class="mb-4 pb-4 border-bottom border-secondary">
                                     <p class="mb-0">${listFeedback.feedback}</p>
