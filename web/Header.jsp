@@ -65,6 +65,7 @@
                         <div class="navbar-nav mx-auto">
                             <a href="home" class="nav-item nav-link active">Trang chủ</a>
                             <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
+                            <a href="FlashSale.jsp" class="nav-item nav-link ">Flash Sale</a>
                             <a href="blog" class="nav-item nav-link">Blog</a>
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>

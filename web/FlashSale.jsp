@@ -35,69 +35,42 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <style>
+            #countdown {
+                text-align: center;
+                background: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
+            #timer {
+                font-size: 2em;
+            }
+        </style>
     </head>
 
     <body>
 
         <%@include file="Header.jsp" %>
 
-        <!-- Modal Search Start -->
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex align-items-center">
-                        <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal Search End -->
-
-
-        <!-- Single Page Header start -->
-        <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Blog</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a href="Home.jsp">Trang chủ</a></li>
-                <li class="breadcrumb-item active text-white">Blog</li>
-            </ol>
-        </div>
-        <!-- Single Page Header End -->
-
-
-        <!-- Tastimonial Start -->
         <div class="container-fluid testimonial py-5">
             <div class="container py-5">
                 <div class="testimonial-header text-center">
-                    <h1 class="display-5 mb-5 text-dark">Chào mừng bạn đến với Blog!</h1>
+                    <h1 class="display-5 mb-5 text-dark">Chào mừng bạn đến với Flashsale!</h1>
                 </div>
-                <c:forEach items="${listBlogDTO}" var="b">
-                    <div class="blog-post">
-                        <h2 class="blog-title">${b.title}</h2>
-                        <div class="blog-meta">
-                            <span class="blog-date">${b.createDate}</span> |
-                            <span class="blog-author">Người đăng: ${b.nameUpdateBy}</span>
-                        </div>
-                        <div class="blog-image">
-                            <img src="img/${b.imageURL}" alt="Blog Image" class="img-fluid">
-                        </div>
-                        <div class="blog-content">
-                            <p>${b.content}</p>
-                        </div>
+                <h1 style="text-align: center;">Coming Soon!</h1>
+<!--                <div id="countdown">
+                    <h1>Countdown Timer</h1>
+                    <div id="timer">
+                        <span id="days"></span> days 
+                        <span id="hours"></span> hours 
+                        <span id="minutes"></span> minutes 
+                        <span id="seconds"></span> seconds
                     </div>
-                </c:forEach>
+                </div>-->
             </div>
         </div>
-        <!-- Tastimonial End -->
-
 
         <%@include file="Footer.jsp" %>
 
@@ -116,7 +89,38 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script>
+            var now = new Date().getTime();
+            var countDownDate = new Date(now + 60 * 1000).getTime();
 
+// Cập nhật đồng hồ đếm ngược mỗi giây
+            var x = setInterval(function () {
+
+                // Lấy thời gian hiện tại
+                now = new Date().getTime();
+
+                // Tính khoảng cách thời gian giữa hiện tại và thời gian đếm ngược
+                var distance = countDownDate - now;
+
+                // Tính toán ngày, giờ, phút và giây còn lại
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Hiển thị kết quả trong các phần tử với id tương ứng
+                document.getElementById("days").innerHTML = days;
+                document.getElementById("hours").innerHTML = hours;
+                document.getElementById("minutes").innerHTML = minutes;
+                document.getElementById("seconds").innerHTML = seconds;
+
+                // Nếu đếm ngược kết thúc, hiển thị thông báo
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("timer").innerHTML = "EXPIRED";
+                }
+            }, 1000);
+        </script>
     </body>
 
 </html>

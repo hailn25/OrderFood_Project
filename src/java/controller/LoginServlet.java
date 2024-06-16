@@ -40,12 +40,17 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+  try (PrintWriter out = response.getWriter()) {
             response.setContentType("text/html;charset=UTF-8");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
 //            String hashedPassword = EncodePassword.toSHA1(password);
-
+            if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+                request.setAttribute("err", "Vui lòng nhập cả email và mật khẩu");
+                request.setAttribute("email", email);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                return;
+            }
             AccountDAO acc = new AccountDAO();
             Account a = acc.checkLogin(email, password);
 
@@ -77,6 +82,11 @@ public class LoginServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("managerProduct").forward(request, response);
+                }  else if (a.getRoleId() == 5) {
+                    acc.UpdateLastDateLogin(email);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("account", a);
+                    request.getRequestDispatcher("ManagerStaff.jsp").forward(request, response);
                 }
             }
         }

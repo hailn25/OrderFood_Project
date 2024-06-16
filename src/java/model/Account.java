@@ -19,6 +19,7 @@ public class Account {
     private boolean gender;
     private String phone;
     private String address;
+    private int loginWith;
     private String imageAvatar;
     private boolean status;
     private Date lastDateLogin;
@@ -29,7 +30,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(int accountId, String email, String password, String name, boolean gender, String phone, String address, String imageAvatar, boolean status, Date lastDateLogin, Date createDate, Date updateDate, int roleId) {
+    public Account(int accountId, String email, String password, String name, boolean gender, String phone, String address, String imageAvatar, int loginWith, boolean status, Date lastDateLogin, Date createDate, Date updateDate, int roleId) {
         this.accountId = accountId;
         this.email = email;
         this.password = password;
@@ -38,6 +39,7 @@ public class Account {
         this.phone = phone;
         this.address = address;
         this.imageAvatar = imageAvatar;
+        this.loginWith = loginWith;
         this.status = status;
         this.lastDateLogin = lastDateLogin;
         this.createDate = createDate;
@@ -120,8 +122,7 @@ public class Account {
     public boolean isStatus() {
         return status;
     }
-
-    public void setStatus(boolean status) {
+public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -156,6 +157,15 @@ public class Account {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
+
+    public int getLoginWith() {
+        return loginWith;
+    }
+
+    public void setLoginWith(int loginWith) {
+        this.loginWith = loginWith;
+    }
+    
 
     public int getId() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
