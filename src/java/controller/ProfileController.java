@@ -4,26 +4,20 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductDAO;
-import dao.ProductHomeDAO;
+import dao.AccountDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
-
+import jakarta.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
  * @author ADMIN
  */
-public class HomeServlet extends HttpServlet {
+public class ProfileController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,24 +31,20 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
-        
-        List<ProductHome> list = dao.getAllProduct();
-        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
-        
 
-        request.setAttribute("listP", list);
-        request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listV", listProductP);
-        request.setAttribute("listB", listBestSellerProduct);
-        
-        
-        
-        
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        // Lấy accountId từ session (sau khi người dùng đăng nhập)
+        HttpSession session = request.getSession();
+        String accountId = (String) session.getAttribute("accountId");
+
+        // Call DAO để lấy thông tin tài khoản dựa trên accountId
+        AccountDAO accountDAO = new AccountDAO();
+        Account account = accountDAO.getAccountByAId(accountId);
+
+        // Đặt thông tin tài khoản vào request attribute
+        request.setAttribute("account", account);
+
+        // Forward request tới Profile.jsp
+        request.getRequestDispatcher("Profile.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

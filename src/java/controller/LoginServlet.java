@@ -5,8 +5,6 @@
 package controller;
 
 import dao.AccountDAO;
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,12 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.Account;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
 import util.EncodePassword;
 
 /**
@@ -45,7 +38,12 @@ public class LoginServlet extends HttpServlet {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
 //            String hashedPassword = EncodePassword.toSHA1(password);
-
+            if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+                request.setAttribute("err", "Vui lòng nhập cả email và mật khẩu");
+                request.setAttribute("email", email);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                return;
+            }
             AccountDAO acc = new AccountDAO();
             Account a = acc.checkLogin(email, password);
 
