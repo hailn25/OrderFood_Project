@@ -130,6 +130,7 @@ public class RegisterServlet extends HttpServlet {
                     response.addCookie(c);
                     session.setAttribute("authenticationfor", "register");
                     Account account = new Account(email, pass, fullName, (gender.equals("Male") ? true : false), phone, address);
+                    session.setAttribute("email", email);
                     session.setAttribute("accregister", account);
                     request.getRequestDispatcher("Verify.jsp").forward(request, response);
                 } catch (AddressException ex) {
@@ -150,6 +151,7 @@ public class RegisterServlet extends HttpServlet {
 
                 }
             }
+          
             if (!codeVerify.equals(code)) {
                 request.setAttribute("err", "Code nhập không đúng");
                 request.getRequestDispatcher("Verify.jsp").forward(request, response);

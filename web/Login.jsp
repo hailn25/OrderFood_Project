@@ -12,6 +12,19 @@
         <title>Login</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .bg-image {
+            background-image: url('path_to_your_image.jpg'); /* Thay đổi đường dẫn hình nền ở đây */
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
     </head>
     <body>
         <section class="vh-100" style="background-color: #81C408;">
@@ -37,7 +50,7 @@
                                     <p class="small mb-5 pb-lg-2"><a class="text-muted" href="ForgetPassword.jsp">Quên mật khẩu?</a></p>
                                     <hr class="my-4">
 
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit">Đăng nhập</button>
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color:#81C408 ">Đăng nhập</button>
 
                                     <hr class="my-4">
                                 </form>

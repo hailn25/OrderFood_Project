@@ -9,9 +9,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.internet.AddressException;
+import model.EmailHandler;
+import util.EncodePassword;
 
 /**
  *
@@ -29,18 +36,63 @@ public class ResendVerify extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ResendVerify</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ResendVerify at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute("email");
+            String codeVerify = EmailHandler.generateCodeVerify();
+            String verify = EncodePassword.toSHA1(codeVerify);
+            String subject = "Email Varification!";
+            String content = "<!DOCTYPE html>\n"
+                    + "<html>\n"
+                    + "<head>\n"
+                    + "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
+                    + "    <title>Xác thực email</title>\n"
+                    + "    <style>\n"
+                    + "        .container {\n"
+                    + "            margin: 50px 200px;\n"
+                    + "            background-color: #F3F3F3;\n"
+                    + "            padding: 25px;\n"
+                    + "        }\n"
+                    + "    </style>\n"
+                    + "</head>\n"
+                    + "<body style=\"background-color: #b8daff; padding: 20px;\">\n"
+                    + "    <div class=\"container\">\n"
+                    + "        <h2 style=\"font-size: 30px;\">Xin Chào!!</h2>\n"
+                    + "        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Mã xác thực của bạn là:</p>\n"
+                    + "        <h1 style=\"margin-left: 150px; font-size: 38px; color: red;\">" + codeVerify + "</h1>\n"
+                    + "        <p>Vui lòng nhập mã này vào trang xác thực trên website của chúng tôi để hoàn tất quá trình.</p>\n"
+                    + "        <p style=\"font-size: 15px;\"><a href=\"http://localhost:9999/onlineshop/verify.jsp\">Quay lại website của chúng tôi</a></p>\n"
+                    + "        <p>Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ với bộ phận hỗ trợ của chúng tôi.</p>\n"
+                    + "        <p>Trân trọng,</p>\n"
+                    + "        <h2>FBT Shoes Shop</h2>\n"
+                    + "    </div>\n"
+                    + "</body>\n"
+                    + "</html>";
+            EmailHandler.sendEmail(email, subject, content);
+            Cookie[] arrCookie = request.getCookies();
+            if(arrCookie != null){
+                for(Cookie c : arrCookie){
+                    if(c.getName().equals("codeVerify")){
+                        c.setMaxAge(0);
+                        response.addCookie(c);
+                    }
+                }
+            }
+            Cookie c = new Cookie("codeVerify", verify);
+            c.setMaxAge(60 * 5);
+            response.addCookie(c);
+            String redirect = (String) session.getAttribute("authenticationfor");
+            session.setAttribute("authenticationfor", redirect);
+            if(redirect.equals("forgetpass")){
+                request.setAttribute("verified", "verified");
+                request.getRequestDispatcher("ForgetPassword").forward(request, response);
+                
+            } else {
+                request.getRequestDispatcher("Verify.jsp").forward(request, response);
+            }
+        } catch (AddressException ex) {
+            Logger.getLogger(ResendVerify.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
 

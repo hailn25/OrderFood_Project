@@ -14,7 +14,7 @@
         <title>Register</title>
     </head>
     <body>
-        <section class="vh-100 bg-image" style="background-color: #f08632;">
+        <section class="vh-100 bg-image" style="background-color: #81C408;">
             <div class="mask d-flex align-items-center h-100 gradient-custom-3">
                 <div class="container h-100">
                     <div class="row d-flex justify-content-center align-items-center h-100">
