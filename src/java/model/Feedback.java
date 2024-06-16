@@ -11,59 +11,45 @@ import java.util.Date;
  * @author ADMIN
  */
 public class Feedback {
-    private int id;
-    private double rateStar;
-    private String feedback;
-    private String image;
+    private int productId;
     private String name;
-    private String avatar;
-    private String nameProduct;
+    private double price;
+    private String description;
+    private String imageURL;
+    private int categoryId;
+    private int restaurantId;
+    private int feedbackId;
+    private String feedback;
     private Date date;
+    private double rateStar;
+    private String imageAvatar;
+    private String nameAccount;
 
     public Feedback() {
     }
 
-    public Feedback(int id, double rateStar, String feedback, String image, String name, String avatar, String nameProduct, Date date) {
-        this.id = id;
-        this.rateStar = rateStar;
-        this.feedback = feedback;
-        this.image = image;
+    public Feedback(int productId, String name, double price, String description, String imageURL, int categoryId, int restaurantId, int feedbackId, String feedback, Date date, double rateStar, String imageAvatar, String nameAccount) {
+        this.productId = productId;
         this.name = name;
-        this.avatar = avatar;
-        this.nameProduct = nameProduct;
-        this.date = date;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getRateStar() {
-        return rateStar;
-    }
-
-    public void setRateStar(double rateStar) {
-        this.rateStar = rateStar;
-    }
-
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
+        this.price = price;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.categoryId = categoryId;
+        this.restaurantId = restaurantId;
+        this.feedbackId = feedbackId;
         this.feedback = feedback;
+        this.date = date;
+        this.rateStar = rateStar;
+        this.imageAvatar = imageAvatar;
+        this.nameAccount = nameAccount;
     }
 
-    public String getImage() {
-        return image;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getName() {
@@ -74,20 +60,60 @@ public class Feedback {
         this.name = name;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public double getPrice() {
+        return price;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public String getNameProduct() {
-        return nameProduct;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNameProduct(String nameProduct) {
-        this.nameProduct = nameProduct;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public int getFeedbackId() {
+        return feedbackId;
+    }
+
+    public void setFeedbackId(int feedbackId) {
+        this.feedbackId = feedbackId;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
     public Date getDate() {
@@ -98,9 +124,33 @@ public class Feedback {
         this.date = date;
     }
 
+    public double getRateStar() {
+        return rateStar;
+    }
+
+    public void setRateStar(double rateStar) {
+        this.rateStar = rateStar;
+    }
+
+    public String getImageAvatar() {
+        return imageAvatar;
+    }
+
+    public void setImageAvatar(String imageAvatar) {
+        this.imageAvatar = imageAvatar;
+    }
+
+    public String getNameAccount() {
+        return nameAccount;
+    }
+
+    public void setNameAccount(String nameAccount) {
+        this.nameAccount = nameAccount;
+    }
+
     @Override
     public String toString() {
-        return "Feedback{" + "id=" + id + ", rateStar=" + rateStar + ", feedback=" + feedback + ", image=" + image + ", name=" + name + ", avatar=" + avatar + ", nameProduct=" + nameProduct + ", date=" + date + '}';
+        return "Feedback{" + "productId=" + productId + ", name=" + name + ", price=" + price + ", description=" + description + ", imageURL=" + imageURL + ", categoryId=" + categoryId + ", restaurantId=" + restaurantId + ", feedbackId=" + feedbackId + ", feedback=" + feedback + ", date=" + date + ", rateStar=" + rateStar + ", imageAvatar=" + imageAvatar + ", nameAccount=" + nameAccount + '}';
     }
-    
+
 }

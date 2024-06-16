@@ -74,7 +74,7 @@ public class AccountDAO {
                 Date updateDate = rs.getDate(13);
                 int roleId = rs.getInt(14);
 
-                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar,loginWith, status, lastDateLogin, createDate, updateDate, roleId);
+                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar, loginWith, status, lastDateLogin, createDate, updateDate, roleId);
                 return s;
             }
         } catch (Exception e) {
@@ -161,7 +161,7 @@ public class AccountDAO {
             ps.setString(5, phone);
             ps.setString(6, address);
             ps.setString(7, imageAvatar);
-            ps.setInt(8,0 );
+            ps.setInt(8, 0);
             ps.setBoolean(9, true);
             ps.setString(10, date);
             ps.setString(11, date);
@@ -172,7 +172,7 @@ public class AccountDAO {
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-      return null;
+        return null;
     }
 
     public boolean checkAccountExist(String email) {
@@ -213,8 +213,8 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void ChangePassword(String email, String password) throws SQLException{
+
+    public void ChangePassword(String email, String password) throws SQLException {
         try {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
@@ -229,11 +229,11 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public Account getAccountByEmail(String email) throws SQLException{
+
+    public Account getAccountByEmail(String email) throws SQLException {
         try {
             String sql = "select * from Account where Email = ?";
-            conn = new  DBContext().getConnection();
+            conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
@@ -256,9 +256,9 @@ public class AccountDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-         return null;
+        return null;
     }
-    
+
     public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
         try {
             LocalDate curDate = LocalDate.now();
@@ -283,6 +283,6 @@ public class AccountDAO {
 
     public static void main(String[] args) throws SQLException {
         AccountDAO ac = new AccountDAO();
-        System.out.println(ac.checkLogin("user1@gmail.com", "user123"));
+        ac.getAccountByAId("1");
     }
 }

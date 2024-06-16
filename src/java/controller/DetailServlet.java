@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.FeedbackDAO;
 import dao.ProductDAO;
 import dao.ProductHomeDAO;
 import dao.ProductSaleDAO;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.CategoryListDetail;
+import model.Feedback;
 import model.Product;
 import model.ProductHome;
 import model.ProductSale;
@@ -38,18 +40,37 @@ public class DetailServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("pid");
+        String fId = request.getParameter("ProductID");
+
+        // Fetch the product details
         ProductHomeDAO dao = new ProductHomeDAO();
-        ProductSaleDAO dao1 = new ProductSaleDAO();
+        FeedbackDAO fb = new FeedbackDAO();
         ProductHome p = dao.getProductById(id);
+
+        // Fetch the category ID from the product details
+        int categoryId = p.getCategoryId();
+
+        // Fetch products from the same category
+        List<ProductHome> listSameCategoryProducts = dao.getProductByCategoryId(categoryId);
+
+        // Fetch other necessary details
+        ProductSaleDAO dao1 = new ProductSaleDAO();
         List<ProductSale> listProductSale = dao1.getProductSale();
         List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
-        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
+        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
 
-        
-        request.setAttribute("listBSL", listBestSellerProduct);
+        // Fetch feedback for the product
+        List<Feedback> listFeedback = fb.getFeedbackByProductId(Integer.parseInt(id));
+
+        // Set attributes for the request
         request.setAttribute("detail", p);
+        request.setAttribute("listSameCategoryProducts", listSameCategoryProducts);
         request.setAttribute("listProductSale", listProductSale);
         request.setAttribute("listCategoryListDetail", listCategoryListDetail);
+        request.setAttribute("listBSL", listBestSellerProduct);
+        request.setAttribute("reviews", listFeedback); // Add this line to set feedback
+
+        // Forward the request to the JSP page
         request.getRequestDispatcher("ShopDetail.jsp").forward(request, response);
     }
 

@@ -1,0 +1,22 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 7, 2024, 8:35:55 AM
+    Author     : ADMIN
+*/
+
+.description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.container-fluid.page-header.py-5 {
+    background-color: greenyellow;
+    border-radius: 15px; /* Điều chỉnh giá trị này để thay đổi độ bo tròn */
+}
