@@ -87,6 +87,7 @@
             <!-- Cart Page Start -->
             <div class="container-fluid py-5">
                 <div class="container py-5">
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -99,55 +100,61 @@
                                     <th scope="col">Handle</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            <c:set var="o" value="${sessionScope.cart}"/>
-                            <c:forEach var="i" items="${o.items}"  >
-                                <tr>
-                                    <th scope="row">
-                                        <div class="d-flex align-items-center">
-                                            <img src="img/${i.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+
+                        <c:set var="o" value="${sessionScope.cart}"/>
+                        <c:forEach var="i" items="${o.items}"  >
+
+
+                            <tr>
+                                <th scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <img src="img/${i.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </div>
+                                </th>
+                                <td>
+                                    <p class="mb-0 mt-4">${i.product.name}</p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">
+                                        <fmt:formatNumber value="${i.price}" maxFractionDigits="3"/>
+                                    </p>
+
+                                </td>
+                                <td>
+                                    <c:if test="${not empty requestScope.mes}">
+                                        <div class="alert alert-warning" role="alert">
+                                            ${requestScope.mes}
                                         </div>
-                                    </th>
-                                    <td>
-                                        <p class="mb-0 mt-4">${i.product.name}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 mt-4">
-                                            <fmt:formatNumber value="${i.price}" maxFractionDigits="1"/>
-                                        </p>
-
-                                    </td>
-                                    <td>
-                                        <div class="input-group  mt-4" style="width: 100px; border: none">
-                                            <div class="input-group-btn" style="border: none;">
-                                                <button><a href="process?num=-1&id=${i.product.productId}" style="border: none">-</a></button>
-                                            </div>
-                                            <input type="text" style="width: 40px" readonly value="${i.quantity}"/>
-
-                                            <div class="input-group-btn">
-                                                <button><a href="process?num=1&id=${i.product.productId}">+</a></button>
-                                            </div>
+                                    </c:if>
+                                    <div class="input-group  mt-4" style="width: 100px; border: none">
+                                        <div class="input-group-btn" style="border: none;">
+                                            <button><a href="process?num=-1&id=${i.product.productId}" style="border: none">-</a></button>
                                         </div>
-                                    </td>
+                                        <input type="text" style="width: 40px" readonly value="${i.quantity}"/>
+                                        <div class="input-group-btn">
+                                            <button><a href="process?num=1&id=${i.product.productId}">+</a></button>
+                                        </div>
+                                    </div>
+                                </td>
 
-                                    <td>
+                                <td>
 
-                                        <p class="mb-0 mt-4">
-                                            <fmt:formatNumber value="${i.quantity*i.price}" maxFractionDigits="2"/>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <form action="process" method="post">
+                                    <p class="mb-0 mt-4">
+                                        <fmt:formatNumber value="${i.quantity*i.price}" maxFractionDigits="3"/>
+                                    </p>
+                                </td>
+                                <td>
+                                    <form action="process" method="post">
 
-                                            <input type="hidden" name="id" value="${i.product.productId}"/>
-                                            <input style="cursor: pointer; margin-top: 20px"  type="submit" value="Delete"/>
+                                        <input type="hidden" name="id" value="${i.product.productId}"/>
+                                        <input style="cursor: pointer; margin-top: 20px"  type="submit" value="Delete"/>
 
 
-                                        </form>
-                                    </td>
+                                    </form>
+                                </td>
 
-                                </tr>
-                            </c:forEach>
+                            </tr>
+                        </c:forEach>
 
 
                         </tbody>

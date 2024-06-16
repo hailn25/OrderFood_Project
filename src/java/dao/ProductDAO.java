@@ -192,6 +192,6 @@ public class ProductDAO {
 
     public static void main(String[] args) {
         ProductDAO db = new ProductDAO();
-        System.out.println(db.getProductByID(1));
+        System.out.println(db.getQuantityProduct(2));
     }
 }

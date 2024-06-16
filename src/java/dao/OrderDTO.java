@@ -1,4 +1,5 @@
 package dao;
+
 import dal.DBContext;
 import java.sql.Connection;
 import java.sql.Date;
@@ -39,6 +40,22 @@ public class OrderDTO {
 
     public int getOrderID() {
         String sql = "SELECT top 1 * FROM [dbo].[Order]  ORDER BY  [OrderId ]DESC";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
+    public int getOrderDetailId() {
+        String sql = "SELECT TOP 1 OrderDetailId\n"
+                + "FROM OrderDetail\n"
+                + "ORDER BY OrderDetailID DESC;";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -93,20 +110,51 @@ public class OrderDTO {
         }
     }
 
-    public  void updateQuantity(int pid, int quantity) {
-    String sql = "UPDATE [dbo].[Product]\n" +
-                 "SET [quantity] = [quantity] - ?\n" +
-                 "WHERE [ProductId] = ?;";
-    try {
-        conn = new DBContext().getConnection();
-        ps = conn.prepareStatement(sql);
-        ps.setInt(1,quantity);  
-        ps.setInt(2, pid);
-          ps.executeUpdate(); 
-    }catch (Exception e ){
-        
-    }
-       
+    public void getQuantity(int pid) {
+        String sql = "select quantity from Product where ProductId = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
 
-}
+        } catch (Exception e) {
+        }
+
+    }
+
+    public String getPayment(int orderDetailId) {
+        String sql = "SELECT PaymentBy FROM OrderDetail WHERE OrderDetailId = ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderDetailId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("PaymentBy");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateQuantity(int pid, int quantity) {
+        String sql = "UPDATE [dbo].[Product]\n"
+                + "SET [quantity] = [quantity] - ?\n"
+                + "WHERE [ProductId] = ?;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, pid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+
+        }
+    }
+
+    public static void main(String[] args) {
+        OrderDTO od = new OrderDTO();
+        System.out.println(od.getOrderDetailId());
+        System.out.println(od.getPayment(108));
+    }
 }

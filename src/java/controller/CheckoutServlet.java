@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.OrderDAO;
+
 import dao.OrderDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -118,6 +118,8 @@ public class CheckoutServlet extends HttpServlet {
             OrderDTO dao = new OrderDTO();
             dao.insertNewOrder(id, Double.parseDouble(total), name, email, phone, address, note);
             int oid = dao.getOrderID();
+            int orderDetailId = dao.getOrderDetailId();
+            
             for (Item item : cart.getItems()) {
                 dao.insertNewOrderDetail(oid, item.getProduct().getProductId(), item.getQuantity(), item.getPrice() * item.getQuantity(), payment, true);
                 dao.updateQuantity(item.getProduct().getProductId(), item.getQuantity());
@@ -150,9 +152,9 @@ public class CheckoutServlet extends HttpServlet {
                         + "</head>\n"
                         + "<body style=\" padding: 30px;\">\n"
                         + "    <div>\n"
-                        + "        <h2 style=\"font-size: 25px;\">Cảm ơn " + name + " đã đặt hàng tại  <a href=\"http://localhost:9999/Order_Food/home\">4FoodHD</a></h2>\n"
+                        + "        <h2 style=\"font-size: 25px;\">Cảm ơn " + account.getName() + " đã đặt hàng tại  <a href=\"http://localhost:9999/Order_Food/home\">4FoodHD</a></h2>\n"
                         + "        <p>Đơn hàng của bạn đã được đặt thành công!</p>\n"
-                        + "        <p><a href=\"http://localhost:9999/onlineshop/checkout" + oid + "\">Xem đơn của bạn tại Shop</a></p>\n"
+                      
                         + "        <h1 style=\"margin-top: 50px; font-size: 28px\">" + "Chi tiết đơn hàng của bạn." + "</h1>\n"
                         + "<table style=\"width:100%;border-spacing:inherit;border:1px solid #ddd\">\n"
                         + "            <tr style=\"background-color:#ce0707;font-weight:bold\">\n"
@@ -165,15 +167,27 @@ public class CheckoutServlet extends HttpServlet {
                         + "            </tr>\n"
                         + "            <tr style=\"color:#ce0707\">\n"
                         + "                <td style=\"padding:10px;border-right:1px solid #ddd\">\n"
-                        + "                    " + name + "\n"
+                         + "                    Tên khách hàng :\n"
+                        + "                    " + account.getName() + "\n"
                         + "                </td>\n"
                         + "                <td style=\"padding:10px\">\n"
-                        + "                 " + address + "\n"
+                         + "                   Địa chỉ   :\n"
+                        + "                 " + account.getAddress() + "\n"
+                         
                         + "                </td>\n"
                         + "            </tr>\n"
                         + "            <tr style=\"color:#ce0707\">\n"
                         + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">\n"
-                        + "                 " + phone + "\n"
+                         + "                   Số điện thoại  :\n"
+                        + "                 " + account.getPhone() + "\n"
+                        + "                </td>\n"
+                        + "                <td style=\"padding:10px;color:white\">\n"
+                        + "                </td>\n"
+                        + "            </tr>\n"
+                         + "            <tr style=\"color:#ce0707\">\n"
+                        + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">\n"
+                         + "                  Hình thức thanh toán :\n"
+                        + "                 " + dao.getPayment(orderDetailId)  + "\n"
                         + "                </td>\n"
                         + "                <td style=\"padding:10px;color:white\">\n"
                         + "                </td>\n"
