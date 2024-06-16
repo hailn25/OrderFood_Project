@@ -4,8 +4,11 @@
  */
 package controller;
 
+import dal.DBContext;
 import dao.CategoryDAO;
 import dao.ProductDAO;
+import model.Category;
+import model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,15 +20,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Category;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadCategoryControl", urlPatterns = {"/loadCategory"})
-public class LoadCategoryControl extends HttpServlet {
+@WebServlet(name = "LoadOpenControl", urlPatterns = {"/loadOpenProduct"})
+public class LoadOpenProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,17 +41,24 @@ public class LoadCategoryControl extends HttpServlet {
             throws ServletException, IOException, Exception {
         try {
             response.setContentType("text/html;charset=UTF-8");
-            int cID = Integer.parseInt(request.getParameter("cid"));
+            String pID = request.getParameter("pid");
+            String cID = request.getParameter("cid");
+            String status = request.getParameter("status");
+            ProductDAO dao = new ProductDAO();
             CategoryDAO dao1 = new CategoryDAO();
+            Product p = dao.getProductByID(Integer.parseInt(pID));
+            ArrayList<Category> listC = dao1.getAllCategory();
 
-            Category c = dao1.getCategoryByCId(cID);
+            request.setAttribute("detail", p);
+            request.setAttribute("cid", cID);
+            request.setAttribute("listC", listC);
+            request.setAttribute("status", status);
 
-            request.setAttribute("detail", c);
-
-            request.getRequestDispatcher("EditCategory.jsp").forward(request, response);
+            request.getRequestDispatcher("EditOpenProduct.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -68,7 +76,7 @@ public class LoadCategoryControl extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,7 +94,7 @@ public class LoadCategoryControl extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

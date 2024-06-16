@@ -13,10 +13,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import utils.Validation;
 
-@WebServlet(name = "EditProductControl", urlPatterns = {"/editOpenProduct"})
+@WebServlet(name = "EditCloseProductControl", urlPatterns = {"/editCloseProduct"})
 @MultipartConfig
-public class EditProductControl extends HttpServlet {
+public class EditCloseProductControl extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,7 +36,7 @@ public class EditProductControl extends HttpServlet {
             // Xử lý file upload
             Part filePart = request.getPart("image");
             String fileName = filePart.getSubmittedFileName();
-            
+
             // Kiểm tra nếu có tệp mới được tải lên
             String img = null;
             if (fileName != null && !fileName.isEmpty()) {
@@ -43,17 +44,31 @@ public class EditProductControl extends HttpServlet {
                 filePart.write(uploadPath);
                 img = fileName;
             } else {
-                img = request.getParameter("currentImage");
+                img = request.getParameter("OldImage");
             }
 
-            // Gọi DAO để cập nhật sản phẩm
-            ProductDAO dao = new ProductDAO();
-            dao.editProduct(name, price, description, img, category, quantity, status, id);
+            int lengthName = Validation.removeAllBlank(name).length();
+            int lengthPrice = Validation.removeAllBlank(price).length();
+            int lengthQuantity = Validation.removeAllBlank(quantity).length();
+            int lengthDescription = Validation.removeAllBlank(description).length();
+            if (lengthName > 0 && lengthPrice > 0 && lengthQuantity > 0 && lengthDescription > 0) {
 
-            // Chuyển hướng sau khi cập nhật thành công
-            response.sendRedirect("managerOpenProduct");
+                name = Validation.removeUnnecessaryBlank(name);
+                price = Validation.removeAllBlank(price);
+                quantity = Validation.removeAllBlank(quantity);
+                description = Validation.removeUnnecessaryBlank(description);
+
+                ProductDAO dao = new ProductDAO();
+                dao.editProduct(name, price, description, img, category, quantity, status, id);
+
+                response.sendRedirect("managerCloseProduct");
+            } else {
+                request.setAttribute("error", "Nhập không hợp lệ!");
+                request.getRequestDispatcher("loadCloseProduct?pid=" + id + "&cid=" + category + "&status=" + status).forward(request, response);
+            }
+
         } catch (SQLException ex) {
-            Logger.getLogger(EditProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

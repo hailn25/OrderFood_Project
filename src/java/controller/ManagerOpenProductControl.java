@@ -26,7 +26,7 @@ import model.Account;
  *
  * @author Vu Huy
  */
-@WebServlet(name = "ManagerControl", urlPatterns = {"/managerOpenProduct"})
+@WebServlet(name = "ManagerOpenControl", urlPatterns = {"/managerOpenProduct"})
 public class ManagerOpenProductControl extends HttpServlet {
 
     /**
@@ -53,9 +53,7 @@ public class ManagerOpenProductControl extends HttpServlet {
             CategoryDAO dao1 = new CategoryDAO();
 
             ArrayList<Product> listP = dao.getOpenProductByRestaurantId(restaurantId);
-            ArrayList<Category> listC = dao1.getAllCategory();
 
-            request.setAttribute("listC", listC);
             request.setAttribute("listP", listP);
             request.getRequestDispatcher("ManagerOpenProduct.jsp").forward(request, response);
         } catch (Exception ex) {

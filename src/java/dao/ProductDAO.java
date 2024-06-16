@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Product;
+import model.Role;
 
 /**
  *
@@ -99,6 +100,38 @@ public class ProductDAO {
         }
     }
 
+    public void openProduct(int productId) {
+        try {
+            String sql = "update [dbo].[Product]\n"
+                    + "set [Status] = 1\n"
+                    + "where ProductId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void closeProduct(int productId) {
+        try {
+            String sql = "update [dbo].[Product]\n"
+                    + "set [Status] = 0\n"
+                    + "where ProductId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void editProduct(String name, String price, String description,
             String img, String categoryId, String quantity, String status,
             String productId) throws SQLException {
@@ -144,33 +177,7 @@ public class ProductDAO {
         }
     }
 
-    public ArrayList<Product> getAllProduct() {
-        ArrayList<Product> listProduct = new ArrayList<>();
-        String sql = "select * from Product";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listProduct.add(new Product(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getBoolean(8),
-                        rs.getInt(9),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getBoolean(12)
-                ));
-            }
-        } catch (Exception e) {
-        }
-        return listProduct;
-    }
+    
 
     public Product getProductByID(int id) {
         try {
@@ -202,8 +209,8 @@ public class ProductDAO {
         return null;
     }
 
-    public static void main(String[] args) {
-        ProductDAO db = new ProductDAO();
-        System.out.println(db.getProductByID(1));
-    }
+//    public static void main(String[] args) {
+//        ProductDAO db = new ProductDAO();
+//        System.out.println(db.getAllRole());
+//    }
 }

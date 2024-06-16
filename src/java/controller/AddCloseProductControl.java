@@ -19,9 +19,9 @@ import jakarta.servlet.http.Part;
 import model.Account;
 import utils.Validation;
 
-@WebServlet(name = "AddOpenControl", urlPatterns = {"/addOpenProduct"})
+@WebServlet(name = "AddCloseControl", urlPatterns = {"/addCloseProduct"})
 @MultipartConfig
-public class AddOpenProductControl extends HttpServlet {
+public class AddCloseProductControl extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -67,17 +67,17 @@ public class AddOpenProductControl extends HttpServlet {
 
                 ProductDAO dao = new ProductDAO();
                 dao.insertProduct(name, price, description, img, category, restaurantId, quantity, status);
-                request.getRequestDispatcher("managerOpenProduct").forward(request, response);
+                request.getRequestDispatcher("managerCloseProduct").forward(request, response);
 
             } else {
                 request.setAttribute("error", "Nhập không hợp lệ!");
-                request.getRequestDispatcher("managerAddOpenProduct").forward(request, response);
+                request.getRequestDispatcher("managerAddCloseProduct").forward(request, response);
 
             }
 
 //            response.sendRedirect("managerOpenProduct");
         } catch (SQLException ex) {
-            Logger.getLogger(AddOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddCloseProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

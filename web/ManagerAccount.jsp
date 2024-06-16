@@ -124,9 +124,9 @@
                                 <td>
                                     ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Customer" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Restaurant" : (o.roleId == 5 ? "Staff" : "Unknown role"))))}
                                 </td>
-                                <td>${o.status ? "Active" : "Banned"}</td>
+                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Active" : "Banned"}</td>
                                 <td>
-                                    <a href="#loadAccount?aid=${o.accountId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                     <a href="#deleteAccount?aid=${o.accountId}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
 

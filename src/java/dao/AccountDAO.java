@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.Role;
 
 public class AccountDAO {
 
@@ -81,6 +82,8 @@ public class AccountDAO {
         }
         return null;
     }
+    
+   
 
     public void editAccount(int roleId, int status, int accountId) throws SQLException, ClassNotFoundException {
         try {
@@ -278,11 +281,30 @@ public class AccountDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
-    public static void main(String[] args) throws SQLException {
-        AccountDAO ac = new AccountDAO();
-        ac.getAccountByEmail("ngochai251003@gmail.com");
+    
+    public ArrayList<Role> getAllRole() {
+        ArrayList<Role> listRole = new ArrayList<>();
+        String sql = "select * from Role";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listRole.add(new Role(
+                        rs.getInt(1),
+                        rs.getString(2)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listRole;
     }
+    
+
+
+//    public static void main(String[] args) throws SQLException {
+//        AccountDAO ac = new AccountDAO();
+//        ac.getAccountByEmail("ngochai251003@gmail.com");
+//    }
 }

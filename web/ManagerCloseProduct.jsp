@@ -37,8 +37,6 @@
                     <c:if test="${not empty sessionScope.account.name}">
                         <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
                         </c:if>
-
-
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"
@@ -74,7 +72,7 @@
 
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link active" href="managerOpenProduct">
+                                <a class="nav-link " href="managerOpenProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang bán
                                 </a>
                             </li>
@@ -82,7 +80,7 @@
 
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="managerCloseProduct">
+                                <a class="nav-link active" href="managerCloseProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
                                 </a>
                             </li>
@@ -122,10 +120,10 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Quản lý sản phẩm<b> đang bán</b></h2>
+                            <h2>Quản lý sản phẩm<b> đang ẩn</b></h2>
                         </div>
                         <div class="col-sm-6">
-                            <a href="managerAddOpenProduct"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm mới</span></a>
+                            <a href="managerAddCloseProduct"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm mới</span></a>
                         </div>
                     </div>
                 </div>
@@ -153,15 +151,15 @@
                                     <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
                                 </td>
                                 <td>
-                                    <a href="loadOpenProduct?pid=${o.productId}&cid=${o.categoryId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
-                                    <a href="closeProduct?pid=${o.productId}" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Ẩn sản phẩm" style="color: red">&#xe8f4;</i></a>
+                                    <a href="loadCloseProduct?pid=${o.productId}&cid=${o.categoryId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
+                                    <a href="openProduct?pid=${o.productId}" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Mở bán sản phẩm" style="color: gray">&#xe8f5;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
             </div>
-            <a href="managerAddOpenProduct" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm mới</a>
+            <a href="managerAddCloseProduct" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm mới</a>
         </div>
 
 

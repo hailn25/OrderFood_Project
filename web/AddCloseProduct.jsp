@@ -93,7 +93,7 @@
                                 <h2 class="tm-block-title d-inline-block text-uppercase">Thêm sản phẩm mới</h2>
                             </div>
                         </div>
-                        <form action="addOpenProduct" method="post" enctype="multipart/form-data">
+                        <form action="addCloseProduct" method="post" enctype="multipart/form-data">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
                                     <c:if test="${not empty error}">
@@ -122,8 +122,8 @@
                                     <div class="form-group mb-3">
                                         <label for="category">Trạng thái</label>
                                         <select class="custom-select tm-select-accounts" name="status" required>
-                                            <option value="1">Bật</option>
                                             <option value="0">Tắt</option>
+                                            <option value="1">Bật</option>
                                         </select>
                                     </div>
                                     <div class="row">
@@ -165,7 +165,7 @@
 
                                 <div class="col-6">
                                     <!--<input type="button" class="btn btn-primary btn-block text-uppercase" value="Huỷ bỏ" onclick="window.history.back();" />-->
-                                    <a href="managerOpenProduct" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
+                                    <a href="managerCloseProduct" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
                                 </div>
                                 <div class="col-6">
                                     <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" />

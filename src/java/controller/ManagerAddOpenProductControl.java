@@ -24,7 +24,7 @@ import model.Product;
  *
  * @author Vu Huy
  */
-@WebServlet(name="ManagerAddProductControl", urlPatterns={"/managerAddOpenProduct"})
+@WebServlet(name="ManagerAddOpenProductControl", urlPatterns={"/managerAddOpenProduct"})
 public class ManagerAddOpenProductControl extends HttpServlet {
    
     /** 
@@ -39,18 +39,10 @@ public class ManagerAddOpenProductControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             response.setContentType("text/html;charset=UTF-8");
-
-//            HttpSession session = request.getSession();
-//            Account a = (Account) session.getAttribute("acc");
-//            int id = a.getAccountId();
-//            int id = 3;
-//            ProductDAO dao = new ProductDAO();
             CategoryDAO dao1 = new CategoryDAO();
-//            ArrayList<Product> listP = dao.getProductByRestaurantId(id);
             ArrayList<Category> listC = dao1.getAllCategory();
 
             request.setAttribute("listC", listC);
-//            request.setAttribute("listP", listP);
             request.getRequestDispatcher("AddOpenProduct.jsp").forward(request, response);
         } catch (Exception ex) {
             Logger.getLogger(ManagerOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
