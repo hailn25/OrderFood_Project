@@ -84,7 +84,7 @@ public class RegisterServlet extends HttpServlet {
             String password = request.getParameter("password");
             String fullName = request.getParameter("fullname");
             String gender = request.getParameter("gender");
-//            String pass = EncodePassword.toSHA1(password);
+            String pass = EncodePassword.toSHA1(password);
             String phone = request.getParameter("phonenumber");
             String address = request.getParameter("address");
             AccountDAO acc = new AccountDAO();
@@ -129,7 +129,7 @@ public class RegisterServlet extends HttpServlet {
                     c.setMaxAge(60 * 5);
                     response.addCookie(c);
                     session.setAttribute("authenticationfor", "register");
-                    Account account = new Account(email, password, fullName, (gender.equals("Male") ? true : false), phone, address);
+                    Account account = new Account(email, pass, fullName, (gender.equals("Male") ? true : false), phone, address);
                     session.setAttribute("accregister", account);
                     request.getRequestDispatcher("Verify.jsp").forward(request, response);
                 } catch (AddressException ex) {

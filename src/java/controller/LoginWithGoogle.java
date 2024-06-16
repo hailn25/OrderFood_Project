@@ -188,11 +188,12 @@ public class LoginWithGoogle extends HttpServlet {
                     } catch (SQLException ex) {
                         Logger.getLogger(LoginWithGoogle.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                } else {
                 
                 Account a = dao.getAccountByEmail(email);
                 session.setAttribute("account", a);
                 request.getRequestDispatcher("home").forward(request, response);
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(LoginWithGoogle.class.getName()).log(Level.SEVERE, null, ex);
             }

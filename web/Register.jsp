@@ -21,7 +21,7 @@
                         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                             <div class="card" style="border-radius: 15px;">
                                 <div class="card-body p-5">
-                                    <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+                                    <h2 class="text-uppercase text-center mb-5">Đăng ký tài khoản</h2>
                                     <form action="register" method="post" onsubmit="return validateForm()">
                                         <div id="errorMessage" style="color: red;"></div>
                                         <div class="form-outline mb-4">
@@ -31,39 +31,39 @@
 
                                         <div class="form-outline mb-4">
                                              <small class="form-text" style="color: red;">* Bắt buộc</small>
-                                            <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+                                            <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Mật khẩu" required="">
                                         </div>
 
                                         <div class="form-outline mb-4">
                                              <small class="form-text" style="color: red;">* Bắt buộc</small>
-                                            <input name="repassword"  type="password" id="inputPassword" class="form-control" placeholder="Repeat Password" required="">
+                                            <input name="repassword"  type="password" id="inputPassword" class="form-control" placeholder="Nhập lại mật khẩu" required="">
                                         </div>
 
                                         <div class="form-outline mb-4">
                                              <small class="form-text" style="color: red;">* Bắt buộc</small>
-                                            <input name="fullname"  type="text" id="inputPassword" class="form-control" placeholder="Fullname" required="">
+                                            <input name="fullname"  type="text" id="inputPassword" class="form-control" placeholder="Họ và tên" required="">
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            Gender  <input type="radio" name="gender" value="Male" checked /> Male
-                                            <input type="radio" name="gender" value="Female" /> Female
+                                            Giới tính  <input type="radio" name="gender" value="Male" checked /> Nam
+                                            <input type="radio" name="gender" value="Female" /> Nữ
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <input name="phonenumber"  type="text" id="inputPassword" class="form-control" placeholder="PhoneNumber" >
+                                            <input name="phonenumber"  type="text" id="inputPassword" class="form-control" placeholder="Số điện thoại" >
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <input name="address"  type="text" id="inputaddress" class="form-control" placeholder="Address" >
+                                            <input name="address"  type="text" id="inputaddress" class="form-control" placeholder="Địa chỉ" >
                                         </div>
 
                                         <div class="d-flex justify-content-center">
                                             <button type="submit"
-                                                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                                                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Đăng ký</button>
                                         </div>
 
                                         <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="Login.jsp"
-                                                                                                                ><u>Login here</u></a></p>
+                                                                                                                ><u>Đăng nhập</u></a></p>
 
                                     </form>
 

@@ -47,10 +47,10 @@
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
                         </c:if> 
                         <c:if test = "${sessionScope.account != null}"> 
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
                         </c:if> 
                     </div>
                 </div>
