@@ -14,6 +14,44 @@
         <title>Account Settings - Bootdey.com</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/profile.css">
+        <style>
+            .action-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 1.5rem;
+                color: #007bff;
+                padding: 0;
+                margin-left: 10px;
+            }
+
+            /* Style for the dropdown menu */
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                background-color: #fff;
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                padding: 0.5rem 0;
+                list-style: none;
+            }
+
+            /* Style for dropdown items */
+            .dropdown-item {
+                padding: 0.25rem 1.5rem;
+                cursor: pointer;
+            }
+
+            .dropdown-item
+            {
+                background-color: #f8f9fa;
+            }
+
+            /* Show dropdown menu on button click */
+            .action-btn.active + .dropdown-menu {
+                display: block;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -194,7 +232,6 @@
                                 </div>
                             </div>
 
-                            <!-- Hiển Thị Lịch Sử Mua Hàng -->
                             <div id="purchaseHistory" class="content-section">
                                 <div class="card h-100">
                                     <div class="card-body">
@@ -206,11 +243,23 @@
                                                 <ul id="purchaseHistoryList" class="list-group">
                                                     <li class="list-group-item">
                                                         Order #1234 - Date: 2023-05-01 - Total: $150.00
-                                                        <button class="btn btn-secondary btn-sm float-right review-btn" data-order-id="1234">Review Product</button>
+                                                        <div class="float-right">
+                                                            <button class="action-btn" data-order-id="1234">&#x25CF;</button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="dropdown-item feedback-btn" data-order-id="1234">Feedback</div>
+                                                                <div class="dropdown-item report-btn" data-order-id="1234">Report</div>
+                                                            </div>
+                                                        </div>
                                                     </li>
                                                     <li class="list-group-item">
                                                         Order #1235 - Date: 2023-06-15 - Total: $85.50
-                                                        <button class="btn btn-secondary btn-sm float-right review-btn" data-order-id="1235">Review Product</button>
+                                                        <div class="float-right">
+                                                            <button class="action-btn" data-order-id="1235">&#x25CF;</button>
+                                                            <div class="dropdown-menu">
+                                                                <div class="dropdown-item feedback-btn" data-order-id="1235">Feedback</div>
+                                                                <div class="dropdown-item report-btn" data-order-id="1235">Report</div>
+                                                            </div>
+                                                        </div>
                                                     </li>
                                                     <!-- Add more purchase history items here if needed -->
                                                 </ul>
@@ -219,44 +268,91 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Hidden Review Form -->
-                            <div id="reviewModal" class="modal" tabindex="-1" role="dialog">
-                                <div class="modal-dialog" role="document">
+                            <!-- Modal for Review -->
+                            <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Submit a Review</h5>
+                                            <h5 class="modal-title" id="reviewModalLabel">Submit Review</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="reviewForm" enctype="multipart/form-data">
+                                            <form id="reviewForm">
                                                 <input type="hidden" id="orderId">
                                                 <div class="form-group">
                                                     <label for="reviewName">Name</label>
-                                                    <input type="text" class="form-control" id="reviewName" placeholder="Enter your name" required>
+                                                    <input type="text" class="form-control" id="reviewName" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="reviewText">Review</label>
-                                                    <textarea class="form-control" id="reviewText" rows="3" placeholder="Enter your review" required></textarea>
+                                                    <textarea class="form-control" id="reviewText" rows="3" required></textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="reviewRating">Rating</label>
                                                     <select class="form-control" id="reviewRating" required>
-                                                        <option value="" disabled selected>Select rating</option>
-                                                        <option value="1">1 Star</option>
-                                                        <option value="2">2 Stars</option>
-                                                        <option value="3">3 Stars</option>
-                                                        <option value="4">4 Stars</option>
-                                                        <option value="5">5 Stars</option>
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="reviewImages">Upload Images</label>
-                                                    <input type="file" class="form-control-file" id="reviewImages" accept="image/*" multiple>
+                                                    <input type="file" class="form-control-file" id="reviewImages" multiple>
                                                 </div>
-                                                <div id="imagePreview" class="mt-2"></div>
+                                                <div id="imagePreview"></div>
                                                 <button type="submit" class="btn btn-primary">Submit Review</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal for Feedback -->
+                            <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="feedbackModalLabel">Feedback</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="feedbackForm">
+                                                <input type="hidden" id="feedbackOrderId" name="orderId">
+                                                <div class="form-group">
+                                                    <label for="feedbackText">Feedback</label>
+                                                    <textarea class="form-control" id="feedbackText" name="feedbackText" rows="3" required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal for Report -->
+                            <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="reportModalLabel">Report Issue</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="reportForm">
+                                                <input type="hidden" id="reportOrderId" name="orderId">
+                                                <div class="form-group">
+                                                    <label for="reportText">Report Issue</label>
+                                                    <textarea class="form-control" id="reportText" name="reportText" rows="3" required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit Report</button>
                                             </form>
                                         </div>
                                     </div>
@@ -298,78 +394,148 @@
                 </div>
             </div>
         </div>
-        <ul id="reviewList" class="list-group mt-4">
-            <!-- Reviews will be appended here -->
-        </ul>
+        <ul id="reviewList" class="list-group mt-3"></ul>
         <!-- Custom JavaScript -->
         <script>
-            document.querySelectorAll('.review-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const orderId = this.getAttribute('data-order-id');
-                    document.getElementById('orderId').value = orderId;
-                    document.getElementById('imagePreview').innerHTML = ''; // Clear previous image preview
-                    document.getElementById('reviewImages').value = ''; // Clear file input
-                    $('#reviewModal').modal('show');
+            document.addEventListener('DOMContentLoaded', function () {
+                const actionButtons = document.querySelectorAll('.action-btn');
+
+                actionButtons.forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const dropdownMenu = this.nextElementSibling;
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            if (menu !== dropdownMenu) {
+                                menu.style.display = 'none';
+                            }
+                        });
+                        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                    });
                 });
-            });
 
-            document.getElementById('reviewImages').addEventListener('change', function () {
-                const imagePreview = document.getElementById('imagePreview');
-                imagePreview.innerHTML = ''; // Clear previous image preview
+                document.addEventListener('click', function () {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.style.display = 'none';
+                    });
+                });
 
-                const files = this.files;
-                if (files) {
-                    Array.from(files).forEach(file => {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
+                // Review button functionality
+                document.querySelectorAll('.review-btn').forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const orderId = this.getAttribute('data-order-id');
+                        document.getElementById('orderId').value = orderId;
+                        document.getElementById('imagePreview').innerHTML = ''; // Clear previous image preview
+                        document.getElementById('reviewImages').value = ''; // Clear file input
+                        $('#reviewModal').modal('show');
+                        this.parentElement.style.display = 'none';
+                    });
+                });
+
+                document.getElementById('reviewImages').addEventListener('change', function () {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.innerHTML = ''; // Clear previous image preview
+
+                    const files = this.files;
+                    if (files) {
+                        Array.from(files).forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.alt = 'Review Image';
+                                img.className = 'img-thumbnail mt-2';
+                                img.style.maxWidth = '200px';
+                                imagePreview.appendChild(img);
+                            }
+                            reader.readAsDataURL(file);
+                        });
+                    }
+                });
+
+                document.getElementById('reviewForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    // Get the form values
+                    const orderId = document.getElementById('orderId').value;
+                    const name = document.getElementById('reviewName').value;
+                    const review = document.getElementById('reviewText').value;
+                    const rating = document.getElementById('reviewRating').value;
+                    const imageFiles = document.getElementById('reviewImages').files;
+
+                    // Create a new list item for the review
+                    const newReview = document.createElement('li');
+                    newReview.className = 'list-group-item';
+                    newReview.innerHTML = '<strong>' + name + '</strong> - Order #' + orderId + ' - ' + rating + ' Stars<br>' + review;
+
+                    // Check if images were uploaded and preview them
+                    if (imageFiles.length > 0) {
+                        Array.from(imageFiles).forEach(file => {
                             const img = document.createElement('img');
-                            img.src = e.target.result;
+                            img.src = URL.createObjectURL(file);
                             img.alt = 'Review Image';
                             img.className = 'img-thumbnail mt-2';
                             img.style.maxWidth = '200px';
-                            imagePreview.appendChild(img);
-                        }
-                        reader.readAsDataURL(file);
+                            newReview.appendChild(img);
+                        });
+                    }
+
+                    // Append the new review to the review list
+                    document.getElementById('reviewList').appendChild(newReview);
+
+                    // Clear the form
+                    document.getElementById('reviewForm').reset();
+
+                    // Close the modal
+                    $('#reviewModal').modal('hide');
+                });
+
+                // Feedback button functionality
+                document.querySelectorAll('.feedback-btn').forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const orderId = this.getAttribute('data-order-id');
+                        document.getElementById('feedbackOrderId').value = orderId;
+                        $('#feedbackModal').modal('show');
+                        this.parentElement.style.display = 'none';
                     });
-                }
+                });
+
+                // Report button functionality
+                document.querySelectorAll('.report-btn').forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const orderId = this.getAttribute('data-order-id');
+                        document.getElementById('reportOrderId').value = orderId;
+                        $('#reportModal').modal('show');
+                        this.parentElement.style.display = 'none';
+                    });
+                });
+
+                // Handle feedback form submission
+                document.getElementById('feedbackForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    // Add your logic to handle feedback form submission here
+                    // For example, you can send feedback data to a server using fetch or XMLHttpRequest
+                    // After submission, you can close the modal
+                    $('#feedbackModal').modal('hide');
+                    // Optionally, you can clear the form fields
+                    // this.reset();
+                });
+
+                // Handle report form submission
+                document.getElementById('reportForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    // Add your logic to handle report form submission here
+                    // For example, you can send report data to a server using fetch or XMLHttpRequest
+                    // After submission, you can close the modal
+                    $('#reportModal').modal('hide');
+                    // Optionally, you can clear the form fields
+                    // this.reset();
+                });
+
             });
 
-            document.getElementById('reviewForm').addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Get the form values
-                const orderId = document.getElementById('orderId').value;
-                const name = document.getElementById('reviewName').value;
-                const review = document.getElementById('reviewText').value;
-                const rating = document.getElementById('reviewRating').value;
-                const imageFiles = document.getElementById('reviewImages').files;
-
-                // Create a new list item for the review
-                const newReview = document.createElement('li');
-                newReview.className = 'list-group-item';
-                newReview.innerHTML = '<strong>' + name + '</strong> - Order #' + orderId + ' - ' + rating + ' Stars<br>' + review;
-
-                // Check if images were uploaded and preview them
-                if (imageFiles.length > 0) {
-                    Array.from(imageFiles).forEach(file => {
-                        const img = document.createElement('img');
-                        img.src = URL.createObjectURL(file);
-                        img.alt = 'Review Image';
-                        img.className = 'img-thumbnail mt-2';
-                        img.style.maxWidth = '200px';
-                        newReview.appendChild(img);
-                    });
-                }
-
-                // Append the new review to the review list
-                document.getElementById('reviewList').appendChild(newReview);
-
-                // Clear the form
-                document.getElementById('reviewForm').reset();
-
-                // Close the modal
-                $('#reviewModal').modal('hide');
-            });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
