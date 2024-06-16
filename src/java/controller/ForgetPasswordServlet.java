@@ -8,15 +8,16 @@ import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jakarta.servlet.http.HttpSession;
 import javax.mail.internet.AddressException;
-import model.Account;
 import model.EmailHandler;
 import util.EncodePassword;
 
@@ -24,7 +25,8 @@ import util.EncodePassword;
  *
  * @author hailt
  */
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "ForgetPasswordServlet", urlPatterns = {"/forget"})
+public class ForgetPasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,13 +41,14 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");
+            out.println("<title>Servlet ForgetPasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ForgetPasswordServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +66,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -77,24 +80,17 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String codeEnter = request.getParameter("verify");
+        String email = request.getParameter("email");
+        String code = request.getParameter("code");
         HttpSession session = request.getSession();
-        if (codeEnter == null) {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String fullName = request.getParameter("fullname");
-            String gender = request.getParameter("gender");
-            String pass = EncodePassword.toSHA1(password);
-            String phone = request.getParameter("phonenumber");
-            String address = request.getParameter("address");
-            AccountDAO acc = new AccountDAO();
-
-            if (acc.checkAccountExist(email)) {
-                request.setAttribute("msg", "Tài khoản email đã tồn tại.");
-                request.getRequestDispatcher("Register.jsp").forward(request, response);
+        AccountDAO dao = new AccountDAO();
+        if (email != null) {
+            if (!dao.checkAccountExist(email)) {
+                request.setAttribute("err", "email không được đăng ký trong hệ thống");
+                request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
             } else {
-                try {
 
+                try {
                     String verify = EmailHandler.generateCodeVerify();
                     String codeVerify = EncodePassword.toSHA1(verify);
                     String subject = "Email Varification";
@@ -124,45 +120,53 @@ public class RegisterServlet extends HttpServlet {
                             + "    </div>\n"
                             + "</body>\n"
                             + "</html>";
+
                     EmailHandler.sendEmail(email, subject, content);
                     Cookie c = new Cookie("codeVerify", codeVerify);
+                    session.setAttribute("email", email);
                     c.setMaxAge(60 * 5);
                     response.addCookie(c);
-                    session.setAttribute("authenticationfor", "register");
-                    Account account = new Account(email, pass, fullName, (gender.equals("Male") ? true : false), phone, address);
-                    session.setAttribute("email", email);
-                    session.setAttribute("accregister", account);
-                    request.getRequestDispatcher("Verify.jsp").forward(request, response);
+                    request.setAttribute("verified", "verified");
+                    request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
                 } catch (AddressException ex) {
-                    Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ForgetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
+            }
+        } else if (code != null) {
+            String codeVerify = EncodePassword.toSHA1(code);
+            Cookie[] arrCookie = request.getCookies();
+            String verify = "";
+            for (Cookie cookie : arrCookie) {
+                if (cookie.getName().equals("codeVerify")) {
+                    verify += cookie.getValue();
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+
+            }
+            if (!codeVerify.equals(verify)) {
+                request.setAttribute("err", "Code nhập không đúng");
+                request.setAttribute("verified", "verified");
+                request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
+            } else {
+                request.setAttribute("verified", "next");
+                request.setAttribute("changepass", "change");
+                request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
             }
         } else {
-            String codeVerify = EncodePassword.toSHA1(codeEnter);
-            Cookie[] arrCookie = request.getCookies();
-            String code = "";
-            if (arrCookie != null) {
-                for (Cookie cookie : arrCookie) {
-                    if (cookie.getName().equals("codeVerify")) {
-                        code += cookie.getValue();
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                    }
-
-                }
-            }
-          
-            if (!codeVerify.equals(code)) {
-                request.setAttribute("err", "Code nhập không đúng");
-                request.getRequestDispatcher("Verify.jsp").forward(request, response);
-            } else {
-                AccountDAO adao = new AccountDAO();
-                Account account = (Account) session.getAttribute("accregister");
-                adao.registerAccount(account.getEmail(), account.getPassword(), account.getName(), account.isGender(), account.getPhone(), account.getAddress());
+            try {
+                String password = request.getParameter("password");
+                String emailC = (String) session.getAttribute("email");
+//                String pass = EncodePassword.toSHA1(password);
+                dao.ChangePassword(emailC, password);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
-
+            } catch (SQLException ex) {
+                Logger.getLogger(ForgetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
+
     }
 
     /**

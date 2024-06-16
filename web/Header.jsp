@@ -5,6 +5,8 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
     <head>
         <meta charset="utf-8">
@@ -43,14 +45,17 @@
                 <div class="d-flex justify-content-between">
                     <div class="top-info ps-2">
                         <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
-                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
+                        <!--                        <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
                         </c:if> 
-                        <c:if test = "${sessionScope.account != null}"> 
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
+                        <c:if test="${sessionScope.account != null}">
+                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
+                            <small class="text-white ms-2">Hello, ${username}</small>
+                            <span class="text-white ms-2">|</span>
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
                         </c:if> 
                     </div>
                 </div>
@@ -77,15 +82,15 @@
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">
-                            
+
                             <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <i class="fas fa-search text-primary"></i>
                             </button>
 
-                          <c:set value="${sessionScope.size}" var="size"></c:set>
-                            <a href="Cart.jsp" class="position-relative me-4 my-auto">
-                                <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
+                            <c:set value="${sessionScope.size}" var="size"></c:set>
+                                <a href="Cart.jsp" class="position-relative me-4 my-auto">
+                                    <i class="fa fa-shopping-bag fa-2x"></i>
+                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
                             </a>
                             <a href="Profile.jsp" class="my-auto" >
                                 <i class="fas fa-user fa-2x"></i>
@@ -97,9 +102,9 @@
             </div>
         </div>
         <!-- Navbar End -->
-    <!-- Modal Search Start -->
-     
-            <!-- Modal Search End -->
+        <!-- Modal Search Start -->
+
+        <!-- Modal Search End -->
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
