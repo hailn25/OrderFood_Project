@@ -145,8 +145,6 @@ public class RegisterServlet extends HttpServlet {
                 for (Cookie cookie : arrCookie) {
                     if (cookie.getName().equals("codeVerify")) {
                         code += cookie.getValue();
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
                     }
 
                 }
@@ -156,6 +154,12 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("err", "Code nhập không đúng");
                 request.getRequestDispatcher("Verify.jsp").forward(request, response);
             } else {
+                for (Cookie cookie : arrCookie) {
+                if (cookie.getName().equals("codeVerify")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
                 AccountDAO adao = new AccountDAO();
                 Account account = (Account) session.getAttribute("accregister");
                 adao.registerAccount(account.getEmail(), account.getPassword(), account.getName(), account.isGender(), account.getPhone(), account.getAddress());

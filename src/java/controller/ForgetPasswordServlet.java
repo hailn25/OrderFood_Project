@@ -140,8 +140,6 @@ public class ForgetPasswordServlet extends HttpServlet {
             for (Cookie cookie : arrCookie) {
                 if (cookie.getName().equals("codeVerify")) {
                     verify += cookie.getValue();
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
                 }
 
             }
@@ -150,6 +148,12 @@ public class ForgetPasswordServlet extends HttpServlet {
                 request.setAttribute("verified", "verified");
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
             } else {
+                for (Cookie cookie : arrCookie) {
+                if (cookie.getName().equals("codeVerify")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
                 request.setAttribute("verified", "next");
                 request.setAttribute("changepass", "change");
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
@@ -158,8 +162,8 @@ public class ForgetPasswordServlet extends HttpServlet {
             try {
                 String password = request.getParameter("password");
                 String emailC = (String) session.getAttribute("email");
-//                String pass = EncodePassword.toSHA1(password);
-                dao.ChangePassword(emailC, password);
+                String pass = EncodePassword.toSHA1(password);
+                dao.ChangePassword(emailC, pass);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
             } catch (SQLException ex) {
                 Logger.getLogger(ForgetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
