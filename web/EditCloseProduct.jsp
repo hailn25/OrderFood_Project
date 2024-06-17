@@ -132,7 +132,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Loại sản phẩm</label>
-                                        <select class="custom-select tm-select-accounts" name="category" required>
+                                        <select style="color: white"  class="custom-select tm-select-accounts" name="category" required>
                                             <c:forEach items="${listC}" var="o">
                                                 <option value="${o.categoryId}" ${o.categoryId == cid ? "selected" : ""}>${o.name}</option>
                                             </c:forEach>
@@ -140,7 +140,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Trạng thái</label>
-                                        <select class="custom-select tm-select-accounts" name="status" required>
+                                        <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
                                             <!--                                            <option value="1">Bật</option>
                                                                                         <option value="0">Tắt</option>-->
                                             <option value="true" ${status == true ? "selected" : ""}>Bán hàng</option>

@@ -100,8 +100,7 @@
                                         <div id="error-message" class="alert alert-danger mt-3">${error}</div>
                                     </c:if>
                                     <div>
-                                        <input id="id" name="id" type="hidden" value="${detail.productId}" class="form-control validate" />
-                                        <input id="currentImage" name="currentImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />
+                                        <!--<input id="currentImage" name="currentImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />-->
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Tên sản phẩm</label>
@@ -113,7 +112,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Loại sản phẩm</label>
-                                        <select class="custom-select tm-select-accounts" name="category" required>
+                                        <select style="color: white" class="custom-select tm-select-accounts" name="category" required>
                                             <c:forEach items="${listC}" var="o">
                                                 <option value="${o.categoryId}">${o.name}</option>
                                             </c:forEach>
@@ -121,7 +120,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Trạng thái</label>
-                                        <select class="custom-select tm-select-accounts" name="status" required>
+                                        <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
                                             <option value="1">Bật</option>
                                             <option value="0">Tắt</option>
                                         </select>

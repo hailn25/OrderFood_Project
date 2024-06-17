@@ -93,7 +93,6 @@
                 </div>
             </nav>
         </div>
-
         <div class="container">
             <div class="table-wrapper">
                 <div class="table-title">
@@ -126,22 +125,15 @@
                                 </td>
                                 <td class="${o.status ? "active" : "banned"}">${o.status ? "Active" : "Banned"}</td>
                                 <td>
-                                    <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                     <a href="#deleteAccount?aid=${o.accountId}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
-
                             </tr>
                         </c:forEach>
                     </tbody>
-
-
                 </table>
-
             </div>
-
-
         </div>
-
 
         <!--cai nay cua ProGear-->
         <script src="js/manager_1.js" type="text/javascript"></script>

@@ -23,6 +23,8 @@
             Product Admin CSS Template
             https://templatemo.com/tm-524-product-admin
         -->
+
+
     </head>
 
     <body style="background-color: #F6F6F6">
@@ -32,53 +34,65 @@
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <div class="row">
                             <div class="col-12">
-                                <h2 class="tm-block-title d-inline-block text-uppercase">Chỉnh sửa tài khoản</h2>
+                                <h2 class="tm-block-title d-inline-block text-uppercase">Chỉnh sửa vai trò và trạng thái</h2>
                             </div>
                         </div>
-                        <form action="editAccount" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                        <form action="editAccount1" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
                                     <c:if test="${not empty error}">
                                         <div id="error-message" class="alert alert-danger mt-3">${error}</div>
                                     </c:if>
                                     <div>
-                                        <input id="id" name="id" type="hidden" value="${detail.accountId}" class="form-control validate" />
+                                        <input id="accountId" name="accountId" type="hidden" value="${detail.accountId}" class="form-control validate" />
                                         <input id="OldImage" name="OldImage" type="hidden" value="${detail.imageAvatar}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="email">Email</label>
-                                        <input id="email" name="email" type="text" required value="${detail.email}" class="form-control validate" />
+                                        <input id="email" name="email" type="text" required value="${detail.email}" class="form-control validate read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Tên người dùng</label>
-                                        <input id="name" name="name" type="text" required value="${detail.name}" class="form-control validate" />
+                                        <input id="name" name="name" type="text" required value="${detail.name}" class="form-control validate read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Giới tính</label>
-                                        <input id="gender" name="gender" type="text" required value="${detail.gender}" class="form-control validate" />
+                                        <input id="gender" name="gender" type="text" required value="${detail.gender ? "Nam" : "Nữ"}" class="form-control validate read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="name">Điện thoại</label>
-                                        <input id="phone" name="phone" type="text" required value="${detail.phone}" class="form-control validate" />
+                                        <label for="name">Số điện thoại</label>
+                                        <input id="phone" name="phone" type="text" required value="${detail.phone}" class="form-control validate read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Địa chỉ</label>
-                                        <input id="address" name="address" type="text" required value="${detail.address}" class="form-control validate" />
+                                        <input id="address" name="address" type="text" required value="${detail.address}" class="form-control validate read-only" readonly/>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="role">Vai trò</label>
-                                        <select class="custom-select tm-select-accounts" name="role" required>
-                                            <c:forEach items="${listRole}" var="o">
-                                                <option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>
-                                            </c:forEach>
-                                        </select>
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="createDate">Ngày tạo tài khoản</label>
+                                            <input id="createDate" name="createDate" type="text" required value="${detail.createDate}" class="form-control validate read-only" readonly/>
+                                        </div>
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="lastDateLogin">Ngày đăng nhập cuối</label>
+                                            <input id="lastDateLogin" name="lastDateLogin" type="text" required value="${detail.lastDateLogin}" class="form-control validate read-only" readonly/>
+                                        </div>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="category">Trạng thái</label>
-                                        <select class="custom-select tm-select-accounts" name="status" required>
-                                            <option value="true" ${status == true ? "selected" : ""}>Đang hoạt động</option>
-                                            <option value="false" ${status == false  ? "selected" : ""}>Đã bị cấm</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="role">Vai trò</label>
+                                            <select class="custom-select tm-select-accounts select" name="role" required>
+                                                <c:forEach items="${listRole}" var="o">
+                                                    <option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="category">Trạng thái</label>
+                                            <select class="custom-select tm-select-accounts select" name="status" required>
+                                                <option value="true" ${status == true ? "selected" : ""}>Hoạt động</option>
+                                                <option value="false" ${status == false  ? "selected" : ""}>Bị cấm</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
@@ -111,7 +125,7 @@
 
 
                                 <div class="col-6">
-                                    <a href="managerOpenProduct" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
+                                    <a href="managerAccount" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
 
                                 </div>
                                 <div class="col-6">

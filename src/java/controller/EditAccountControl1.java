@@ -4,7 +4,6 @@
  */
 package controller;
 
-import dal.DBContext;
 import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,16 +12,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.Account;
-import model.Role;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadAccountControl", urlPatterns = {"/loadAccount"})
-public class LoadAccountControl extends HttpServlet {
+@WebServlet(name = "EditAccountControl1", urlPatterns = {"/editAccount1"})
+public class EditAccountControl1 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +34,20 @@ public class LoadAccountControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String aId = request.getParameter("aid");
-        int roleId = Integer.parseInt(request.getParameter("roleId"));
-        String status = request.getParameter("status");
-        AccountDAO dao = new AccountDAO();
-        Account a = dao.getAccountByAId(aId);
-//            ArrayList<Category> listC = db.getAllCategory();
-        ArrayList<Role> listRole = dao.getAllRole();
-        request.setAttribute("detail", a);
-//            request.setAttribute("cid", cID);
-        request.setAttribute("listRole", listRole);
-        request.setAttribute("roleId", roleId);
-        request.setAttribute("status", status);
+        try {
+            String accountId = request.getParameter("accountId");
+            String status = request.getParameter("status");
+            String roleId = request.getParameter("role");
 
-        request.getRequestDispatcher("EditAccount.jsp").forward(request, response);
+            AccountDAO dao = new AccountDAO();
+            dao.editAccount(roleId, status, accountId);
+//            response.sendRedirect("managerAccount");
+            request.getRequestDispatcher("managerAccount").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditAccountControl1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EditAccountControl1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

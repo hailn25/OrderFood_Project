@@ -711,3 +711,12 @@ input[type="checkbox"]:focus {
 .banned {
     color: red;
 }
+.read-only {
+    color: #0266c4;
+    pointer-events: none;
+    background-color: black;
+}
+.select {
+    background-color: white;
+    color: black;
+}

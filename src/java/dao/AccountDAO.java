@@ -83,24 +83,30 @@ public class AccountDAO {
         return null;
     }
     
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        AccountDAO dao = new AccountDAO();
+//        System.out.println(dao.getAccountByAId("1"));
+        dao.editAccount("2", "1", "10");
+    }
    
 
-    public void editAccount(int roleId, int status, int accountId) throws SQLException, ClassNotFoundException {
+    public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set RoleId = ?, [Status] = ?\n"
                     + "where [AccountId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, roleId);
-            ps.setInt(2, status);
-            ps.setInt(3, accountId);
+            ps.setString(1, roleId);
+            ps.setString(2, status);
+            ps.setString(3, accountId);
             ps.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
+    
+    
 
     public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
         try {
