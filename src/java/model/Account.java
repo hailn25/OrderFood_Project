@@ -19,8 +19,8 @@ public class Account {
     private boolean gender;
     private String phone;
     private String address;
-    private int loginWith;
     private String imageAvatar;
+    private int loginWith;
     private boolean status;
     private Date lastDateLogin;
     private Date createDate;
@@ -46,7 +46,8 @@ public class Account {
         this.updateDate = updateDate;
         this.roleId = roleId;
     }
-     public Account(String email, String password, String name, boolean gender, String phone, String address) {
+
+    public Account(String email, String password, String name, boolean gender, String phone, String address) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -166,7 +167,6 @@ public class Account {
     public void setLoginWith(int loginWith) {
         this.loginWith = loginWith;
     }
-    
 
     public int getId() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

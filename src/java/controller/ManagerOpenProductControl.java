@@ -42,15 +42,13 @@ public class ManagerOpenProductControl extends HttpServlet {
             throws ServletException, IOException, SQLException {
         try {
             response.setContentType("text/html;charset=UTF-8");
-
             HttpSession session = request.getSession();
             Account a = (Account) session.getAttribute("account");
             int accountId = a.getAccountId();
             RestaurantDAO dao2 = new RestaurantDAO();
             int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
-//            int id = 4;
+            
             ProductDAO dao = new ProductDAO();
-            CategoryDAO dao1 = new CategoryDAO();
 
             ArrayList<Product> listP = dao.getOpenProductByRestaurantId(restaurantId);
 
@@ -61,13 +59,6 @@ public class ManagerOpenProductControl extends HttpServlet {
         }
     }
 
-//    public static void main(String[] args) throws Exception {
-//        ProductDAO dao = new ProductDAO();
-//
-//        ArrayList<Category> listC = dao.getAllCategory();
-//        System.out.println(listC);
-//
-//    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

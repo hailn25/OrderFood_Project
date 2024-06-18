@@ -13,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -32,8 +34,9 @@ public class OpenProductControl extends HttpServlet {
     throws ServletException, IOException {
         int pid = Integer.parseInt(request.getParameter("pid"));
         ProductDAO dao = new ProductDAO();
+        LocalDate updateDate = LocalDate.now();
 
-        dao.openProduct(pid);
+        dao.openProduct(Date.valueOf(updateDate), pid);
         response.sendRedirect("managerCloseProduct");
     } 
 

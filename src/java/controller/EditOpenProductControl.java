@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.sql.Date;
+import java.time.LocalDate;
 import utils.Validation;
 
 @WebServlet(name = "EditOpenProductControl", urlPatterns = {"/editOpenProduct"})
@@ -32,6 +34,7 @@ public class EditOpenProductControl extends HttpServlet {
             String price = request.getParameter("price");
             String quantity = request.getParameter("quantity");
             String status = request.getParameter("status");
+            LocalDate updateDate = LocalDate.now();
 
             // Xử lý file upload
             Part filePart = request.getPart("image");
@@ -59,7 +62,7 @@ public class EditOpenProductControl extends HttpServlet {
                 description = Validation.removeUnnecessaryBlank(description);
 
                 ProductDAO dao = new ProductDAO();
-                dao.editProduct(name, price, description, img, category, quantity, status, id);
+                dao.editProduct(name, price, description, img, category, quantity, status, Date.valueOf(updateDate), id);
 
                 response.sendRedirect("managerOpenProduct");
             } else {

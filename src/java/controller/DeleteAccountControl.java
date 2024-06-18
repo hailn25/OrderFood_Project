@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.DBContext;
 import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,8 +22,8 @@ import java.util.logging.Logger;
  *
  * @author Vu Huy
  */
-@WebServlet(name = "EditAccountControl1", urlPatterns = {"/editAccount1"})
-public class EditAccountControl1 extends HttpServlet {
+@WebServlet(name = "DeleteAccountControl", urlPatterns = {"/deleteAccount"})
+public class DeleteAccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,18 +37,25 @@ public class EditAccountControl1 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String accountId = request.getParameter("accountId");
+            response.setContentType("text/html;charset=UTF-8");
+            String aid = request.getParameter("aid");
             String status = request.getParameter("status");
-            String roleId = request.getParameter("role");
+            LocalDate updateDate = LocalDate.now();
+            
+            if (status.compareTo("false") == 0) {
+                AccountDAO dao = new AccountDAO();
+                dao.unbanAccount(updateDate.toString(), aid);
+                response.sendRedirect("managerAccount");
+            } else {
+                AccountDAO dao = new AccountDAO();
+                dao.banAccount(updateDate.toString(), aid);
+                response.sendRedirect("managerAccount");
+            }
 
-            AccountDAO dao = new AccountDAO();
-            dao.editAccount(roleId, status, accountId);
-//            response.sendRedirect("managerAccount");
-            request.getRequestDispatcher("managerAccount").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(EditAccountControl1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeleteAccountControl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EditAccountControl1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeleteAccountControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

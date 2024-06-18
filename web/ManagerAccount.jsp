@@ -16,6 +16,12 @@
         <link rel="stylesheet" href="css/fontawesome.min.css" />
         <link rel="stylesheet" href="css/bootstrap.min_1.css" />
         <link rel="stylesheet" href="css/templatemo-style.css">
+        <style>
+            img{
+                width: 150px;
+                height: 150px;
+            }
+        </style>
     </head>
 
     <body id="reportsPage" style="background-color: #F6F6F6">
@@ -111,6 +117,7 @@
                             <th>Họ và tên</th>
                             <th>Vai trò</th>
                             <th>Trạng thái</th>
+                            <th>Ảnh đại diện</th>
                             <th>Tác vụ</th>
                         </tr>
                     </thead>
@@ -121,12 +128,13 @@
                                 <td>${o.email}</td>
                                 <td>${o.name}</td>
                                 <td>
-                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Customer" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Restaurant" : (o.roleId == 5 ? "Staff" : "Unknown role"))))}
+                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Người dùng" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Nhà hàng" : (o.roleId == 5 ? "Nhân viên" : "Unknown role"))))}
                                 </td>
-                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Active" : "Banned"}</td>
+                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Hoạt động" : "Bị cấm"}</td>
+                                <td><img src="img/${o.imageAvatar}" alt="Không thể tải ảnh"></td>
                                 <td>
                                     <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#deleteAccount?aid=${o.accountId}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>

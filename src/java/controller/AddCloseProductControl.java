@@ -5,7 +5,7 @@ import dao.RestaurantDAO;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.time.LocalDate;
+import java.util.Date;
 import model.Account;
 import utils.Validation;
 
@@ -34,6 +36,8 @@ public class AddCloseProductControl extends HttpServlet {
             String description = request.getParameter("description");
             String category = request.getParameter("category");
             String status = request.getParameter("status");
+            LocalDate updateDate = LocalDate.now();
+            LocalDate createDate = LocalDate.now();
 
 // Xử lý file upload
             Part filePart = request.getPart("image");
@@ -45,39 +49,43 @@ public class AddCloseProductControl extends HttpServlet {
                 String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
                 filePart.write(uploadPath);
                 img = fileName;
-            } else {
-                img = request.getParameter("currentImage");
             }
 
+// Kiểm tra các trường nhập liệu
             int lengthName = Validation.removeAllBlank(name).length();
             int lengthPrice = Validation.removeAllBlank(price).length();
             int lengthQuantity = Validation.removeAllBlank(quantity).length();
             int lengthDescription = Validation.removeAllBlank(description).length();
-            if (lengthName > 0 && lengthPrice > 0 && lengthQuantity > 0 && lengthDescription > 0) {
+
+            if (img == null) {
+                request.setAttribute("error", "Chưa chọn ảnh!");
+                request.getRequestDispatcher("managerAddCloseProduct").forward(request, response);
+            } else if (lengthName > 0 && lengthPrice > 0 && lengthQuantity > 0 && lengthDescription > 0) {
                 name = Validation.removeUnnecessaryBlank(name);
                 price = Validation.removeAllBlank(price);
                 quantity = Validation.removeAllBlank(quantity);
                 description = Validation.removeUnnecessaryBlank(description);
-                // Thay bằng lấy từ session nếu cần
+
+                // Lấy accountId từ session
                 HttpSession session = request.getSession();
                 Account a = (Account) session.getAttribute("account");
                 int accountId = a.getAccountId();
+
+                // Lấy restaurantId dựa trên accountId
                 RestaurantDAO dao2 = new RestaurantDAO();
                 int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
 
+                // Thêm sản phẩm mới vào cơ sở dữ liệu
                 ProductDAO dao = new ProductDAO();
-                dao.insertProduct(name, price, description, img, category, restaurantId, quantity, status);
+                dao.insertProduct(name, price, description, img, category, restaurantId, quantity, java.sql.Date.valueOf(updateDate), java.sql.Date.valueOf(createDate), status);
                 request.getRequestDispatcher("managerCloseProduct").forward(request, response);
-
             } else {
                 request.setAttribute("error", "Nhập không hợp lệ!");
                 request.getRequestDispatcher("managerAddCloseProduct").forward(request, response);
-
             }
 
-//            response.sendRedirect("managerOpenProduct");
         } catch (SQLException ex) {
-            Logger.getLogger(AddCloseProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

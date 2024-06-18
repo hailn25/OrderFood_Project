@@ -21,7 +21,7 @@ public class AccountDAO {
 
     public ArrayList<Account> getAllAccount() {
         ArrayList<Account> listAccount = new ArrayList<>();
-        String sql = "select * from Account";
+        String sql = "select * from Account\n";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -75,20 +75,13 @@ public class AccountDAO {
                 Date updateDate = rs.getDate(13);
                 int roleId = rs.getInt(14);
 
-                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar,loginWith, status, lastDateLogin, createDate, updateDate, roleId);
+                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar, loginWith, status, lastDateLogin, createDate, updateDate, roleId);
                 return s;
             }
         } catch (Exception e) {
         }
         return null;
     }
-    
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        AccountDAO dao = new AccountDAO();
-//        System.out.println(dao.getAccountByAId("1"));
-        dao.editAccount("2", "1", "10");
-    }
-   
 
     public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
         try {
@@ -106,21 +99,65 @@ public class AccountDAO {
         }
     }
     
-    
-
-    public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
+    public void editAccountR(String roleId, String status, String updateDate, String accountId) throws SQLException, ClassNotFoundException {
         try {
-            String sql = "delete from [dbo].[Account]\n"
+            String sql = "update [dbo].[Account]\n"
+                    + "set RoleId = ?, [Status] = ?, [UpdateDate] = ?\n"
                     + "where [AccountId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, aid);
-            ps.executeQuery();
+            ps.setString(1, roleId);
+            ps.setString(2, status);
+            ps.setString(3, updateDate);
+            ps.setString(4, accountId);
+            ps.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
+    
+
+
+    public void banAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = "update [dbo].[Account]\n"
+                    + "set [Status] = 0, [UpdateDate] = ?\n"
+                    + "where [AccountId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, updateDate);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void unbanAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = "update [dbo].[Account]\n"
+                    + "set [Status] = 1, [UpdateDate] = ?\n"
+                    + "where [AccountId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, updateDate);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+//        public static void main(String[] args) {
+//        try {
+//            AccountDAO dao = new AccountDAO();
+//            dao.banAccount("2024-2-2", "10");
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public Account checkLogin(String email, String password) {
         String sql = "select * from Account where [Email] = ? and [Password] = ?";
@@ -170,18 +207,18 @@ public class AccountDAO {
             ps.setString(5, phone);
             ps.setString(6, address);
             ps.setString(7, imageAvatar);
-            ps.setInt(8,0 );
-            ps.setBoolean(9, true);
+            ps.setInt(8, 0);
+            ps.setInt(9, 1);
             ps.setString(10, date);
             ps.setString(11, date);
             ps.setString(12, date);
             ps.setInt(13, 2);
             ps.executeUpdate();
-            return new Account(0, email, password, date, gender, phone, address, imageAvatar, 0, gender, java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), 2);
+            return new Account(0, email, password, date, gender, phone, address, imageAvatar, 0, true, java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), 2);
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-      return null;
+        return null;
     }
 
     public boolean checkAccountExist(String email) {
@@ -222,8 +259,8 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void ChangePassword(String email, String password) throws SQLException{
+
+    public void ChangePassword(String email, String password) throws SQLException {
         try {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
@@ -238,11 +275,11 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public Account getAccountByEmail(String email) throws SQLException{
+
+    public Account getAccountByEmail(String email) throws SQLException {
         try {
             String sql = "select * from Account where Email = ?";
-            conn = new  DBContext().getConnection();
+            conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
@@ -265,9 +302,9 @@ public class AccountDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-         return null;
+        return null;
     }
-    
+
     public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
         try {
             LocalDate curDate = LocalDate.now();
@@ -288,7 +325,7 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public ArrayList<Role> getAllRole() {
         ArrayList<Role> listRole = new ArrayList<>();
         String sql = "select * from Role";
@@ -306,11 +343,4 @@ public class AccountDAO {
         }
         return listRole;
     }
-    
-
-
-//    public static void main(String[] args) throws SQLException {
-//        AccountDAO ac = new AccountDAO();
-//        ac.getAccountByEmail("ngochai251003@gmail.com");
-//    }
 }

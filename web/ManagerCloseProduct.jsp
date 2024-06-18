@@ -152,7 +152,7 @@
                                 </td>
                                 <td>
                                     <a href="loadCloseProduct?pid=${o.productId}&cid=${o.categoryId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
-                                    <a href="openProduct?pid=${o.productId}" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Mở bán sản phẩm" style="color: gray">&#xe8f5;</i></a>
+                                    <a href="openProduct?pid=${o.productId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Mở bán sản phẩm" style="color: gray">&#xe8f5;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -177,6 +177,13 @@
             function formatPrice(price) {
                 // Chuyển đổi số tiền thành dạng chuỗi và thêm dấu phân cách phần nghìn
                 return price.toLocaleString('vi-VN') + ' đ';
+            }
+            function confirmDelete(event) {
+                event.preventDefault();
+                var confirmAction = confirm("Bạn có chắc chắn muốn hiển thị sản phẩm này không?");
+                if (confirmAction) {
+                    window.location.href = event.target.closest('a').href;
+                }
             }
         </script>
     </body>

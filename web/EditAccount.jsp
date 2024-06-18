@@ -37,7 +37,7 @@
                                 <h2 class="tm-block-title d-inline-block text-uppercase">Chỉnh sửa vai trò và trạng thái</h2>
                             </div>
                         </div>
-                        <form action="editAccount1" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                        <form action="editAccount" method="post" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
                                     <c:if test="${not empty error}">
@@ -46,6 +46,7 @@
                                     <div>
                                         <input id="accountId" name="accountId" type="hidden" value="${detail.accountId}" class="form-control validate" />
                                         <input id="OldImage" name="OldImage" type="hidden" value="${detail.imageAvatar}" class="form-control validate" />
+                                        <input id="oldRoleId" name="oldRoleId" type="hidden" value="${roleId}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="email">Email</label>
@@ -89,8 +90,8 @@
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="category">Trạng thái</label>
                                             <select class="custom-select tm-select-accounts select" name="status" required>
-                                                <option value="true" ${status == true ? "selected" : ""}>Hoạt động</option>
-                                                <option value="false" ${status == false  ? "selected" : ""}>Bị cấm</option>
+                                                <option value="1" ${status ? "selected" : ""}>Hoạt động</option>
+                                                <option value="0" ${status == false ? "selected" : ""}>Bị cấm</option>
                                             </select>
                                         </div>
                                     </div>
@@ -102,8 +103,8 @@
                                     </div>
                                     <!-- Khung chứa nút chọn ảnh -->
                                     <div class="custom-file mt-3 mb-3">
-                                        <input id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />
-                                        <input type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
+                                        <input hidden="" id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />
+                                        <input hidden type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
                                     </div>
                                 </div>
 

@@ -48,7 +48,6 @@ public class ManagerCloseProductControl extends HttpServlet {
             int accountId = a.getAccountId();
             RestaurantDAO dao2 = new RestaurantDAO();
             int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
-//            int id = 4;
             ProductDAO dao = new ProductDAO();
             CategoryDAO dao1 = new CategoryDAO();
 

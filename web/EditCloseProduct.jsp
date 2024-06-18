@@ -26,83 +26,6 @@
     </head>
 
     <body style="background-color: #F6F6F6">
-
-        <!--        <nav class="navbar navbar-expand-xl">
-                    <div class="container h-100">
-                        <a class="navbar-brand" href="Dashboard.jsp">
-        <c:if test="${not empty sessionScope.account.name}">
-            <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
-        </c:if>
-</a>
-<button
-    class="navbar-toggler ml-auto mr-0"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-    >
-    <i class="fas fa-bars tm-nav-icon"></i>
-</button>
-
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mx-auto h-100">
-
-        <c:if test="${sessionScope.account.roleId == 1}">
-            <li class="nav-item">
-                <a class="nav-link" href="Dashboard.jsp">
-                    <i class="fas fa-tachometer-alt"></i> Thống kê
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-        </c:if>
-
-        <c:if test="${sessionScope.account.roleId == 1}">
-            <li class="nav-item">
-                <a class="nav-link" href="managerCategory">
-                    <i class="far fa-file-alt"></i> Loại sản phẩm
-                </a>
-            </li>
-        </c:if>
-
-        <c:if test="${sessionScope.account.roleId == 4}">
-            <li class="nav-item">
-                <a class="nav-link active" href="managerProduct">
-                    <i class="fas fa-shopping-cart"></i> Sản phẩm
-                </a>
-            </li>
-        </c:if>
-
-        <c:if test="${sessionScope.account.roleId == 1}">
-            <li class="nav-item">
-                <a class="nav-link" href="managerAccount">
-                    <i class="far fa-user"></i> Tài khoản
-                </a>
-            </li>
-        </c:if>
-
-    </ul>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-        <c:if test = "${sessionScope.account == null}"> 
-            <a class="nav-link d-block" href="Login.jsp">
-                <b>Đăng nhập</b>
-            </a>
-
-        </c:if> 
-        <c:if test = "${sessionScope.account != null}"> 
-            <a class="nav-link d-block" href="logout">
-                <b>Đăng xuất</b>
-            </a>
-        </c:if> 
-    </li>
-</ul>
-</div>
-</div>
-</nav>-->
-
-
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
                 <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
@@ -143,8 +66,8 @@
                                         <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
                                             <!--                                            <option value="1">Bật</option>
                                                                                         <option value="0">Tắt</option>-->
-                                            <option value="true" ${status == true ? "selected" : ""}>Bán hàng</option>
-                                            <option value="false" ${status == false  ? "selected" : ""}>Ẩn</option>
+                                            <option value="1" ${status == true ? "selected" : ""}>Bán hàng</option>
+                                            <option value="0" ${status == false  ? "selected" : ""}>Ẩn</option>
                                         </select>
                                     </div>
                                     <div class="row">
