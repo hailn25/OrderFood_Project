@@ -39,6 +39,16 @@ public class ResendVerify extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
+             Cookie[] arrCookie = request.getCookies();
+
+            if(arrCookie != null){
+                for(Cookie c : arrCookie){
+                    if(c.getName().equals("codeVerify")){
+                        c.setMaxAge(0);
+                        response.addCookie(c);
+                    }
+                }
+            }
             String email = (String) session.getAttribute("email");
             String codeVerify = EmailHandler.generateCodeVerify();
             String verify = EncodePassword.toSHA1(codeVerify);
@@ -70,22 +80,14 @@ public class ResendVerify extends HttpServlet {
                     + "</body>\n"
                     + "</html>";
             EmailHandler.sendEmail(email, subject, content);
-            Cookie[] arrCookie = request.getCookies();
-
-            if(arrCookie != null){
-                for(Cookie c : arrCookie){
-                    if(c.getName().equals("codeVerify")){
-                        c.setMaxAge(0);
-                        response.addCookie(c);
-                    }
-                }
-            }
+           
+            
             Cookie c = new Cookie("codeVerify", verify);
             c.setMaxAge(60 * 5);
             response.addCookie(c);
             String redirect = (String) session.getAttribute("authenticationfor");
             session.setAttribute("authenticationfor", redirect);
-            if(redirect.equals("forgetpass")){
+            if(redirect.equals("forget")){
                 request.setAttribute("verified", "verified");
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
                 

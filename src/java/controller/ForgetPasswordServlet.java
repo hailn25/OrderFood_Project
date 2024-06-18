@@ -124,6 +124,7 @@ public class ForgetPasswordServlet extends HttpServlet {
                     EmailHandler.sendEmail(email, subject, content);
                     Cookie c = new Cookie("codeVerify", codeVerify);
                     session.setAttribute("email", email);
+                    session.setAttribute("authenticationfor", "forget");
                     c.setMaxAge(60 * 5);
                     response.addCookie(c);
                     request.setAttribute("verified", "verified");
@@ -140,6 +141,7 @@ public class ForgetPasswordServlet extends HttpServlet {
             for (Cookie cookie : arrCookie) {
                 if (cookie.getName().equals("codeVerify")) {
                     verify += cookie.getValue();
+
                 }
 
             }
@@ -149,11 +151,11 @@ public class ForgetPasswordServlet extends HttpServlet {
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
             } else {
                 for (Cookie cookie : arrCookie) {
-                if (cookie.getName().equals("codeVerify")) {
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
+                    if (cookie.getName().equals("codeVerify")) {
+                        cookie.setMaxAge(0);
+                        response.addCookie(cookie);
+                    }
                 }
-            }
                 request.setAttribute("verified", "next");
                 request.setAttribute("changepass", "change");
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
