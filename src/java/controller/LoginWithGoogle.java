@@ -95,7 +95,7 @@ public class LoginWithGoogle extends HttpServlet {
                 Cookie c = new Cookie("codeVerify", codeVerify);
                 c.setMaxAge(5 * 60);
                 response.addCookie(c);
-                session.setAttribute("email", email);
+                session.setAttribute("email", toEmail);
                 session.setAttribute("authenticationfor", "logingoogle");
                 request.getRequestDispatcher("Verify.jsp").forward(request, response);
                 
@@ -165,18 +165,22 @@ public class LoginWithGoogle extends HttpServlet {
             for (Cookie cookie : arrCookie) {
                 if(cookie.getName().equals("codeVerify")){
                     code += cookie.getValue();
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
+                
                 }
             }
         }
-        HttpSession session = request.getSession();
-       EmailDTO emailDTO = (EmailDTO) session.getAttribute("email");
-        String email = emailDTO.getEmail();
+         HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
         if(!codeVerify.equals(code)){
             request.setAttribute("err", "Code nhập không đúng");
             request.getRequestDispatcher("Verify.jsp").forward(request, response);
         } else {
+             for (Cookie cookie : arrCookie) {
+                    if (cookie.getName().equals("codeVerify")) {
+                        cookie.setMaxAge(0);
+                        response.addCookie(cookie);
+                    }
+                }
             try {
                 AccountDAO dao = new AccountDAO();
                 if(!dao.checkAccountExist(email)){

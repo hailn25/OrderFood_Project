@@ -103,106 +103,147 @@
                     </div>
                 </div>
                 <!-- row -->
-                <div class="row tm-content-row">
+                <div class="row tm-content-row" >
                     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                        <div class="tm-bg-primary-dark tm-block">
-                            <h2 class="tm-block-title">Latest Hits</h2>
-                            <canvas id="lineChart"></canvas>
-                        </div>
+                        <html>
+                            <head>
+                                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                                <script type="text/javascript">
+                                    google.charts.load('current', {'packages': ['corechart']});
+                                    google.charts.setOnLoadCallback(drawVisualization);
+
+                                    function drawVisualization() {
+                                        // Updated data for 12 months with values from 1 million to 100 million
+                                        var data = google.visualization.arrayToDataTable([
+                                            ['Month', 'Value'],
+                                            ['Jan', 1000000],
+                                            ['Feb', 10000000],
+                                            ['Mar', 20000000],
+                                            ['Apr', 30000000],
+                                            ['May', 40000000],
+                                            ['Jun', 50000000],
+                                            ['Jul', 60000000],
+                                            ['Aug', 70000000],
+                                            ['Sep', 80000000],
+                                            ['Oct', 90000000],
+                                            ['Nov', 95000000],
+                                            ['Dec', 100000000]
+                                        ]);
+
+                                        var options = {
+                                            title: 'Doanh thu của nhà hàng trong năm',
+                                            vAxis: {title: 'Doanh thu'},
+                                            hAxis: {title: 'Month'},
+                                            seriesType: 'bars'
+                                        };
+
+                                        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+                                        chart.draw(data, options);
+                                    }
+                                </script>
+                            </head>
+                            <body>
+                                <div id="chart_div" style="width: 900px; height: 500px; margin: 0 auto 0 0;"></div>
+                            </body>
+                        </html>
                     </div>
-                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                        <div class="tm-bg-primary-dark tm-block">
-                            <h2 class="tm-block-title">Performance</h2>
-                            <canvas id="barChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                        <div class="tm-bg-primary-dark tm-block tm-block-taller">
-                            <h2 class="tm-block-title">Storage Information</h2>
-                            <div id="pieChartContainer">
-                                <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
-                            </div>                        
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-                        <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
-                            <h2 class="tm-block-title">Notification List</h2>
-                            <div class="tm-notification-items">
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-01.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Jessica</b> and <b>6 others</b> sent you new <a href="#"
-                                                                                                           class="tm-notification-link">product updates</a>. Check new orders.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-02.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Oliver Too</b> and <b>6 others</b> sent you existing <a href="#"
-                                                                                                                   class="tm-notification-link">product updates</a>. Read more reports.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-03.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Victoria</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                        class="tm-notification-link">order updates</a>. Read order information.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-01.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Laura Cute</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                          class="tm-notification-link">product records</a>.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-02.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Samantha</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                        class="tm-notification-link">order stuffs</a>.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-03.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Sophie</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                      class="tm-notification-link">product updates</a>.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-01.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Lily A</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                      class="tm-notification-link">product updates</a>.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-02.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Amara</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                     class="tm-notification-link">product updates</a>.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                                <div class="media tm-notification-item">
-                                    <div class="tm-gray-circle"><img src="img/notification-03.jpg" alt="Avatar Image" class="rounded-circle"></div>
-                                    <div class="media-body">
-                                        <p class="mb-2"><b>Cinthela</b> and <b>6 others</b> sent you <a href="#"
-                                                                                                        class="tm-notification-link">product updates</a>.</p>
-                                        <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    F
+
+
+
+                    <!--                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                                            <div class="tm-bg-primary-dark tm-block">
+                                                <h2 class="tm-block-title">Performance</h2>
+                                                <canvas id="barChart"></canvas>
+                                            </div>
+                                        </div>-->
+                    <!--                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                                            <div class="tm-bg-primary-dark tm-block tm-block-taller">
+                                                <h2 class="tm-block-title">Storage Information</h2>
+                                                <div id="pieChartContainer">
+                                                    <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
+                                                </div>                        
+                                            </div>
+                                        </div>-->
+                    <!--                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+                                            <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
+                                                <h2 class="tm-block-title">Notification List</h2>
+                                                <div class="tm-notification-items">
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-01.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Jessica</b> and <b>6 others</b> sent you new <a href="#"
+                                                                                                                               class="tm-notification-link">product updates</a>. Check new orders.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-02.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Oliver Too</b> and <b>6 others</b> sent you existing <a href="#"
+                                                                                                                                       class="tm-notification-link">product updates</a>. Read more reports.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-03.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Victoria</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                            class="tm-notification-link">order updates</a>. Read order information.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-01.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Laura Cute</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                              class="tm-notification-link">product records</a>.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-02.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Samantha</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                            class="tm-notification-link">order stuffs</a>.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-03.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Sophie</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                          class="tm-notification-link">product updates</a>.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-01.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Lily A</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                          class="tm-notification-link">product updates</a>.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-02.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Amara</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                         class="tm-notification-link">product updates</a>.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media tm-notification-item">
+                                                        <div class="tm-gray-circle"><img src="img/notification-03.jpg" alt="Avatar Image" class="rounded-circle"></div>
+                                                        <div class="media-body">
+                                                            <p class="mb-2"><b>Cinthela</b> and <b>6 others</b> sent you <a href="#"
+                                                                                                                            class="tm-notification-link">product updates</a>.</p>
+                                                            <span class="tm-small tm-text-color-secondary">6h ago.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
                     <div class="col-12 tm-block-col">
                         <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                             <h2 class="tm-block-title">Orders List</h2>
@@ -378,29 +419,29 @@
         <!-- https://getbootstrap.com/ -->
         <script src="js/tooplate-scripts.js"></script>
         <script>
-            Chart.defaults.global.defaultFontColor = 'white';
-            let ctxLine,
-                    ctxBar,
-                    ctxPie,
-                    optionsLine,
-                    optionsBar,
-                    optionsPie,
-                    configLine,
-                    configBar,
-                    configPie,
-                    lineChart;
-            barChart, pieChart;
-            // DOM is ready
-            $(function () {
-                drawLineChart(); // Line Chart
-                drawBarChart(); // Bar Chart
-                drawPieChart(); // Pie Chart
+                                    Chart.defaults.global.defaultFontColor = 'white';
+                                    let ctxLine,
+                                            ctxBar,
+                                            ctxPie,
+                                            optionsLine,
+                                            optionsBar,
+                                            optionsPie,
+                                            configLine,
+                                            configBar,
+                                            configPie,
+                                            lineChart;
+                                    barChart, pieChart;
+                                    // DOM is ready
+                                    $(function () {
+                                        drawLineChart(); // Line Chart
+                                        drawBarChart(); // Bar Chart
+                                        drawPieChart(); // Pie Chart
 
-                $(window).resize(function () {
-                    updateLineChart();
-                    updateBarChart();
-                });
-            })
+                                        $(window).resize(function () {
+                                            updateLineChart();
+                                            updateBarChart();
+                                        });
+                                    })
         </script>
     </body>
 
