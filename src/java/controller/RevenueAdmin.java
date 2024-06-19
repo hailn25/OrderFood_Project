@@ -4,28 +4,25 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.RestaurantDAO;
+import dao.RevenueDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDate;
+import java.util.Date;
 import model.Account;
-import utils.Validation;
 
 /**
  *
- * @author Vu Huy
+ * @author hailt
  */
-@WebServlet(name = "EditCategoryControl", urlPatterns = {"/editCategory"})
-public class EditCategoryControl extends HttpServlet {
+@WebServlet(name = "RevenueAdmin", urlPatterns = {"/revenueAdmin"})
+public class RevenueAdmin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,35 +35,42 @@ public class EditCategoryControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            response.setContentType("text/html;charset=UTF-8");
-            String name = request.getParameter("name");
-            String id = request.getParameter("id");
-            int lengthName = Validation.removeAllBlank(name).length();
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
 
-            HttpSession session = request.getSession();
-            Account a = (Account) session.getAttribute("account");
-            int roleId = a.getRoleId();
+        int accountId = a.getAccountId();
+        RestaurantDAO dao2 = new RestaurantDAO();
+        int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
+        int year = LocalDate.now().getYear();
 
-            if (roleId == 1 || roleId == 5) {
-                if (lengthName > 0) {
-                    name = Validation.removeUnnecessaryBlank(name);
-                    CategoryDAO dao1 = new CategoryDAO();
-                    dao1.editCategory(name, id);
-                    response.sendRedirect("managerCategory");
-                } else {
-                    request.setAttribute("error", "Nhập không hợp lệ!");
-                    request.getRequestDispatcher("loadCategory?cid=" + id).forward(request, response);
-                }
-            } else {
-                request.setAttribute("error", "Tài khoản đang dùng không hợp lệ");
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
-            }
+        RevenueDAO dao = new RevenueDAO();
+        double t1 = dao.getRevenueOfWeb(1, year) + dao.AccountValidFee(1, year);
+        double t2 = dao.getRevenueOfWeb(2, year) + dao.AccountValidFee(2, year);
+        double t3 = dao.getRevenueOfWeb(3, year) + dao.AccountValidFee(3, year);
+        double t4 = dao.getRevenueOfWeb(4, year) + dao.AccountValidFee(4, year);
+        double t5 = dao.getRevenueOfWeb(5, year) + dao.AccountValidFee(5, year);
+        double t6 = dao.getRevenueOfWeb(6, year) + dao.AccountValidFee(6, year);
+        double t7 = dao.getRevenueOfWeb(7, year) + dao.AccountValidFee(7, year);
+        double t8 = dao.getRevenueOfWeb(8, year) + dao.AccountValidFee(8, year);
+        double t9 = dao.getRevenueOfWeb(9, year) + dao.AccountValidFee(9, year);
+        double t10 = dao.getRevenueOfWeb(10, year) + dao.AccountValidFee(10, year);
+        double t11 = dao.getRevenueOfWeb(11, year) + dao.AccountValidFee(11, year);
+        double t12 = dao.getRevenueOfWeb(12, year) + dao.AccountValidFee(12, year);
 
-        } catch (SQLException ex) {
-            Logger.getLogger(EditCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        request.setAttribute("t1", t1);
+        request.setAttribute("t2", t2);
+        request.setAttribute("t3", t3);
+        request.setAttribute("t4", t4);
+        request.setAttribute("t5", t5);
+        request.setAttribute("t6", t6);
+        request.setAttribute("t7", t7);
+        request.setAttribute("t8", t8);
+        request.setAttribute("t9", t9);
+        request.setAttribute("t10", t10);
+        request.setAttribute("t11", t11);
+        request.setAttribute("t12", t12);
+        request.getRequestDispatcher("ManagerDashboardAdmin.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

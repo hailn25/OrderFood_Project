@@ -71,7 +71,7 @@ public class LoginServlet extends HttpServlet {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                    request.getRequestDispatcher("ManagerDashboard.jsp").forward(request, response);
+                    request.getRequestDispatcher("revenueAdmin").forward(request, response);
                 } else if (a.getRoleId() == 3) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                    request.getRequestDispatcher("managerOpenProduct").forward(request, response);
+                    request.getRequestDispatcher("revenueRestaurant").forward(request, response);
                 }
             }
         }

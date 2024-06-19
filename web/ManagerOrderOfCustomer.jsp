@@ -11,26 +11,44 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
-
-
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
         <link rel="stylesheet" href="css/fontawesome.min.css" />
         <link rel="stylesheet" href="css/bootstrap.min_1.css" />
         <link rel="stylesheet" href="css/templatemo-style.css">
-
         <style>
             img{
                 width: 150px;
                 height: 150px;
             }
         </style>
+        <style>
+            .status-waiting-for-shipper {
+                color: orange;
+            }
+            .status-delivering {
+                color: blue;
+            }
+            .status-delivered-successfully {
+                color: green;
+            }
+            .status-cancelled {
+                color: red;
+            }
+            .status-shipper-rejected {
+                color: gray;
+            }
+            .status-waiting-for-restaurant {
+                color: purple;
+            }
+            .status-unknown {
+                color: black;
+            }
+        </style>
+
     </head>
 
     <body id="reportsPage" style="background-color: #F6F6F6">
-
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="revenueRestaurant">
@@ -52,7 +70,6 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
-
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item">
                                 <a class="nav-link" href="revenueRestaurant">
@@ -61,7 +78,6 @@
                                 </a>
                             </li>
                         </c:if>
-
                         <c:if test="${sessionScope.account.roleId == 1}">
                             <li class="nav-item">
                                 <a class="nav-link" href="managerCategory">
@@ -69,7 +85,6 @@
                                 </a>
                             </li>
                         </c:if>
-
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
                                 <a class="nav-link " href="managerOpenProduct">
@@ -77,10 +92,9 @@
                                 </a>
                             </li>
                         </c:if>
-
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link active" href="managerCloseProduct">
+                                <a class="nav-link" href="managerCloseProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
                                 </a>
                             </li>
@@ -92,17 +106,17 @@
                                                             </a>
                                                         </li>-->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="far fa-file-alt"></i>
                                     <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng đã giao thành công</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng đã bị huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer">Đơn hàng đang chờ xác nhận của nhà hàng</a>
+                                    <a class="dropdown-item" href="#">Đơn hàng đang chờ xác nhận của Shipper</a>
+                                    <a class="dropdown-item" href="#">Đơn hàng đang giao</a>
+                                    <a class="dropdown-item" href="#">Đơn hàng đã giao thành công</a>
+                                    <a class="dropdown-item" href="#">Đơn hàng đã bị huỷ</a>
+                                    <a class="dropdown-item" href="#">Đơn hàng đã bị shipper huỷ</a>
                                 </div>
                             </li>
 
@@ -114,8 +128,6 @@
                                 </a>
                             </li>
                         </c:if>
-
-
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -123,7 +135,6 @@
                                 <a class="nav-link d-block" href="Login.jsp">
                                     <b>Đăng nhập</b>
                                 </a>
-
                             </c:if> 
                             <c:if test = "${sessionScope.account != null}"> 
                                 <a class="nav-link d-block" href="logout">
@@ -135,16 +146,12 @@
                 </div>
             </div>
         </nav>
-
         <div class="container">
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Quản lý sản phẩm<b> đang ẩn</b></h2>
-                        </div>
-                        <div class="col-sm-6">
-                            <a href="managerAddCloseProduct"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm mới</span></a>
+                            <h2>Quản lý <b> đơn hàng</b></h2>
                         </div>
                     </div>
                 </div>
@@ -155,44 +162,72 @@
                             <th>Tên sản phẩm</th>
                             <th>Số lượng</th>
                             <th>Đơn giá</th>
+                            <th>Trạng thái</th>
                             <th>Ảnh</th>
                             <th>Tác vụ</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${listP}" var="o">
+                        <c:forEach items="${listO}" var="o">
                             <tr>
-                                <td>${o.productId}</td>
+                                <td>${o.orderDetailId}</td>
                                 <td>${o.name}</td>
                                 <td>${o.quantity}</td>
-                                <!--<td>${o.price}</td>-->
-                                <!--<td><p><fmt:formatNumber value="${o.price}" type="currency" currencyCode="VND" /></p></td>-->
-                                <td><fmt:formatNumber value="${o.price}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
+                                <td><fmt:formatNumber value="${o.totalMoney}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
+                                <td class="<c:choose>
+                                        <c:when test="${o.orderStatusId == 1}">status-waiting-for-shipper</c:when>
+                                        <c:when test="${o.orderStatusId == 2}">status-delivering</c:when>
+                                        <c:when test="${o.orderStatusId == 3}">status-delivered-successfully</c:when>
+                                        <c:when test="${o.orderStatusId == 4}">status-cancelled</c:when>
+                                        <c:when test="${o.orderStatusId == 5}">status-shipper-rejected</c:when>
+                                        <c:when test="${o.orderStatusId == 6}">status-waiting-for-restaurant</c:when>
+                                        <c:otherwise>status-unknown</c:otherwise>
+                                    </c:choose>">
+                                    <c:choose>
+                                        <c:when test="${o.orderStatusId == 1}">
+                                            Đang chờ xác nhận của shipper
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 2}">
+                                            Đang giao hàng
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 3}">
+                                            Giao hàng thành công
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 4}">
+                                            Đơn hàng bị huỷ
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 5}">
+                                            Shipper không nhận đơn
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 6}">
+                                            Đang chờ xác nhận của nhà hàng
+                                        </c:when>
+                                        <c:otherwise>
+                                            Trạng thái không xác định
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
                                 <td>
                                     <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
                                 </td>
                                 <td>
-                                    <a href="loadCloseProduct?pid=${o.productId}&cid=${o.categoryId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
-                                    <a href="openProduct?pid=${o.productId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Mở bán sản phẩm" style="color: gray">&#xe8f5;</i></a>
+                                    <a href="" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
+                                    <a href="" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Ẩn sản phẩm" style="color: red">&#xE872;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
             </div>
-            <a href="managerAddCloseProduct" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm mới</a>
+            <!--<a href="managerAddOpenProduct" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm mới</a>-->
         </div>
-
-
-
 
         <!--cai nay cua ProGear-->
         <script src="js/manager_1.js" type="text/javascript"></script>
-
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                        new DataTable('#example');
+            new DataTable('#example');
         </script>
         <script>
             function formatPrice(price) {
@@ -201,13 +236,14 @@
             }
             function confirmDelete(event) {
                 event.preventDefault();
-                var confirmAction = confirm("Bạn có chắc chắn muốn hiển thị sản phẩm này không?");
+                var confirmAction = confirm("Bạn có chắc chắn muốn ẩn sản phẩm này không?");
                 if (confirmAction) {
                     window.location.href = event.target.closest('a').href;
                 }
             }
         </script>
         <script src="js/bootstrap.min.js"></script>
+
 
     </body>
 </html>

@@ -4,28 +4,25 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.RestaurantDAO;
+import dao.RevenueDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDate;
+import java.util.Date;
 import model.Account;
-import utils.Validation;
 
 /**
  *
- * @author Vu Huy
+ * @author hailt
  */
-@WebServlet(name = "EditCategoryControl", urlPatterns = {"/editCategory"})
-public class EditCategoryControl extends HttpServlet {
+@WebServlet(name = "RevenueRestaurant", urlPatterns = {"/revenueRestaurant"})
+public class RevenueRestaurant extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,35 +35,44 @@ public class EditCategoryControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            response.setContentType("text/html;charset=UTF-8");
-            String name = request.getParameter("name");
-            String id = request.getParameter("id");
-            int lengthName = Validation.removeAllBlank(name).length();
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
 
-            HttpSession session = request.getSession();
-            Account a = (Account) session.getAttribute("account");
-            int roleId = a.getRoleId();
+        int accountId = a.getAccountId();
+        RestaurantDAO dao2 = new RestaurantDAO();
+        int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
+        int year = LocalDate.now().getYear();
 
-            if (roleId == 1 || roleId == 5) {
-                if (lengthName > 0) {
-                    name = Validation.removeUnnecessaryBlank(name);
-                    CategoryDAO dao1 = new CategoryDAO();
-                    dao1.editCategory(name, id);
-                    response.sendRedirect("managerCategory");
-                } else {
-                    request.setAttribute("error", "Nhập không hợp lệ!");
-                    request.getRequestDispatcher("loadCategory?cid=" + id).forward(request, response);
-                }
-            } else {
-                request.setAttribute("error", "Tài khoản đang dùng không hợp lệ");
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
-            }
+        RevenueDAO dao = new RevenueDAO();
 
-        } catch (SQLException ex) {
-            Logger.getLogger(EditCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        long thang1 = dao.getTotalMoneyByMonth(restaurantId, 1, year);
+        long thang2 = dao.getTotalMoneyByMonth(restaurantId, 2, year);
+        long thang3 = dao.getTotalMoneyByMonth(restaurantId, 3, year);
+        long thang4 = dao.getTotalMoneyByMonth(restaurantId, 4, year);
+        long thang5 = dao.getTotalMoneyByMonth(restaurantId, 5, year);
+        long thang6 = dao.getTotalMoneyByMonth(restaurantId, 6, year);
+        long thang7 = dao.getTotalMoneyByMonth(restaurantId, 7, year);
+        long thang8 = dao.getTotalMoneyByMonth(restaurantId, 8, year);
+        long thang9 = dao.getTotalMoneyByMonth(restaurantId, 9, year);
+        long thang10 = dao.getTotalMoneyByMonth(restaurantId, 10, year);
+        long thang11 = dao.getTotalMoneyByMonth(restaurantId, 11, year);
+        long thang12 = dao.getTotalMoneyByMonth(restaurantId, 12, year);
 
+        request.setAttribute("thang1", thang1);
+        request.setAttribute("thang2", thang2);
+        request.setAttribute("thang3", thang3);
+        request.setAttribute("thang4", thang4);
+        request.setAttribute("thang5", thang5);
+        request.setAttribute("thang6", thang6);
+        request.setAttribute("thang7", thang7);
+        request.setAttribute("thang8", thang8);
+        request.setAttribute("thang9", thang9);
+        request.setAttribute("thang10", thang10);
+        request.setAttribute("thang11", thang11);
+        request.setAttribute("thang12", thang12);
+
+        request.getRequestDispatcher("ManagerDashboardRestaurant.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

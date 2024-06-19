@@ -28,7 +28,7 @@
         <div class="" id="home">
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="ManagerDashboard.jsp">
+                    <a class="navbar-brand" href="revenueAdmin">
                         <h1 class="tm-site-title mb-0">Admin</h1>
                     </a>
                     <button
@@ -47,7 +47,7 @@
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="ManagerDashboard.jsp">
+                                    <a class="nav-link" href="revenueAdmin">
                                         <i class="fas fa-tachometer-alt"></i> Thống kê
                                         <span class="sr-only">(current)</span>
                                     </a>
@@ -69,7 +69,13 @@
                                     </a>
                                 </li>
                             </c:if>
-
+                            <c:if test="${sessionScope.account.roleId == 4}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerOrderOfCustomer">
+                                        <i class="far fa-file-alt"></i> Quản lý đơn hàng
+                                    </a>
+                                </li>
+                            </c:if>
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="managerAccount">
@@ -134,7 +140,7 @@
                                 <td><img src="img/${o.imageAvatar}" alt="Không thể tải ảnh"></td>
                                 <td>
                                     <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -149,7 +155,19 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-            new DataTable('#example');
+                                        new DataTable('#example');
+
+                                        function confirmDelete(event, status) {
+                                            event.preventDefault();
+                                            if (status === false) {
+                                                var confirmAction = confirm("Bạn có chắc chắn muốn bỏ chặn tài khoản này không?");
+                                            } else {
+                                                var confirmAction = confirm("Bạn có chắc chắn muốn chặn tài khoản này không?");
+                                            }
+                                            if (confirmAction) {
+                                                window.location.href = event.target.closest('a').href;
+                                            }
+                                        }
         </script>
     </body>
 </html>

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.OrderDetailDTO_Huyvq;
 import model.Product;
 import model.Role;
 
@@ -134,7 +135,6 @@ public class ProductDAO {
         }
     }
 
-   
     public void editProduct(String name, String price, String description,
             String img, String categoryId, String quantity, String status,
             Date updateDate, String productId) throws SQLException {
@@ -181,17 +181,7 @@ public class ProductDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-//     public static void main(String[] args) {
-//
-//        try {
-//            ProductDAO db = new ProductDAO();
-//            db.insertProduct("name", "12000", "ngon", "url", "1", 2, "12", Date.valueOf("2024-02-23"), "true");
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//    }
-    
+
 
     public Product getProductByID(int id) {
         try {
@@ -222,4 +212,178 @@ public class ProductDAO {
         }
         return null;
     }
+
+    public ArrayList<OrderDetailDTO_Huyvq> getAllOrderByRestaurantId(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ?";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_1(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 1";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_2(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 2";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_3(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 3";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_4(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 4";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_5(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 5";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_6(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 6";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+    
+//         public static void main(String[] args) throws Exception {
+//        ProductDAO db = new ProductDAO();
+//        System.out.println(db.getAllOrderByRestaurantId(2));
+//    }
 }

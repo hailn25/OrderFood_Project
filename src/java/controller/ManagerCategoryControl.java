@@ -12,9 +12,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
 import model.Category;
 
 /**
@@ -38,11 +40,10 @@ public class ManagerCategoryControl extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
 
-//            HttpSession session = request.getSession();
-//            Account a = (Account) session.getAttribute("acc");
-//            int id = a.getAccountId();
-            int id = 3;
-            ProductDAO dao = new ProductDAO();
+            HttpSession session = request.getSession();
+            Account a = (Account) session.getAttribute("account");
+            int roleId = a.getRoleId();
+            
             CategoryDAO dao1 = new CategoryDAO();
 
             ArrayList<Category> listC = dao1.getAllCategory();
