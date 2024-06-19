@@ -13,18 +13,17 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
-        .bg-image {
-            background-image: url('path_to_your_image.jpg'); /* Thay đổi đường dẫn hình nền ở đây */
-            height: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-    </style>
+         
+            body, html {
+                height: 100%;
+                margin-top:50px;
+               background-color: #81C408;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+     
+        </style>
     </head>
     <body>
         <section class="vh-100" style="background-color: #81C408;">
@@ -54,8 +53,8 @@
 
                                     <hr class="my-4">
                                 </form>
-                                
-<a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force">
+
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force">
                                     <button class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;"                                                                                                         >
                                         Đăng nhập bằng Google</button></a>
 
@@ -68,5 +67,28 @@
                 </div>
             </div>
         </section>
+        <script>
+            window.onload = function () {
+                var registerSuccess = "<c:out value='${registerSuccess}' />";
+                if (registerSuccess === "true") {
+                    alert("Đăng ký thành công! Vui lòng đăng nhập.");
+                    <% session.removeAttribute("registerSuccess"); %>
+                }
+
+                var passwordChangeSuccess = "<c:out value='${passwordChangeSuccess}' />";
+                if (passwordChangeSuccess === "true") {
+                    alert("Mật khẩu của bạn đã được đổi thành công! Vui lòng đăng nhập.");
+                    <% session.removeAttribute("passwordChangeSuccess"); %>
+                }
+            }
+        </script>
     </body>
 </html>
+
+
+
+
+
+
+
+

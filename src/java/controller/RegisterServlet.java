@@ -163,6 +163,7 @@ public class RegisterServlet extends HttpServlet {
                 AccountDAO adao = new AccountDAO();
                 Account account = (Account) session.getAttribute("accregister");
                 adao.registerAccount(account.getEmail(), account.getPassword(), account.getName(), account.isGender(), account.getPhone(), account.getAddress());
+                session.setAttribute("registerSuccess", "true"); // Set success message
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
 
             }

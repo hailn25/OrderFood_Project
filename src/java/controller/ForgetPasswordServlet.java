@@ -166,6 +166,7 @@ public class ForgetPasswordServlet extends HttpServlet {
                 String emailC = (String) session.getAttribute("email");
                 String pass = EncodePassword.toSHA1(password);
                 dao.ChangePassword(emailC, pass);
+                session.setAttribute("passwordChangeSuccess", "true");
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
             } catch (SQLException ex) {
                 Logger.getLogger(ForgetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);

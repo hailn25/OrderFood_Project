@@ -59,7 +59,7 @@ public class AccountDAO {
             ps.setString(1, accountId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int accountId1 = rs.getInt(1);
+                int accountID = rs.getInt(1);
                 String email = rs.getString(2);
                 String password = rs.getString(3);
                 String fullName = rs.getString(4);
@@ -74,7 +74,7 @@ public class AccountDAO {
                 Date updateDate = rs.getDate(13);
                 int roleId = rs.getInt(14);
 
-                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar,loginWith, status, lastDateLogin, createDate, updateDate, roleId);
+                Account s = new Account(accountID, email, password, fullName, gender, phone, address, imageAvatar,loginWith, status, lastDateLogin, createDate, updateDate, roleId);
                 return s;
             }
         } catch (Exception e) {

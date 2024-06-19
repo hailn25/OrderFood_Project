@@ -12,6 +12,18 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <title>Register</title>
+        <style>
+         
+            body, html {
+                height: 100%;
+                margin-top: 50px;
+               background-color: #81C408;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+     
+        </style>
     </head>
     <body>
         <section class="vh-100 bg-image" style="background-color: #81C408;">
