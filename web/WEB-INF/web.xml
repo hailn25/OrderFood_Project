@@ -41,8 +41,12 @@
         <servlet-class>controller.EditPasswordControll</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>editAvatarProfileControll</servlet-name>
-        <servlet-class>controller.editAvatarProfileControll</servlet-class>
+        <servlet-name>SettingBannerControll</servlet-name>
+        <servlet-class>controller.SettingBannerControll</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditAvatarControll</servlet-name>
+        <servlet-class>controller.EditAvatarControll</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -85,7 +89,11 @@
         <url-pattern>/editPassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>editAvatarProfileControll</servlet-name>
+        <servlet-name>SettingBannerControll</servlet-name>
+        <url-pattern>/settingBanner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAvatarControll</servlet-name>
         <url-pattern>/editAvatar</url-pattern>
     </servlet-mapping>
 </web-app>
