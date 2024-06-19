@@ -27,7 +27,7 @@
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
                     <a class="navbar-brand" href="ManagerDashboard.jsp">
-                        <h1 class="tm-site-title mb-0">Admin</h1>
+                        <h1 class="tm-site-title mb-0">Staff</h1>
                     </a>
                     <button
                         class="navbar-toggler ml-auto mr-0"
@@ -43,35 +43,19 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
-                            <c:if test="${sessionScope.account.roleId == 1}">
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="ManagerDashboard.jsp">
-                                        <i class="fas fa-tachometer-alt"></i> Thống kê
+                                    <a class="nav-link active" href="ManagerStaff.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
                                         <span class="sr-only">(current)</span>
                                     </a>
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 1}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerCategory">
-                                        <i class="far fa-file-alt"></i> Loại sản phẩm
-                                    </a>
-                                </li>
-                            </c:if>
-
-                            <c:if test="${sessionScope.account.roleId == 4}">                          
-                                <li class="nav-item">
-                                    <a class="nav-link" href="managerProduct">
-                                        <i class="fas fa-shopping-cart"></i> Sản phẩm
-                                    </a>
-                                </li>
-                            </c:if>
-
-                            <c:if test="${sessionScope.account.roleId == 1}">                          
-                                <li class="nav-item">
-                                    <a class="nav-link" href="managerAccount">
-                                        <i class="far fa-user"></i> Tài khoản
+                                    <a class="nav-link" href="managerBlog">
+                                        <i class="far fa-file-alt"></i> Quản lý blog
                                     </a>
                                 </li>
                             </c:if>
@@ -99,11 +83,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <p class=" mt-5 mb-5" style="color: black">Welcome back, <b>Admin</b></p>
+                        <p class=" mt-5 mb-5" style="color: black">Welcome back, <b>Staff</b></p>
                     </div>
                 </div>
                 <!-- row -->
-                <div class="row tm-content-row">
+<!--                <div class="row tm-content-row">
                     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
                         <div class="tm-bg-primary-dark tm-block">
                             <h2 class="tm-block-title">Latest Hits</h2>
@@ -355,9 +339,9 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
-            <footer class="tm-footer row tm-mt-small">
+<!--            <footer class="tm-footer row tm-mt-small">
                 <div class="col-12 font-weight-light">
                     <p class="text-center text-white mb-0 px-4 small">
                         Copyright &copy; <b>2018</b> All rights reserved. 
@@ -365,7 +349,7 @@
                         Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template Mo</a>
                     </p>
                 </div>
-            </footer>
+            </footer>-->
         </div>
 
         <script src="js/jquery-3.3.1.min.js"></script>
