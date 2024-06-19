@@ -73,7 +73,6 @@ public class AccountDAO {
                 Date createDate = rs.getDate(12);
                 Date updateDate = rs.getDate(13);
                 int roleId = rs.getInt(14);
-
                 Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar, loginWith, status, lastDateLogin, createDate, updateDate, roleId);
                 return s;
             }
@@ -97,6 +96,46 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid) {
+        String query = "update Account\n"
+                + "  set [Name] = ?,\n"
+                + "  [Email] = ?,\n"
+                + "  [Phone] = ?,\n"
+                + "  [Address] = ?,\n"
+                + "  [Gender] = ?\n"
+                + "  where AccountId = ?";
+        try {
+            conn = new DBContext().getConnection();
+
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, phone);
+            ps.setString(4, address);
+            ps.setBoolean(5, gender);
+            ps.setString(6, aid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateAvatarAccountById(String imageAvatar, String aid) {
+        String query = "update Account\n"
+                + "  set [ImageAvatar] = ?\n"
+                + "  where AccountId = ?";
+        try {
+            conn = new DBContext().getConnection();
+
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, imageAvatar);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
     }
 
     public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
@@ -230,6 +269,53 @@ public class AccountDAO {
         }
     }
 
+    public void updatePassword(String password, String aid) {
+        String query = "UPDATE Account SET Password = ? WHERE AccountId = ?";
+        try {
+            conn = new DBContext().getConnection();
+
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, password);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public boolean checkPassword(String accountId, String currentPassword) {
+        String sql = "SELECT * FROM Account WHERE AccountId = ? AND Password = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, accountId);
+            ps.setString(2, currentPassword);
+            rs = ps.executeQuery();
+            return rs.next(); // Nếu có kết quả trả về, tức là mật khẩu đúng
+        } catch (Exception e) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            closeResources();
+        }
+        return false;
+    }
+
+    private void closeResources() {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
     public Account getAccountByEmail(String email) throws SQLException {
         try {
             String sql = "select * from Account where Email = ?";
@@ -282,7 +368,8 @@ public class AccountDAO {
     }
 
     public static void main(String[] args) throws SQLException {
-        AccountDAO ac = new AccountDAO();
-        ac.getAccountByAId("1");
+        AccountDAO dao = new AccountDAO();
+        //dao.updatePassword("13012003", "6");
+        dao.updateAvatarAccountById("haiavt.png", "6");
     }
 }

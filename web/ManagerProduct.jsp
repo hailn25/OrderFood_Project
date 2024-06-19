@@ -33,7 +33,7 @@
                 <a class="navbar-brand" href="ManagerDashboard.jsp">
                     <c:if test="${not empty sessionScope.account.name}">
                         <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
-                    </c:if>
+                        </c:if>
 
 
                 </a>
@@ -69,13 +69,19 @@
                             </li>
                         </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 4}">                          
+                        <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item">
-                                <a class="nav-link active" href="managerProduct">
+                                <a class="nav-link" href="managerProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="profile">
+                                    <i class="fas fa-user"></i> Profile
+                                </a>
+                            </li>
                         </c:if>
+
 
                         <c:if test="${sessionScope.account.roleId == 1}">
                             <li class="nav-item">

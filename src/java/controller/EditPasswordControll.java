@@ -5,19 +5,19 @@
 package controller;
 
 import dao.AccountDAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
 
 /**
  *
  * @author ADMIN
  */
-public class ProfileController extends HttpServlet {
+public class EditPasswordControll extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,19 +32,38 @@ public class ProfileController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        // Lấy accountId từ session (sau khi người dùng đăng nhập)
-        HttpSession session = request.getSession();
-        String accountId = (String) session.getAttribute("accountId");
+        // Lấy thông tin từ request
+        String aid = request.getParameter("accountId");
+        String currentPassword = request.getParameter("currentPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
 
-        // Call DAO để lấy thông tin tài khoản dựa trên accountId
-        AccountDAO accountDAO = new AccountDAO();
-        Account account = accountDAO.getAccountByAId(accountId);
+        // Kiểm tra mật khẩu cũ
+        AccountDAO dao = new AccountDAO();
+        boolean isCurrentPasswordCorrect = dao.checkPassword(aid, currentPassword);
 
-        // Đặt thông tin tài khoản vào request attribute
-        request.setAttribute("account", account);
+        if (!isCurrentPasswordCorrect) {
+            // Nếu mật khẩu cũ không đúng, thông báo lỗi cho người dùng
+            request.setAttribute("error", "Mật khẩu cũ không chính xác.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("ChangePasswordProfile.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            // Kiểm tra mật khẩu mới và nhập lại mật khẩu mới có khớp nhau không
+            if (!newPassword.equals(confirmPassword)) {
+                // Nếu mật khẩu mới và nhập lại mật khẩu mới không khớp, thông báo lỗi cho người dùng
+                request.setAttribute("error", "Mật khẩu mới và Nhập lại mật khẩu mới không khớp.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("ChangePasswordProfile.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                // Nếu mật khẩu mới và nhập lại mật khẩu mới khớp, tiến hành cập nhật mật khẩu mới vào cơ sở dữ liệu
+                dao.updatePassword(newPassword, aid);
 
-        // Forward request tới Profile.jsp
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);
+                // Set thông báo thành công để hiển thị trên trang
+                request.setAttribute("success", "Đổi mật khẩu thành công.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("ChangePasswordProfile.jsp");
+                dispatcher.forward(request, response);
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
