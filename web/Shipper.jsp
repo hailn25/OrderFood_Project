@@ -1,165 +1,141 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Giao Hàng</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background: greenyellow;
-        }
-        h1 {
-            text-align: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        .row {
-            display: flex;
-        }
-        .col-lg-3 {
-            flex: 1;
-            max-width: 25%;
-            padding: 20px;
-            border-right: 1px solid #ddd;
-        }
-        .col-lg-9 {
-            flex: 3;
-            padding: 20px;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .card-header {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            text-transform: uppercase;
-        }
-        .shop__sidebar__accordion a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-        }
-        .shop__sidebar__accordion a:hover {
-            background-color: #f0f0f0;
-        }
-    </style>
-</head>
-<body>
+<html lang="en">
+    <head>
 
-    <h1>Quản Lý Giao Hàng</h1>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+        <link href="css/manager.css" rel="stylesheet" type="text/css"/>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/fontawesome.min.css" />
+        <link rel="stylesheet" href="css/bootstrap.min_1.css" />
+        <link rel="stylesheet" href="css/templatemo-style.css">
+    </head>
+    <body id="reportsPage" style="background-color: #F6F6F6">
+        <div class="" id="home">
+            <nav class="navbar navbar-expand-xl">
+                <div class="container h-100">
+                    <a class="navbar-brand" href="Shipper.jsp">
+                        <h1 class="tm-site-title mb-0">Shipper</h1>
+                    </a>
+                    <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars tm-nav-icon"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto h-100">
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="managerShipper">
+                                        <i class="fas fa-clipboard-check"></i>Đơn hàng đợi xử lý
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerCategory">
+                                        <i class="fas fa-shipping-fast"></i> Đơn hàng đã xác nhận
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerProduct">
+                                        <i class="fas fa-thumbs-up"></i>  Đơn hàng đã giao thành công 
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link " href="">
+                                        <i class="fas fa-trash-alt"></i> Đơn hàng bị hủy
+                                    </a>
+                                </li>
+                            </c:if>
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <c:if test="${sessionScope.account == null}">
+                                    <a class="nav-link d-block" href="Login.jsp">
+                                        <b>Đăng nhập</b>
+                                    </a>
+                                </c:if>
+                                <c:if test="${sessionScope.account != null}">
+                                    <a class="nav-link d-block" href="logout">
+                                        <b>Đăng xuất</b>
+                                    </a>
+                                </c:if>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
 
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="shop__sidebar">
-                <div class="shop__sidebar__accordion">
-                    <div class="accordion" id="accordionExample">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="fa fa-list"></i> Quản lý đơn hàng 
-                            </div>
-                            <div>
-                                <a href="Shipper.jsp?status=pending">Đơn hàng đang chờ xử lý</a>
-                                <a href="Shipper.jsp?status=confirmed">Đơn hàng đã xác nhận</a>
-                                <a href="Shipper.jsp?status=delivered">Đơn hàng đã giao</a>
-                                <a href="Shipper.jsp?status=cancelled">Đơn hàng bị hủy</a>
-                            </div>
+        <div class="container">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Quản lý <b>đơn hàng </b></h2>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-lg-9">
-            <div class="section">
-                <h2>Thông Tin Đơn Hàng</h2>
-              <div class="col-lg-9">
-    <div class="section">
-        <h2>Chi Tiết Đơn Hàng Đang Xử Lý</h2>
-        <c:forEach var="order" items="${orders}">
-            <c:if test="${order.status == 'pending'}">
-                <div class="order-info">
-                    <p>Mã Đơn Hàng: ${order.id}</p>
-                    <p>Ngày Đặt Hàng: ${order.orderDate}</p>
-                    <p>Thời Gian Giao Dự Kiến: ${order.deliveryDate}</p>
-                    <p>Họ và Tên: ${order.customerName}</p>
-                    <p>Địa Chỉ: ${order.address}</p>
-                    <p>Số Điện Thoại: ${order.phone}</p>
-                    <p>Email: ${order.email}</p>
-
-                    <h3>Thông Tin Sản Phẩm</h3>
-                    <table>
+                <table id="example" class="display" style="width:100%">
+                    <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên Sản Phẩm</th>
-                            <th>Số Lượng</th>
-                            <th>Đơn Giá</th>
-                            <th>Thành Tiền</th>
+                            <th>Stt</th>
+                            <th>Họ và tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Ghi chú</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền </th>
+                            <th>Trạng thái đơn hàng </th>
+                            <th>Hoạt Động </th>
+
                         </tr>
-                        <c:forEach var="item" items="${order.items}">
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${list}" var="o">
                             <tr>
-                                <td>${item.index}</td>
-                                <td>${item.productName}</td>
-                                <td>${item.quantity}</td>
-                                <td>${item.price}</td>
-                                <td>${item.total}</td>
+                                <td>${o.orderId}</td>
+                                <td>${o.name}</td>
+
+                                <td>${o.phone}</td>
+                                <td>${o.address}</td>
+                                <td>${o.note}</td>
+                                <td>${o.createDate}</td>
+                                <td>${o.totalMoney}</td>
+                                <td>
+                                    ${o.status == 1 ? "Đang chờ xử lý " :   "Unknown role"}
+                                </td>
+
+                                <td>
+                                    <a href="managerActions?action=accept&oid=${o.orderId}" class="accept" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xác nhận đơn hàng">&#xe5ca;</i></a>
+
+                                    <a href="managerActions?action=refuse&oid=${o.orderId}" class="refuse" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Không chấp nhận " style="color: red;">&#xe5cd;</i></a>
+
+                                    <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
+
+                                </td>
+
                             </tr>
                         </c:forEach>
-                    </table>
-                    <p><strong>Tổng Cộng: ${order.totalPrice} VND</strong></p>
-                </div>
-                <hr>
-            </c:if>
-        </c:forEach>
-    </div>
-</div>
-
-
-            <div class="section">
-                <h2>Ghi Chú và Phản Hồi</h2>
-                <form action="UpdateOrderStatus" method="post">
-                    <input type="hidden" name="orderId" value="${order.id}">
-                    <textarea name="notes" rows="4" cols="50" placeholder="Nhập ghi chú hoặc phản hồi từ khách hàng..."></textarea>
-                    <h3>Tình Trạng Giao Hàng</h3>
-                    <select name="status">
-                        <option value="confirmed">Xác Nhận Đơn</option>
-                        <option value="delivered">Đã Giao Hàng</option>
-                        <option value="cancelled">Hủy Đơn</option>
-                    </select>
-                    <br><br>
-                    <button type="submit" class="button">Cập Nhật Trạng Thái</button>
-                </form>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
 
-</body>
+        <script src="js/manager_1.js" type="text/javascript"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        <script>
+            new DataTable('#example');
+        </script>
+    </body>
 </html>

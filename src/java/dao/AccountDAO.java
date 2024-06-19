@@ -35,11 +35,12 @@ public class AccountDAO {
                         rs.getString(6),
                         rs.getString(7),
                         rs.getString(8),
-                        rs.getBoolean(9),
-                        rs.getDate(10),
+                        rs.getInt(9),
+                        rs.getBoolean(10),
                         rs.getDate(11),
                         rs.getDate(12),
-                        rs.getInt(13)
+                        rs.getDate(13),
+                        rs.getInt(14)
                 ));
             }
         } catch (Exception e) {
@@ -66,13 +67,14 @@ public class AccountDAO {
                 String phone = rs.getString(6);
                 String address = rs.getString(7);
                 String imageAvatar = rs.getString(8);
-                boolean status = rs.getBoolean(9);
-                Date lastDateLogin = rs.getDate(10);
-                Date createDate = rs.getDate(11);
-                Date updateDate = rs.getDate(12);
-                int roleId = rs.getInt(13);
+                int loginWith = rs.getInt(9);
+                boolean status = rs.getBoolean(10);
+                Date lastDateLogin = rs.getDate(11);
+                Date createDate = rs.getDate(12);
+                Date updateDate = rs.getDate(13);
+                int roleId = rs.getInt(14);
 
-                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar, status, lastDateLogin, createDate, updateDate, roleId);
+                Account s = new Account(accountId1, email, password, fullName, gender, phone, address, imageAvatar,loginWith, status, lastDateLogin, createDate, updateDate, roleId);
                 return s;
             }
         } catch (Exception e) {
@@ -128,11 +130,12 @@ public class AccountDAO {
                         rs.getString(6),
                         rs.getString(7),
                         rs.getString(8),
-                        rs.getBoolean(9),
-                        rs.getDate(10),
+                        rs.getInt(9),
+                        rs.getBoolean(10),
                         rs.getDate(11),
                         rs.getDate(12),
-                        rs.getInt(13));
+                        rs.getDate(13),
+                        rs.getInt(14));
             }
         } catch (Exception e) {
         }
@@ -144,7 +147,7 @@ public class AccountDAO {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
             String imageAvatar = "anh_mac_dinh.jpg";
-            String sql = "INSERT INTO Account (Email, Password, Name, Gender, Phone, Address, imageAvatar, Status, lastDateLogin, createDate, updateDate, roleId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Account (Email, Password, Name, Gender, Phone, Address, imageAvatar, LoginWith, Status, lastDateLogin, createDate, updateDate, roleId) VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
             try {
                 conn = new DBContext().getConnection();
             } catch (ClassNotFoundException ex) {
@@ -158,17 +161,18 @@ public class AccountDAO {
             ps.setString(5, phone);
             ps.setString(6, address);
             ps.setString(7, imageAvatar);
-            ps.setBoolean(8, true);
-            ps.setString(9, date);
+            ps.setInt(8,0 );
+            ps.setBoolean(9, true);
             ps.setString(10, date);
             ps.setString(11, date);
-            ps.setInt(12, 2);
+            ps.setString(12, date);
+            ps.setInt(13, 2);
             ps.executeUpdate();
-            return new Account(0, email, password, fullName, gender, phone, address, imageAvatar, true, java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), 2);
+            return new Account(0, email, password, date, gender, phone, address, imageAvatar, 0, gender, java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), 2);
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+      return null;
     }
 
     public boolean checkAccountExist(String email) {
@@ -209,9 +213,76 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void ChangePassword(String email, String password) throws SQLException{
+        try {
+            LocalDate curDate = LocalDate.now();
+            String date = curDate.toString();
+            String sql = "UPDATE Account SET [Password] = ? , UpdateDate = ? where Email = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, password);
+            ps.setString(2, date);
+            ps.setString(3, email);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Account getAccountByEmail(String email) throws SQLException{
+        try {
+            String sql = "select * from Account where Email = ?";
+            conn = new  DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Account(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getBoolean(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getInt(9),
+                        rs.getBoolean(10),
+                        rs.getDate(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getInt(14));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return null;
+    }
+    
+    public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
+        try {
+            LocalDate curDate = LocalDate.now();
+            String date = curDate.toString();
+            String sql = "INSERT INTO [dbo].[Account] ([Email],[LoginWith],[Status],[LastDateLogin],[CreateDate],[UpdateDate],[RoleId]) VALUES (?,?,?,?,?,?,?)";
 
-    public static void main(String[] args) {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setInt(2, loginWith);
+            ps.setBoolean(3, true);
+            ps.setString(4, date);
+            ps.setString(5, date);
+            ps.setString(6, date);
+            ps.setInt(7, 2);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static void main(String[] args) throws SQLException {
         AccountDAO ac = new AccountDAO();
-        System.out.println(ac.getAllAccount());
+        ac.getAccountByEmail("ngochai251003@gmail.com");
     }
 }

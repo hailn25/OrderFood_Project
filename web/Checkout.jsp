@@ -83,6 +83,7 @@
 
                                 <div class="form-item">
                                     <label class="form-label my-3">Họ và Tên <sup>*</sup></label>
+
                                     <input type="text" class="form-control" name="name" value="${account.name}">
                             </div>
                             <div class="form-item">
@@ -102,17 +103,8 @@
                                 <label class="form-check-label" for="Address-1">Ship to a different address?</label>
                             </div>
 
-                            <script>
-                                function redirectToCheckout() {
-                                    var checkbox = document.getElementById("Address-1");
-                                    if (checkbox.checked) {
-                                        window.location.href = "Checkout_1.jsp";
-                                    }
-                                }
-                            </script>
 
                             <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú (thêm)"></textarea>
-                        </form>
                     </div>
                     <div class="col-md-12 col-lg-6 col-xl-5">
                         <div class="table-responsive">
@@ -142,7 +134,7 @@
                                             <td class="py-5">${i.quantity}</td>
                                             <td class="py-5">
                                                 <fmt:formatNumber value="${i.quantity * i.price}" maxFractionDigits="2" />
-                                                <input type="hidden" name="cost" value="${i.quantity * i.price}" />
+                                                <input type="hidden"value="${i.quantity * i.price}" />
                                             </td>
 
 
@@ -163,10 +155,11 @@
                                                     <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}" />
                                                 </c:forEach>
                                                 <fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />
+                                                <input type="hidden" name="cost" value="<fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />" />
                                             </div>
+
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <th scope="row"></th>
                                         <td class="py-5">
@@ -203,25 +196,24 @@
                                 </tbody>
                             </table>
                         </div>
-                        <form action="checkout" method="post">
-                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-                                <div class="col-12">
-                                    <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="cod" name="payment" value="cod" onclick="updatePaymentInfo('COD')" checked>
-                                        <label class="form-check-label" for="cod">Ship COD</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check text-start my-3">
-                                        <input type="radio" class="form-check-input bg-primary border-0" id="vnpay" name="payment" value="vnpay" onclick="updatePaymentInfo('VNPay')">
-                                        <label class="form-check-label" for="vnpay">Thanh toán bằng VNPay</label>
-                                    </div>
+                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                            <div class="col-12">
+                                <div class="form-check text-start my-3">
+                                    <input type="radio" class="form-check-input bg-primary border-0" id="cod" name="payment" value="cod" onclick="updatePaymentInfo('COD')" checked>
+                                    <label class="form-check-label" for="cod">Ship COD</label>
                                 </div>
                             </div>
-                            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                                <input type="hidden" name="cost" value="${subtotal}" />
-                                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                            <div class="col-12">
+                                <div class="form-check text-start my-3">
+                                    <input type="radio" class="form-check-input bg-primary border-0" id="vnpay" name="payment" value="vnpay" onclick="updatePaymentInfo('VNPay')">
+                                    <label class="form-check-label" for="vnpay">Thanh toán bằng VNPay</label>
+                                </div>
                             </div>
+                        </div>
+                        <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                            <input type="hidden" name="cost" value="${subtotal}" />
+                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                        </div>
                         </form>
 
                     </div>
@@ -274,6 +266,14 @@
                 paymentInfo.innerHTML = "Quý khách chuyển khoản trước";
                 vnpayButton.style.display = "block";
                 codButton.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        function redirectToCheckout() {
+            var checkbox = document.getElementById("Address-1");
+            if (checkbox.checked) {
+                window.location.href = "Checkout_1.jsp";
             }
         }
     </script>

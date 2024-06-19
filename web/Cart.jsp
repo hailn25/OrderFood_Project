@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                     <h5 class="mb-0 ps-4 me-4">Total</h5>
-                                    <fmt:formatNumber value="${subtotal + 3.00}" maxFractionDigits="2"/>
+                                    <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
                                 </div>
                                 <form action="checkout" method="get">
                                     <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>

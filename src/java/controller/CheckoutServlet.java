@@ -4,8 +4,8 @@
  */
 package controller;
 
+import dao.OrderDAO;
 
-import dao.OrderDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -101,7 +101,7 @@ public class CheckoutServlet extends HttpServlet {
         String note = request.getParameter("note");
         String payment = request.getParameter("payment");
         String total = request.getParameter("cost");
-
+         request.setAttribute("note", note);
         Cart cart = null;
         Object o = session.getAttribute("cart");
         if (o != null) {
@@ -115,13 +115,18 @@ public class CheckoutServlet extends HttpServlet {
         if (a != null) {
             account = (Account) a;
             int id = account.getAccountId();
-            OrderDTO dao = new OrderDTO();
-            dao.insertNewOrder(id, Double.parseDouble(total), name, email, phone, address, note);
+            OrderDAO dao = new OrderDAO();
+            dao.insertNewOrder(1, id, Double.parseDouble(total), account.getName(), account.getEmail(), account.getPhone(), account.getAddress(), note);
             int oid = dao.getOrderID();
             int orderDetailId = dao.getOrderDetailId();
-            
+            if (payment.equals("cod")) {
+                for (Item item : cart.getItems()) {
+                    dao.insertNewOrderDetail(oid, item.getProduct().getProductId(), item.getQuantity(), item.getPrice() * item.getQuantity(), payment, "Thanh toán khi nhận hàng ");
+                    dao.updateQuantity(item.getProduct().getProductId(), item.getQuantity());
+                }
+            }
             for (Item item : cart.getItems()) {
-                dao.insertNewOrderDetail(oid, item.getProduct().getProductId(), item.getQuantity(), item.getPrice() * item.getQuantity(), payment, true);
+                dao.insertNewOrderDetail(orderDetailId, item.getProduct().getProductId(), item.getQuantity(), item.getPrice() * item.getQuantity(), payment, "Thanh toán thành công ");
                 dao.updateQuantity(item.getProduct().getProductId(), item.getQuantity());
             }
             if (payment.equals("vnpay")) {
@@ -154,7 +159,6 @@ public class CheckoutServlet extends HttpServlet {
                         + "    <div>\n"
                         + "        <h2 style=\"font-size: 25px;\">Cảm ơn " + account.getName() + " đã đặt hàng tại  <a href=\"http://localhost:9999/Order_Food/home\">4FoodHD</a></h2>\n"
                         + "        <p>Đơn hàng của bạn đã được đặt thành công!</p>\n"
-                      
                         + "        <h1 style=\"margin-top: 50px; font-size: 28px\">" + "Chi tiết đơn hàng của bạn." + "</h1>\n"
                         + "<table style=\"width:100%;border-spacing:inherit;border:1px solid #ddd\">\n"
                         + "            <tr style=\"background-color:#ce0707;font-weight:bold\">\n"
@@ -167,27 +171,26 @@ public class CheckoutServlet extends HttpServlet {
                         + "            </tr>\n"
                         + "            <tr style=\"color:#ce0707\">\n"
                         + "                <td style=\"padding:10px;border-right:1px solid #ddd\">\n"
-                         + "                    Tên khách hàng :\n"
+                        + "                    Tên khách hàng :\n"
                         + "                    " + account.getName() + "\n"
                         + "                </td>\n"
                         + "                <td style=\"padding:10px\">\n"
-                         + "                   Địa chỉ   :\n"
+                        + "                   Địa chỉ   :\n"
                         + "                 " + account.getAddress() + "\n"
-                         
                         + "                </td>\n"
                         + "            </tr>\n"
                         + "            <tr style=\"color:#ce0707\">\n"
                         + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">\n"
-                         + "                   Số điện thoại  :\n"
+                        + "                   Số điện thoại  :\n"
                         + "                 " + account.getPhone() + "\n"
                         + "                </td>\n"
                         + "                <td style=\"padding:10px;color:white\">\n"
                         + "                </td>\n"
                         + "            </tr>\n"
-                         + "            <tr style=\"color:#ce0707\">\n"
+                        + "            <tr style=\"color:#ce0707\">\n"
                         + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">\n"
-                         + "                  Hình thức thanh toán :\n"
-                        + "                 " + dao.getPayment(orderDetailId)  + "\n"
+                        + "                  Hình thức thanh toán :\n"
+                        + "                 " + dao.getPayment(orderDetailId) + "\n"
                         + "                </td>\n"
                         + "                <td style=\"padding:10px;color:white\">\n"
                         + "                </td>\n"

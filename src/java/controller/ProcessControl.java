@@ -17,7 +17,7 @@ import java.util.List;
 import model.Item;
 import model.Product;
 import model.Cart;
-import dao.OrderDTO;
+import dao.OrderDAO;
 import java.util.Set;
 
 /**
@@ -79,7 +79,7 @@ public class ProcessControl extends HttpServlet {
         try {
             id = Integer.parseInt(tid);
             num = Integer.parseInt(tnum);
-            OrderDTO od = new OrderDTO();
+            OrderDAO od = new OrderDAO();
             ProductDAO dao = new ProductDAO();
             Product p = dao.getProductByID(id);
             int q = dao.getQuantityProduct(id);
