@@ -362,25 +362,8 @@ public class OrderDAO {
 
     public static void main(String[] args) {
         OrderDAO orderDAO = new OrderDAO();
-//        ArrayList<OrderDTO> orders = orderDAO.getAllOrder(1);
-//
-//        for (OrderDTO order : orders) {
-//            System.out.println("Order ID: " + order.getOrderId());
-//            System.out.println("Name: " + order.getName());
-//            System.out.println("Phone: " + order.getPhone());
-//            System.out.println("Address: " + order.getAddress());
-//            System.out.println("Note: " + order.getNote());
-//            System.out.println("Create Date: " + order.getCreateDate());
-//            System.out.println("Total Money: " + order.getTotalMoney());
-//            System.out.println("Status: " + order.getStatus());
-//            System.out.println("----------------------------------");
-        
-
-    // Giả định orderId và orderStatusId của đơn hàng cần cập nhật
-    int orderIdToUpdate = 123; // Thay bằng orderId thực tế cần cập nhật
-    int newOrderStatusId = 2; // Thay bằng orderStatusId mới
-
-    // Gọi phương thức updateOrderStatus để cập nhật trạng thái đơn hàng
+    int orderIdToUpdate = 123; 
+    int newOrderStatusId = 2; 
     orderDAO.updateOrderStatus(orderIdToUpdate, newOrderStatusId);
 
     System.out.println("Order status updated successfully!");
