@@ -10,26 +10,26 @@ import java.util.Date;
  *
  * @author quoch
  */
-public class Slider {
+public class SliderDTO {
     private int sliderId;
     private String sliderTitle;
     private String imageURL;
     private int Arrange;
-    private int status;
+    private String statusName;
     private int updateBy;
     private Date createDate;
     private Date updateDate;
     private String backLink;
 
-    public Slider() {
+    public SliderDTO() {
     }
 
-    public Slider(int sliderId, String sliderTitle, String imageURL, int Arrange, int status, int updateBy, Date createDate, Date updateDate, String backLink) {
+    public SliderDTO(int sliderId, String sliderTitle, String imageURL, int Arrange, String statusName, int updateBy, Date createDate, Date updateDate, String backLink) {
         this.sliderId = sliderId;
         this.sliderTitle = sliderTitle;
         this.imageURL = imageURL;
         this.Arrange = Arrange;
-        this.status = status;
+        this.statusName = statusName;
         this.updateBy = updateBy;
         this.createDate = createDate;
         this.updateDate = updateDate;
@@ -68,12 +68,12 @@ public class Slider {
         this.Arrange = Arrange;
     }
 
-    public int getStatus() {
-        return status;
+    public String getStatusName() {
+        return statusName;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public int getUpdateBy() {
@@ -110,7 +110,8 @@ public class Slider {
 
     @Override
     public String toString() {
-        return "Slider{" + "sliderId=" + sliderId + ", sliderTitle=" + sliderTitle + ", imageURL=" + imageURL + ", Arrange=" + Arrange + ", status=" + status + ", updateBy=" + updateBy + ", createDate=" + createDate + ", updateDate=" + updateDate + ", backLink=" + backLink + '}';
+        return "SliderDTO{" + "sliderId=" + sliderId + ", sliderTitle=" + sliderTitle + ", imageURL=" + imageURL + ", Arrange=" + Arrange + ", statusName=" + statusName + ", updateBy=" + updateBy + ", createDate=" + createDate + ", updateDate=" + updateDate + ", backLink=" + backLink + '}';
     }
-
+    
+    
 }

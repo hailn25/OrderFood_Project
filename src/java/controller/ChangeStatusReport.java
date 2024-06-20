@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.ReportDAO;
 import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,16 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.Slider;
-import model.SliderDTO;
 
 /**
  *
  * @author quoch
  */
-@WebServlet(name = "ManagerServiceControl", urlPatterns = {"/managerService"})
-public class ManagerServiceControl extends HttpServlet {
+@WebServlet(name = "ChangeStatusReport", urlPatterns = {"/changeStatusReport"})
+public class ChangeStatusReport extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,11 +33,16 @@ public class ManagerServiceControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        SliderDAO sliderDAO = new SliderDAO();
-        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-        request.setAttribute("listSlider", listSlider);
-        
-        request.getRequestDispatcher("ManagerService.jsp").forward(request, response);
+        ReportDAO reportDAO = new ReportDAO();
+        int changeStatus = Integer.parseInt(request.getParameter("changeStatus"));
+        int reportId = Integer.parseInt(request.getParameter("reportId"));
+        if (changeStatus == 3) {
+            reportDAO.changeStatusReport(reportId, changeStatus);
+        } else {
+            reportDAO.changeStatusReport(reportId, changeStatus);
+        }
+
+        request.getRequestDispatcher("managerReport").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

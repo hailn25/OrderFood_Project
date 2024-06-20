@@ -152,25 +152,26 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tiêu đề</th>
+                            <th>Mô tả</th>
                             <th>Ảnh</th>
+                            <th>Ngày</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${listSlider}" var="s">
-                            <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
+                        <c:forEach items="${listReport}" var="r">
+                            <c:if test="${r.status == 1}">
                                 <tr>
-                                    <td>${s.sliderId}</td>
-                                    <td class="title" data-title>${s.sliderTitle}</td>
+                                    <td>${r.reportId}</td>
+                                    <td>${r.description}</td>
                                     <td>
-                                        <img src="img/${s.imageURL}" alt="Không thể tải ảnh">
+                                        <img src="img/${r.imageURL}" alt="Không thể tải ảnh">
                                     </td>
-                                    <td>${s.statusName}</td>
+                                    <td>${r.createDate}</td>
                                     <td>
-                                        <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                        <a href="changeStatusReport?changeStatus=${3}&reportId=${r.reportId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="changeStatusReport?changeStatus=${2}&reportId=${r.reportId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
                                     </td>
                                 </tr>
                             </c:if>
@@ -192,7 +193,7 @@
 
                                             function confirmDelete(event) {
                                                 event.preventDefault();
-                                                var confirmAction = confirm("Bạn có muốn từ chối yêu cầu này không?");
+                                                var confirmAction = confirm("Bạn có muốn gửi yêu cầu cấm tài khoản không?");
                                                 if (confirmAction) {
                                                     window.location.href = event.target.closest('a').href;
                                                 }

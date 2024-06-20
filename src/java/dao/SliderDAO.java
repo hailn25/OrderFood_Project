@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Slider;
+import model.SliderDTO;
 
 /**
  *
@@ -28,7 +29,7 @@ public class SliderDAO {
         ArrayList<Slider> listSlider = new ArrayList<>();
         try {
             String sql = "select *\n"
-                    + "from Sliders";
+                    + "from [dbo].[Slider]";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -38,7 +39,7 @@ public class SliderDAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getInt(4),
-                        rs.getBoolean(5),
+                        rs.getInt(5),
                         rs.getInt(6),
                         rs.getDate(7),
                         rs.getDate(8),
@@ -52,16 +53,45 @@ public class SliderDAO {
         return listSlider;
     }
 
-    public void changeStatusSlider(int sliderId, boolean status) {
+    public ArrayList<SliderDTO> getAllSliderDTO() {
+        ArrayList<SliderDTO> listSlider = new ArrayList<>();
         try {
-            String sql = "UPDATE [dbo].[Sliders]\n"
-                    + "SET [Status] = ?\n"
+            String sql = "SELECT Slider.SliderId, Slider.SliderTitle, Slider.ImageURL, Slider.Arrange, SliderStatus.StatusName, Slider.UpdateBy, Slider.CreateDate, Slider.UpdateDate, Slider.Backlink\n"
+                    + "FROM     Slider INNER JOIN\n"
+                    + "                  SliderStatus ON Slider.SliderStatusId = SliderStatus.SliderStatusId";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listSlider.add(new SliderDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getDate(7),
+                        rs.getDate(8),
+                        rs.getString(9)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listSlider;
+    }
+
+    public void changeStatusSlider(int sliderId, int status) {
+        try {
+            String sql = "UPDATE [dbo].[Slider]\n"
+                    + "SET [SliderStatusId] = ?\n"
                     + "WHERE [SliderId] = ?";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
-            ps.setBoolean(1, status);
+            ps.setInt(1, status);
             ps.setInt(2, sliderId);
-            
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,8 +102,8 @@ public class SliderDAO {
 
     public static void main(String[] args) {
         SliderDAO dao = new SliderDAO();
-//        for (Slider s : dao.getAllSlider()) {
-//            System.out.println(s.toString());
-//        }
+        for (SliderDTO s : dao.getAllSliderDTO()) {
+            System.out.println(s.toString());
+        }
     }
 }
