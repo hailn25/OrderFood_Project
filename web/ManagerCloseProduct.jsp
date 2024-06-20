@@ -26,6 +26,31 @@
                 width: 150px;
                 height: 150px;
             }
+            /* Ẩn dropdown menu mặc định */
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                background-color: white;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+            .dropdown-menu .dropdown-item {
+                padding: 8px 16px;
+                display: block;
+                color: black;
+                text-decoration: none;
+            }
+
+            .dropdown-menu .dropdown-item:hover {
+                background-color: #ddd;
+            }
+
+            /* Hiển thị dropdown menu khi active */
+            .show {
+                display: block;
+            }
+
         </style>
     </head>
 
@@ -86,17 +111,13 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
-                            <!--                            <li class="nav-item">
-                                                            <a class="nav-link active" href="managerOrderOfCustomer">
-                                                                <i class="far fa-file-alt"></i> Quản lý đơn hàng
-                                                            </a>
-                                                        </li>-->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
                                     <i class="far fa-file-alt"></i>
                                     <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu" id="dropdownMenu">
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
                                     <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
                                     <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
                                     <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
@@ -105,11 +126,11 @@
                                     <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
                                 </div>
                             </li>
-
                         </c:if>
+
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="#Profile.jsp">
+                                <a class="nav-link" href="profile">
                                     <i class="far fa-user"></i> Tài khoản
                                 </a>
                             </li>
@@ -173,7 +194,7 @@
                                 </td>
                                 <td>
                                     <a href="loadCloseProduct?pid=${o.productId}&cid=${o.categoryId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
-                                    <a href="openProduct?pid=${o.productId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Mở bán sản phẩm" style="color: gray">&#xe8f5;</i></a>
+                                    <a href="openProduct?pid=${o.productId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Mở bán sản phẩm" style="color: red">&#xe8f4;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -207,7 +228,25 @@
                 }
             }
         </script>
-        <script src="js/bootstrap.min.js"></script>
+        <script>
+            function toggleDropdown(event) {
+                event.preventDefault();
+                var dropdownMenu = document.getElementById("dropdownMenu");
+                dropdownMenu.classList.toggle("show");
+            }
 
+// Đóng dropdown menu nếu click ngoài nó
+            window.onclick = function (event) {
+                if (!event.target.matches('.dropdown-toggle')) {
+                    var dropdowns = document.getElementsByClassName("dropdown-menu");
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+        </script>
     </body>
 </html>

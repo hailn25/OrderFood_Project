@@ -7,6 +7,8 @@
         <!--cai nay cua ProGear-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--day la icon edit, delete-->
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
+        <link rel="stylesheet" href="css/fontawesome.min.css" />
+
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
 
 
@@ -20,6 +22,15 @@
             img{
                 width: 150px;
                 height: 150px;
+            }
+        </style>
+        <style>
+            .material-symbols-outlined {
+                font-variation-settings:
+                    'FILL' 0,
+                    'wght' 400,
+                    'GRAD' 0,
+                    'opsz' 24
             }
         </style>
     </head>
@@ -139,8 +150,18 @@
                                 <td class="${o.status ? "active" : "banned"}">${o.status ? "Hoạt động" : "Bị cấm"}</td>
                                 <td><img src="img/${o.imageAvatar}" alt="Không thể tải ảnh"></td>
                                 <td>
-                                    <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons fas fa-edit" style="color: #5c98ff" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
+                                    <c:if test="${o.status == true}">
+                                        <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmDelete(event)" class="delete" data-toggle="modal">
+                                            <i class="material-icons fas fa-toggle-on" style="color: green" data-toggle="tooltip" title="Khoá tài khoản"></i>
+                                        </a>
+                                    </c:if>
+                                    <c:if test="${o.status == false}">
+                                        <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmOpen(event)" class="delete" data-toggle="modal">
+                                            <i class="material-icons fas fa-toggle-off" style="color: green" data-toggle="tooltip" title="Mở khoá tài khoản">&#xE872;</i>
+                                        </a>
+                                    </c:if>
+
                                 </td>
                             </tr>
                         </c:forEach>
@@ -155,19 +176,45 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                        new DataTable('#example');
+                                            new DataTable('#example');
 
-                                        function confirmDelete(event, status) {
-                                            event.preventDefault();
-                                            if (status === false) {
-                                                var confirmAction = confirm("Bạn có chắc chắn muốn bỏ chặn tài khoản này không?");
-                                            } else {
-                                                var confirmAction = confirm("Bạn có chắc chắn muốn chặn tài khoản này không?");
+                                            function confirmDelete(event) {
+                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+                                                var confirmAction = confirm("Bạn có chắc chắn muốn khoá tài khoản này không?");
+
+                                                if (confirmAction) {
+                                                    window.location.href = event.target.closest('a').href;
+                                                }
                                             }
-                                            if (confirmAction) {
-                                                window.location.href = event.target.closest('a').href;
+
+                                            function confirmOpen(event) {
+                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+                                                var userConfirmed = confirm("Bạn có chắc muốn mở khoá tài khoản này không?");
+
+                                                if (userConfirmed) {
+                                                    window.location.href = event.currentTarget.href;
+                                                }
                                             }
-                                        }
+
+// Gắn hàm confirmDelete vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Khoá tài khoản"
+                                            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Khoá tài khoản"]').forEach(function (element) {
+                                                element.onclick = function (event) {
+                                                    confirmDelete(event);
+                                                };
+                                            });
+
+// Gắn hàm confirmOpen vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Mở khoá tài khoản"
+                                            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Mở khoá tài khoản"]').forEach(function (element) {
+                                                element.onclick = function (event) {
+                                                    confirmOpen(event);
+                                                };
+                                            });
+
+
         </script>
+
+
     </body>
 </html>

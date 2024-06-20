@@ -54,8 +54,8 @@ public class RevenueDAO {
         }
         return 0;
     }
-    
-    public double getRevenueOfWeb(int month, int year) {
+
+    public long getRevenueOfWeb(int month) {
         String sql = "SELECT \n"
                 + "    MONTH(O.FinishDate) AS month,\n"
                 + "    YEAR(O.FinishDate) AS year,\n"
@@ -65,21 +65,75 @@ public class RevenueDAO {
                 + "WHERE \n"
                 + "    O.OrderStatusId = 3\n"
                 + "    AND MONTH(O.FinishDate) = ?\n"
-                + "    AND YEAR(O.FinishDate) = ?\n"
                 + "GROUP BY \n"
                 + "    YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
                 + "ORDER BY \n"
                 + "    YEAR(O.FinishDate), MONTH(O.FinishDate);";
+
+        // Initialize resources
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
         try {
+            // Establish database connection
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, month);
-            ps.setInt(2, year);
             rs = ps.executeQuery();
+
             if (rs.next()) {
                 double totalRevenue = rs.getDouble("total_revenue");
                 double finalRevenue = totalRevenue * 0.05;
-                return finalRevenue;
+                return (long) finalRevenue;
+            }
+        } catch (Exception e) {
+            // Handle exceptions and possibly log them
+            e.printStackTrace();
+        } finally {
+            // Ensure resources are closed properly
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public int AccountValid1(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?) \n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount1 = rs.getInt("number_of_accounts");
+                return numberAccount1;
             }
         } catch (Exception e) {
 
@@ -87,37 +141,633 @@ public class RevenueDAO {
         return 0;
     }
 
-    public double AccountValidFee(int month, int year) {
+    public int AccountValid2(int year) {
         String sql = "SELECT \n"
                 + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE WHEN DAY(UpdateDate) BETWEEN 1 AND 15 THEN 1 ELSE NULL END) AS accounts_to_charge_fee\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
                 + "FROM \n"
                 + "    Account\n"
                 + "WHERE \n"
                 + "    Account.RoleId = 4\n"
                 + "    AND Account.Status = 1\n"
-                + "    AND DAY(UpdateDate) BETWEEN 1 AND 15\n"
-                + "    AND MONTH(Account.UpdateDate) = ?\n"
-                + "     AND YEAR(Account.UpdateDate) = ?";
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
         try {
-             conn = new DBContext().getConnection();
+            conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, month);
+            ps.setInt(1, year);
             ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
             rs = ps.executeQuery();
-            if(rs.next()){
-                int totalAccount = rs.getInt("number_of_accounts");
-                double accountFee = totalAccount * 1000000;
-                return accountFee;
+            if (rs.next()) {
+                int numberAccount2 = rs.getInt("number_of_accounts");
+                return numberAccount2;
             }
         } catch (Exception e) {
-                
+
+        }
+        return 0;
+    }
+
+    public int AccountValid3(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "    );";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount3 = rs.getInt("number_of_accounts");
+                return numberAccount3;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid4(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount4 = rs.getInt("number_of_accounts");
+                return numberAccount4;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid5(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount5 = rs.getInt("number_of_accounts");
+                return numberAccount5;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid6(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount6 = rs.getInt("number_of_accounts");
+                return numberAccount6;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid7(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+            ps.setInt(13, year);
+            ps.setInt(14, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount7 = rs.getInt("number_of_accounts");
+                return numberAccount7;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid8(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+            ps.setInt(13, year);
+            ps.setInt(14, year);
+            ps.setInt(15, year);
+            ps.setInt(16, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount8 = rs.getInt("number_of_accounts");
+                return numberAccount8;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid9(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(CreateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+            ps.setInt(13, year);
+            ps.setInt(14, year);
+            ps.setInt(15, year);
+            ps.setInt(16, year);
+            ps.setInt(17, year);
+            ps.setInt(18, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount9 = rs.getInt("number_of_accounts");
+                return numberAccount9;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid10(int year) {
+        String sql = "SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+            ps.setInt(13, year);
+            ps.setInt(14, year);
+            ps.setInt(15, year);
+            ps.setInt(16, year);
+            ps.setInt(17, year);
+            ps.setInt(18, year);
+            ps.setInt(19, year);
+            ps.setInt(20, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount10 = rs.getInt("number_of_accounts");
+                return numberAccount10;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid11(int year) {
+        String sql = "	SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 9 AND YEAR(CreateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+            ps.setInt(13, year);
+            ps.setInt(14, year);
+            ps.setInt(15, year);
+            ps.setInt(16, year);
+            ps.setInt(17, year);
+            ps.setInt(18, year);
+            ps.setInt(19, year);
+            ps.setInt(20, year);
+            ps.setInt(21, year);
+            ps.setInt(22, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount11 = rs.getInt("number_of_accounts");
+                return numberAccount11;
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int AccountValid12(int year) {
+        String sql = "	SELECT \n"
+                + "    COUNT(AccountId) AS number_of_accounts,\n"
+                + "    COUNT(CASE \n"
+                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
+                + "                   OR (MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
+                + "              THEN 1 \n"
+                + "              ELSE NULL \n"
+                + "          END) AS accounts_to_charge_fee\n"
+                + "FROM \n"
+                + "    Account\n"
+                + "WHERE \n"
+                + "    Account.RoleId = 4\n"
+                + "    AND Account.Status = 1\n"
+                + "    AND (\n"
+                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
+                + "        OR (MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
+                + "    )";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, year);
+            ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
+            ps.setInt(5, year);
+            ps.setInt(6, year);
+            ps.setInt(7, year);
+            ps.setInt(8, year);
+            ps.setInt(9, year);
+            ps.setInt(10, year);
+            ps.setInt(11, year);
+            ps.setInt(12, year);
+            ps.setInt(13, year);
+            ps.setInt(14, year);
+            ps.setInt(15, year);
+            ps.setInt(16, year);
+            ps.setInt(17, year);
+            ps.setInt(18, year);
+            ps.setInt(19, year);
+            ps.setInt(20, year);
+            ps.setInt(21, year);
+            ps.setInt(22, year);
+            ps.setInt(23, year);
+            ps.setInt(24, year);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int numberAccount12 = rs.getInt("number_of_accounts");
+                return numberAccount12;
+            }
+        } catch (Exception e) {
+
         }
         return 0;
     }
 
     public static void main(String[] args) {
         RevenueDAO dao = new RevenueDAO();
-        System.out.println(dao.getTotalMoneyByMonth(2, 12, 2023));
+        System.out.println(dao.AccountValid3(2024));
     }
 }

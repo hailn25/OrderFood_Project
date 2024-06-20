@@ -125,7 +125,7 @@
                                 <td>${o.name}</td>
                                 <td>
                                     <a href="loadCategory?cid=${o.categoryId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="deleteCategory?cid=${o.categoryId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <!--<a href="deleteCategory?cid=${o.categoryId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>-->
                                 </td>
                             </tr>
                         </c:forEach>

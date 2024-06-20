@@ -21,6 +21,51 @@
                 width: 150px;
                 height: 150px;
             }
+            .btn {
+                display: inline-block;
+                padding: 5px 10px;
+                font-size: 16px;
+                font-weight: bold;
+                color: white;
+                background-color: #28a745;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-blue {
+                background-color: #74C0FC;
+                color: white;
+            }
+
+            .btn-green {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .btn-green:hover {
+                background-color: #218838;
+                color: white;
+            }
+
+            .btn-blue:hover {
+                background-color: #58A6FF;
+                color: white;
+            }
+
+            .btn-red {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .btn-red:hover {
+                background-color: #c82333;
+                color: white;
+            }
+
         </style>
         <style>
             .status-waiting-for-shipper {
@@ -44,7 +89,34 @@
             .status-unknown {
                 color: black;
             }
+            /* Ẩn dropdown menu mặc định */
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                background-color: white;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+            .dropdown-menu .dropdown-item {
+                padding: 8px 16px;
+                display: block;
+                color: black;
+                text-decoration: none;
+            }
+
+            .dropdown-menu .dropdown-item:hover {
+                background-color: #ddd;
+            }
+
+            /* Hiển thị dropdown menu khi active */
+            .show {
+                display: block;
+            }
+
         </style>
+
+
 
     </head>
 
@@ -100,30 +172,26 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
-                            <!--                            <li class="nav-item">
-                                                            <a class="nav-link active" href="managerOrderOfCustomer">
-                                                                <i class="far fa-file-alt"></i> Quản lý đơn hàng
-                                                            </a>
-                                                        </li>-->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
                                     <i class="far fa-file-alt"></i>
                                     <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="managerOrderOfCustomer">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                    <a class="dropdown-item" href="#">Đơn hàng đang chờ xác nhận của Shipper</a>
-                                    <a class="dropdown-item" href="#">Đơn hàng đang giao</a>
-                                    <a class="dropdown-item" href="#">Đơn hàng đã giao thành công</a>
-                                    <a class="dropdown-item" href="#">Đơn hàng đã bị huỷ</a>
-                                    <a class="dropdown-item" href="#">Đơn hàng đã bị shipper huỷ</a>
+                                <div class="dropdown-menu" id="dropdownMenu">
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng đã giao thành công</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng đã bị huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
                                 </div>
                             </li>
-
                         </c:if>
+
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="#Profile.jsp">
+                                <a class="nav-link" href="profile">
                                     <i class="far fa-user"></i> Tài khoản
                                 </a>
                             </li>
@@ -169,57 +237,61 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listO}" var="o">
-                            <tr>
-                                <td>${o.orderDetailId}</td>
-                                <td>${o.name}</td>
-                                <td>${o.quantity}</td>
-                                <td><fmt:formatNumber value="${o.totalMoney}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
-                                <td class="<c:choose>
-                                        <c:when test="${o.orderStatusId == 1}">status-waiting-for-shipper</c:when>
-                                        <c:when test="${o.orderStatusId == 2}">status-delivering</c:when>
-                                        <c:when test="${o.orderStatusId == 3}">status-delivered-successfully</c:when>
-                                        <c:when test="${o.orderStatusId == 4}">status-cancelled</c:when>
-                                        <c:when test="${o.orderStatusId == 5}">status-shipper-rejected</c:when>
-                                        <c:when test="${o.orderStatusId == 6}">status-waiting-for-restaurant</c:when>
-                                        <c:otherwise>status-unknown</c:otherwise>
-                                    </c:choose>">
-                                    <c:choose>
-                                        <c:when test="${o.orderStatusId == 1}">
-                                            Đang chờ xác nhận của shipper
-                                        </c:when>
-                                        <c:when test="${o.orderStatusId == 2}">
-                                            Đang giao hàng
-                                        </c:when>
-                                        <c:when test="${o.orderStatusId == 3}">
-                                            Giao hàng thành công
-                                        </c:when>
-                                        <c:when test="${o.orderStatusId == 4}">
-                                            Đơn hàng bị huỷ
-                                        </c:when>
-                                        <c:when test="${o.orderStatusId == 5}">
-                                            Shipper không nhận đơn
-                                        </c:when>
-                                        <c:when test="${o.orderStatusId == 6}">
-                                            Đang chờ xác nhận của nhà hàng
-                                        </c:when>
-                                        <c:otherwise>
-                                            Trạng thái không xác định
-                                        </c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td>
-                                    <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
-                                </td>
-                                <td>
-                                    <a href="" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
-                                    <a href="" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Ẩn sản phẩm" style="color: red">&#xE872;</i></a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+    <tr>
+        <td>${o.orderDetailId}</td>
+        <td>${o.name}</td>
+        <td>${o.quantity}</td>
+        <td><fmt:formatNumber value="${o.totalMoney}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
+        <td class="<c:choose>
+                <c:when test="${o.orderStatusId == 1}">status-waiting-for-shipper</c:when>
+                <c:when test="${o.orderStatusId == 2}">status-delivering</c:when>
+                <c:when test="${o.orderStatusId == 3}">status-delivered-successfully</c:when>
+                <c:when test="${o.orderStatusId == 4}">status-cancelled</c:when>
+                <c:when test="${o.orderStatusId == 5}">status-shipper-rejected</c:when>
+                <c:when test="${o.orderStatusId == 6}">status-waiting-for-restaurant</c:when>
+                <c:otherwise>status-unknown</c:otherwise>
+            </c:choose>">
+            <c:choose>
+                <c:when test="${o.orderStatusId == 1}">
+                    Đang chờ xác nhận của shipper
+                </c:when>
+                <c:when test="${o.orderStatusId == 2}">
+                    Đang giao hàng
+                </c:when>
+                <c:when test="${o.orderStatusId == 3}">
+                    Giao hàng thành công
+                </c:when>
+                <c:when test="${o.orderStatusId == 4}">
+                    Đơn hàng bị huỷ
+                </c:when>
+                <c:when test="${o.orderStatusId == 5}">
+                    Shipper không nhận đơn
+                </c:when>
+                <c:when test="${o.orderStatusId == 6}">
+                    Đang chờ xác nhận của nhà hàng
+                </c:when>
+                <c:otherwise>
+                    Trạng thái không xác định
+                </c:otherwise>
+            </c:choose>
+        </td>
+        <td>
+            <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
+        </td>
+        <td>
+            <a href="viewOrderByRestaurant?oid=${o.orderDetailId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                <c:if test="${o.orderStatusId == 6}">
+                <a href="#confirmOrder?oid=${o.orderDetailId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                <a href="#cancelOrder?oid=${o.orderDetailId}" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
+                </c:if>
+        </td>
+    </tr>
+</c:forEach>
+
+
                     </tbody>
                 </table>
             </div>
-            <!--<a href="managerAddOpenProduct" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm mới</a>-->
         </div>
 
         <!--cai nay cua ProGear-->
@@ -227,7 +299,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-            new DataTable('#example');
+                                    new DataTable('#example');
         </script>
         <script>
             function formatPrice(price) {
@@ -242,7 +314,27 @@
                 }
             }
         </script>
-        <script src="js/bootstrap.min.js"></script>
+        <script>
+            function toggleDropdown(event) {
+                event.preventDefault();
+                var dropdownMenu = document.getElementById("dropdownMenu");
+                dropdownMenu.classList.toggle("show");
+            }
+
+// Đóng dropdown menu nếu click ngoài nó
+            window.onclick = function (event) {
+                if (!event.target.matches('.dropdown-toggle')) {
+                    var dropdowns = document.getElementsByClassName("dropdown-menu");
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+        </script>
+
 
 
     </body>

@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import dao.ProductDAO;
 import dao.RestaurantDAO;
 import java.io.IOException;
@@ -46,8 +47,8 @@ public class ManagerOrderOfCustomerControl_4 extends HttpServlet {
             RestaurantDAO dao2 = new RestaurantDAO();
             int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
 
-            ProductDAO dao = new ProductDAO();
-
+            OrderDAO dao = new OrderDAO();
+            
             ArrayList<OrderDetailDTO_Huyvq> listO = dao.getOrderStatusByRestaurantId_4(restaurantId);
 
             request.setAttribute("listO", listO);

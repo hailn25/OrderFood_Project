@@ -109,43 +109,51 @@
 
 
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <script type="text/javascript">
-                google.charts.load('current', {'packages': ['corechart']});
-                google.charts.setOnLoadCallback(drawChart);
+            <html>
+                <head>
+                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    <script type="text/javascript">
+                        google.charts.load('current', {'packages': ['corechart']});
+                        google.charts.setOnLoadCallback(drawChart);
 
-                function drawChart() {
-                    var data = google.visualization.arrayToDataTable([
-                        ['Tháng', 'Sales'],
-                        ['Tháng 1', ${t1}],
-                        ['Tháng 2', ${t2}],
-                        ['Tháng 3', ${t3}],
-                        ['Tháng 4', ${t4}],
-                        ['Tháng 5', ${t5}],
-                        ['Tháng 6', ${t6}],
-                        ['Tháng 7', ${t7}],
-                        ['Tháng 8', ${t8}],
-                        ['Tháng 9', ${t9}],
-                        ['Tháng 10', ${t10}],
-                        ['Tháng 11', ${t11}],
-                        ['Tháng 12', ${t12}]
-                    ]);
+                        function drawChart() {
+                            var data = google.visualization.arrayToDataTable([
+                                ['Tháng', 'Doanh thu'],
+                                ['Tháng 1', ${t1}],
+                                ['Tháng 2', ${t2}],
+                                ['Tháng 3', ${t3}],
+                                ['Tháng 4', ${t4}],
+                                ['Tháng 5', ${t5}],
+                                ['Tháng 6', ${t6}],
+                                ['Tháng 7', ${t7}],
+                                ['Tháng 8', ${t8}],
+                                ['Tháng 9', ${t9}],
+                                ['Tháng 10', ${t10}],
+                                ['Tháng 11', ${t11}],
+                                ['Tháng 12', ${t12}]
+                            ]);
 
-                    var options = {
-                        title: 'Doanh thu của web trong năm',
-                        curveType: 'function',
-                        legend: {position: 'bottom'}
-                    };
+                            var options = {
+                                title: 'Doanh thu của nhà hàng trong năm 2024',
+                                curveType: 'function',
+                                legend: {position: 'bottom'}
+                            };
 
-                    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+                            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
-                    chart.draw(data, options);
-                }
-            </script>
+                            chart.draw(data, options);
+                        }
+                    </script>
+                </head>
+                <div class="col-12 tm-block-col">
+                    <div class=" tm-block-taller">
+                        <div id="curve_chart" style="width: 1300px; height: 500px; margin: 50px auto"></div>
+                    </div>
+                </div>
+
+            </html>
         </head>
-        <body>
-            <!--<div id="curve_chart" style="width: 900px; height: 500px"></div>-->
-            <div id="curve_chart" style="width: 1300px; height: 500px; margin: 50px auto;"></div>
-        </body>
+        
     </div>
 
     <script src="js/jquery-3.3.1.min.js"></script>

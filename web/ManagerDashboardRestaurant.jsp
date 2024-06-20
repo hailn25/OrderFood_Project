@@ -22,6 +22,34 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
 
+    <style>
+        /* Ẩn dropdown menu mặc định */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-menu .dropdown-item {
+            padding: 8px 16px;
+            display: block;
+            color: black;
+            text-decoration: none;
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #ddd;
+        }
+
+        /* Hiển thị dropdown menu khi active */
+        .show {
+            display: block;
+        }
+
+    </style>
+
     <body id="reportsPage" style="background-color: #F6F6F6">
         <div class="" id="home">
 
@@ -78,30 +106,26 @@
                                 </li>
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 4}">
-<!--                            <li class="nav-item">
-                                <a class="nav-link active" href="managerOrderOfCustomer">
-                                    <i class="far fa-file-alt"></i> Quản lý đơn hàng
-                                </a>
-                            </li>-->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="far fa-file-alt"></i>
-                                    <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng đã giao thành công</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng đã bị huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
-                                </div>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
+                                        <i class="far fa-file-alt"></i>
+                                        <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                                    </a>
+                                    <div class="dropdown-menu" id="dropdownMenu">
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng đã giao thành công</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng đã bị huỷ</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
+                                    </div>
+                                </li>
+                            </c:if>
 
-                        </c:if>
                             <c:if test="${sessionScope.account.roleId == 4}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="profile">
                                         <i class="far fa-user"></i> Tài khoản
                                     </a>
                                 </li>
@@ -175,9 +199,30 @@
         <!-- https://momentjs.com/ -->
         <script src="js/Chart.min.js"></script>
         <!-- http://www.chartjs.org/docs/latest/ -->
-        <script src="js/bootstrap.min.js"></script>
         <!-- https://getbootstrap.com/ -->
         <script src="js/tooplate-scripts.js"></script>
+
+        <script>
+                function toggleDropdown(event) {
+                    event.preventDefault();
+                    var dropdownMenu = document.getElementById("dropdownMenu");
+                    dropdownMenu.classList.toggle("show");
+                }
+
+// Đóng dropdown menu nếu click ngoài nó
+                window.onclick = function (event) {
+                    if (!event.target.matches('.dropdown-toggle')) {
+                        var dropdowns = document.getElementsByClassName("dropdown-menu");
+                        for (var i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.classList.contains('show')) {
+                                openDropdown.classList.remove('show');
+                            }
+                        }
+                    }
+                }
+        </script>
+
 
     </body>
 
