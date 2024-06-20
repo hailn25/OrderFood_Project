@@ -57,8 +57,9 @@ public class BlogDAO {
         ArrayList<BlogDTO> listBlog = new ArrayList<>();
         try {
             String sql = "SELECT Blog.BlogId, Blog.Title, Blog.[Content], Blog.ImageURL, Blog.Summary, Account.Name, Blog.Status, Blog.CreateDate, Blog.UpdateDate\n"
-                    + "FROM     Account INNER JOIN\n"
-                    + "                  Blog ON Account.AccountId = Blog.UpdateBy";
+                    + "FROM Account INNER JOIN\n"
+                    + "	 Blog ON Account.AccountId = Blog.UpdateBy\n"
+                    + "Order by Blog.BlogId";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -205,7 +206,42 @@ public class BlogDAO {
         return blog;
     }
 
+    public BlogDTO getBlogDTOById(int blogId) {
+        BlogDTO blogDTO = new BlogDTO();
+        try {
+            String sql = "SELECT Blog.BlogId, Blog.Title, Blog.[Content], Blog.ImageURL, Blog.Summary, Account.Name, Blog.Status, Blog.CreateDate, Blog.UpdateDate\n"
+                    + "FROM Account INNER JOIN\n"
+                    + "Blog ON Account.AccountId = Blog.UpdateBy\n"
+                    + "WHERE Blog.BlogId = ?";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, blogId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                blogDTO = new BlogDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getBoolean(7),
+                        rs.getDate(8),
+                        rs.getDate(9));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return blogDTO;
+    }
+
     public static void main(String[] args) {
         BlogDAO dao = new BlogDAO();
+//        for (BlogDTO b : dao.getAllBlogDTO()) {
+//            System.out.println(b.toString());
+//        }
+        System.out.println(dao.getBlogDTOById(1));
     }
 }

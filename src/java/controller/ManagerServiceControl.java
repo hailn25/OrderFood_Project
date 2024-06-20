@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.BlogDAO;
+import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,16 +13,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
-import model.Blog;
-import model.BlogDTO;
+import model.Slider;
 
 /**
  *
  * @author quoch
  */
-@WebServlet(name = "BlogControl", urlPatterns = {"/blog"})
-public class BlogControl extends HttpServlet {
+@WebServlet(name = "ManagerServiceControl", urlPatterns = {"/managerService"})
+public class ManagerServiceControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,29 +34,11 @@ public class BlogControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        BlogDAO dao = new BlogDAO();
-        ArrayList<BlogDTO> listBlogDTO = dao.getAllBlogDTO();
-        int itemsPerPage = 5;
-        int currentPage = 1;
-
-        if (request.getParameter("page") != null) {
-            currentPage = Integer.parseInt(request.getParameter("page"));
-        }
-
-        int totalItems = listBlogDTO.size();
-        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
-
-        int start = (currentPage - 1) * itemsPerPage;
-        int end = Math.min(start + itemsPerPage, totalItems);
-
-        List<BlogDTO> paginatedList = listBlogDTO.subList(start, end);
-
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("paginatedList", paginatedList);
-        request.setAttribute("listBlogDTO", listBlogDTO);
-
-        request.getRequestDispatcher("Blog.jsp").forward(request, response);
+        SliderDAO sliderDAO = new SliderDAO();
+        ArrayList<Slider> listSlider = sliderDAO.getAllSlider();
+        request.setAttribute("listSlider", listSlider);
+        
+        request.getRequestDispatcher("ManagerService.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

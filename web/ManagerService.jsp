@@ -22,6 +22,42 @@
                 width: 150px;
                 height: 150px;
             }
+
+            .btn {
+                display: inline-block;
+                padding: 5px 10px;
+                font-size: 16px;
+                font-weight: bold;
+                color: white;
+                background-color: #28a745;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-green {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .btn-green:hover {
+                background-color: #218838;
+                color: white;
+            }
+
+            .btn-red {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .btn-red:hover {
+                background-color: #c82333;
+                color: white;
+            }
+
         </style>
     </head>
 
@@ -100,10 +136,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Quản lý <b>Blog</b></h2>
-                        </div>
-                        <div class="col-sm-6">
-                            <a href="managerAddBlog"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm bài viết mới</span></a>
+                            <h2>Yêu cầu quảng cáo từ <b>Nhà hàng</b></h2>
                         </div>
                     </div>
                 </div>
@@ -114,35 +147,23 @@
                             <th>Tiêu đề</th>
                             <th>Ảnh</th>
                             <th>Trạng thái</th>
-                            <th>Ngày đăng</th>
-                            <th>Tác vụ</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${listBlog}" var="b">
+                        <c:forEach items="${listSlider}" var="s">
                             <tr>
-                                <td>${b.blogId}</td>
-                                <td class="title" data-title="${b.title}"></td>
+                                <td>${s.sliderId}</td>
+                                <td class="title" data-title>${s.sliderTitle}</td>
                                 <td>
-                                    <img src="img/${b.imageURL}" alt="Không thể tải ảnh">
+                                    <img src="img/${s.imageURL}" alt="Không thể tải ảnh">
                                 </td>
-                                <td style="color: ${b.status ? 'green' : 'red'};">
-                                    ${b.status ? "Đang hiển thị" : "Đang ẩn"}
+                                <td style="color: ${s.status ? 'green' : 'red'};">
+                                    ${s.status ? "Đã xác nhận" : "Đang chờ xác nhận"}
                                 </td>
-                                <td>${b.createDate}</td>
                                 <td>
-                                    <a href="editBlog?bid=${b.blogId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
-                                    <c:if test="${b.status == true}">
-                                        <a href="changeStatus?bid=${b.blogId}&statusBlog=${b.status}" class="change" data-toggle="modal">
-                                            <i class="material-icons fas fa-eye-slash" data-toggle="tooltip" title="Ẩn"></i>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${b.status == false}">
-                                        <a href="changeStatus?bid=${b.blogId}&statusBlog=${b.status}" class="change" data-toggle="modal">
-                                            <i class="material-icons fas fa-eye" data-toggle="tooltip" title="Hiển thị"></i>
-                                        </a>
-                                    </c:if>
-                                    <a href="deleteBlog?bid=${b.blogId}" class="delete" data-toggle="modal" onclick="confirmDelete(event)"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="changeStatusSlider?changeStatus=${s.status}&sliderId=${s.sliderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                    <a href="changeStatusSlider?changeStatus=${s.status}&sliderId=${s.sliderId}" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -159,38 +180,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                        new DataTable('#example');
-
-                                        document.addEventListener("DOMContentLoaded", function () {
-                                            const summaries = document.querySelectorAll('.summary');
-                                            summaries.forEach(function (summary) {
-                                                const fullText = summary.getAttribute('data-summary');
-                                                if (fullText.length > 100) {
-                                                    summary.textContent = fullText.substring(0, 100) + '...';
-                                                } else {
-                                                    summary.textContent = fullText;
-                                                }
-                                            });
-                                        });
-
-                                        const titles = document.querySelectorAll('.title');
-                                        titles.forEach(function (title) {
-                                            const fullText = title.getAttribute('data-title');
-                                            const words = fullText.split(' ');
-                                            if (words.length > 30) {
-                                                title.textContent = words.slice(0, 30).join(' ') + '...';
-                                            } else {
-                                                title.textContent = fullText;
-                                            }
-                                        });
-
-                                        function confirmDelete(event) {
-                                            event.preventDefault();
-                                            var confirmAction = confirm("Bạn có chắc chắn muốn xóa bài viết này không?");
-                                            if (confirmAction) {
-                                                window.location.href = event.target.closest('a').href;
-                                            }
-                                        }
+            new DataTable('#example');
         </script>
     </body>
 </html>

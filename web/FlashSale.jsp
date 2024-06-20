@@ -60,7 +60,7 @@
                     <h1 class="display-5 mb-5 text-dark">Chào mừng bạn đến với Flashsale!</h1>
                 </div>
                 <h1 style="text-align: center;">Coming Soon!</h1>
-<!--                <div id="countdown">
+                <div id="countdown">
                     <h1>Countdown Timer</h1>
                     <div id="timer">
                         <span id="days"></span> days 
@@ -68,7 +68,7 @@
                         <span id="minutes"></span> minutes 
                         <span id="seconds"></span> seconds
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
 
