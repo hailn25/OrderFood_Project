@@ -1,5 +1,6 @@
 package dao;
 
+import model.ViewDetail;
 import dal.DBContext;
 import java.sql.Connection;
 import java.sql.Date;
@@ -263,6 +264,36 @@ public class OrderDAO {
         return list;
     }
 
+    public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_7(int restaurantId) throws SQLException, Exception {
+        ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
+        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
+                + "FROM            [Order] INNER JOIN\n"
+                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
+                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
+                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
+                + "WHERE Product.RestaurantId = ? and OrderStatus.OrderStatusId = 7";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int orderDetailId = rs.getInt(1);
+            String name = rs.getString(2);
+            int quantity = rs.getInt(3);
+            double totalMoney = rs.getDouble(4);
+            int orderStatusId = rs.getInt(5);
+            String imageURL = rs.getString(6);
+            OrderDetailDTO_Huyvq s = new OrderDetailDTO_Huyvq(orderDetailId, name, quantity, totalMoney, orderStatusId, imageURL);
+            list.add(s);
+        }
+        return list;
+    }
+//
+//    public static void main(String[] args) throws Exception {
+//        OrderDAO db = new OrderDAO();
+//        System.out.println(db.getOrderStatusByRestaurantId_7(2));
+//    }
+
     public void confirmOrderOfCustomer(String orderDetailId) throws ClassNotFoundException, SQLException {
         String sql = "UPDATE o\n"
                 + "SET o.OrderStatusId = 1\n"
@@ -274,6 +305,7 @@ public class OrderDAO {
         ps.setString(1, orderDetailId);
         ps.executeUpdate();
     }
+
     public void cancelOrderOfCustomer(int orderDetailId) throws ClassNotFoundException, SQLException {
         String sql = "UPDATE o\n"
                 + "SET o.OrderStatusId = 7\n"
@@ -285,7 +317,8 @@ public class OrderDAO {
         ps.setInt(1, orderDetailId);
         ps.executeUpdate();
     }
-     public ArrayList<OrderDetailDTO_Huyvq_1> getOrderDetailByoid(int orderId) {
+
+    public ArrayList<OrderDetailDTO_Huyvq_1> getOrderDetailByoid(int orderId) {
         ArrayList<OrderDetailDTO_Huyvq_1> listOrderDetails = new ArrayList<>();
         try {
             String sql = "SELECT \n"
@@ -326,8 +359,8 @@ public class OrderDAO {
         }
         return listOrderDetails;
     }
-     
-     public ViewDetail getViewDetailslByoid(int orderId) {
+
+    public ViewDetail getViewDetailslByoid(int orderId) {
         ViewDetail viewDetail = new ViewDetail();
         try {
             String sql = "SELECT o.OrderId, o.Name, o.Email, o.Phone, o.Address, o.Note, o.CreateDate, od.PaymentBy, od.PaymentStatus\n"
@@ -359,10 +392,4 @@ public class OrderDAO {
         return viewDetail;
     }
 
-
-//        public static void main(String[] args) throws Exception {
-//        OrderDAO db = new OrderDAO();
-//        db.confirmOrderOfCustomer("10");
-//    }
-        
 }

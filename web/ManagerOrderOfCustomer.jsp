@@ -71,24 +71,31 @@
             .status-waiting-for-shipper {
                 color: orange;
             }
+
             .status-delivering {
                 color: blue;
             }
+
             .status-delivered-successfully {
                 color: green;
             }
-            .status-cancelled {
+
+            .status-customer-rejected {
                 color: red;
             }
+
             .status-shipper-rejected {
-                color: gray;
+                color: darkred;
             }
+
             .status-waiting-for-restaurant {
                 color: purple;
             }
-            .status-unknown {
-                color: black;
+
+            .status-restaurant-rejected {
+                color: brown;
             }
+
             /* Ẩn dropdown menu mặc định */
             .dropdown-menu {
                 display: none;
@@ -173,25 +180,27 @@
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                    <i class="far fa-file-alt"></i>
-                                    <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                                <a href="#" class="nav-link dropdown-toggle active" id="dropdownMenuLink" onclick="toggleDropdown(event)">
+                                    <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
+                                    <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
                                 </a>
                                 <div class="dropdown-menu" id="dropdownMenu">
                                     <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
                                     <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
                                     <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng đã giao thành công</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng đã bị huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
                                 </div>
                             </li>
+
                         </c:if>
 
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="profile">
+                                <a class="nav-link" href="Profile.jsp">
                                     <i class="far fa-user"></i> Tài khoản
                                 </a>
                             </li>
@@ -237,56 +246,57 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listO}" var="o">
-    <tr>
-        <td>${o.orderDetailId}</td>
-        <td>${o.name}</td>
-        <td>${o.quantity}</td>
-        <td><fmt:formatNumber value="${o.totalMoney}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
-        <td class="<c:choose>
-                <c:when test="${o.orderStatusId == 1}">status-waiting-for-shipper</c:when>
-                <c:when test="${o.orderStatusId == 2}">status-delivering</c:when>
-                <c:when test="${o.orderStatusId == 3}">status-delivered-successfully</c:when>
-                <c:when test="${o.orderStatusId == 4}">status-cancelled</c:when>
-                <c:when test="${o.orderStatusId == 5}">status-shipper-rejected</c:when>
-                <c:when test="${o.orderStatusId == 6}">status-waiting-for-restaurant</c:when>
-                <c:otherwise>status-unknown</c:otherwise>
-            </c:choose>">
-            <c:choose>
-                <c:when test="${o.orderStatusId == 1}">
-                    Đang chờ xác nhận của shipper
-                </c:when>
-                <c:when test="${o.orderStatusId == 2}">
-                    Đang giao hàng
-                </c:when>
-                <c:when test="${o.orderStatusId == 3}">
-                    Giao hàng thành công
-                </c:when>
-                <c:when test="${o.orderStatusId == 4}">
-                    Đơn hàng bị huỷ
-                </c:when>
-                <c:when test="${o.orderStatusId == 5}">
-                    Shipper không nhận đơn
-                </c:when>
-                <c:when test="${o.orderStatusId == 6}">
-                    Đang chờ xác nhận của nhà hàng
-                </c:when>
-                <c:otherwise>
-                    Trạng thái không xác định
-                </c:otherwise>
-            </c:choose>
-        </td>
-        <td>
-            <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
-        </td>
-        <td>
-            <a href="viewOrderByRestaurant?oid=${o.orderDetailId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
-                <c:if test="${o.orderStatusId == 6}">
-                <a href="#confirmOrder?oid=${o.orderDetailId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                <a href="#cancelOrder?oid=${o.orderDetailId}" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
-                </c:if>
-        </td>
-    </tr>
-</c:forEach>
+                            <tr>
+                                <td>${o.orderDetailId}</td>
+                                <td>${o.name}</td>
+                                <td>${o.quantity}</td>
+                                <td><fmt:formatNumber value="${o.totalMoney}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
+                                <td class="<c:choose>
+                                        <c:when test="${o.orderStatusId == 1}">status-waiting-for-shipper</c:when>
+                                        <c:when test="${o.orderStatusId == 2}">status-delivering</c:when>
+                                        <c:when test="${o.orderStatusId == 3}">status-delivered-successfully</c:when>
+                                        <c:when test="${o.orderStatusId == 4}">status-customer-rejected</c:when>
+                                        <c:when test="${o.orderStatusId == 5}">status-shipper-rejected</c:when>
+                                        <c:when test="${o.orderStatusId == 6}">status-waiting-for-restaurant</c:when>
+                                        <c:when test="${o.orderStatusId == 7}">status-restaurant-rejected</c:when>
+                                        <c:otherwise>status-unknown</c:otherwise>
+                                    </c:choose>">
+                                    <c:choose>
+                                        <c:when test="${o.orderStatusId == 1}">
+                                            Đang chờ xác nhận của shipper
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 2}">
+                                            Đang giao hàng
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 3}">
+                                            Giao hàng thành công
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 4}">
+                                            Người mua không nhận hàng
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 5}">
+                                            Shipper không nhận đơn
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 6}">
+                                            Đang chờ xác nhận của nhà hàng
+                                        </c:when>
+                                        <c:when test="${o.orderStatusId == 7}">
+                                            Nhà hàng không nhận đơn
+                                        </c:when>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
+                                </td>
+                                <td>
+                                    <a href="viewOrderByRestaurant?oid=${o.orderDetailId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                        <c:if test="${o.orderStatusId == 6}">
+                                        <a href="confirmOrder?oid=${o.orderDetailId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="cancelOrder?oid=${o.orderDetailId}" onclick="confirmCancel(event)" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
+                                        </c:if>
+                                </td>
+                            </tr>
+                        </c:forEach>
 
 
                     </tbody>
@@ -299,7 +309,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                    new DataTable('#example');
+                                            new DataTable('#example');
         </script>
         <script>
             function formatPrice(price) {
@@ -331,6 +341,26 @@
                             openDropdown.classList.remove('show');
                         }
                     }
+                }
+            }
+            function toggleDropdown(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                var dropdownMenu = document.getElementById("dropdownMenu");
+                dropdownMenu.classList.toggle("show");
+            }
+            function confirmCancel(event) {
+                event.preventDefault();
+                var confirmAction = confirm("Bạn có chắc chắn huỷ đơn hàng này không?");
+                if (confirmAction) {
+                    window.location.href = event.target.closest('a').href;
+                }
+            }
+            function confirmAccecpt(event) {
+                event.preventDefault();
+                var confirmAction = confirm("Bạn có chắc chắn muốn hiển thị sản phẩm này không?");
+                if (confirmAction) {
+                    window.location.href = event.target.closest('a').href;
                 }
             }
         </script>

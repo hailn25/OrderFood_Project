@@ -34,18 +34,20 @@ public class ConfirmOrderControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         try {
-            String oid = request.getParameter("oid");
-            OrderDAO dao = new OrderDAO();
-            dao.confirmOrderOfCustomer(oid);
-            request.getRequestDispatcher("managerOrderOfCustomer_6").forward(request, response);
+            if (request.getParameter("oid") != null) {
+                String oid = request.getParameter("oid");
+                OrderDAO dao = new OrderDAO();
+                dao.confirmOrderOfCustomer(oid);
+                request.getRequestDispatcher("managerOrderOfCustomer_6").forward(request, response);
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ConfirmOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ConfirmOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
