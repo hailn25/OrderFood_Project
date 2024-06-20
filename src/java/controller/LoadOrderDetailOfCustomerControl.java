@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CategoryDAO;
+import dao.OrderDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,19 +14,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Category;
+import model.OrderDetailDTO_Huyvq;
 import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadCategoryControl", urlPatterns = {"/loadCategory"})
-public class LoadCategoryControl extends HttpServlet {
+@WebServlet(name = "LoadOrderDetailOfCustomerControl", urlPatterns = {"/loadOrderDetailOfCustomer"})
+public class LoadOrderDetailOfCustomerControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,19 +38,16 @@ public class LoadCategoryControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception {
+            throws ServletException, IOException {
         try {
-            response.setContentType("text/html;charset=UTF-8");
-            int cID = Integer.parseInt(request.getParameter("cid"));
-            CategoryDAO dao1 = new CategoryDAO();
-
-            Category c = dao1.getCategoryByCId(cID);
-
-            request.setAttribute("detail", c);
-
-            request.getRequestDispatcher("EditCategory.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            int orderDetailId = Integer.parseInt(request.getParameter("id"));
+            OrderDAO dao = new OrderDAO();
+            OrderDetailDTO_Huyvq o = dao.getOrderDetailById(orderDetailId);
+            request.setAttribute("detail", o);
+            
+            request.getRequestDispatcher("OrderDetailCustomer.jsp").forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(LoadOrderDetailOfCustomerControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -65,11 +63,7 @@ public class LoadCategoryControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -83,11 +77,7 @@ public class LoadCategoryControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

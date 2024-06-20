@@ -6,26 +6,28 @@ package controller;
 
 import dao.CategoryDAO;
 import dao.ProductDAO;
+import dao.RestaurantDAO;
+import model.Category;
+import model.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Category;
-import model.Product;
+import model.Account;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadCategoryControl", urlPatterns = {"/loadCategory"})
-public class LoadCategoryControl extends HttpServlet {
+@WebServlet(name = "ManagerOpenControl", urlPatterns = {"/managerOpenProduct"})
+public class ManagerOpenProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,19 +39,23 @@ public class LoadCategoryControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception {
+            throws ServletException, IOException, SQLException {
         try {
             response.setContentType("text/html;charset=UTF-8");
-            int cID = Integer.parseInt(request.getParameter("cid"));
-            CategoryDAO dao1 = new CategoryDAO();
+            HttpSession session = request.getSession();
+            Account a = (Account) session.getAttribute("account");
+            int accountId = a.getAccountId();
+            RestaurantDAO dao2 = new RestaurantDAO();
+            int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
+            
+            ProductDAO dao = new ProductDAO();
 
-            Category c = dao1.getCategoryByCId(cID);
+            ArrayList<Product> listP = dao.getOpenProductByRestaurantId(restaurantId);
 
-            request.setAttribute("detail", c);
-
-            request.getRequestDispatcher("EditCategory.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("listP", listP);
+            request.getRequestDispatcher("ManagerOpenProduct.jsp").forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ManagerOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -67,8 +73,8 @@ public class LoadCategoryControl extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -85,8 +91,8 @@ public class LoadCategoryControl extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

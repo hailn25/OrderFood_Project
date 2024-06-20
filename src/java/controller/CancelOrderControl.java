@@ -5,8 +5,7 @@
 
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,18 +13,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Category;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name="ManagerAddProductControl", urlPatterns={"/managerAddProduct"})
-public class ManagerAddProductControl extends HttpServlet {
+@WebServlet(name="ConfirmOrderControl", urlPatterns={"/confirmOrder"})
+public class CancelOrderControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,24 +33,15 @@ public class ManagerAddProductControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         try {
-            response.setContentType("text/html;charset=UTF-8");
-
-//            HttpSession session = request.getSession();
-//            Account a = (Account) session.getAttribute("acc");
-//            int id = a.getAccountId();
-            int id = 3;
-            ProductDAO dao = new ProductDAO();
-            CategoryDAO dao1 = new CategoryDAO();
-            ArrayList<Product> listP = dao.getProductByRestaurantId(id);
-            ArrayList<Category> listC = dao1.getAllCategory();
-
-            request.setAttribute("listC", listC);
-            request.setAttribute("listP", listP);
-            request.getRequestDispatcher("AddProduct.jsp").forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ManagerProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            int id = Integer.parseInt(request.getParameter("id"));
+            OrderDAO dao = new OrderDAO();
+            dao.cancelOrderOfCustomer(id);
+            request.getRequestDispatcher("managerOrderOfCustomer_6");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CancelOrderControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CancelOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
 

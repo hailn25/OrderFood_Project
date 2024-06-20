@@ -4,8 +4,7 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,18 +13,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Category;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadCategoryControl", urlPatterns = {"/loadCategory"})
-public class LoadCategoryControl extends HttpServlet {
+@WebServlet(name = "ConfirmOrderControl", urlPatterns = {"/confirmOrder"})
+public class ConfirmOrderControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,20 +33,19 @@ public class LoadCategoryControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception {
+            throws ServletException, IOException {
+        
         try {
-            response.setContentType("text/html;charset=UTF-8");
-            int cID = Integer.parseInt(request.getParameter("cid"));
-            CategoryDAO dao1 = new CategoryDAO();
-
-            Category c = dao1.getCategoryByCId(cID);
-
-            request.setAttribute("detail", c);
-
-            request.getRequestDispatcher("EditCategory.jsp").forward(request, response);
+            String oid = request.getParameter("oid");
+            OrderDAO dao = new OrderDAO();
+            dao.confirmOrderOfCustomer(oid);
+            request.getRequestDispatcher("managerOrderOfCustomer_6").forward(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ConfirmOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConfirmOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,11 +60,7 @@ public class LoadCategoryControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -83,11 +74,7 @@ public class LoadCategoryControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

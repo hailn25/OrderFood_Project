@@ -4,28 +4,24 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import dao.AccountDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Category;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadCategoryControl", urlPatterns = {"/loadCategory"})
-public class LoadCategoryControl extends HttpServlet {
+@WebServlet(name = "EditAccountControl", urlPatterns = {"/editAccount"})
+public class EditAccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,19 +33,27 @@ public class LoadCategoryControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception {
+            throws ServletException, IOException {
         try {
-            response.setContentType("text/html;charset=UTF-8");
-            int cID = Integer.parseInt(request.getParameter("cid"));
-            CategoryDAO dao1 = new CategoryDAO();
+            String accountId = request.getParameter("accountId");
+            String status = request.getParameter("status");
+            String roleId = request.getParameter("role");
+            String oldRoleId = request.getParameter("oldRoleId");
 
-            Category c = dao1.getCategoryByCId(cID);
-
-            request.setAttribute("detail", c);
-
-            request.getRequestDispatcher("EditCategory.jsp").forward(request, response);
+            if (oldRoleId.compareTo(roleId) == 0) {
+                LocalDate updateDate = LocalDate.now();
+                AccountDAO dao = new AccountDAO();
+                dao.editAccountR(roleId, status,updateDate.toString() ,accountId);
+                request.getRequestDispatcher("managerAccount").forward(request, response);
+            } else {
+                AccountDAO dao = new AccountDAO();
+                dao.editAccount(roleId, status, accountId);
+                request.getRequestDispatcher("managerAccount").forward(request, response);
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EditAccountControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -65,11 +69,7 @@ public class LoadCategoryControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -83,11 +83,7 @@ public class LoadCategoryControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

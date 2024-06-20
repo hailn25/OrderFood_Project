@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.Role;
 
 public class AccountDAO {
 
@@ -20,7 +21,7 @@ public class AccountDAO {
 
     public ArrayList<Account> getAllAccount() {
         ArrayList<Account> listAccount = new ArrayList<>();
-        String sql = "select * from Account";
+        String sql = "select * from Account\n";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -82,36 +83,81 @@ public class AccountDAO {
         return null;
     }
 
-    public void editAccount(int roleId, int status, int accountId) throws SQLException, ClassNotFoundException {
+    public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set RoleId = ?, [Status] = ?\n"
                     + "where [AccountId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, roleId);
-            ps.setInt(2, status);
-            ps.setInt(3, accountId);
+            ps.setString(1, roleId);
+            ps.setString(2, status);
+            ps.setString(3, accountId);
             ps.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
-    public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
+    
+    public void editAccountR(String roleId, String status, String updateDate, String accountId) throws SQLException, ClassNotFoundException {
         try {
-            String sql = "delete from [dbo].[Account]\n"
+            String sql = "update [dbo].[Account]\n"
+                    + "set RoleId = ?, [Status] = ?, [UpdateDate] = ?\n"
                     + "where [AccountId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, aid);
-            ps.executeQuery();
+            ps.setString(1, roleId);
+            ps.setString(2, status);
+            ps.setString(3, updateDate);
+            ps.setString(4, accountId);
+            ps.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
+    
+
+
+    public void banAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = "update [dbo].[Account]\n"
+                    + "set [Status] = 0, [UpdateDate] = ?\n"
+                    + "where [AccountId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, updateDate);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void unbanAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = "update [dbo].[Account]\n"
+                    + "set [Status] = 1, [UpdateDate] = ?\n"
+                    + "where [AccountId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, updateDate);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+//        public static void main(String[] args) {
+//        try {
+//            AccountDAO dao = new AccountDAO();
+//            dao.banAccount("2024-2-2", "10");
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public Account checkLogin(String email, String password) {
         String sql = "select * from Account where [Email] = ? and [Password] = ?";
@@ -161,14 +207,15 @@ public class AccountDAO {
             ps.setString(5, phone);
             ps.setString(6, address);
             ps.setString(7, imageAvatar);
+
             ps.setInt(8,0 );
             ps.setBoolean(9, true);
+
             ps.setString(10, date);
             ps.setString(11, date);
             ps.setString(12, date);
             ps.setInt(13, 2);
             ps.executeUpdate();
-            return new Account(0, email, password, date, gender, phone, address, imageAvatar, 0, gender, java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), java.sql.Date.valueOf(date), 2);
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -259,6 +306,8 @@ public class AccountDAO {
          return null;
     }
     
+
+
     public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
         try {
             LocalDate curDate = LocalDate.now();
@@ -281,8 +330,22 @@ public class AccountDAO {
 
     }
 
-    public static void main(String[] args) throws SQLException {
-        AccountDAO ac = new AccountDAO();
-        ac.getAccountByEmail("ngochai251003@gmail.com");
-    }
+
+    public ArrayList<Role> getAllRole() {
+        ArrayList<Role> listRole = new ArrayList<>();
+        String sql = "select * from Role";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listRole.add(new Role(
+                        rs.getInt(1),
+                        rs.getString(2)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listRole;
 }
+    }

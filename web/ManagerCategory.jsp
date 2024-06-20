@@ -27,7 +27,7 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerDashboard.jsp">
+                <a class="navbar-brand" href="revenueAdmin">
                     <h1 class="tm-site-title mb-0">Admin</h1>
                 </a>
                 <button
@@ -47,13 +47,13 @@
 
                         <c:if test="${sessionScope.account.roleId == 1}">
                             <li class="nav-item">
-                                <a class="nav-link" href="ManagerDashboard.jsp">
+                                <a class="nav-link" href="revenueAdmin">
                                     <i class="fas fa-tachometer-alt"></i> Thống kê
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                         </c:if>
-                            
+
                         <c:if test="${sessionScope.account.roleId == 1}">
                             <li class="nav-item">
                                 <a class="nav-link active" href="managerCategory">
@@ -61,7 +61,7 @@
                                 </a>
                             </li>
                         </c:if>
-                            
+
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerProduct">
@@ -125,7 +125,7 @@
                                 <td>${o.name}</td>
                                 <td>
                                     <a href="loadCategory?cid=${o.categoryId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="deleteCategory?cid=${o.categoryId}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <!--<a href="deleteCategory?cid=${o.categoryId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>-->
                                 </td>
                             </tr>
                         </c:forEach>
@@ -146,6 +146,13 @@
 <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
 <script>
     new DataTable('#example');
+    function confirmDelete(event) {
+        event.preventDefault();
+        var confirmAction = confirm("Bạn có chắc chắn muốn xoá loại sản phẩm này không?");
+        if (confirmAction) {
+            window.location.href = event.target.closest('a').href;
+        }
+    }
 </script>
 </body>
 </html>

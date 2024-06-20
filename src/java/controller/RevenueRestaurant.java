@@ -4,20 +4,24 @@
  */
 package controller;
 
+import dao.RestaurantDAO;
 import dao.RevenueDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.util.Date;
+import model.Account;
 
 /**
  *
  * @author hailt
  */
-@WebServlet(name = "RevenueRestaurant", urlPatterns = {"/RevenueRestaurant"})
+@WebServlet(name = "RevenueRestaurant", urlPatterns = {"/revenueRestaurant"})
 public class RevenueRestaurant extends HttpServlet {
 
     /**
@@ -32,18 +36,43 @@ public class RevenueRestaurant extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RevenueRestaurant</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RevenueRestaurant at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
+
+        int accountId = a.getAccountId();
+        RestaurantDAO dao2 = new RestaurantDAO();
+        int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
+        int year = LocalDate.now().getYear();
+
+        RevenueDAO dao = new RevenueDAO();
+
+        long thang1 = dao.getTotalMoneyByMonth(restaurantId, 1, year);
+        long thang2 = dao.getTotalMoneyByMonth(restaurantId, 2, year);
+        long thang3 = dao.getTotalMoneyByMonth(restaurantId, 3, year);
+        long thang4 = dao.getTotalMoneyByMonth(restaurantId, 4, year);
+        long thang5 = dao.getTotalMoneyByMonth(restaurantId, 5, year);
+        long thang6 = dao.getTotalMoneyByMonth(restaurantId, 6, year);
+        long thang7 = dao.getTotalMoneyByMonth(restaurantId, 7, year);
+        long thang8 = dao.getTotalMoneyByMonth(restaurantId, 8, year);
+        long thang9 = dao.getTotalMoneyByMonth(restaurantId, 9, year);
+        long thang10 = dao.getTotalMoneyByMonth(restaurantId, 10, year);
+        long thang11 = dao.getTotalMoneyByMonth(restaurantId, 11, year);
+        long thang12 = dao.getTotalMoneyByMonth(restaurantId, 12, year);
+
+        request.setAttribute("thang1", thang1);
+        request.setAttribute("thang2", thang2);
+        request.setAttribute("thang3", thang3);
+        request.setAttribute("thang4", thang4);
+        request.setAttribute("thang5", thang5);
+        request.setAttribute("thang6", thang6);
+        request.setAttribute("thang7", thang7);
+        request.setAttribute("thang8", thang8);
+        request.setAttribute("thang9", thang9);
+        request.setAttribute("thang10", thang10);
+        request.setAttribute("thang11", thang11);
+        request.setAttribute("thang12", thang12);
+
+        request.getRequestDispatcher("ManagerDashboardRestaurant.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,50 +87,7 @@ public class RevenueRestaurant extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       RevenueDAO dao = new RevenueDAO();
-//    double thang1 = dao.getTotalMoneyByMonth(1);
-//    double thang2 = dao.getTotalMoneyByMonth(2);
-//    double thang3 = dao.getTotalMoneyByMonth(3);
-//    double thang4 = dao.getTotalMoneyByMonth(4);
-//    double thang5 = dao.getTotalMoneyByMonth(5);
-//    double thang6 = dao.getTotalMoneyByMonth(6);
-//    double thang7 = dao.getTotalMoneyByMonth(7);
-//    double thang8 = dao.getTotalMoneyByMonth(8);
-//    double thang9 = dao.getTotalMoneyByMonth(9);
-//    double thang10 = dao.getTotalMoneyByMonth(10);
-//    double thang11 = dao.getTotalMoneyByMonth(11);
-//    double thang12 = dao.getTotalMoneyByMonth(12);
-
-double thang1 = 10;
-double thang2 = 10;
-double thang3 = 10;
-double thang4 = 10;
-double thang5 = 10;
-double thang6 = 10;
-double thang7 = 10;
-double thang8 = 10;
-double thang9 = 10;
-double thang10 = 10;
-double thang11 = 10;
-double thang12 = 10;
-
-
-    request.setAttribute("thang1", thang1);
-    request.setAttribute("thang2", thang2);
-    request.setAttribute("thang3", thang3);
-    request.setAttribute("thang4", thang4);
-    request.setAttribute("thang5", thang5);
-    request.setAttribute("thang6", thang6);
-    request.setAttribute("thang7", thang7);
-    request.setAttribute("thang8", thang8);
-    request.setAttribute("thang9", thang9);
-    request.setAttribute("thang10", thang10);
-    request.setAttribute("thang11", thang11);
-    request.setAttribute("thang12", thang12);
-
-    request.getRequestDispatcher("ManagerDashboard.jsp").forward(request, response);
-        
-
+        processRequest(request, response);
     }
 
     /**

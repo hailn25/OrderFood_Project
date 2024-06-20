@@ -19,15 +19,34 @@ public class RevenueDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public double getTotalMoneyByMonth(int month) {
-        String sql = "SELECT SUM(TotalMoney) as TotalMoney from OrderDetail where MONTH(UpdateDate) = ?";
+    public long getTotalMoneyByMonth(int restaurantId, int month, int year) {
+        String sql = "SELECT \n"
+                + "    MONTH(o.FinishDate) AS Month,\n"
+                + "    YEAR(o.FinishDate) AS Year,\n"
+                + "    SUM(od.TotalMoney) AS TotalMoney\n"
+                + "FROM \n"
+                + "    [Order] o\n"
+                + "JOIN \n"
+                + "    OrderDetail od ON o.OrderId = od.OrderId\n"
+                + "JOIN \n"
+                + "    Product p ON od.ProductId = p.ProductId\n"
+                + "WHERE \n"
+                + "    o.OrderStatusId = 3\n"
+                + "    AND p.RestaurantId = ?\n"
+                + "	AND MONTH(o.FinishDate) = ?\n"
+                + "	AND YEAR(o.FinishDate) = ?\n"
+                + "GROUP BY \n"
+                + "    MONTH(o.FinishDate), \n"
+                + "    YEAR(o.FinishDate)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, month);
+            ps.setInt(1, restaurantId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
             rs = ps.executeQuery();
             if (rs.next()) {
-                double totalMoney = rs.getDouble("TotalMoney");
+                long totalMoney = rs.getLong("TotalMoney");
                 return totalMoney;
             }
         } catch (Exception e) {
@@ -36,7 +55,7 @@ public class RevenueDAO {
         return 0;
     }
 
-    public double getRevenueOfWeb(int month) {
+    public long getRevenueOfWeb(int month) {
         String sql = "SELECT \n"
                 + "    MONTH(O.FinishDate) AS month,\n"
                 + "    YEAR(O.FinishDate) AS year,\n"
@@ -50,18 +69,42 @@ public class RevenueDAO {
                 + "    YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
                 + "ORDER BY \n"
                 + "    YEAR(O.FinishDate), MONTH(O.FinishDate);";
+
+        // Initialize resources
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
         try {
+            // Establish database connection
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, month);
             rs = ps.executeQuery();
+
             if (rs.next()) {
                 double totalRevenue = rs.getDouble("total_revenue");
                 double finalRevenue = totalRevenue * 0.05;
-                return finalRevenue;
+                return (long) finalRevenue;
             }
         } catch (Exception e) {
-
+            // Handle exceptions and possibly log them
+            e.printStackTrace();
+        } finally {
+            // Ensure resources are closed properly
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return 0;
     }
@@ -725,6 +768,6 @@ public class RevenueDAO {
 
     public static void main(String[] args) {
         RevenueDAO dao = new RevenueDAO();
-        System.out.println(dao.AccountValid12(2023));
+        System.out.println(dao.AccountValid3(2024));
     }
 }

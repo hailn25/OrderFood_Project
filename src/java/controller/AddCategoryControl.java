@@ -13,9 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
+import utils.Validation;
 
 /**
  *
@@ -37,9 +40,27 @@ public class AddCategoryControl extends HttpServlet {
             throws ServletException, IOException {
         try {
             String name = request.getParameter("name");
-            CategoryDAO dao = new CategoryDAO();
-            dao.insertCategory(name);
-            response.sendRedirect("managerCategory");
+            int lengthName = Validation.removeAllBlank(name).length();
+
+            HttpSession session = request.getSession();
+            Account a = (Account) session.getAttribute("account");
+            int roleId = a.getRoleId();
+
+            if (roleId == 1 || roleId == 5) {
+                if (lengthName > 0) {
+                    name = Validation.removeUnnecessaryBlank(name);
+                    CategoryDAO dao = new CategoryDAO();
+                    dao.insertCategory(name);
+                    response.sendRedirect("managerCategory");
+                } else {
+                    request.setAttribute("error", "Nhập không hợp lệ!");
+                    request.getRequestDispatcher("AddCategory.jsp").forward(request, response);
+                }
+            } else {
+                request.setAttribute("error", "Tài khoản đang dùng không hợp lệ");
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(AddCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
         }
