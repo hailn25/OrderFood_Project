@@ -69,14 +69,14 @@
                         <div class="e-navlist e-navlist--active-bg">
                             <div class="user-profile">
                                 <div class="avatar">
-                                    <img src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
+                                    <img id="avatarImage" src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
                                 </div>
                             </div>
+
                             <c:choose>
                                 <c:when test="${sessionScope.account.roleId == 2}">
                                     <ul class="nav">
                                         <li class="nav-item"><a class="nav-link px-3 active" href="home"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="EditAvatar.jsp"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Đổi ảnh đại diện</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Thông tin cá nhân</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="ChangePasswordProfile.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Đổi mật khẩu</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="Voucher.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>voucher</span></a></li>
@@ -86,8 +86,7 @@
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="managerProduct"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="EditAvatar.jsp"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Đổi ảnh đại diện</span></a></li>
+                                        <li class="nav-item"><a class="nav-link px-3 active" href="managerProduct"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>                                      
                                         <li class="nav-item"><a class="nav-link px-3" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Thông tin cá nhân</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="ChangePasswordProfile.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Đổi mật khẩu</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="SettingBanner.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Setting banner</span></a></li>
@@ -149,5 +148,7 @@
                 </div>
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 </html>

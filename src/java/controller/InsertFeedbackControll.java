@@ -4,25 +4,24 @@
  */
 package controller;
 
-import dao.AccountDAO;
+import dao.FeedbackDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
-import java.io.File;
-import model.Account;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author ADMIN
  */
-@MultipartConfig
-public class EditProfileControll extends HttpServlet {
+public class InsertFeedbackControll extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,41 +35,18 @@ public class EditProfileControll extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String aid = request.getParameter("accountId");
-        String aname = request.getParameter("name");
-        String aemail = request.getParameter("email");
-        String aphone = request.getParameter("phone");
-        String aaddress = request.getParameter("address");
-        String agender = request.getParameter("gender");
-
-        // Determine the boolean value for gender based on the input
-        boolean genderBool = "Nam".equalsIgnoreCase(agender);
-
-        Part filePart = request.getPart("image");
-        String fileName = filePart.getSubmittedFileName();
-
-        // Kiểm tra nếu có tệp mới được tải lên
-        String img = null;
-        if (fileName != null && !fileName.isEmpty()) {
-            String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
-            filePart.write(uploadPath);
-            img = fileName;
-        } else {
-            img = request.getParameter("OldImage");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet InsertFeedbackControll</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet InsertFeedbackControll at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        AccountDAO dao = new AccountDAO();
-        dao.updateAccount(aname, aemail, aphone, aaddress, genderBool, aid, img);
-
-        // Fetch the updated account details
-        Account updatedAccount = dao.getAccountByAId(aid);
-
-        // Update session with new account details
-        HttpSession session = request.getSession();
-        session.setAttribute("account", updatedAccount);
-
-        // Redirect to the profile page
-        response.sendRedirect("profile");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -99,8 +75,31 @@ public class EditProfileControll extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String rateStar = request.getParameter("rateStar");
+        String feedbackText = request.getParameter("feedback");
+        String imageURL = request.getParameter("imageURL");
+        String accountId = request.getParameter("accountName");
+        String productId = request.getParameter("productId");
+        String date = request.getParameter("date");
+
+        try {
+            FeedbackDAO dao = new FeedbackDAO();
+            dao.insertFeedback(rateStar, feedbackText, imageURL, accountId, productId, date);
+
+            // Set success message in request attribute
+            request.setAttribute("successMessage", "Phản hồi thành công!");
+        } catch (SQLException | ClassNotFoundException ex) {
+            // Handle exceptions
+            ex.printStackTrace();
+            // Set error message in request attribute
+            request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
+        }
+
+        // Forward to the same page (Feedback.jsp)
+        request.getRequestDispatcher("Feedback.jsp").forward(request, response);
     }
+
+    
 
     /**
      * Returns a short description of the servlet.

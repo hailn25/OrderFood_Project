@@ -18,6 +18,18 @@
                 margin-top: 20px;
                 background: #f8f8f8;
             }
+            #avatarPreview img,
+            #imagePreview img {
+                max-width: 200px; /* Chiều rộng tối đa của ảnh */
+                height: auto;     /* Duy trì tỉ lệ khung hình */
+                display: block;   /* Đảm bảo ảnh là một khối độc lập */
+                margin: 0 auto;   /* Canh giữa ảnh */
+            }
+            .custom-file .btn {
+                width: 100px; /* Chiều rộng cụ thể của nút "Chọn ảnh" */
+                margin: 0 auto; /* Canh giữa nút */
+                display: block; /* Đảm bảo nút là một khối độc lập */
+            }
         </style>
     </head>
     <body>
@@ -44,7 +56,7 @@
                                     </ul>
                                     <div class="tab-content pt-3">
                                         <div class="tab-pane active">
-                                            <form action="editProfile">
+                                            <form action="editProfile" method="post" enctype="multipart/form-data">
                                                 <div class="form-group">
                                                     <input type="hidden" name="accountId" value="${account.accountId}">
                                                 </div>
@@ -71,6 +83,16 @@
                                                         <option value="Nam"${account.gender ? 'Nam' : 'Nữ'}>Nam</option>
                                                         <option value="Nữ"${account.gender ? 'Nam' : 'Nữ'}>Nữ</option>
                                                     </select>
+                                                </div>
+                                                <input id="OldImage" name="OldImage" type="hidden" value="${account.imageAvatar}" class="form-control validate" />
+                                                <div id="avatarPreview">
+                                                    <h3>Xem trước ảnh đại diện mới</h3>
+                                                    <img id="currentImage" src="img/${account.imageAvatar}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto">
+                                                </div>
+                                                <div class="custom-file mt-3 mb-3">
+                                                    <input id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />
+                                                    <input type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
+                                                    <div id="imagePreview" class="mt-3"></div>
                                                 </div>
 
                                                 <div class="form-group">
@@ -128,6 +150,22 @@
                     return true; // Form sẽ submit nếu hợp lệ
                 });
             });
+        </script>
+
+        <script>
+            function previewImage(event) {
+                var input = event.target;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var dataURL = reader.result;
+                    var output = document.getElementById('currentImage');
+                    output.src = dataURL;
+                    output.style.display = 'block'; // Hiển thị ảnh mới
+                };
+                if (input.files && input.files[0]) {
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
         </script>
     </body>
 </html>

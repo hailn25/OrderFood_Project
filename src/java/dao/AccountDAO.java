@@ -98,13 +98,14 @@ public class AccountDAO {
 
     }
 
-    public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid) {
+    public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid, String imageAvatar ) {
         String query = "update Account\n"
                 + "  set [Name] = ?,\n"
                 + "  [Email] = ?,\n"
                 + "  [Phone] = ?,\n"
                 + "  [Address] = ?,\n"
-                + "  [Gender] = ?\n"
+                + "  [Gender] = ?,\n"
+                + "  [ImageAvatar] = ?\n"
                 + "  where AccountId = ?";
         try {
             conn = new DBContext().getConnection();
@@ -116,7 +117,8 @@ public class AccountDAO {
             ps.setString(3, phone);
             ps.setString(4, address);
             ps.setBoolean(5, gender);
-            ps.setString(6, aid);
+            ps.setString(6, imageAvatar);
+            ps.setString(7, aid);
             ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -370,6 +372,6 @@ public class AccountDAO {
     public static void main(String[] args) throws SQLException {
         AccountDAO dao = new AccountDAO();
         //dao.updatePassword("13012003", "6");
-        dao.updateAvatarAccountById("haiavt.png", "6");
+        
     }
 }

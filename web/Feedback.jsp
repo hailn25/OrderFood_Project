@@ -6,76 +6,90 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Feedback</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">Phản hồi</div>
-                    <div class="card-body">
-                        <form id="feedbackForm" action="process_feedback.php" method="POST" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="accountName">Account Name</label>
-                                <input type="text" class="form-control" id="accountName" name="accountName" required>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Feedback</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            body {
+                background-color: #f8f9fa; /* màu nền xám nhẹ */
+            }
+            .card {
+                border: none; /* bỏ viền card */
+                border-radius: 10px; /* bo góc card */
+                box-shadow: 0 0 10px rgba(0,0,0,0.1); /* đổ bóng nhẹ */
+            }
+            .card-header {
+                background-color: #007bff; /* màu header */
+                border-radius: 10px 10px 0 0; /* bo góc header */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header text-white">
+                            <h4 class="mb-0">Phản hồi</h4>
+                        </div>
+                        <div class="card-body">
+                            <%-- Kiểm tra và hiển thị thông báo thành công nếu có --%>
+                            <% if (request.getAttribute("successMessage") != null) { %>
+                            <div class="alert alert-success" role="alert">
+                                <%= request.getAttribute("successMessage") %>
                             </div>
+                            <% } %>
 
-                            <div class="form-group">
-                                <label for="productId">Product ID</label>
-                                <input type="text" class="form-control" id="productId" name="productId" required>
+                            <%-- Kiểm tra và hiển thị thông báo lỗi nếu có --%>
+                            <% if (request.getAttribute("errorMessage") != null) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= request.getAttribute("errorMessage") %>
                             </div>
+                            <% } %>
 
-                            <div class="form-group">
-                                <label for="feedback">Phản hồi</label>
-                                <textarea class="form-control" id="feedback" name="feedback" rows="5" required></textarea>
-                            </div>
+                            <form action="insertFeedback" method="post">
+                                <div class="form-group">
+                                    <label for="rateStar">Rate Star:</label>
+                                    <input type="text" class="form-control" id="rateStar" name="rateStar">
+                                </div>
 
-                            <div class="form-group">
-                                <label for="rateStar">Đánh giá sao</label>
-                                <input type="number" class="form-control" id="rateStar" name="rateStar" min="1" max="5" required>
-                            </div>
+                                <div class="form-group">
+                                    <label for="feedback">Feedback:</label>
+                                    <textarea class="form-control" id="feedback" name="feedback" rows="4"></textarea>
+                                </div>
 
-                            <div class="form-group">
-                                <label for="date">Ngày</label>
-                                <input type="date" class="form-control" id="date" name="date" required>
-                            </div>
+                                <div class="form-group">
+                                    <label for="imageURL">Image URL:</label>
+                                    <input type="text" class="form-control" id="imageURL" name="imageURL">
+                                </div>
 
-                            <div class="form-group">
-                                <label for="imageFile">Chọn ảnh (tối đa 2MB)</label>
-                                <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*" onchange="previewImage(event)">
-                                <small id="imageHelpBlock" class="form-text text-muted">
-                                    File ảnh của bạn không được vượt quá 2MB.
-                                </small>
-                                <div id="imagePreview" class="mt-2"></div>
-                            </div>
+                                <div class="form-group">
+                                    <label for="accountName">AccountId</label>
+                                    <input type="text" class="form-control" id="accountName" name="accountName" value="${account.accountId}" readonly required>
+                                </div>
 
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary">Gửi phản hồi</button>
-                            </div>
-                        </form>
+                                <div class="form-group">
+                                    <label for="productId">Product ID:</label>
+                                    <input type="text" class="form-control" id="productId" name="productId">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="date">Date:</label>
+                                    <input type="text" class="form-control" id="date" name="date">
+                                </div>
+                                <a href="OrderHistory.jsp" class="btn btn-secondary mr-2">Quay lại</a>
+                                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-                                    function previewImage(event) {
-                                        var reader = new FileReader();
-                                        reader.onload = function () {
-                                            var output = document.getElementById('imagePreview');
-                                            output.innerHTML = '<img src="' + reader.result + '" class="img-fluid img-thumbnail" style="max-width:200px; max-height:200px;" />';
-                                        }
-                                        reader.readAsDataURL(event.target.files[0]);
-                                    }
-    </script>
-</body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
 </html>

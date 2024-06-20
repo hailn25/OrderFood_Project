@@ -45,8 +45,12 @@
         <servlet-class>controller.SettingBannerControll</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditAvatarControll</servlet-name>
-        <servlet-class>controller.EditAvatarControll</servlet-class>
+        <servlet-name>ListOrderControll</servlet-name>
+        <servlet-class>controller.ListOrderControll</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertFeedbackControll</servlet-name>
+        <servlet-class>controller.InsertFeedbackControll</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -93,7 +97,11 @@
         <url-pattern>/settingBanner</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditAvatarControll</servlet-name>
-        <url-pattern>/editAvatar</url-pattern>
+        <servlet-name>ListOrderControll</servlet-name>
+        <url-pattern>/listOrder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertFeedbackControll</servlet-name>
+        <url-pattern>/insertFeedback</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -5,21 +5,22 @@
 
 package controller;
 
-import dao.AccountDAO;
+import dao.FeedbackDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
+import java.sql.SQLException;
 
 /**
  *
  * @author ADMIN
  */
-public class EditAvatarControll extends HttpServlet {
+@WebServlet(name="InsertReportControll", urlPatterns={"/insertReport"})
+public class InsertReportControll extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,23 +32,18 @@ public class EditAvatarControll extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String aid = request.getParameter("accountId");
-        String aavatar = request.getParameter("newAvatar");
-        
-
-
-        AccountDAO dao = new AccountDAO();
-        dao.updateAvatarAccountById(aavatar, aid);
-
-        // Fetch the updated account details
-        Account updateAvatarAccountById = dao.getAccountByAId(aid);
-
-        // Update session with new account details
-        HttpSession session = request.getSession();
-        session.setAttribute("account", updateAvatarAccountById);
-
-        // Redirect to the profile page
-        response.sendRedirect("EditAvatar.jsp");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet InsertReportControll</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet InsertReportControll at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,8 +69,30 @@ public class EditAvatarControll extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException {
+        String description = request.getParameter("description");
+        String imageURL = request.getParameter("imageURL");
+        String accountId = request.getParameter("accountId");
+        String restaurantId = request.getParameter("restaurantId");
+        String status = request.getParameter("status");
+        String createDate = request.getParameter("createDate");
+
+        try {
+            FeedbackDAO dao = new FeedbackDAO();
+            dao.insertReport(description, imageURL, accountId, restaurantId, status, createDate);
+
+            // Set success message in request attribute
+            request.setAttribute("successMessage", "Phản hồi thành công!");
+            request.getRequestDispatcher("Report.jsp").forward(request, response);
+        } catch (SQLException | ClassNotFoundException ex) {
+            // Handle exceptions
+            ex.printStackTrace();
+            // Set error message in request attribute
+            request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
+        }
+
+        // Forward to the same page (Feedback.jsp)
+        request.getRequestDispatcher("Report.jsp").forward(request, response);
     }
 
     /** 
