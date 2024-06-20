@@ -30,7 +30,7 @@
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 3}">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="managerShipper">
+                                    <a class="nav-link " href="managerShipper">
                                         <i class="fas fa-clipboard-check"></i>Đơn hàng đợi xử lý
                                     </a>
                                 </li>
@@ -44,7 +44,7 @@
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 3}">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerShipperFinish">
+                                    <a class="nav-link active" href="managerShipperFinish">
                                         <i class="fas fa-thumbs-up"></i>  Đơn hàng đã giao thành công 
                                     </a>
                                 </li>
@@ -97,6 +97,7 @@
                             <th>Tổng tiền </th>
                             <th>Trạng thái đơn hàng </th>
                             <th>Hoạt Động </th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -104,19 +105,19 @@
                             <tr>
                                 <td>${o.orderId}</td>
                                 <td>${o.name}</td>
+
                                 <td>${o.phone}</td>
                                 <td>${o.address}</td>
                                 <td>${o.note}</td>
                                 <td>${o.createDate}</td>
                                 <td>${o.totalMoney}</td>
                                 <td>
-                                    ${o.status}
+                                          ${o.status}
+
                                 </td>
 
                                 <td>
-                                    <a href="managerActions?action=accept&oid=${o.orderId}" class="accept" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xác nhận đơn hàng">&#xe5ca;</i></a>
-
-                                    <a href="managerActions?action=refuse&oid=${o.orderId}" class="refuse" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Không chấp nhận " style="color: red;">&#xe5cd;</i></a>
+                                  
 
                                     <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
 

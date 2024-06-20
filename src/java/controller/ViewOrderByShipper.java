@@ -42,7 +42,7 @@ public class ViewOrderByShipper extends HttpServlet {
         orderDAO.getOrderDetailByoid(orderId);
     }
     
-    ArrayList<ViewDetail> listView = orderDAO.getViewDetailslByoid(orderId);
+    ViewDetail listView = orderDAO.getViewDetailslByoid(orderId);
     request.setAttribute("listV", listView);
     
     ArrayList<OrderDetailDTO> listOrderDetail = orderDAO.getOrderDetailByoid(orderId);

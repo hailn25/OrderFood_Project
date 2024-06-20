@@ -24,44 +24,48 @@
                             </div>
                         </div>
                         <div class="row tm-edit-product-row">
-                            <c:forEach items="${listV}" var="v">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="name">Họ và tên</label>
-                                        <input id="name" name="name" type="text" required value="${v.name}" class="form-control validate">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="phone">Số điện thoại</label>
-                                        <input id="phone" name="phone" type="text" required value="${v.phone}" class="form-control validate">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="paymentMethod">Hình thức thanh toán</label>
-                                        <input id="paymentMethod" name="paymentMethod" type="text" required value="${v.paymentBy}" class="form-control validate">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="purchaseDate">Ngày mua</label>
-                                        <input id="purchaseDate" name="purchaseDate" type="text" required value="${v.createDate}" class="form-control validate">
-                                    </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group mb-3">
+                                    <label for="name">Họ và tên</label>
+                                    <input id="name" name="name" type="text" required value="${listV.name}" class="form-control validate">
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="email">Email</label>
-                                        <input id="email" name="email" type="text" required value="${v.email}" class="form-control validate">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="address">Địa chỉ</label>
-                                        <input id="address" name="address" type="text" required value="${v.address}" class="form-control validate">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="paymentStatus">Trạng thái thanh toán</label>
-                                        <input id="paymentStatus" name="paymentStatus" type="text" required value="${v.paymentStatus}" class="form-control validate">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="description">Ghi chú</label>
-                                        <textarea class="form-control tm-small" rows="5" name="description" required>${v.note}</textarea>
-                                    </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone">Số điện thoại</label>
+                                    <input id="phone" name="phone" type="text" required value="${listV.phone}" class="form-control validate">
                                 </div>
-                            </c:forEach>
+                                <div class="form-group mb-3">
+                                    <label for="paymentMethod">Hình thức thanh toán</label>
+                                    <input id="paymentMethod" name="paymentMethod" type="text" required value="${listV.paymentBy}" class="form-control validate">
+                                </div>
+                                <div class=" form-group mb-3">
+                                    <label for="purchaseDate">Ngày mua</label>
+                                    <input id="purchaseDate" name="purchaseDate" type="text" required value="${listV.createDate}" class="form-control validate">
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group  mb-3">
+                                    <label for="email">Email</label>
+                                    <input id="email" name="email" type="text" required value="${listV.email}" class="form-control validate">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="address">Địa chỉ</label>
+                                    <input id="address" name="address" type="text" required value="${listV.address}" class="form-control validate">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="paymentStatus">Trạng thái thanh toán</label>
+                                    <input id="paymentStatus" name="paymentStatus" type="text" required value="${listV.paymentStatus}" class="form-control validate">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="description">Ghi chú</label>
+                                    <textarea class="form-control tm-small" rows="1" name="description" required>${listV.note}</textarea>
+                                </div>
+
+                            </div>
+
                         </div>
                         <div class="col-12">
                             <table class="table table-bordered">
@@ -86,7 +90,7 @@
                             </table>
                         </div>
                         <div class="text-center">
-                            <h1>Tổng đơn hàng: ${listOrderDetail[0].totalMoney}</h1>
+                            <h1 style="color: white; margin-top: 20px;">Tổng đơn hàng: ${listOrderDetail[0].totalMoney}</h1>
                         </div>
                         <div class="text-center">
                             <a href="managerShipper" class="btn btn-primary">Thoát</a>

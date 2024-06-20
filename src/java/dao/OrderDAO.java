@@ -64,7 +64,7 @@ public class OrderDAO {
                         rs.getString(5),
                         rs.getDate(6),
                         rs.getDouble(7),
-                        rs.getInt(8)
+                        rs.getString(8)
                 );
                 listOrders.add(order);
             }
@@ -75,17 +75,17 @@ public class OrderDAO {
         return listOrders;
     }
 
-    public ArrayList<OrderDTO> getAllOrder(int status) {
+    public ArrayList<OrderDTO> getAllOrder(int OrderStatusId) {
         ArrayList<OrderDTO> listOrders = new ArrayList<>();
         try {
             String sql = "SELECT [Order].OrderId, [Order].Name, [Order].Phone, [Order].Address, [Order].Note, [Order].CreateDate, [Order].TotalMoney, OrderStatus.Status\n"
-                    + "                   FROM     [Order] INNER JOIN\n"
-                    + "                                   OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
-                    + "								   where OrderStatus.Status = ?";
+                    + "                                      FROM     [Order] INNER JOIN\n"
+                    + "                                                    OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                    + "                   							   where OrderStatus.OrderStatusId = ?";
 
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, status);
+            ps.setInt(1, OrderStatusId);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -97,7 +97,7 @@ public class OrderDAO {
                         rs.getString(5),
                         rs.getDate(6),
                         rs.getDouble(7),
-                        rs.getInt(8)
+                        rs.getString(8)
                 );
                 listOrders.add(order);
             }
@@ -223,7 +223,7 @@ public class OrderDAO {
     }
 
     public void updateOrderStatus(int orderId, int orderStatusId) {
-        String sql = "UPDATE [Order_FoodV4].[dbo].[Order] SET OrderStatusId = ? WHERE OrderId = ?";
+        String sql = "UPDATE [Order_FoodV5].[dbo].[Order] SET OrderStatusId = ? WHERE OrderId = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -244,6 +244,46 @@ public class OrderDAO {
                 e.printStackTrace();
             }
         }
+    }
+
+    public int getOrderStatusById(int orderId) {
+        String sql = "SELECT OrderStatus.OrderStatusId\n"
+                + "FROM [Order] INNER JOIN\n"
+                + "     OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                + "WHERE [Order].OrderId = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int status = 0;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                status = rs.getInt("OrderStatusId");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return status;
     }
 
     public ArrayList<OrderDetailDTO> getOrderDetailByoid(int orderId) {
@@ -279,6 +319,7 @@ public class OrderDAO {
                         rs.getDouble(6)
                 );
                 listOrderDetails.add(orderDetail);
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -287,8 +328,8 @@ public class OrderDAO {
         return listOrderDetails;
     }
 
-    public ArrayList<ViewDetail> getViewDetailslByoid(int orderId) {
-        ArrayList<ViewDetail> listViewDetails = new ArrayList<>();
+    public ViewDetail getViewDetailslByoid(int orderId) {
+        ViewDetail viewDetail = new ViewDetail();
         try {
             String sql = "SELECT o.OrderId, o.Name, o.Email, o.Phone, o.Address, o.Note, o.CreateDate, od.PaymentBy, od.PaymentStatus\n"
                     + "FROM [Order] o\n"
@@ -301,7 +342,7 @@ public class OrderDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                ViewDetail viewDetail = new ViewDetail(
+                viewDetail = new ViewDetail(
                         rs.getInt("OrderId"),
                         rs.getString("Name"),
                         rs.getString("Email"),
@@ -312,24 +353,39 @@ public class OrderDAO {
                         rs.getString("PaymentBy"),
                         rs.getString("PaymentStatus")
                 );
-                listViewDetails.add(viewDetail);
             }
         } catch (Exception ex) {
 
         }
-        return listViewDetails;
+        return viewDetail;
     }
 
     public static void main(String[] args) {
         OrderDAO orderDAO = new OrderDAO();
+//        ArrayList<OrderDTO> orders = orderDAO.getAllOrder(1);
+//
+//        for (OrderDTO order : orders) {
+//            System.out.println("Order ID: " + order.getOrderId());
+//            System.out.println("Name: " + order.getName());
+//            System.out.println("Phone: " + order.getPhone());
+//            System.out.println("Address: " + order.getAddress());
+//            System.out.println("Note: " + order.getNote());
+//            System.out.println("Create Date: " + order.getCreateDate());
+//            System.out.println("Total Money: " + order.getTotalMoney());
+//            System.out.println("Status: " + order.getStatus());
+//            System.out.println("----------------------------------");
+        
 
-        // Call the getAllOrder method and get the list of orders
-        ArrayList<OrderDTO> orders = orderDAO.getAllOrder(1);
+    // Giả định orderId và orderStatusId của đơn hàng cần cập nhật
+    int orderIdToUpdate = 123; // Thay bằng orderId thực tế cần cập nhật
+    int newOrderStatusId = 2; // Thay bằng orderStatusId mới
 
-        // Print the orders
-        for (OrderDTO order : orders) {
-            System.out.println(order);
-        }
+    // Gọi phương thức updateOrderStatus để cập nhật trạng thái đơn hàng
+    orderDAO.updateOrderStatus(orderIdToUpdate, newOrderStatusId);
+
+    System.out.println("Order status updated successfully!");
+    
+    }
     }
 
-}
+

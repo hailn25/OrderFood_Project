@@ -35,8 +35,10 @@ public class ManagerShipper extends HttpServlet {
             throws ServletException, IOException {
         OrderDAO orderDAO = new OrderDAO();
         int od = orderDAO.getOrderID();
-        ArrayList<OrderDTO> listOrder = orderDAO.getAllOrder(1);
-        request.setAttribute("list", listOrder);
+        int orderStatusId = orderDAO.getOrderStatusById(od);
+        ArrayList<OrderDTO> listOrderAccept = null;
+        listOrderAccept = orderDAO.getAllOrder(1);
+        request.setAttribute("list", listOrderAccept);
         request.getRequestDispatcher("Shipper.jsp").forward(request, response);
 
     }

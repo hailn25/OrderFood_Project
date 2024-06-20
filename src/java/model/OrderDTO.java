@@ -19,12 +19,12 @@ public class OrderDTO {
     String note;
     Date createDate;
     double totalMoney;
-    int status;
+    String  status;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(int orderId, String name, String phone, String address, String note, Date createDate, double totalMoney, int status) {
+    public OrderDTO(int orderId, String name, String phone, String address, String note, Date createDate, double totalMoney, String status) {
         this.orderId = orderId;
         this.name = name;
         this.phone = phone;
@@ -91,11 +91,11 @@ public class OrderDTO {
         this.totalMoney = totalMoney;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -104,5 +104,5 @@ public class OrderDTO {
         return "OrderDTO{" + "orderId=" + orderId + ", name=" + name + ", phone=" + phone + ", address=" + address + ", note=" + note + ", createDate=" + createDate + ", totalMoney=" + totalMoney + ", status=" + status + '}';
     }
 
-   
+    
 }
