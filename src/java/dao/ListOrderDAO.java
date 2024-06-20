@@ -24,33 +24,33 @@ public class ListOrderDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<ListOrder> getListOrderById(String aid) {
+    public List<ListOrder> getListOrderById(String accountId) {
         List<ListOrder> listOrderById = new ArrayList<>();
-        String query = "select o.OrderId, o.OrderStatusId, o.AccountId, s.[Name], o.TotalMoney, o.[Name], o.Email, o.Phone, o.[Address], o.Note, o.CreateDate, o.FinishDate \n"
-                + "from [Order] o\n"
-                + "join Account a\n"
-                + "on o.AccountId = a.AccountId\n"
-                + "join Shipper s\n"
-                + "on o.ShipperId = s.ShipperId\n"
-                + "where o.AccountId = ?";
+        String query = "SELECT o.AccountId, a.Name, a.Email, a.Phone, a.Address, od.PaymentBy, od.PaymentStatus, o.CreateDate, o.Note, p.Name, p.Price, od.Quantity, o.TotalMoney\n"
+                + "FROM [Order] o\n"
+                + "JOIN Account a ON o.AccountId = a.AccountId\n"
+                + "JOIN OrderDetail od ON o.OrderId = od.OrderId\n"
+                + "JOIN Product p ON od.ProductId = p.ProductId\n"
+                + "where a.AccountId = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setString(1, aid);
+            ps.setString(1, accountId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listOrderById.add(new ListOrder(rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getInt(3),
+                        rs.getString(2),
+                        rs.getString(3),
                         rs.getString(4),
-                        rs.getDouble(5),
+                        rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getString(8),
+                        rs.getDate(8),
                         rs.getString(9),
                         rs.getString(10),
-                        rs.getDate(11),
-                        rs.getDate(12)
+                        rs.getDouble(11),
+                        rs.getInt(12),
+                        rs.getDouble(13)
                 ));
             }
         } catch (Exception e) {

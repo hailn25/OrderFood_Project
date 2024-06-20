@@ -45,10 +45,6 @@
         <servlet-class>controller.SettingBannerControll</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ListOrderControll</servlet-name>
-        <servlet-class>controller.ListOrderControll</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>InsertFeedbackControll</servlet-name>
         <servlet-class>controller.InsertFeedbackControll</servlet-class>
     </servlet>
@@ -95,10 +91,6 @@
     <servlet-mapping>
         <servlet-name>SettingBannerControll</servlet-name>
         <url-pattern>/settingBanner</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListOrderControll</servlet-name>
-        <url-pattern>/listOrder</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InsertFeedbackControll</servlet-name>

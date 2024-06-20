@@ -5,7 +5,7 @@
 
 package controller;
 
-import dao.ProductDAO;
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,20 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import model.Cart;
-import model.Item;
-import model.Product;
+import java.util.ArrayList;
+import model.OrderDTO;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name="AddToCartServlet", urlPatterns={"/addtocart"})
-public class AddToCartServlet extends HttpServlet {
+@WebServlet(name="ManagerShipperSuccess", urlPatterns={"/managerShipperSuccess"})
+public class ManagerShipperSuccess extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,19 +32,12 @@ public class AddToCartServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AddToCartServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AddToCartServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        OrderDAO orderDAO = new OrderDAO();
+        int od = orderDAO.getOrderID();
+       
+        ArrayList<OrderDTO> listOrderSuccess =  orderDAO.getAllOrder(2);
+        request.setAttribute("list", listOrderSuccess);
+        request.getRequestDispatcher("ViewOrderSuccess.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,40 +61,11 @@ public class AddToCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    HttpSession session = request.getSession();
-    Cart cart = null;
-    Object o = session.getAttribute("cart");
-    if(o != null){
-        cart = (Cart)o;
-    } else {
-        cart = new Cart();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        processRequest(request, response);
     }
-   
-    String productId = request.getParameter("productId"); 
-    int num, id;
-    
-    try { 
-        if (productId != null) { 
-            num = 1; 
-            id = Integer.parseInt(productId);
-            ProductDAO dao = new ProductDAO();
-            Product p = dao.getProductByID(id);
-            double price = p.getPrice();
-            Item t = new Item(p, num, price);
-            cart.addItem(t);
-        } else {
-            num = 1;
-        }
-    } catch (Exception e) {
-        num = 1;
-    }
-    List<Item> list = cart.getItems();
-    session.setAttribute("cart", cart);
-    session.setAttribute("size", list.size());
-    request.getRequestDispatcher("Cart.jsp").forward(request, response);
-}
-
 
     /** 
      * Returns a short description of the servlet.
