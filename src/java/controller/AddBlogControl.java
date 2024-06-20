@@ -8,21 +8,23 @@ import dao.BlogDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import model.Blog;
-import model.BlogDTO;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.util.Date;
+import utils.Validation;
 
 /**
  *
  * @author quoch
  */
-@WebServlet(name = "BlogControl", urlPatterns = {"/blog"})
-public class BlogControl extends HttpServlet {
+@WebServlet(name = "AddBlogControl", urlPatterns = {"/addBlog"})
+@MultipartConfig
+public class AddBlogControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,29 +38,39 @@ public class BlogControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        BlogDAO dao = new BlogDAO();
-        ArrayList<BlogDTO> listBlogDTO = dao.getAllBlogDTO();
-        int itemsPerPage = 5;
-        int currentPage = 1;
+        BlogDAO blogDAO = new BlogDAO();
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+        String summary = request.getParameter("summary");
+        Date createDate = new Date();
+        Date updateDate = new Date();
 
-        if (request.getParameter("page") != null) {
-            currentPage = Integer.parseInt(request.getParameter("page"));
+        Part filePart = request.getPart("image");
+        String fileName = filePart.getSubmittedFileName();
+
+        String img = null;
+        String error = "Thông tin không hợp lệ";
+
+        int lengthTitle = Validation.removeAllBlank(title).length();
+        int lengthContent = Validation.removeAllBlank(content).length();
+        int lengthSummary = Validation.removeAllBlank(summary).length();
+        if (lengthTitle == 0 || lengthContent == 0 || lengthSummary == 0 || request.getParameter("status") == null) {
+            request.setAttribute("error", error);
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        } else {
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            if (fileName != null && !fileName.isEmpty()) {
+                String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
+                filePart.write(uploadPath);
+                img = fileName;
+                blogDAO.addBlog(title, content, img, summary, 2, status, createDate, updateDate);
+                response.sendRedirect("managerBlog");
+            } else {
+                error = "Chưa chọn ảnh";
+                request.setAttribute("error", error);
+                request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+            }
         }
-
-        int totalItems = listBlogDTO.size();
-        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
-
-        int start = (currentPage - 1) * itemsPerPage;
-        int end = Math.min(start + itemsPerPage, totalItems);
-
-        List<BlogDTO> paginatedList = listBlogDTO.subList(start, end);
-
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("paginatedList", paginatedList);
-        request.setAttribute("listBlogDTO", listBlogDTO);
-
-        request.getRequestDispatcher("Blog.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

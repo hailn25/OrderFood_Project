@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.BlogDAO;
+import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,17 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import model.Blog;
-import model.BlogDTO;
 
 /**
  *
  * @author quoch
  */
-@WebServlet(name = "BlogControl", urlPatterns = {"/blog"})
-public class BlogControl extends HttpServlet {
+@WebServlet(name = "ChangeStatusSlider", urlPatterns = {"/changeStatusSlider"})
+public class ChangeStatusSlider extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,29 +32,16 @@ public class BlogControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        BlogDAO dao = new BlogDAO();
-        ArrayList<BlogDTO> listBlogDTO = dao.getAllBlogDTO();
-        int itemsPerPage = 5;
-        int currentPage = 1;
-
-        if (request.getParameter("page") != null) {
-            currentPage = Integer.parseInt(request.getParameter("page"));
+        SliderDAO sliderDAO = new SliderDAO();
+        int changeStatus = Integer.parseInt(request.getParameter("changeStatus"));
+        int sliderId = Integer.parseInt(request.getParameter("sliderId"));
+        if (changeStatus == 3) {
+            sliderDAO.changeStatusSlider(sliderId, changeStatus);
+        } else {
+            sliderDAO.changeStatusSlider(sliderId, changeStatus);
         }
 
-        int totalItems = listBlogDTO.size();
-        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
-
-        int start = (currentPage - 1) * itemsPerPage;
-        int end = Math.min(start + itemsPerPage, totalItems);
-
-        List<BlogDTO> paginatedList = listBlogDTO.subList(start, end);
-
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("paginatedList", paginatedList);
-        request.setAttribute("listBlogDTO", listBlogDTO);
-
-        request.getRequestDispatcher("Blog.jsp").forward(request, response);
+        request.getRequestDispatcher("managerService").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

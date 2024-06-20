@@ -11,7 +11,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>4FOODHD</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -61,18 +61,6 @@
         </div>
         <!-- Modal Search End -->
 
-
-        <!-- Single Page Header start -->
-        <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Sản phẩm</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a href="Home.jsp">Trang chủ</a></li>
-                <li class="breadcrumb-item active text-white">Sản phẩm</li>
-            </ol>
-        </div>
-        <!-- Single Page Header End -->
-
-
         <!-- Fruits Shop Start-->
         <div class="container-fluid fruite py-5">
             <div class="container py-5">
@@ -82,16 +70,19 @@
                     <div class="col-lg-12">
                         <div class="row g-4">
                             <div class="col-xl-3">
-                                <form action="shop">
+                                <c:if test="${not empty error}">
+                                    <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                                </c:if>
+                                <form action="shop" method="post">
                                     <div class="input-group w-100 mx-auto d-flex">
-                                        <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName">
+                                        <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName" required="" value="${productName}">
                                         <button id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                                     </div>
 
                                     <div class="mb-3" style="margin: 10px">
                                         <h4 class="mb-2">Giá sản phẩm</h4>
                                         <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000" value="0" oninput="updateAmount()">
-                                        <output id="amount" name="amount" min-velue="0" max-value="1000" for="rangeInput">0 VND </output>
+                                        <output id="amount" name="amount" min-velue="0" max-value="1000" for="rangeInput">0 VND - 1.000.000 VND</output>
                                     </div>
                                 </form>
                             </div>
@@ -180,11 +171,12 @@
                                                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
                                                 </c:if>
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4 style="height: 80px">${p.name}</h4>
-
+                                                    <div style="height: 80px;">
+                                                        <a href="detail?pid=${p.producId}" style="color: black; font-weight: bold; font-size: 20px;">${p.name}</a>
+                                                    </div>
 
                                                     <div style="display: flex">
-                                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                                        <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
                                                             <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
                                                         </div>
                                                         <form action="addtocart" method="post">
@@ -245,12 +237,13 @@
                 var value = rangeInput.value;
 
                 // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND';
+                var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
                 // Cập nhật nội dung hiển thị
                 amount.value = formattedValue;
                 amount.innerText = formattedValue;
             }
+
         </script>
     </body>
 

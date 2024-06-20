@@ -82,7 +82,13 @@ public class LoginServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("managerProduct").forward(request, response);
+                }else if (a.getRoleId() == 5) {
+                    acc.UpdateLastDateLogin(email);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("account", a);
+                    request.getRequestDispatcher("ManagerStaff.jsp").forward(request, response);
                 }
+                
             }
         }
     }

@@ -4,8 +4,7 @@
  */
 package controller;
 
-import dao.FunctionShopDAO;
-import dao.ShopDAO;
+import dao.BlogDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,17 +13,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import model.Category;
-import model.CategoryDTO;
-import model.ProductDTO;
-import model.RestaurantDTO;
+import model.BlogDTO;
 
 /**
  *
- * @author Vu Huy
+ * @author quoch
  */
-@WebServlet(name = "ShopController", urlPatterns = {"/shop"})
-public class ShopController extends HttpServlet {
+@WebServlet(name = "BlogDetailControl", urlPatterns = {"/blogDetail"})
+public class BlogDetailControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,41 +34,14 @@ public class ShopController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ShopDAO dao = new ShopDAO();
-        FunctionShopDAO daofunction = new FunctionShopDAO();
+        BlogDAO dao = new BlogDAO();
+        ArrayList<BlogDTO> listBlogDTO = dao.getAllBlogDTO();
+        request.setAttribute("listBlogDTO", listBlogDTO);
+        int blogId = Integer.parseInt(request.getParameter("blogId"));
+        BlogDTO blog = dao.getBlogDTOById(blogId);
+        request.setAttribute("blog", blog);
 
-        ArrayList<ProductDTO> listProductDTO = dao.getAllProductDTO();
-        request.setAttribute("listProductDTO", listProductDTO);
-
-        ArrayList<Category> listAllCategory = dao.getAllCategory();
-        request.setAttribute("listAllCategory", listAllCategory);
-
-        ArrayList<CategoryDTO> listTotalQuantityByCategory = dao.getTotalQuantityByCategory();
-        request.setAttribute("listTotalQuantityByCategory", listTotalQuantityByCategory);
-
-        ArrayList<RestaurantDTO> listRestaurantDTO = dao.getAllRestaurantDTO();
-        request.setAttribute("listRestaurantDTO", listRestaurantDTO);
-
-        String categoryName = request.getParameter("categoryName");
-        if (categoryName != null) {
-            listProductDTO = daofunction.getAllProductDTOByCategoryName(categoryName);
-            request.setAttribute("listProductDTO", listProductDTO);
-        }
-
-        String productName = request.getParameter("productName");
-        String maxPriceStr = request.getParameter("rangeInput");
-
-        if (productName != null || maxPriceStr != null) {
-            try {
-                int maxPrice = maxPriceStr != null ? Integer.parseInt(maxPriceStr) : 0;
-                listProductDTO = daofunction.searchProductByAttribute(productName, maxPrice);
-                request.setAttribute("listProductDTO", listProductDTO);
-            } catch (NumberFormatException ex) {
-                // Xử lý ngoại lệ: ghi log hoặc thông báo lỗi cho người dùng
-            }
-        }
-
-        request.getRequestDispatcher("Shop.jsp").forward(request, response);
+        request.getRequestDispatcher("BlogDetail.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
