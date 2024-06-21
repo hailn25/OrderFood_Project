@@ -75,7 +75,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 4}">
-                                <li class="nav-item">
+<li class="nav-item">
                                     <a class="nav-link active" href="revenueRestaurant">
                                         <i class="fas fa-tachometer-alt"></i> Thống kê
                                         <span class="sr-only">(current)</span>
@@ -108,24 +108,25 @@
                             <c:if test="${sessionScope.account.roleId == 4}">
                                 <li class="nav-item dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                        <i class="far fa-file-alt"></i>
-                                        <span> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                                        <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
+                                        <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
                                     </a>
                                     <div class="dropdown-menu" id="dropdownMenu">
                                         <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
                                         <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của Shipper</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
                                         <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng đã giao thành công</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng đã bị huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng đã bị shipper huỷ</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
                                     </div>
                                 </li>
                             </c:if>
 
                             <c:if test="${sessionScope.account.roleId == 4}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="profile">
+                                    <a class="nav-link" href="Profile.jsp">
                                         <i class="far fa-user"></i> Tài khoản
                                     </a>
                                 </li>
@@ -176,7 +177,7 @@
 
                     var options = {
                         title: 'Doanh thu của nhà hàng',
-                        vAxis: {title: 'VNĐ'},
+vAxis: {title: 'VNĐ'},
                         hAxis: {title: 'Tháng'},
                         seriesType: 'bars'
                     };
@@ -220,6 +221,12 @@
                             }
                         }
                     }
+                }
+                function toggleDropdown(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var dropdownMenu = document.getElementById("dropdownMenu");
+                    dropdownMenu.classList.toggle("show");
                 }
         </script>
 

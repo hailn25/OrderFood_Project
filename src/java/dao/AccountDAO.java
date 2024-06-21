@@ -19,7 +19,7 @@ public class AccountDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public ArrayList<Account> getAllAccount() {
+     public ArrayList<Account> getAllAccount() {
         ArrayList<Account> listAccount = new ArrayList<>();
         String sql = "select * from Account\n";
         try {
@@ -148,16 +148,6 @@ public class AccountDAO {
         }
     }
     
-//        public static void main(String[] args) {
-//        try {
-//            AccountDAO dao = new AccountDAO();
-//            dao.banAccount("2024-2-2", "10");
-//        } catch (SQLException ex) {
-//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
 
     public Account checkLogin(String email, String password) {
         String sql = "select * from Account where [Email] = ? and [Password] = ?";
@@ -348,4 +338,88 @@ public class AccountDAO {
         }
         return listRole;
 }
+    public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid, String imageAvatar ) {
+        String query = "update Account\n"
+                + "  set [Name] = ?,\n"
+                + "  [Email] = ?,\n"
+                + "  [Phone] = ?,\n"
+                + "  [Address] = ?,\n"
+                + "  [Gender] = ?,\n"
+                + "  [ImageAvatar] = ?\n"
+                + "  where AccountId = ?";
+        try {
+            conn = new DBContext().getConnection();
+
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, phone);
+            ps.setString(4, address);
+            ps.setBoolean(5, gender);
+            ps.setString(6, imageAvatar);
+            ps.setString(7, aid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = "delete from [dbo].[Account]\n"
+                    + "where [AccountId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, aid);
+            ps.executeQuery();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    public void updatePassword(String password, String aid) {
+        String query = "UPDATE Account SET Password = ? WHERE AccountId = ?";
+        try {
+            conn = new DBContext().getConnection();
+
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, password);
+            ps.setString(2, aid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    public boolean checkPassword(String accountId, String currentPassword) {
+        String sql = "SELECT * FROM Account WHERE AccountId = ? AND Password = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, accountId);
+            ps.setString(2, currentPassword);
+            rs = ps.executeQuery();
+            return rs.next(); // Nếu có kết quả trả về, tức là mật khẩu đúng
+        } catch (Exception e) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            closeResources();
+        }
+        return false;
+    }
+    private void closeResources() {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    
     }

@@ -212,7 +212,26 @@ public class ProductDAO {
         }
         return null;
     }
-    
+    public int getQuantityProduct(int pid) {
+        try {
+
+            String query = "SELECT Quantity\n"
+                    + "FROM    Product  where ProductId = ?";
+            conn = new DBContext().getConnection();
+
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, pid);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+        }
+        return 0;
+    }
     
 
 }

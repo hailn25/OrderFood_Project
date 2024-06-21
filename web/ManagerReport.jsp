@@ -65,7 +65,7 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerDashboard.jsp">
+                <a class="navbar-brand" href="ManagerStaff.jsp">
                     <c:if test="${not empty sessionScope.account.name}">
                         <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
                         </c:if>
@@ -114,7 +114,7 @@
 
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="managerService">
+                                <a class="nav-link active" href="managerReport">
                                     <i class="far fa-comment-dots"></i> Quản lý báo cáo
                                 </a>
                             </li>
@@ -169,6 +169,7 @@
                                         <img src="img/${r.imageURL}" alt="Không thể tải ảnh">
                                     </td>
                                     <td>${r.createDate}</td>
+                                    <td>Đang chờ giao hàng</td>
                                     <td>
                                         <a href="changeStatusReport?changeStatus=${3}&reportId=${r.reportId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
                                         <a href="changeStatusReport?changeStatus=${2}&reportId=${r.reportId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>

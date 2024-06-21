@@ -29,7 +29,7 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerDashboard.jsp">
+                <a class="navbar-brand" href="ManagerStaff.jsp">
                     <c:if test="${not empty sessionScope.account.name}">
                         <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
                         </c:if>
@@ -62,7 +62,7 @@
 
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="managerBlog">
+                                <a class="nav-link active" href="managerBlog">
                                     <i class="far fa-file-alt"></i> Quản lý blog
                                 </a>
                             </li>
@@ -75,6 +75,14 @@
                                 </a>
                             </li>
                         </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerReport">
+                                    <i class="far fa-comment-dots"></i> Quản lý báo cáo
+                                </a>
+                            </li>
+                        </c:if>
+
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">

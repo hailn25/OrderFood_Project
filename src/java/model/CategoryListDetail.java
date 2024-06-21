@@ -11,15 +11,13 @@ package model;
 public class CategoryListDetail {
     private int id;
     private String name;
-    private int quantity;
 
     public CategoryListDetail() {
     }
 
-    public CategoryListDetail(int id, String name, int quantity) {
+    public CategoryListDetail(int id, String name) {
         this.id = id;
         this.name = name;
-        this.quantity = quantity;
     }
 
     public int getId() {
@@ -38,18 +36,10 @@ public class CategoryListDetail {
         this.name = name;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     @Override
     public String toString() {
-        return "CategoryListDetail{" + "id=" + id + ", name=" + name + ", quantity=" + quantity + '}';
+        return "CategoryListDetail{" + "id=" + id + ", name=" + name + '}';
     }
-    
+
     
 }

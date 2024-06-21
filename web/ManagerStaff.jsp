@@ -26,7 +26,7 @@
 
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="ManagerDashboard.jsp">
+                    <a class="navbar-brand" href="ManagerStaff.jsp">
                         <h1 class="tm-site-title mb-0">Staff</h1>
                     </a>
                     <button
@@ -70,7 +70,7 @@
 
                             <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerService">
+                                    <a class="nav-link" href="managerReport">
                                         <i class="far fa-comment-dots"></i> Quản lý báo cáo
                                     </a>
                                 </li>
