@@ -39,6 +39,16 @@ public class ResendVerify extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
+             Cookie[] arrCookie = request.getCookies();
+
+            if(arrCookie != null){
+                for(Cookie c : arrCookie){
+                    if(c.getName().equals("codeVerify")){
+                        c.setMaxAge(0);
+                        response.addCookie(c);
+                    }
+                }
+            }
             String email = (String) session.getAttribute("email");
             String codeVerify = EmailHandler.generateCodeVerify();
             String verify = EncodePassword.toSHA1(codeVerify);
@@ -62,7 +72,7 @@ public class ResendVerify extends HttpServlet {
                     + "        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Mã xác thực của bạn là:</p>\n"
                     + "        <h1 style=\"margin-left: 150px; font-size: 38px; color: red;\">" + codeVerify + "</h1>\n"
                     + "        <p>Vui lòng nhập mã này vào trang xác thực trên website của chúng tôi để hoàn tất quá trình.</p>\n"
-                    + "        <p style=\"font-size: 15px;\"><a href=\"http://localhost:9999/onlineshop/verify.jsp\">Quay lại website của chúng tôi</a></p>\n"
+                    + "        <p style=\"font-size: 15px;\"><a href=\"http://localhost:8080/onlineshop/verify.jsp\">Quay lại website của chúng tôi</a></p>\n"
                     + "        <p>Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ với bộ phận hỗ trợ của chúng tôi.</p>\n"
                     + "        <p>Trân trọng,</p>\n"
                     + "        <h2>FBT Shoes Shop</h2>\n"
@@ -70,23 +80,16 @@ public class ResendVerify extends HttpServlet {
                     + "</body>\n"
                     + "</html>";
             EmailHandler.sendEmail(email, subject, content);
-            Cookie[] arrCookie = request.getCookies();
-            if(arrCookie != null){
-                for(Cookie c : arrCookie){
-                    if(c.getName().equals("codeVerify")){
-                        c.setMaxAge(0);
-                        response.addCookie(c);
-                    }
-                }
-            }
+           
+            
             Cookie c = new Cookie("codeVerify", verify);
             c.setMaxAge(60 * 5);
             response.addCookie(c);
             String redirect = (String) session.getAttribute("authenticationfor");
             session.setAttribute("authenticationfor", redirect);
-            if(redirect.equals("forgetpass")){
+            if(redirect.equals("forget")){
                 request.setAttribute("verified", "verified");
-                request.getRequestDispatcher("ForgetPassword").forward(request, response);
+                request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
                 
             } else {
                 request.getRequestDispatcher("Verify.jsp").forward(request, response);

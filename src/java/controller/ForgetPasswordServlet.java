@@ -124,6 +124,7 @@ public class ForgetPasswordServlet extends HttpServlet {
                     EmailHandler.sendEmail(email, subject, content);
                     Cookie c = new Cookie("codeVerify", codeVerify);
                     session.setAttribute("email", email);
+                    session.setAttribute("authenticationfor", "forget");
                     c.setMaxAge(60 * 5);
                     response.addCookie(c);
                     request.setAttribute("verified", "verified");
@@ -140,8 +141,7 @@ public class ForgetPasswordServlet extends HttpServlet {
             for (Cookie cookie : arrCookie) {
                 if (cookie.getName().equals("codeVerify")) {
                     verify += cookie.getValue();
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
+
                 }
 
             }
@@ -150,6 +150,12 @@ public class ForgetPasswordServlet extends HttpServlet {
                 request.setAttribute("verified", "verified");
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
             } else {
+                for (Cookie cookie : arrCookie) {
+                    if (cookie.getName().equals("codeVerify")) {
+                        cookie.setMaxAge(0);
+                        response.addCookie(cookie);
+                    }
+                }
                 request.setAttribute("verified", "next");
                 request.setAttribute("changepass", "change");
                 request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
@@ -158,9 +164,10 @@ public class ForgetPasswordServlet extends HttpServlet {
             try {
                 String password = request.getParameter("password");
                 String emailC = (String) session.getAttribute("email");
-//                String pass = EncodePassword.toSHA1(password);
-                dao.ChangePassword(emailC, password);
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                String pass = EncodePassword.toSHA1(password);
+                dao.ChangePassword(emailC, pass);
+                session.setAttribute("passwordChangeSuccess", "true");
+                response.sendRedirect("Login.jsp");
             } catch (SQLException ex) {
                 Logger.getLogger(ForgetPasswordServlet.class.getName()).log(Level.SEVERE, null, ex);
             }

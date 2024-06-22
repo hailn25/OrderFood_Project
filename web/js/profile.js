@@ -52,28 +52,5 @@ document.addEventListener('DOMContentLoaded', function () {
         // Hiển thị phần được chọn
         document.getElementById(sectionId).style.display = 'block';
     }
-
-    // Xác nhận khi thay đổi mật khẩu
-    document.getElementById('change-password-btn').addEventListener('click', function () {
-        var oldPassword = document.getElementById('old-password').value;
-        var newPassword = document.getElementById('new-password').value;
-        var confirmPassword = document.getElementById('confirm-password').value;
-
-        // Kiểm tra mật khẩu cũ và mới
-        if (oldPassword === "" || newPassword === "" || confirmPassword === "") {
-            alert("Vui lòng nhập đầy đủ thông tin mật khẩu.");
-            return;
-        }
-
-        if (newPassword !== confirmPassword) {
-            alert("Mật khẩu mới và mật khẩu xác nhận không khớp.");
-            return;
-        }
-
-        // Gửi yêu cầu thay đổi mật khẩu
-        // (Tại đây bạn có thể thực hiện gửi dữ liệu thông qua Ajax hoặc các phương thức khác)
-
-        // Hiển thị thông báo thành công
-        alert("Thay đổi mật khẩu thành công.");
-    });
 });
+

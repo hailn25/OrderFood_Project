@@ -26,71 +26,20 @@
     </head>
 
     <body style="background-color: #F6F6F6">
-
-        <nav class="navbar navbar-expand-xl">
-            <div class="container h-100">
-                <a class="navbar-brand" href="Dashboard.jsp">
-                    <h1 class="tm-site-title mb-0">Product Admin</h1>
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto h-100">
-                        <li class="nav-item">
-                            <a class="nav-link" href="Dashboard.jsp">
-                                <i class="fas fa-tachometer-alt"></i> Dashboard
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link active" href="managerCategory">
-                                <i class="far fa-file-alt"></i> Categories
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="managerProduct">
-                                <i class="fas fa-shopping-cart"></i> Products
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="managerAccount">
-                                <i class="far fa-user"></i> Accounts
-                            </a>
-                        </li>
-
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link d-block" href="Login.jsp">
-                                Admin, <b>Logout</b>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
                 <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
                     <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
                         <div class="row">
                             <div class="col-6">
-                                <h2 class="tm-block-title d-inline-block">Add New Category</h2>
+                                <h2 class="tm-block-title d-inline-block">Chỉnh sửa loại sản phẩm</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <c:if test="${not empty error}">
+                                    <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                                </c:if>
                             </div>
                         </div>
                         <form action="editCategory" method="post">
@@ -100,15 +49,16 @@
                                         <input id="id" name="id" type="hidden" value="${detail.categoryId}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="name">Category Name</label>
+                                        <label for="name">Tên loại sản phẩm</label>
                                         <input id="name" name="name" value="${detail.name}" type="text" required" class="form-control validate" />
                                     </div>
+
                                 </div>
                                 <div class="col-xl-6 col-lg-6 ">
-                                    <input type="button" class="btn btn-primary btn-block text-uppercase" value="Cancel" onclick="window.history.back();" />
+                                    <a href="managerCategory" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 ">
-                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Update Now" />
+                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Cập nhật ngay" />
                                 </div>
                             </div>
                         </form>

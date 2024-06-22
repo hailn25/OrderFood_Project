@@ -311,6 +311,6 @@ public class ProductHomeDAO {
     public static void main(String[] args) {
         ProductHomeDAO dao = new ProductHomeDAO();
 
-        System.out.println(dao.getProductByCategoryId(1));
+        System.out.println(dao.getAllProduct());
     }
 }

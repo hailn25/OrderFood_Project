@@ -13,8 +13,19 @@ public class OrderDetail {
     private int quantity;
     private double totalMoney;
     private String paymentBy;
-    private boolean paymentStatus;
+    private String  paymentStatus;
     private Date updateDate;
+
+    public OrderDetail(int oderDetailId, int oderId, int productId, int quantity, double totalMoney, String paymentBy, String paymentStatus, Date updateDate) {
+        this.oderDetailId = oderDetailId;
+        this.oderId = oderId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.totalMoney = totalMoney;
+        this.paymentBy = paymentBy;
+        this.paymentStatus = paymentStatus;
+        this.updateDate = updateDate;
+    }
 
     public OrderDetail() {
     }
@@ -67,11 +78,11 @@ public class OrderDetail {
         this.paymentBy = paymentBy;
     }
 
-    public boolean isPaymentStatus() {
+    public String getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(boolean paymentStatus) {
+    public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
@@ -83,21 +94,11 @@ public class OrderDetail {
         this.updateDate = updateDate;
     }
 
-    public OrderDetail(int oderDetailId, int oderId, int productId, int quantity, double totalMoney, String paymentBy, boolean paymentStatus, Date updateDate) {
-        this.oderDetailId = oderDetailId;
-        this.oderId = oderId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.totalMoney = totalMoney;
-        this.paymentBy = paymentBy;
-        this.paymentStatus = paymentStatus;
-        this.updateDate = updateDate;
-    }
-
     @Override
     public String toString() {
-        return "OderDetail{" + "oderDetailId=" + oderDetailId + ", oderId=" + oderId + ", productId=" + productId + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", paymentBy=" + paymentBy + ", paymentStatus=" + paymentStatus + ", updateDate=" + updateDate + '}';
+        return "OrderDetail{" + "oderDetailId=" + oderDetailId + ", oderId=" + oderId + ", productId=" + productId + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", paymentBy=" + paymentBy + ", paymentStatus=" + paymentStatus + ", updateDate=" + updateDate + '}';
     }
 
+    
    
 }

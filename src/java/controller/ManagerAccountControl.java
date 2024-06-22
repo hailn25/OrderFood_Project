@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -36,15 +37,15 @@ public class ManagerAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-//        HttpSession session = request.getSession();
-//        Account a = (Account) session.getAttribute("acc");
-//        int id = a.getAccountId();
-        AccountDAO dao = new AccountDAO();
-        ArrayList<Account> list = dao.getAllAccount();
-        request.setAttribute("listA", list);
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
+        if (a.getRoleId() == 1 || a.getRoleId() == 5) {
+            AccountDAO dao = new AccountDAO();
+            ArrayList<Account> list = dao.getAllAccount();
+            request.setAttribute("listA", list);
+        }
         request.getRequestDispatcher("ManagerAccount.jsp").forward(request, response);
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
