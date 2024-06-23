@@ -5,6 +5,8 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
     <head>
         <meta charset="utf-8">
@@ -47,10 +49,13 @@
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
                         </c:if> 
-                        <c:if test = "${sessionScope.account != null}"> 
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
+                        <c:if test="${sessionScope.account != null}">
+                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
+                            <small class="text-white ms-2">Hello, ${username}</small>
+                            <span class="text-white ms-2">|</span>
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
                         </c:if> 
                     </div>
                 </div>
@@ -80,7 +85,7 @@
                                 <i class="fa fa-shopping-bag fa-2x"></i>
                                 <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
                             </a>
-                            <a href="Profile.jsp" class="my-auto" >
+                            <a href="profile" class="my-auto" >
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
 

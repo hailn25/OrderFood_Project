@@ -24,66 +24,8 @@
             https://templatemo.com/tm-524-product-admin
         -->
     </head>
-
+    
     <body style="background-color: #F6F6F6">
-
-        <nav class="navbar navbar-expand-xl">
-            <div class="container h-100">
-                <a class="navbar-brand" href="Dashboard.jsp">
-                    <h1 class="tm-site-title mb-0">Nhà hàng</h1>
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto h-100">
-                        <li class="nav-item">
-                            <a class="nav-link" href="Dashboard.jsp">
-                                <i class="fas fa-tachometer-alt"></i> Thống kê
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="managerCategory">
-                                <i class="far fa-file-alt"></i> Loại sản phẩm
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link active" href="managerProduct">
-                                <i class="fas fa-shopping-cart"></i> Sản phẩm
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="managerAccount">
-                                <i class="far fa-user"></i> Tài khoản
-                            </a>
-                        </li>
-
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link d-block" href="Login.jsp">
-                                <b>Đăng xuất</b>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
                 <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
@@ -93,12 +35,15 @@
                                 <h2 class="tm-block-title d-inline-block text-uppercase">Chỉnh sửa sản phẩm</h2>
                             </div>
                         </div>
-                        <form action="editProduct" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                        <form action="editOpenProduct" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
+                                    <c:if test="${not empty error}">
+                                        <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                                    </c:if>
                                     <div>
                                         <input id="id" name="id" type="hidden" value="${detail.productId}" class="form-control validate" />
-                                        <input id="currentImage" name="currentImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />
+                                        <input id="OldImage" name="OldImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Tên sản phẩm</label>
@@ -110,10 +55,17 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Loại sản phẩm</label>
-                                        <select class="custom-select tm-select-accounts" name="category" required>
+                                        <select style="color: white" class="custom-select tm-select-accounts" name="category" required>
                                             <c:forEach items="${listC}" var="o">
                                                 <option value="${o.categoryId}" ${o.categoryId == cid ? "selected" : ""}>${o.name}</option>
                                             </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="category">Trạng thái</label>
+                                        <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
+                                            <option value="1" ${status == true ? "selected" : ""}>Bán hàng</option>
+                                            <option value="0" ${status == false  ? "selected" : ""}>Ẩn</option>
                                         </select>
                                     </div>
                                     <div class="row">
@@ -128,17 +80,34 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                                    <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img src="img/${detail.imageURL}" alt="Product image" class="img-fluid d-block mx-auto">
-                                        <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
+                                        <img id="currentImage" src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
+                                    <!-- Khung chứa nút chọn ảnh -->
                                     <div class="custom-file mt-3 mb-3">
-                                        <input id="fileInput" name="image" type="file" style="display:none;" />
+                                        <input id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />
                                         <input type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
                                     </div>
                                 </div>
+
+                                <script>
+                                    function previewImage(event) {
+                                        var input = event.target;
+                                        var reader = new FileReader();
+                                        reader.onload = function () {
+                                            var dataURL = reader.result;
+                                            var output = document.getElementById('currentImage');
+                                            output.src = dataURL;
+                                            output.style.display = 'block'; // Hiển thị ảnh mới
+                                        };
+                                        if (input.files && input.files[0]) {
+                                            reader.readAsDataURL(input.files[0]);
+                                        }
+                                    }
+                                </script>
                                 <div class="col-6">
-                                    <input type="button" class="btn btn-primary btn-block text-uppercase" value="Huỷ bỏ" onclick="window.history.back();" />
+                                    <a href="managerOpenProduct" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
                                 </div>
                                 <div class="col-6">
                                     <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Cập nhật ngay" />
@@ -150,21 +119,11 @@
             </div>
         </div>
 
-
-
-
         <script src="js/jquery-3.3.1.min.js"></script>
         <!-- https://jquery.com/download/ -->
         <script src="jquery-ui-datepicker/jquery-ui.min.js"></script>
         <!-- https://jqueryui.com/download/ -->
         <script src="js/bootstrap.min.js"></script>
         <!-- https://getbootstrap.com/ -->
-        <!--        <script>
-            $(function () {
-                $("#expire_date").datepicker({
-                    defaultDate: "10/22/2020"
-                });
-            });
-                </script>-->
     </body>
 </html>

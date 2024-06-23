@@ -61,18 +61,15 @@ public class ProductHomeDAO {
 
     public List<CategoryListDetail> getAllCategory() {
         List<CategoryListDetail> listAllCategory = new ArrayList<>();
-        String query = "SELECT c.CategoryId, c.Name, MIN(p.Quantity) AS Quantity\n"
-                + "FROM Product p\n"
-                + "JOIN Category c ON p.CategoryId = c.CategoryId\n"
-                + "GROUP BY c.CategoryId, c.Name;";
+        String query = "select c.CategoryId, c.Name \n"
+                + "from Category c";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listAllCategory.add(new CategoryListDetail(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getInt(3)
+                        rs.getString(2)
                 ));
             }
         } catch (Exception e) {
@@ -221,18 +218,15 @@ public class ProductHomeDAO {
 
     public List<CategoryListDetail> getCategoryListDetail() {
         List<CategoryListDetail> listCategoryListDetail = new ArrayList<>();
-        String query = "SELECT c.CategoryId, c.Name, MIN(p.Quantity) AS Quantity\n"
-                + "FROM Product p\n"
-                + "JOIN Category c ON p.CategoryId = c.CategoryId\n"
-                + "GROUP BY c.CategoryId, c.Name;";
+        String query = "select c.CategoryId, c.Name \n"
+                + "from Category c";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listCategoryListDetail.add(new CategoryListDetail(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getInt(3)
+                        rs.getString(2)
                 ));
             }
         } catch (Exception e) {
@@ -276,10 +270,47 @@ public class ProductHomeDAO {
         }
         return list;
     }
+    
+    public List<ProductHome> getProductByCategoryId(int id) {
+        List<ProductHome> list = new ArrayList<>();
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Product p\n"
+                + "join Restaurant r\n"
+                + "on p.RestaurantId = r.RestaurantId\n"
+                + "join Category c\n"
+                + "on p.CategoryId = c.CategoryId\n"
+                + "where c.CategoryId = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ProductHome(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getString(9),
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
+        ProductHomeDAO dao = new ProductHomeDAO();
 
-        System.out.println(dao);
+        System.out.println(dao.getAllProduct());
     }
 }

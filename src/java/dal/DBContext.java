@@ -43,18 +43,3 @@ public class DBContext {
         }
     }
 }
-
-//class TestConnection {
-//
-//    private static final Logger LOGGER = Logger.getLogger(TestConnection.class.getName());
-//
-//    public static void main(String[] args) {
-//
-//        DBContext dbContext = new DBContext();
-//        if (dbContext.connection != null) {
-//            LOGGER.log(Level.INFO, "Ket noi thanh cong");
-//        } else {
-//            LOGGER.log(Level.SEVERE, "Ket noi that bai");
-//        }
-//    }
-//}

@@ -42,7 +42,7 @@ public class DeleteProductControl extends HttpServlet {
         ProductDAO dao = new ProductDAO();
 
         dao.deleteProduct(pid);
-        response.sendRedirect("managerProduct");
+        response.sendRedirect("managerOpenProduct");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

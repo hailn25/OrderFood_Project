@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Account {
 
-    private int accountId;
+   private int accountId;
     private String email;
     private String password;
     private String name;
@@ -122,7 +122,8 @@ public class Account {
     public boolean isStatus() {
         return status;
     }
-public void setStatus(boolean status) {
+
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -170,5 +171,4 @@ public void setStatus(boolean status) {
     public int getId() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 }
