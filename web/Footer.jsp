@@ -19,14 +19,14 @@
                         <div class="col-lg-3">
                             <a href="#">
                                 <h1 class="text-primary mb-0">4FOODHD</h1>
-                                <p class="text-secondary mb-0">Fresh products</p>
+                               
                             </a>
                         </div>
                         <div class="col-lg-6">
-                            <div class="position-relative mx-auto">
+<!--                            <div class="position-relative mx-auto">
                                 <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
                                 <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribe Now</button>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="col-lg-3">
                             <div class="d-flex justify-content-end pt-3">
@@ -44,7 +44,7 @@
                             <h4 class="text-light mb-3">Tại sao mọi người yêu thích !</h4>
                             <p class="mb-4">
                                 "Đặt món siêu tốc, đa dạng lựa chọn, khuyến mãi ngập tràn – 4FOODHD, niềm vui ẩm thực mỗi ngày!"</p>
-                            <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
+                            <a href="blog" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Xem thêm </a>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">

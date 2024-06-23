@@ -30,7 +30,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name">Họ và tên</label>
                                     <input id="name" name="name" type="text" required value="${listV.name}" class="form-control validate">
-                                </div>
+                                </div><
                                 <div class="form-group mb-3">
                                     <label for="phone">Số điện thoại</label>
                                     <input id="phone" name="phone" type="text" required value="${listV.phone}" class="form-control validate">

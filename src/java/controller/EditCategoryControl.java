@@ -13,9 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
+import utils.Validation;
 
 /**
  *
@@ -39,10 +42,27 @@ public class EditCategoryControl extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             String name = request.getParameter("name");
             String id = request.getParameter("id");
-            
-            CategoryDAO dao1 = new CategoryDAO();
-            dao1.editCategory(name, id);
-            response.sendRedirect("managerCategory");
+            int lengthName = Validation.removeAllBlank(name).length();
+
+            HttpSession session = request.getSession();
+            Account a = (Account) session.getAttribute("account");
+            int roleId = a.getRoleId();
+
+            if (roleId == 1 || roleId == 5) {
+                if (lengthName > 0) {
+                    name = Validation.removeUnnecessaryBlank(name);
+                    CategoryDAO dao1 = new CategoryDAO();
+                    dao1.editCategory(name, id);
+                    response.sendRedirect("managerCategory");
+                } else {
+                    request.setAttribute("error", "Nhập không hợp lệ!");
+                    request.getRequestDispatcher("loadCategory?cid=" + id).forward(request, response);
+                }
+            } else {
+                request.setAttribute("error", "Tài khoản đang dùng không hợp lệ");
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(EditCategoryControl.class.getName()).log(Level.SEVERE, null, ex);
         }

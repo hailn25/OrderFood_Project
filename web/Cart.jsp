@@ -144,13 +144,18 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <form action="process" method="post">
-
+                                    <!--                                    <form action="process" method="post">
+                                    
+                                                                            <input type="hidden" name="id" value="${i.product.productId}"/>
+                                                                            <input style="cursor: pointer; margin-top: 20px"  type="submit" value="Delete"/>
+                                    
+                                    
+                                                                        </form>-->
+                                    <form id="deleteForm${i.product.productId}" action="process" method="post">
                                         <input type="hidden" name="id" value="${i.product.productId}"/>
-                                        <input style="cursor: pointer; margin-top: 20px"  type="submit" value="Delete"/>
-
-
+                                        <input style="cursor: pointer; margin-top: 20px" type="button" value="Delete" onclick="confirmDelete(event, 'deleteForm${i.product.productId}')"/>
                                     </form>
+
                                 </td>
 
                             </tr>
@@ -214,6 +219,14 @@
         <!-- Cart Page End -->
 
         <jsp:include page="Footer.jsp"></jsp:include>
+        <script>
+            function confirmDelete(event, formId) {
+                event.preventDefault(); // Ngăn chặn việc gửi form ngay lập tức
+                if (confirm('Bạn có muốn xoá sản phẩm khỏi giỏ hàng không?')) {
+                    document.getElementById(formId).submit(); // Gửi form nếu người dùng xác nhận
+                }
+            }
+        </script>
 
 
         <!-- Back to Top -->

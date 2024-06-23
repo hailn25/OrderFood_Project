@@ -13,7 +13,7 @@ public class DBContext {
     private static final String DATABASE_NAME = "Order_FoodV5";
     private static final String PORT_NUMBER = "1433";
     private static final String USER_ID = "sa";
-    private static final String PASSWORD = "111203";
+    private static final String PASSWORD = "1";
     protected Connection connection;
 
     public DBContext() {

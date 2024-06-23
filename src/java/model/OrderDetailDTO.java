@@ -9,7 +9,6 @@ package model;
  * @author ADMIN
  */
 public class OrderDetailDTO {
-
     int orderDetail;
     int orderId;
     String productName;
@@ -18,6 +17,15 @@ public class OrderDetailDTO {
     Double totalMoney;
 
     public OrderDetailDTO() {
+    }
+
+    public OrderDetailDTO(int orderDetail, int orderId, String productName, Double price, int quantity, Double totalMoney) {
+        this.orderDetail = orderDetail;
+        this.orderId = orderId;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+        this.totalMoney = totalMoney;
     }
 
     public int getOrderDetail() {
@@ -65,15 +73,6 @@ public class OrderDetailDTO {
     }
 
     public void setTotalMoney(Double totalMoney) {
-        this.totalMoney = totalMoney;
-    }
-
-    public OrderDetailDTO(int orderDetail, int orderId, String productName, Double price, int quantity, Double totalMoney) {
-        this.orderDetail = orderDetail;
-        this.orderId = orderId;
-        this.productName = productName;
-        this.price = price;
-        this.quantity = quantity;
         this.totalMoney = totalMoney;
     }
 

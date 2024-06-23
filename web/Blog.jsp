@@ -11,7 +11,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>4FOODHD</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -35,13 +35,28 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <style>
+            .col-12 {
+                display: flex;
+                align-items: center;  /* Align items vertically center */
+                justify-content: center; /* Align items horizontally center */
+                height: 100%;
+            }
+
+            .img-fluid {
+                max-height: 250px;
+                max-width: 250px;
+                object-fit: cover;
+            }
+
+        </style>
     </head>
 
     <body>
 
         <%@include file="Header.jsp" %>
 
-        <!-- Modal Search Start -->
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content rounded-0">
@@ -58,44 +73,96 @@
                 </div>
             </div>
         </div>
-        <!-- Modal Search End -->
 
-
-        <!-- Single Page Header start -->
-        <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Blog</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a href="Home.jsp">Trang chủ</a></li>
-                <li class="breadcrumb-item active text-white">Blog</li>
-            </ol>
+        <div class="testimonial-header text-center">
+            <h1 class="display-5 mb-5 text-dark">Chào mừng bạn đến với Blog!</h1>
         </div>
-        <!-- Single Page Header End -->
 
+        <div class="container py-5">
 
-        <!-- Tastimonial Start -->
-        <div class="container-fluid testimonial py-5">
-            <div class="container py-5">
-                <div class="testimonial-header text-center">
-                    <h1 class="display-5 mb-5 text-dark">Chào mừng bạn đến với Blog!</h1>
-                </div>
-                <c:forEach items="${listBlogDTO}" var="b">
-                    <div class="blog-post">
-                        <h2 class="blog-title">${b.title}</h2>
-                        <div class="blog-meta">
-                            <span class="blog-date">${b.createDate}</span> |
-                            <span class="blog-author">Người đăng: ${b.nameUpdateBy}</span>
-                        </div>
-                        <div class="blog-image">
-                            <img src="img/${b.imageURL}" alt="Blog Image" class="img-fluid">
-                        </div>
-                        <div class="blog-content">
-                            <p>${b.content}</p>
+            <div class="row g-5">
+                <!-- Blog list Start -->
+                <div class="col-lg-8">
+                    <div class="blog-item mb-5">
+                        <c:forEach var="b" items="${paginatedList}">
+                            <c:if test="${b.status == true}">
+                                <div class="row g-0 bg-light overflow-hidden" style="margin: 30px 0px;">
+                                    <div class="col-12 col-sm-5 h-100">
+                                        <img class="img-fluid h-100" src="img/${b.imageURL}" style="object-fit: cover;">
+                                    </div>
+                                    <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
+                                        <div class="p-4">
+                                            <div class="d-flex mb-3">
+                                                <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Người đăng: ${b.nameUpdateBy}</small>
+                                                <small><i class="bi bi-calendar-date me-2"></i>${b.createDate}</small>
+                                            </div>
+                                            <h5 class="text-uppercase mb-3 title">${b.title}</h5>
+                                            <p class="summary">${b.summary}</p>
+                                            <a class="text-primary text-uppercase" href="blogDetail?blogId=${b.blogId}">Đọc thêm<i class="bi bi-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+
+                        <div class="col-12">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination pagination-lg m-0">
+                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link rounded-0" href="blog?page=${currentPage - 1}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+                                        </a>
+                                    </li>
+                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                            <a class="page-link" href="blog?page=${i}">${i}</a>
+                                        </li>
+                                    </c:forEach>
+                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link rounded-0" href="blog?page=${currentPage + 1}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
-                </c:forEach>
+                </div>
+
+                <!-- Blog list End -->
+
+                <!-- Sidebar Start -->
+                <div class="col-lg-4">
+                    <!-- Search Form Start -->
+                    <div class="mb-5">
+                        <div class="input-group">
+                            <input type="text" class="form-control p-3" placeholder="Từ khoá">
+                            <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                    <!-- Search Form End -->
+
+                    <!-- Recent Post Start -->
+                    <div class="mb-5">
+                        <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Bài viết gần đây</h3>
+                        <c:forEach var="b" items="${listBlogDTO}">
+                            <c:if test="${b.status == true}">
+                                <div class="d-flex overflow-hidden mb-3">
+                                    <img class="img-fluid" src="img/${b.imageURL}" style="width: 100px; height: 100px; object-fit: cover;" alt="Không thể tải ảnh">
+                                    <a href="blogDetail?blogId=${b.blogId}" class="h5 d-flex align-items-center bg-light px-3 mb-0">${b.title}
+                                    </a>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+
+                    </div>
+
+                    <div class="mb-5">
+                        <img src="img/anhblog3.png" alt="" class="img-fluid rounded">
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Tastimonial End -->
 
 
         <%@include file="Footer.jsp" %>
@@ -115,6 +182,17 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const summaries = document.querySelectorAll('.summary');
+                summaries.forEach(summary => {
+                    const maxLength = 150;
+                    if (summary.textContent.length > maxLength) {
+                        summary.textContent = summary.textContent.substring(0, maxLength) + '...';
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

@@ -8,8 +8,11 @@ import dal.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Feedback;
 import model.Product;
 
@@ -23,31 +26,103 @@ public class FeedbackDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<Feedback> getFeedback() {
+    public List<Feedback> getFeedbackByProductId(int productId) {
         List<Feedback> listFeedback = new ArrayList<>();
-        String query = "select f.FeedbackId, f.RateStar, f.Feedback, f.ImageURL, a.Name, a.ImageAvatar, p.Name, f.Date \n"
+        String query = "select p.ProductId, p.Name, p.Price, p.Description, p.ImageURL, p.CategoryId, p.RestaurantId, f.FeedbackId, f.Feedback, f.Date, f.RateStar, a.ImageAvatar, a.Name\n"
                 + "from Feedback f\n"
-                + "join Account a\n"
-                + "on a.AccountId = f.AccountId\n"
                 + "join Product p\n"
-                + "on f.ProductId = p.ProductId";
+                + "on f.ProductId = p.ProductId\n"
+                + "join Account a\n"
+                + "on f.AccountId = a.AccountId\n"
+                + "where p.ProductId = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
+            ps.setInt(1, productId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listFeedback.add(new Feedback(rs.getInt(1),
-                        rs.getDouble(2),
-                        rs.getString(3),
+                        rs.getString(2),
+                        rs.getDouble(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getDate(8)
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getInt(8),
+                        rs.getString(9),
+                        rs.getDate(10),
+                        rs.getDouble(11),
+                        rs.getString(12),
+                        rs.getString(13)
                 ));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return listFeedback;
+    }
+
+    public void insertFeedback(String rateStar, String feedbackText, String imageURL, String accountId, String productId, String date) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            String sql = "INSERT INTO Feedback ([RateStar], [Feedback], [ImageURL], [AccountId], [ProductId], [Date])\n"
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, rateStar);
+            ps.setString(2, feedbackText);
+            ps.setString(3, imageURL);
+            ps.setString(4, accountId);
+            ps.setString(5, productId);
+            ps.setString(6, date);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+
+    public void insertReport(String description, String imageURL, String accountId, String restaurantId, String status, String createDate) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            String sql = "INSERT INTO Report ([Description], [ImageURL], [AccountId], [RestaurantId], [Status], [CreateDate])\n"
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, description);
+            ps.setString(2, imageURL);
+            ps.setString(3, accountId);
+            ps.setString(4, restaurantId);
+            ps.setString(5, status);
+            ps.setString(6, createDate);
+            ps.executeUpdate();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex; // Re-throw the exception to handle it elsewhere if needed
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        FeedbackDAO dao = new FeedbackDAO();
+        dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
     }
 }

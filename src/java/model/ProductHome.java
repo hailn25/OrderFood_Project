@@ -16,7 +16,9 @@ public class ProductHome {
     private double price;
     private String decription;
     private String image;
+    private int categoryId;
     private String categoryName;
+    private int restaurantId;
     private String restaurantName;
     private boolean isSale;
     private int quantity;
@@ -28,13 +30,15 @@ public class ProductHome {
     public ProductHome() {
     }
 
-    public ProductHome(int id, String name, double price, String decription, String image, String categoryName, String restaurantName, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
+    public ProductHome(int id, String name, double price, String decription, String image, int categoryId, String categoryName, int restaurantId, String restaurantName, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.decription = decription;
         this.image = image;
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.isSale = isSale;
         this.quantity = quantity;
@@ -84,12 +88,28 @@ public class ProductHome {
         this.image = image;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public String getCategoryName() {
         return categoryName;
     }
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public String getRestaurantName() {
@@ -150,8 +170,8 @@ public class ProductHome {
 
     @Override
     public String toString() {
-        return "ProductHome{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryName=" + categoryName + ", restaurantName=" + restaurantName + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
+        return "ProductHome{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryId=" + categoryId + ", categoryName=" + categoryName + ", restaurantId=" + restaurantId + ", restaurantName=" + restaurantName + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
     }
-    
+
     
 }
