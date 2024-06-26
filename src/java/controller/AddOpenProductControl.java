@@ -29,60 +29,39 @@ public class AddOpenProductControl extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             String name = request.getParameter("name");
-            String priceStr = request.getParameter("price");
-            String quantityStr = request.getParameter("quantity");
+            String price = request.getParameter("price");
+            String quantity = request.getParameter("quantity");
             String description = request.getParameter("description");
             String category = request.getParameter("category");
             String status = request.getParameter("status");
-            String isSale = request.getParameter("sale");
             LocalDate updateDate = LocalDate.now();
             LocalDate createDate = LocalDate.now();
 
-            // Kiểm tra các trường nhập liệu
-            int lengthName = Validation.removeAllBlank(name).length();
-            int lengthDescription = Validation.removeAllBlank(description).length();
-
-            int price = 0;
-            int quantity = 0;
-            boolean isNumeric = true;
-
-            // Kiểm tra xem giá trị của price và quantity có phải là số không và lớn hơn 0
-            try {
-                price = Integer.parseInt(priceStr);
-                quantity = Integer.parseInt(quantityStr);
-                if (price <= 0 || quantity <= 0) {
-                    isNumeric = false;
-                }
-            } catch (NumberFormatException e) {
-                isNumeric = false;
-            }
-
-            // Xử lý file upload
+// Xử lý file upload
             Part filePart = request.getPart("image");
             String fileName = filePart.getSubmittedFileName();
-            String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
-            // Kiểm tra nếu có tệp mới được tải lên và có đuôi phù hợp
+// Kiểm tra nếu có tệp mới được tải lên
             String img = null;
             if (fileName != null && !fileName.isEmpty()) {
-                if (fileExtension.equals("jpg") || fileExtension.equals("png") || fileExtension.equals("webp")) {
-                    String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
-                    filePart.write(uploadPath);
-                    img = fileName;
-                } else {
-                    request.setAttribute("error", "Chỉ chấp nhận các tệp JPG, PNG, hoặc WebP!");
-                    request.getRequestDispatcher("managerAddOpenProduct").forward(request, response);
-                    return;
-                }
+                String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
+                filePart.write(uploadPath);
+                img = fileName;
             }
+
+// Kiểm tra các trường nhập liệu
+            int lengthName = Validation.removeAllBlank(name).length();
+            int lengthPrice = Validation.removeAllBlank(price).length();
+            int lengthQuantity = Validation.removeAllBlank(quantity).length();
+            int lengthDescription = Validation.removeAllBlank(description).length();
 
             if (img == null) {
                 request.setAttribute("error", "Chưa chọn ảnh!");
                 request.getRequestDispatcher("managerAddOpenProduct").forward(request, response);
-            } else if (lengthName >= 2 && lengthName <= 30 && lengthDescription >= 4 && lengthDescription <= 500 && isNumeric) {
+            } else if (lengthName > 0 && lengthPrice > 0 && lengthQuantity > 0 && lengthDescription > 0) {
                 name = Validation.removeUnnecessaryBlank(name);
-                priceStr = Validation.removeAllBlank(priceStr);
-                quantityStr = Validation.removeAllBlank(quantityStr);
+                price = Validation.removeAllBlank(price);
+                quantity = Validation.removeAllBlank(quantity);
                 description = Validation.removeUnnecessaryBlank(description);
 
                 // Lấy accountId từ session
@@ -96,7 +75,7 @@ public class AddOpenProductControl extends HttpServlet {
 
                 // Thêm sản phẩm mới vào cơ sở dữ liệu
                 ProductDAO dao = new ProductDAO();
-                dao.insertProduct(name, priceStr, description, img, category, restaurantId, isSale, quantityStr,  Date.valueOf(updateDate), Date.valueOf(createDate), status);
+                dao.insertProduct(name, price, description, img, category, restaurantId, quantity,  Date.valueOf(updateDate), Date.valueOf(createDate), status);
                 request.getRequestDispatcher("managerOpenProduct").forward(request, response);
             } else {
                 request.setAttribute("error", "Nhập không hợp lệ!");

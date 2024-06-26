@@ -75,7 +75,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 4}">
-                                <li class="nav-item">
+<li class="nav-item">
                                     <a class="nav-link active" href="revenueRestaurant">
                                         <i class="fas fa-tachometer-alt"></i> Thống kê
                                         <span class="sr-only">(current)</span>
@@ -177,7 +177,7 @@
 
                     var options = {
                         title: 'Doanh thu của nhà hàng',
-                        vAxis: {title: 'VNĐ'},
+vAxis: {title: 'VNĐ'},
                         hAxis: {title: 'Tháng'},
                         seriesType: 'bars'
                     };

@@ -42,8 +42,6 @@ public class CategoryServlet extends HttpServlet {
         List<CategoryListDetail> listAllCategory = dao.getAllCategory();
         List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
         List<ListProduct> listProductP = dao.getListProductP();
-         List<Feedback> listFeedback = dao1.getFeedback();
-        request.setAttribute("listFeedback", listFeedback);
         
         request.setAttribute("listC", listAllCategory);
         request.setAttribute("listP", list);

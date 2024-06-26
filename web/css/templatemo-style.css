@@ -533,11 +533,15 @@ input[type="checkbox"]:focus {
     display: block;
 }
 .tm-upload-icon {
-    cursor: pointer;
+
+    background: #455c71;
     width: 55px;
     height: 55px;
-    border-radius: 15%;
+    border-radius: 50%;
     text-align: center;
+    padding-top: 15px;
+    font-size: 22px;
+
 }
 .tm-login-col {
     max-width: 470px;

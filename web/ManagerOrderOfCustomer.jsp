@@ -87,8 +87,7 @@
             .status-shipper-rejected {
                 color: darkred;
             }
-
-            .status-waiting-for-restaurant {
+.status-waiting-for-restaurant {
                 color: purple;
             }
 
@@ -164,8 +163,8 @@
                                 </a>
                             </li>
                         </c:if>
-                        <c:if test="${sessionScope.account.roleId == 4}">                          
-                            <li class="nav-item">
+                        <c:if test="${sessionScope.account.roleId == 4}">
+<li class="nav-item">
                                 <a class="nav-link " href="managerOpenProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang bán
                                 </a>
@@ -180,21 +179,21 @@
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                    <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
-                                    <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
-                                </a>
-                                <div class="dropdown-menu" id="dropdownMenu">
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
-                                </div>
-                            </li>
+                                    <a href="#" class="nav-link dropdown-toggle active" id="dropdownMenuLink" onclick="toggleDropdown(event)">
+                                        <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
+                                        <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                                    </a>
+                                    <div class="dropdown-menu" id="dropdownMenu">
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
+                                        <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
+                                    </div>
+                                </li>
 
                         </c:if>
 
@@ -208,8 +207,8 @@
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <c:if test = "${sessionScope.account == null}"> 
-                                <a class="nav-link d-block" href="Login.jsp">
+                            <c:if test = "${sessionScope.account == null}">
+<a class="nav-link d-block" href="Login.jsp">
                                     <b>Đăng nhập</b>
                                 </a>
                             </c:if> 
@@ -262,7 +261,7 @@
                                         <c:otherwise>status-unknown</c:otherwise>
                                     </c:choose>">
                                     <c:choose>
-                                        <c:when test="${o.orderStatusId == 1}">
+<c:when test="${o.orderStatusId == 1}">
                                             Đang chờ xác nhận của shipper
                                         </c:when>
                                         <c:when test="${o.orderStatusId == 2}">
@@ -313,7 +312,7 @@
         </script>
         <script>
             function formatPrice(price) {
-                // Chuyển đổi số tiền thành dạng chuỗi và thêm dấu phân cách phần nghìn
+// Chuyển đổi số tiền thành dạng chuỗi và thêm dấu phân cách phần nghìn
                 return price.toLocaleString('vi-VN') + ' đ';
             }
             function confirmDelete(event) {

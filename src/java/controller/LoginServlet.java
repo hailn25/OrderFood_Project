@@ -5,8 +5,6 @@
 package controller;
 
 import dao.AccountDAO;
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,12 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.Account;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
 import util.EncodePassword;
 
 /**
@@ -59,7 +52,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("email", email);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
             } else if (a.isStatus() == false) {
-                request.setAttribute("err", "Tài khoản của bạn đã bị chặn");
+                request.setAttribute("err", "Tài khoản của bạn đã bị cấm");
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
             } else {
                 if (a.getRoleId() == 2) {
@@ -81,8 +74,15 @@ public class LoginServlet extends HttpServlet {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                    request.getRequestDispatcher("revenueRestaurant").forward(request, response);
+                            request.getRequestDispatcher("revenueRestaurant").forward(request, response);
+
+                }else if (a.getRoleId() == 5) {
+                    acc.UpdateLastDateLogin(email);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("account", a);
+                    request.getRequestDispatcher("ManagerStaff.jsp").forward(request, response);
                 }
+                
             }
         }
     }

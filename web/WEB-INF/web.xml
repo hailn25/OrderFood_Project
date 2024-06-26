@@ -4,7 +4,7 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controller.LoginServlet</servlet-class>
     </servlet>
-    <servlet>
+      <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>controller.RegisterServlet</servlet-class>
     </servlet>
@@ -28,13 +28,29 @@
         <servlet-name>SearchController</servlet-name>
         <servlet-class>controller.SearchController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProfileControl</servlet-name>
+        <servlet-class>controller.ProfileControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditProfileControll</servlet-name>
+        <servlet-class>controller.EditProfileControll</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditPasswordControll</servlet-name>
+        <servlet-class>controller.EditPasswordControll</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SettingBannerControll</servlet-name>
+        <servlet-class>controller.SettingBannerControll</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertFeedbackControll</servlet-name>
+        <servlet-class>controller.InsertFeedbackControll</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -56,5 +72,28 @@
         <servlet-name>SearchController</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
-    
+        <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileControl</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProfileControll</servlet-name>
+        <url-pattern>/editProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditPasswordControll</servlet-name>
+        <url-pattern>/editPassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingBannerControll</servlet-name>
+        <url-pattern>/settingBanner</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertFeedbackControll</servlet-name>
+        <url-pattern>/insertFeedback</url-pattern>
+    </servlet-mapping>
 </web-app>
