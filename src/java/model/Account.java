@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Account {
 
-    private int accountId;
+   private int accountId;
     private String email;
     private String password;
     private String name;

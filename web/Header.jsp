@@ -5,6 +5,8 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
     <head>
         <meta charset="utf-8">
@@ -47,10 +49,13 @@
                     </div>
                     <div class="top-link pe-2">
                         <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Sign in</small></a>
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
                         </c:if> 
-                        <c:if test = "${sessionScope.account != null}"> 
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Log out</small></a>
+                        <c:if test="${sessionScope.account != null}">
+                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
+                            <small class="text-white ms-2">Hello, ${account.name}</small>
+                            <span class="text-white ms-2">|</span>
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
                         </c:if> 
                     </div>
                 </div>
@@ -64,16 +69,9 @@
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <a href="home" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="shop" class="nav-item nav-link ">Cửa hàng</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
-                                <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="Cart.jsp" class="dropdown-item">Giỏ hàng</a>
-                                    <a href="Checkout.jsp" class="dropdown-item">Thanh toán</a>
-                                    <a href="blog" class="dropdown-item">Blog</a>
-                                    <!--<a href="404.jsp" class="dropdown-item">404 Page</a>-->
-                                </div>
-                            </div>
+                            <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
+                            <a href="FlashSale.jsp" class="nav-item nav-link ">Flash Sale</a>
+                            <a href="blog" class="nav-item nav-link">Blog</a>
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">

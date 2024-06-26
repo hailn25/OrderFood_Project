@@ -12,14 +12,15 @@ import java.util.Date;
  */
 public class OrderDTO {
 
-    private  int orderId;
-    private String name;
-    private String phone;
-    private String address;
-    private String note;
-    private Date createDate;
-    private double totalMoney;
-    private String  status;
+    int orderId;
+    String name;
+    String phone;
+    String address;
+    String note;
+    Date createDate;
+    double totalMoney;
+    String  status;
+
     public OrderDTO() {
     }
 

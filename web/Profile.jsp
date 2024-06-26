@@ -86,7 +86,7 @@
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="managerProduct"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>                                      
+                                        <li class="nav-item"><a class="nav-link px-3 active" href="revenueRestaurant"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>                                      
                                         <li class="nav-item"><a class="nav-link px-3" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Thông tin cá nhân</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="ChangePasswordProfile.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Đổi mật khẩu</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" href="SettingBanner.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Setting banner</span></a></li>

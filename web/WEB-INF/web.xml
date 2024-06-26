@@ -4,7 +4,7 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controller.LoginServlet</servlet-class>
     </servlet>
-    <servlet>
+      <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>controller.RegisterServlet</servlet-class>
     </servlet>
@@ -53,10 +53,6 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
@@ -75,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>SearchController</servlet-name>
         <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProfileControl</servlet-name>

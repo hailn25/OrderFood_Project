@@ -89,20 +89,20 @@ public class FeedbackDAO {
         }
     }
 
-    public void insertReport(String description, String imageURL, String createDate, int accountId, int restaurantId, int status) throws SQLException, ClassNotFoundException {
+    public void insertReport(String description, String imageURL, String accountId, String restaurantId, String status, String createDate) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Report ([Description], [ImageURL], [AccountId], [RestaurantId],[CreateDate], [Status])\n"
+            String sql = "INSERT INTO Report ([Description], [ImageURL], [AccountId], [RestaurantId], [Status], [CreateDate])\n"
                     + "VALUES (?, ?, ?, ?, ?, ?)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, description);
             ps.setString(2, imageURL);
-            ps.setInt(3, 6);
-            ps.setInt(4, 1);
-            ps.setString(5, createDate);
-            ps.setInt(6, 1);
+            ps.setString(3, accountId);
+            ps.setString(4, restaurantId);
+            ps.setString(5, status);
+            ps.setString(6, createDate);
             ps.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -123,6 +123,6 @@ public class FeedbackDAO {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         FeedbackDAO dao = new FeedbackDAO();
-        dao.insertReport("non", "ahihi.img", "2024-06-20", 0, 0, 0);
+        dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
     }
 }

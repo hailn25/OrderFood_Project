@@ -35,7 +35,7 @@ public class ManagerShipperFinish extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         OrderDAO orderDAO = new OrderDAO();
         int od = orderDAO.getOrderID();
-     int orderStatusId = orderDAO.getOrderStatusById(od);
+
         ArrayList<OrderDTO> listOrderFinish =  orderDAO.getAllOrder(3);
         request.setAttribute("list", listOrderFinish);
         request.getRequestDispatcher("ViewOrderFinish.jsp").forward(request, response);

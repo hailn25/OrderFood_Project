@@ -84,7 +84,7 @@ public class RegisterServlet extends HttpServlet {
             String password = request.getParameter("password");
             String fullName = request.getParameter("fullname");
             String gender = request.getParameter("gender");
-//            String pass = EncodePassword.toSHA1(password);
+            String pass = EncodePassword.toSHA1(password);
             String phone = request.getParameter("phonenumber");
             String address = request.getParameter("address");
             AccountDAO acc = new AccountDAO();
@@ -129,7 +129,8 @@ public class RegisterServlet extends HttpServlet {
                     c.setMaxAge(60 * 5);
                     response.addCookie(c);
                     session.setAttribute("authenticationfor", "register");
-                    Account account = new Account(email, password, fullName, (gender.equals("Male") ? true : false), phone, address);
+                    Account account = new Account(email, pass, fullName, (gender.equals("Male") ? true : false), phone, address);
+                    session.setAttribute("email", email);
                     session.setAttribute("accregister", account);
                     request.getRequestDispatcher("Verify.jsp").forward(request, response);
                 } catch (AddressException ex) {
@@ -144,20 +145,26 @@ public class RegisterServlet extends HttpServlet {
                 for (Cookie cookie : arrCookie) {
                     if (cookie.getName().equals("codeVerify")) {
                         code += cookie.getValue();
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
                     }
 
                 }
             }
+          
             if (!codeVerify.equals(code)) {
                 request.setAttribute("err", "Code nhập không đúng");
                 request.getRequestDispatcher("Verify.jsp").forward(request, response);
             } else {
+                for (Cookie cookie : arrCookie) {
+                if (cookie.getName().equals("codeVerify")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
                 AccountDAO adao = new AccountDAO();
                 Account account = (Account) session.getAttribute("accregister");
                 adao.registerAccount(account.getEmail(), account.getPassword(), account.getName(), account.isGender(), account.getPhone(), account.getAddress());
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                session.setAttribute("registerSuccess", "true"); // Set success message
+               response.sendRedirect("Login.jsp");
 
             }
         }

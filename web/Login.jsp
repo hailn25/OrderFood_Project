@@ -12,6 +12,18 @@
         <title>Login</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <style>
+
+            body, html {
+                height: 100%;
+                margin-top:0px;
+                background-color: #81C408;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+        </style>
     </head>
     <body>
         <section class="vh-100" style="background-color: #81C408;">
@@ -21,35 +33,82 @@
                         <div class="card shadow-2-strong" style="border-radius: 1rem;">
                             <div class="card-body p-5 text-center">
 
-                                <h3 class="mb-5">Sign in</h3>
+                                <h3 class="mb-5">Đăng nhập</h3>
                                 <c:if test="${err!=null}">
-                                    <font color ="red">  ${err}</font>
+                                    <font color ="red" >  ${err}</font>
                                 </c:if>
-                                <form action="login" method="post">
+                                <form id="login_form" action="login" method="post">
                                     <div class="form-outline mb-4">
                                         <input name="email"  type="email" id="inputEmail" class="form-control" placeholder="Email" required="" autofocus="" value="${email}">
                                     </div>
 
                                     <div class="form-outline mb-4">
-                                        <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+                                        <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Mật khẩu" required="">
                                     </div>
                                     <!-- Forgot password -->
-                                    <p class="small mb-5 pb-lg-2"><a class="text-muted" href="forgetPassword.jsp">Forgot password?</a></p>
+                                    <p class="small mb-5 pb-lg-2"><a class="text-muted" href="ForgetPassword.jsp">Quên mật khẩu?</a></p>
+                                    <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>
+                                    <div style="color:red" id= "error"></div>
                                     <hr class="my-4">
 
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)" style="background-color:#81C408 ">Đăng nhập</button>
+
 
                                     <hr class="my-4">
                                 </form>
 
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force">
+                                    <button class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;"                                                                                                         >
+                                        Đăng nhập bằng Google</button></a>
+
                                 <hr class="my-4">
 
-                                <p>Don't have an account? <a href="Register.jsp" class="link-info">Register here</a></p>
+                                <p>Không có tài khoản? <a href="Register.jsp" class="link-info">Đăng ký</a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script>
+                                        window.onload = function () {
+                                            var registerSuccess = "<c:out value='${registerSuccess}' />";
+                                            if (registerSuccess === "true") {
+                                                alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            <% session.removeAttribute("registerSuccess"); %>
+                                            }
+
+                                            var passwordChangeSuccess = "<c:out value='${passwordChangeSuccess}' />";
+                                            if (passwordChangeSuccess === "true") {
+                                                alert("Mật khẩu của bạn đã được đổi thành công! Vui lòng đăng nhập.");
+            <% session.removeAttribute("passwordChangeSuccess"); %>
+                                            }
+                                        }
+
+        </script>
+        <script type="text/javascript">
+    function checkCaptcha(event) {
+        event.preventDefault(); 
+
+        var response = grecaptcha.getResponse();
+        var error = document.getElementById("error");
+
+        if (response.length === 0) { 
+            error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
+        } else {
+            document.getElementById("login_form").submit(); 
+        }
+    }
+</script>
+
     </body>
 </html>
+
+
+
+
+
+
+
+

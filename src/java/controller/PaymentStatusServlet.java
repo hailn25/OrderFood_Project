@@ -43,7 +43,7 @@ public class PaymentStatusServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String status = request.getParameter("vnp_ResponseCode");
+        String status = request.getParameter("vnp_ResponseCode");
         HttpSession session = request.getSession(true);
         String email = request.getParameter("email");
         String name = request.getParameter("name");
@@ -52,7 +52,7 @@ public class PaymentStatusServlet extends HttpServlet {
         String note = request.getParameter("note");
         String payment = request.getParameter("payment");
         String total = request.getParameter("cost");
-         request.setAttribute("note", note);
+        request.setAttribute("note", note);
         Cart cart = null;
         Object o = session.getAttribute("cart");
         if (o != null) {
@@ -214,65 +214,73 @@ public class PaymentStatusServlet extends HttpServlet {
                 } catch (AddressException ex) {
                     Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            if (status.equals("00")) {
                 
-                dao.updatePaymentStatus(oid, "Đã thanh toán");
-                response.sendRedirect("orderdetails?oid=" + oid);
-            } else {
-                response.sendRedirect("shop?order=3");
             }
-        }else{
-             String oid = (String) session.getAttribute("oid");
-             OrderDAO odao = new OrderDAO();
-             if (status.equals("00")) {
-                odao.updatePaymentStatus(Integer.parseInt(oid), "Đã hoàn lại tiền");
-                request.setAttribute("mes", "Hoàn tiền thành công");
-                request.getRequestDispatcher("refund").forward(request, response);
-            } else {
-                request.setAttribute("mes", "Hoàn tiền thất bại");
-                request.getRequestDispatcher("refund").forward(request, response);
-            }
+//            if (status.equals("00")) {
+//                
+//                dao.updatePaymentStatus(oid, "Đã thanh toán");
+//                response.sendRedirect("orderdetails?oid=" + oid);
+//            } else {
+//                response.sendRedirect("shop?order=3");
+//            }
+//        }else{
+//             String oid = (String) session.getAttribute("oid");
+//             OrderDAO odao = new OrderDAO();
+//             if (status.equals("00")) {
+//                odao.updatePaymentStatus(Integer.parseInt(oid), "Đã hoàn lại tiền");
+//                request.setAttribute("mes", "Hoàn tiền thành công");
+//                request.getRequestDispatcher("refund").forward(request, response);
+//            } else {
+//                request.setAttribute("mes", "Hoàn tiền thất bại");
+//                request.getRequestDispatcher("refund").forward(request, response);
+//            }
+//        }
+            request.getRequestDispatcher("home").forward(request, response);
         }
-    }
+        }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+        /**
+         * Handles the HTTP <code>GET</code> method.
+         *
+         * @param request servlet request
+         * @param response servlet response
+         * @throws ServletException if a servlet-specific error occurs
+         * @throws IOException if an I/O error occurs
+         */
+        @Override
+        protected void doGet
+        (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+            processRequest(request, response);
+        }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        /**
+         * Handles the HTTP <code>POST</code> method.
+         *
+         * @param request servlet request
+         * @param response servlet response
+         * @throws ServletException if a servlet-specific error occurs
+         * @throws IOException if an I/O error occurs
+         */
+        @Override
+        protected void doPost
+        (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+            processRequest(request, response);
+        }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
+    }
 
-}

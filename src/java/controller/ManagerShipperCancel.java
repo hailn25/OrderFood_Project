@@ -35,7 +35,6 @@ public class ManagerShipperCancel extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         OrderDAO orderDAO = new OrderDAO();
         int od = orderDAO.getOrderID();
-     int orderStatusId = orderDAO.getOrderStatusById(od);
         ArrayList<OrderDTO> listOrderCancel =  orderDAO.getAllOrder(5);
         request.setAttribute("list", listOrderCancel);
         request.getRequestDispatcher("ViewOrderCancel.jsp").forward(request, response);

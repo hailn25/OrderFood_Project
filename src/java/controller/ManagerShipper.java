@@ -35,7 +35,6 @@ public class ManagerShipper extends HttpServlet {
             throws ServletException, IOException {
         OrderDAO orderDAO = new OrderDAO();
         int od = orderDAO.getOrderID();
-        int orderStatusId = orderDAO.getOrderStatusById(od);
         ArrayList<OrderDTO> listOrderAccept = null;
         listOrderAccept = orderDAO.getAllOrder(1);
         request.setAttribute("list", listOrderAccept);

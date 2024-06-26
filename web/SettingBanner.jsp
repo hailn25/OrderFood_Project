@@ -15,6 +15,7 @@
         </style>
     </head>
     <body>
+    <body>
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -73,53 +74,53 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
-        function validateForm() {
-            var isValid = true;
+            function validateForm() {
+                var isValid = true;
 
-            // Reset errors
-            document.getElementById("sliderTitleError").innerHTML = "";
-            document.getElementById("backLinkError").innerHTML = "";
-            document.getElementById("createDateError").innerHTML = "";
-            document.getElementById("updateDateError").innerHTML = "";
-            document.getElementById("imageAvatarError").innerHTML = "";
+                // Reset errors
+                document.getElementById("sliderTitleError").innerHTML = "";
+                document.getElementById("backLinkError").innerHTML = "";
+                document.getElementById("createDateError").innerHTML = "";
+                document.getElementById("updateDateError").innerHTML = "";
+                document.getElementById("imageAvatarError").innerHTML = "";
 
-            // Validate sliderTitle
-            var sliderTitle = document.getElementById("sliderTitle").value.trim();
-            if (sliderTitle === "") {
-                document.getElementById("sliderTitleError").innerHTML = "Slider Title is required.";
-                isValid = false;
+                // Validate sliderTitle
+                var sliderTitle = document.getElementById("sliderTitle").value.trim();
+                if (sliderTitle === "") {
+                    document.getElementById("sliderTitleError").innerHTML = "Slider Title is required.";
+                    isValid = false;
+                }
+
+                // Validate backLink
+                var backLink = document.getElementById("backLink").value.trim();
+                if (backLink === "") {
+                    document.getElementById("backLinkError").innerHTML = "Backlink is required.";
+                    isValid = false;
+                }
+
+                // Validate createDate
+                var createDate = document.getElementById("createDate").value;
+                if (createDate === "") {
+                    document.getElementById("createDateError").innerHTML = "Create Date is required.";
+                    isValid = false;
+                }
+
+                // Validate updateDate
+                var updateDate = document.getElementById("updateDate").value;
+                if (updateDate === "") {
+                    document.getElementById("updateDateError").innerHTML = "Update Date is required.";
+                    isValid = false;
+                }
+
+                // Validate imageAvatar
+                var imageAvatar = document.getElementById("imageAvatar").value.trim();
+                if (imageAvatar === "") {
+                    document.getElementById("imageAvatarError").innerHTML = "Image URL is required.";
+                    isValid = false;
+                }
+
+                return isValid;
             }
-
-            // Validate backLink
-            var backLink = document.getElementById("backLink").value.trim();
-            if (backLink === "") {
-                document.getElementById("backLinkError").innerHTML = "Backlink is required.";
-                isValid = false;
-            }
-
-            // Validate createDate
-            var createDate = document.getElementById("createDate").value;
-            if (createDate === "") {
-                document.getElementById("createDateError").innerHTML = "Create Date is required.";
-                isValid = false;
-            }
-
-            // Validate updateDate
-            var updateDate = document.getElementById("updateDate").value;
-            if (updateDate === "") {
-                document.getElementById("updateDateError").innerHTML = "Update Date is required.";
-                isValid = false;
-            }
-
-            // Validate imageAvatar
-            var imageAvatar = document.getElementById("imageAvatar").value.trim();
-            if (imageAvatar === "") {
-                document.getElementById("imageAvatarError").innerHTML = "Image URL is required.";
-                isValid = false;
-            }
-
-            return isValid;
-        }
-    </script>
+        </script>
     </body>
 </html>

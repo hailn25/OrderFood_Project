@@ -5,15 +5,16 @@
 package controller;
 
 import dao.AccountDAO;
-import dao.OrderDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Account;
-import model.OrderAccount;
 
 /**
  *
@@ -41,15 +42,14 @@ public class ProfileControl extends HttpServlet {
         // Call DAO để lấy thông tin tài khoản dựa trên accountId
         AccountDAO accountDAO = new AccountDAO();
         Account account = accountDAO.getAccountByAId(accountId);
-        OrderDAO orderDAO = new OrderDAO();
-        OrderAccount orderAccount = orderDAO.getOrdertByAId(accountId);
 
         // Đặt thông tin tài khoản vào request attribute
         request.setAttribute("account", account);
-        request.setAttribute("orderAccount", orderAccount);
 
         // Forward request tới Profile.jsp
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);        
+        request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
