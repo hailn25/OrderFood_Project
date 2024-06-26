@@ -1,15 +1,8 @@
-<%-- 
-    Document   : Checkout
-    Created on : May 26, 2024, 3:03:05 PM
-    Author     : ADMIN
---%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="utf-8">
         <title>Fruitables - Vegetable Website Template</title>
@@ -30,21 +23,15 @@
         <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
     </head>
-
     <body>
-
-
         <jsp:include page="Header.jsp"></jsp:include>
-
             <!-- Navbar End -->
-
 
             <!-- Modal Search Start -->
             <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -65,7 +52,6 @@
             </div>
             <!-- Modal Search End -->
 
-
             <!-- Single Page Header start -->
             <div class="container-fluid page-header py-5">
                 <h1 class="text-center text-white display-6">Checkout</h1>
@@ -77,54 +63,51 @@
             </div>
             <!-- Single Page Header End -->
 
-
             <!-- Checkout Page Start -->
             <div class="container-fluid py-5">
                 <div class="container py-5">
-                    <h1 class="mb-4">Thông tin khách hàng  </h1>
+                    <h1 class="mb-4">Thông tin khách hàng</h1>
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-6 col-xl-7">
-                            <form action="submitBill" method="post">
-                                <div class="form-item">
+                            <form action="checkout1" method="post" id="checkoutForm">
+                                <div class="form-item"  style="margin-bottom: 30px">
                                     <label class="form-label my-3">Họ và Tên <sup>*</sup></label>
-                                    <input type="text" class="form-control" name="fullName" value="${account.name}">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Địa chỉ <sup>*</sup></label>
-                                <input type="text" class="form-control" name="address" value="${account.address}">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Email <sup>*</sup></label>
-                                <input type="text" class="form-control" name="email" value="${account.email}">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
-                                <input type="tel" class="form-control" name="phoneNumber" value="${account.phone}">
-                            </div>
-                           
+                                    <input type="text" class="form-control" name="fullName" value="">
+                                </div>
+                                <div class="form-item" style="margin-bottom: 30px">
+                                    Giới tính  <input type="radio" name="gender" value="Male" checked /> Nam
+                                    <input type="radio" name="gender" value="Female" /> Nữ
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label my-3">Địa chỉ <sup>*</sup></label>
+                                    <input type="text" class="form-control" name="address" value="">
+                                </div>
+                                <div class="form-item">
+                                    <label class="form-label my-3">Email <sup>*</sup></label>
+                                    <input type="text" class="form-control" name="email" value="">
+                                </div>
+                                <div class="form-item" style="margin-bottom: 30px">
+                                    <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
+                                    <input type="tel" class="form-control" name="phoneNumber" value="">
+                                </div>
+                                <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú (thêm)"></textarea>
 
-                            <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú  (thêm)"></textarea>
-
-                        </form>
-
-
-                    </div>
-                    <div class="col-md-12 col-lg-6 col-xl-5">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Products</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <c:set var="o" value="${sessionScope.cart}"/>
-                                        <c:forEach var="i" items="${o.items}">
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-5">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Products</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:set var="o" value="${sessionScope.cart}"/>
+                                    <c:forEach var="i" items="${o.items}">
                                         <tr> 
                                             <th scope="row">
                                                 <div class="d-flex align-items-center mt-2">
@@ -150,7 +133,7 @@
                                             <p class="mb-0 text-dark py-3">Subtotal</p>
                                         </td>
                                         <td class="py-5">
-                                            <div class="py-3 border-bottom border-top">
+                                            <div class="py-3 border-bottom border-top" id="subtotal">
                                                 <c:set var="subtotal" value="0"/>
                                                 <c:forEach var="i" items="${o.items}">
                                                     <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
@@ -159,85 +142,138 @@
                                             </div>
                                         </td>
                                     </tr>
-
                                     <tr>
-                                        <th scope="row">
-                                        </th>
+                                        <th scope="row"></th>
                                         <td class="py-5">
                                             <p class="mb-0 text-dark py-4">Shipping</p>
                                         </td>
                                         <td colspan="3" class="py-5">
                                             <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                                                <input type="radio" class="form-check-input bg-primary border-0" id="Shipping-1" name="shipping" value="0" onclick="updateTotal()">
                                                 <label class="form-check-label" for="Shipping-1">Free Shipping</label>
                                             </div>
                                             <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                                                <input type="radio" class="form-check-input bg-primary border-0" id="Shipping-2" name="shipping" value="15" onclick="updateTotal()">
+                                                <label class="form-check-label" for="Shipping-2">Flat rate: 15.000</label>
                                             </div>
                                             <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                                                <input type="radio" class="form-check-input bg-primary border-0" id="Shipping-3" name="shipping" value="20" onclick="updateTotal()">
+                                                <label class="form-check-label" for="Shipping-3">Local Pickup: 20.000</label>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">
-                                        </th>
+                                        <th scope="row"></th>
                                         <td class="py-5">
                                             <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
                                         </td>
                                         <td class="py-5"></td>
                                         <td class="py-5"></td>
                                         <td class="py-5">
-                                            <div class="py-3 border-bottom border-top">
-                                                <p class="mb-0 text-dark">$135.00</p>
+                                            <div class="py-3 border-bottom border-top" id="total"  >
+                                                <fmt:formatNumber  value="${subtotal}" maxFractionDigits="2"/>
                                             </div>
+                                            <!-- Hidden input to store total value -->
+                                            <input type="hidden" name="total" id="totalValue" value="${subtotal}">
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
-
                         <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
-                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
-                                    <label class="form-check-label" for="Delivery-1">Ship COD </label>
+                                    <input type="radio" class="form-check-input bg-primary border-0" id="Payment-1" id="cod" name="payment" value="cod" onclick="updatePaymentInfo('COD')" checked>
+                                    <label class="form-check-label" for="Payment-1">Thanh toán khi nhận hàng</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
-                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1" name="Paypal" value="Paypal">
-                                    <label class="form-check-label" for="Paypal-1">Chuyển khoản </label>
+                                    <input type="radio" class="form-check-input bg-primary border-0" id="vnpay" name="payment" value="vnpay" onclick="updatePaymentInfo('VNPay')>
+                                    <label class="form-check-label" for="Payment-2">Chuyển khoản</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                            <form action="checkout" method="post">
-                                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
-
-                            </form>
-
+                            <input type="hidden" name="cost" value="${subtotal}" />
+                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
                         </div>
+                        </form>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
         <!-- Checkout Page End -->
 
-
         <jsp:include page="Footer.jsp"></jsp:include>
 
+        <script>
+             function validateForm() {
+            var email = document.getElementsByName("email")[0];
+            var fullname = document.getElementsByName("name")[0];
+            var phonenumber = document.getElementsByName("phone")[0];
+            var address = document.getElementsByName("address")[0];
 
+            if (!fullname.value.trim()) {
+                document.getElementById("errorMessage").innerHTML = "Vui lòng điền tên của bạn";
+                return false;
+            }
+
+            var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!email.value.match(emailPattern)) {
+                document.getElementById("errorMessage").innerHTML = "Vui lòng nhập đúng định dạng email";
+                return false;
+            }
+
+            if (phonenumber.value.length != 10) {
+                document.getElementById("errorMessage").innerHTML = "Số điện thoại phải có 10 số";
+                return false;
+            }
+
+            if (!address.value.trim()) {
+                document.getElementById("errorMessage").innerHTML = "Vui lòng điền đúng địa chỉ";
+                return false;
+            }
+
+            return true;
+        }
+            function updateTotal() {
+                // Get the subtotal from the HTML
+                let subtotal = parseFloat(document.getElementById('subtotal').innerText.replace(/[^0-9.-]+/g, ""));
+
+                // Get the selected shipping cost
+                let shipping = parseFloat(document.querySelector('input[name="shipping"]:checked').value);
+
+                // Calculate the total
+                let total = subtotal + shipping;
+
+                // Update the total in the HTML
+                document.getElementById('total').innerText = total.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+
+                // Update the hidden input with the total value
+                document.getElementById('totalValue').value = total;
+            }
+            function updatePaymentInfo(paymentMethod) {
+            var paymentInfo = document.getElementById("paymentInfo");
+            var vnpayButton = document.getElementById("vnpay-button");
+            var codButton = document.getElementById("cod-button");
+            if (paymentMethod == 'COD') {
+                paymentInfo.innerHTML = "Nhận hàng thanh toán";
+                vnpayButton.style.display = "none";
+                codButton.style.display = "block";
+            } else if (paymentMethod == 'VNPay') {
+                paymentInfo.innerHTML = "Quý khách chuyển khoản trước";
+                vnpayButton.style.display = "block";
+                codButton.style.display = "none";
+            }
+        }
+        </script>
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
-
 
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -250,5 +286,4 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>
