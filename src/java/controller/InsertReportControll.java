@@ -72,14 +72,11 @@ public class InsertReportControll extends HttpServlet {
             throws ServletException, IOException {
         String description = request.getParameter("description");
         String imageURL = request.getParameter("imageURL");
-        String accountId = request.getParameter("accountId");
-        String restaurantId = request.getParameter("restaurantId");
-        String status = request.getParameter("status");
         String createDate = request.getParameter("createDate");
 
         try {
             FeedbackDAO dao = new FeedbackDAO();
-            dao.insertReport(description, imageURL, accountId, restaurantId, status, createDate);
+            dao.insertReport(description, imageURL, createDate, 6, 1, 1);
 
             // Set success message in request attribute
             request.setAttribute("successMessage", "Phản hồi thành công!");

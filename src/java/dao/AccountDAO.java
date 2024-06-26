@@ -124,21 +124,6 @@ public class AccountDAO {
         }
     }
 
-    public void updateAvatarAccountById(String imageAvatar, String aid) {
-        String query = "update Account\n"
-                + "  set [ImageAvatar] = ?\n"
-                + "  where AccountId = ?";
-        try {
-            conn = new DBContext().getConnection();
-
-            ps = conn.prepareStatement(query);
-
-            ps.setString(1, imageAvatar);
-            ps.setString(2, aid);
-            ps.executeUpdate();
-        } catch (Exception e) {
-        }
-    }
 
     public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
         try {

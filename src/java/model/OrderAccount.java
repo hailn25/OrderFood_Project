@@ -10,20 +10,19 @@ import java.util.Date;
  *
  * @author ADMIN
  */
-public class OrderDTO {
-
-    private  int orderId;
+public class OrderAccount {
+    private int accountId;
+    private int orderId;
     private String name;
     private String phone;
     private String address;
     private String note;
     private Date createDate;
     private double totalMoney;
-    private String  status;
-    public OrderDTO() {
-    }
+    private int status;
 
-    public OrderDTO(int orderId, String name, String phone, String address, String note, Date createDate, double totalMoney, String status) {
+    public OrderAccount(int accountId, int orderId, String name, String phone, String address, String note, Date createDate, double totalMoney, int status) {
+        this.accountId = accountId;
         this.orderId = orderId;
         this.name = name;
         this.phone = phone;
@@ -32,6 +31,17 @@ public class OrderDTO {
         this.createDate = createDate;
         this.totalMoney = totalMoney;
         this.status = status;
+    }
+
+    public OrderAccount() {
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public int getOrderId() {
@@ -90,18 +100,18 @@ public class OrderDTO {
         this.totalMoney = totalMoney;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
     @Override
     public String toString() {
-        return "OrderDTO{" + "orderId=" + orderId + ", name=" + name + ", phone=" + phone + ", address=" + address + ", note=" + note + ", createDate=" + createDate + ", totalMoney=" + totalMoney + ", status=" + status + '}';
+        return "OrderAccount{" + "accountId=" + accountId + ", orderId=" + orderId + ", name=" + name + ", phone=" + phone + ", address=" + address + ", note=" + note + ", createDate=" + createDate + ", totalMoney=" + totalMoney + ", status=" + status + '}';
     }
-
+    
     
 }

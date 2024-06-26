@@ -11,6 +11,7 @@ import model.Account;
 import model.Cart;
 import model.Item;
 import model.Order;
+import model.OrderAccount;
 import model.OrderDTO;
 import model.OrderDetailDTO;
 import model.ViewDetail;
@@ -48,8 +49,8 @@ public class OrderDAO {
         ArrayList<OrderDTO> listOrders = new ArrayList<>();
         try {
             String sql = "SELECT [Order].OrderId, [Order].Name, [Order].Phone, [Order].Address, [Order].Note, [Order].CreateDate, [Order].TotalMoney, OrderStatus.Status\n"
-                    + "FROM     [Order] INNER JOIN\n"
-                    + "                  OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId";
+                    + "FROM [Order] INNER JOIN\n"
+                    + "OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId";
 
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -70,9 +71,51 @@ public class OrderDAO {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return listOrders;
+    }
+
+    public OrderAccount getOrdertByAId(String aid) {
+        String sql = "SELECT [Order].[AccountId], [Order].OrderId, [Order].Name, [Order].Phone, [Order].Address, [Order].Note, [Order].CreateDate, [Order].TotalMoney, OrderStatus.Status\n"
+                + "FROM [Order] INNER JOIN\n"
+                + "OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                + "where [Order].AccountId = ?";
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, aid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int accountId = rs.getInt(1);
+                int orderId = rs.getInt(2);
+                String name = rs.getString(3);
+                String phone = rs.getString(4);
+                String address = rs.getString(5);
+                String note = rs.getString(6);
+                Date createDate = rs.getDate(7);
+                double totalMoney = rs.getDouble(8);
+                int status = rs.getInt(9);
+                OrderAccount oa = new OrderAccount(accountId, orderId, name, phone, address, note, createDate, totalMoney, status);
+                return oa;
+            }
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public ArrayList<OrderDTO> getAllOrder(int OrderStatusId) {
@@ -327,7 +370,6 @@ public class OrderDAO {
         }
         return listOrderDetails;
     }
- 
 
     public ViewDetail getViewDetailslByoid(int orderId) {
         ViewDetail viewDetail = new ViewDetail();
@@ -363,11 +405,7 @@ public class OrderDAO {
 
     public static void main(String[] args) {
         OrderDAO orderDAO = new OrderDAO();
-//        int orderIdToUpdate = 123;
-//        int newOrderStatusId = 2;
-//        orderDAO.updateOrderStatus(orderIdToUpdate, newOrderStatusId);
-//
-//        System.out.println("Order status updated successfully!");
+        System.out.println(orderDAO.getAllOrder());
 
     }
 }

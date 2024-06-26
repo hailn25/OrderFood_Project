@@ -51,18 +51,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="restaurantId">restaurantId</label>
-                                    <input type="text" class="form-control" id="restaurantId" name="restaurantId" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="status">Trạng thái</label>
-                                    <input type="text" class="form-control" id="status" name="status" required>
-                                </div>
-
-                                <div class="form-group">
                                     <label for="createDate">Ngày tạo</label>
-                                    <input type="text" class="form-control" id="createDate" name="createDate" required>
+                                    <input type="date" class="form-control" id="createDate" name="createDate" required>
                                 </div>
 
                                 <div class="form-group text-center">
