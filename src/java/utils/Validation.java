@@ -81,7 +81,6 @@ public class Validation {
                 return ret;
             }
         }
-
     }
     
     public static double getDouble(String mess, String errorNumberFormat, String errorOutOfRange, double min, double max) {

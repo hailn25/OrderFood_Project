@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -159,10 +160,10 @@ public class ProductDAO {
         }
     }
 
-    public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String quantity, Date createDate, Date updateDate, String status) throws SQLException {
+    public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String isSale, String quantity, Date createDate, Date updateDate, String status) throws SQLException {
         try {
-            String sql = "insert into [dbo].[Product] ([Name], [Price], [Description], [ImageURL], [CategoryId], [RestaurantId], [Quantity], [CreateDate], [UpdateDate],[Status])\n"
-                    + "values (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into [dbo].[Product] ([Name], [Price], [Description], [ImageURL], [CategoryId], [RestaurantId], [IsSale], [Quantity], [CreateDate], [UpdateDate],[Status])\n"
+                    + "values (?,?,?,?,?,?,?,?,?,?,?)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, name);
@@ -171,13 +172,23 @@ public class ProductDAO {
             ps.setString(4, img);
             ps.setString(5, category);
             ps.setInt(6, RestaurantId);
-            ps.setString(7, quantity);
-            ps.setDate(8, createDate);
-            ps.setDate(9, updateDate);
-            ps.setString(10, status);
+            ps.setString(7, isSale);
+            ps.setString(8, quantity);
+            ps.setDate(9, createDate);
+            ps.setDate(10, updateDate);
+            ps.setString(11, status);
 
             ps.executeUpdate();
         } catch (Exception ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void main(String[] args) {
+        try {
+            ProductDAO dao = new ProductDAO();
+            dao.insertProduct("16", "1", "1", "1", "1", 2, "1", "1", Date.valueOf("2024-06-23"), Date.valueOf("2024-06-23"), "1");
+        } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
