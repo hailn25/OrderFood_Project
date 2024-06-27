@@ -276,6 +276,12 @@
                 window.location.href = "Checkout_1.jsp";
             }
         }
+        
+        function handlePaymentSuccess() {
+            alert("Thanh toán thành công!");
+          
+           window.location.href = "home";
+        }
     </script>
 
     <jsp:include page="Footer.jsp"></jsp:include>
