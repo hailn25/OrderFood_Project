@@ -121,10 +121,12 @@
                                         <c:forEach items="${listRestaurantDTO}" var="r" >
                                             <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
                                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                                    <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh">
+                                                    <a href="shop?restaurantId=${r.restaurantId}">
+                                                        <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh" style="height: 80px; width: 80px; border: 2px solid black; border-radius: 8px">
+                                                    </a>
                                                 </div>
                                                 <div>
-                                                    <h6 class="mb-2">${r.name}</h6>
+                                                    <a href="shop?restaurantId=${r.restaurantId}" style="font-weight: bold;">${r.name}</a>
                                                     <div class="d-flex mb-2">
                                                         <c:forEach begin="1" end="5" var="i">
                                                             <c:choose>
@@ -165,26 +167,31 @@
                                         <div class="col-md-6 col-lg-6 col-xl-4">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
-                                                    <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
+                                                    <a href="detail?pid=${p.producId}">
+                                                        <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
+                                                    </a>
                                                 </div>
                                                 <c:if test="${p.isSale == true}">
                                                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
                                                 </c:if>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom" >
                                                     <div style="height: 80px;">
                                                         <a href="detail?pid=${p.producId}" style="color: black; font-weight: bold; font-size: 20px;">${p.name}</a>
                                                     </div>
 
-                                                    <div style="display: flex">
-                                                        <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                    <div style="display: flex; justify-content: space-between;">
+                                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>   
+                                                        <div style="display: flex;">
+                                                            <form action="addtocart" method="post" >
+                                                                <input type="hidden" name="productId" value="${p.producId}">
+                                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                </button>
+                                                            </form>
+                                                            <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                                <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                            </div>
                                                         </div>
-                                                        <form action="addtocart" method="post">
-                                                            <input type="hidden" name="productId" value="${p.producId}">
-                                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                                            </button>
-                                                        </form>
                                                     </div>
 
                                                 </div>
@@ -239,11 +246,24 @@
                 // Định dạng giá trị với dấu chấm phân tách hàng nghìn
                 var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
-                // Cập nhật nội dung hiển thị
                 amount.value = formattedValue;
                 amount.innerText = formattedValue;
             }
 
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
         </script>
     </body>
 

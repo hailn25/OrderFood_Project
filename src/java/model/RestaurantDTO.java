@@ -9,6 +9,8 @@ package model;
  * @author quoch
  */
 public class RestaurantDTO {
+
+    private int restaurantId;
     private String name;
     private String address;
     private double rateStar;
@@ -17,11 +19,20 @@ public class RestaurantDTO {
     public RestaurantDTO() {
     }
 
-    public RestaurantDTO(String name, String address, double rateStar, String imageAvatar) {
+    public RestaurantDTO(int restaurantId, String name, String address, double rateStar, String imageAvatar) {
+        this.restaurantId = restaurantId;
         this.name = name;
         this.address = address;
         this.rateStar = rateStar;
         this.imageAvatar = imageAvatar;
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public String getName() {
@@ -58,8 +69,8 @@ public class RestaurantDTO {
 
     @Override
     public String toString() {
-        return "RestaurantDTO{" + "name=" + name + ", address=" + address + ", rateStar=" + rateStar + ", imageAvatar=" + imageAvatar + '}';
+        return "RestaurantDTO{" + "restaurantId=" + restaurantId + ", name=" + name + ", address=" + address + ", rateStar=" + rateStar + ", imageAvatar=" + imageAvatar + '}';
     }
-    
 
+    
 }

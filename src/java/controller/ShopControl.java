@@ -7,7 +7,6 @@ package controller;
 import dao.FunctionShopDAO;
 import dao.ShopDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,7 +35,7 @@ public class ShopControl extends HttpServlet {
         ArrayList<Category> listAllCategory = dao.getAllCategory();
         request.setAttribute("listAllCategory", listAllCategory);
 
-        ArrayList<CategoryDTO> listTotalQuantityByCategory = dao.getTotalQuantityByCategory();
+        ArrayList<CategoryDTO> listTotalQuantityByCategory = dao.getProductQuantityByCategory();
         request.setAttribute("listTotalQuantityByCategory", listTotalQuantityByCategory);
 
         ArrayList<RestaurantDTO> listRestaurantDTO = dao.getAllRestaurantDTO();
@@ -48,6 +47,16 @@ public class ShopControl extends HttpServlet {
             request.setAttribute("listProductDTO", listProductDTO);
         }
 
+        if (request.getParameter("restaurantId") != null) {
+            try {
+                int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
+                listProductDTO = daofunction.getListProductByRestaurantId(restaurantId);
+                request.setAttribute("listProductDTO", listProductDTO);
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
         request.getRequestDispatcher("Shop.jsp").forward(request, response);
     }
 
@@ -65,7 +74,7 @@ public class ShopControl extends HttpServlet {
 
         ArrayList<ProductDTO> listProductDTO = dao.getAllProductDTO();
         request.setAttribute("listProductDTO", listProductDTO);
-        
+
         String productName = request.getParameter("productName");
         String minPriceSTR = request.getParameter("rangeInput");
 
