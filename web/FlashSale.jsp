@@ -151,35 +151,8 @@
     <body>
         <jsp:include page="Header.jsp"></jsp:include>
 
-            <div class="container-fluid py-5 mb-5 hero-header">
-                <div class="container py-5">
-                    <div class="row g-5 align-items-center">
-                        <div class="col-md-12 col-lg-7">  
-                        </div>
-                        <div class="col-md-12 col-lg-5">
-                            <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
-                                <div class="carousel-inner" role="listbox">
-                                    <div class="carousel-item active rounded">
-                                        <img src="img/hero-img-1.png" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
-                                        <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
-                                    </div>
-                                    <div class="carousel-item rounded">
-                                        <img src="img/hero-img-2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
-                                        <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
-                                    </div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="container">
+                <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
             </div>
 
             <header>
@@ -196,15 +169,7 @@
                             <span class="status"  id="status2"></span>
                         </div>
                         <!-- Khung thời gian 3 -->
-                        <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'">
-                            <span style="color: white;font-size: 30px" >08:00-14:00</span><br>
-                            <span class="status" >Ngày mai</span>
-                        </div>
-                        <!-- Khung thời gian 4 -->
-                        <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
-                            <span style="color: white;font-size: 30px" >18:00-22:00</span><br>
-                            <span class="status" >Ngày mai</span>
-                        </div>
+
                         <div class="col-md-3">
                             <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
                             <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
@@ -245,7 +210,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </c:forEach>
 
                                 </div>
@@ -272,6 +236,7 @@
             selectedTimeSlot = getParamFromURL("timeFrame");
 
 
+            // Hàm để cập nhật trạng thái và đếm ngược
             // Hàm để cập nhật trạng thái và đếm ngược
             function updateStatusAndCountdown() {
                 // Lấy thời gian hiện tại
@@ -322,56 +287,16 @@
                 for (var i = 0; i < timeSlots.length; i++) {
                     timeSlots[i].classList.remove('selected');
                 }
+
+                // Tính toán thời gian đếm ngược đến 8h sáng ngày mai
                 var countdown = new Date(now);
-
-                if (selectedTimeSlot !== null) {
-                    document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
-                    timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
-                    if (selectedTimeSlot === '1') {
-                        countdown.setHours(8, 0, 0, 0);
-                    }
-                    if (selectedTimeSlot === '2' && hour < 18) {
-                        status = 'Sắp diễn ra';
-                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                        countdown.setHours(18, 0, 0, 0);
-                    }
-                    if (selectedTimeSlot === '3') {
-                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                        countdown.setHours(8 + 24, 0, 0, 0);
-                        status = 'Sắp diễn ra';
-                    }
-                    if (selectedTimeSlot === '4') {
-                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                        countdown.setHours(18 + 24, 0, 0, 0);
-                        status = 'Sắp diễn ra';
-                    }
-                } else {
-                    timeSlot.classList.add('selected');
+                if (hour >= 8) {
+                    countdown.setDate(countdown.getDate() + 1); // Chuyển sang ngày mai
                 }
+                countdown.setHours(8, 0, 0, 0);
 
-                // Cập nhật đếm ngược
-                var itemsSale = document.querySelectorAll('.showP');
-                var hidden = document.querySelectorAll('.hideP');
-                if (status === 'Sắp diễn ra') {
-                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 8 : 18, 0, 0, 0);
-                    if (timeSlot === document.getElementById('timeSlot3')) {
-                        countdown.setHours(8 + 24, 0, 0, 0);
-                    }
-                    if (timeSlot === document.getElementById('timeSlot4')) {
-                        countdown.setHours(18 + 24, 0, 0, 0);
-                    }
-                    for (var i = 0; i < itemsSale.length; i++) {
-                        itemsSale[i].style.display = 'none';
-                    }
-                } else {
-                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 14 : 22, 0, 0, 0);
-                    for (var i = 0; i < hidden.length; i++) {
-                        hidden[i].style.display = 'none';
-                    }
-                }
-
+                // Cập nhật và hiển thị đếm ngược
                 var countdownElement = document.getElementById('time');
-
                 var countdownTime = countdown - now;
 
                 var hours = Math.floor((countdownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -382,13 +307,12 @@
                 minutes = String(minutes).padStart(2, '0');
                 seconds = String(seconds).padStart(2, '0');
 
-                if ((selectedTimeSlot === '3' && hour < 8) || (selectedTimeSlot === '4' && hour < 18)) {
-                    countdownElement.textContent = '1 ngày ' + hours + ": " + minutes + ": " + seconds;
-                } else {
-                    countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
-                }
+                countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
             }
+
+// Tự động cập nhật đếm ngược mỗi giây
             setInterval(updateStatusAndCountdown, 1000);
+
 
             document.addEventListener('DOMContentLoaded', function () {
                 const prices = document.querySelectorAll('[id^="price-"]');

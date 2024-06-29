@@ -56,13 +56,8 @@
 
 
             <!-- Single Page Header start -->
-            <div class="container-fluid page-header py-5">
-                <h1 class="text-center text-white display-6">Chi tiết sản phẩm </h1>
-                <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="home" style="color: white">Home</a></li>
-                    <!--                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                                        <li class="breadcrumb-item active text-white">Shop Detail</li>-->
-                </ol>
+            <div class="container">
+                <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
             </div>
             <!-- Single Page Header End -->
 
@@ -108,59 +103,48 @@
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-lg-12">
-                                <nav>
-                                    <div class="nav nav-tabs mb-3">
-                                        <button class="nav-link active border-white border-bottom-0" type="button" role="tab"
-                                                id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
-                                                aria-controls="nav-about" aria-selected="true">Description</button>
-                                        <button class="nav-link border-white border-bottom-0" type="button" role="tab"
-                                                id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
-                                                aria-controls="nav-mission" aria-selected="false">Reviews</button>
-                                    </div>
-                                </nav>
-                                <div class="tab-content mb-5">
-                                    <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
-                                        <p>${detail.decription}</p>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                    <!-- Single Product End -->
+        <!-- Single Product End -->
 
 
-                                    <!-- Footer Start -->
+        <!-- Footer Start -->
 
-                                    <jsp:include page="Footer.jsp"></jsp:include>
-                                    <!-- Footer End -->
-                                    <!-- Back to Top -->
-                                    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+        <jsp:include page="Footer.jsp"></jsp:include>
+        <!-- Footer End -->
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-                                    <!-- JavaScript Libraries -->
-                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                                    <script src="lib/easing/easing.min.js"></script>
-                                    <script src="lib/waypoints/waypoints.min.js"></script>
-                                    <script src="lib/lightbox/js/lightbox.min.js"></script>
-                                    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <!-- JavaScript Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/waypoints/waypoints.min.js"></script>
+        <script src="lib/lightbox/js/lightbox.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-                                    <!-- Template Javascript -->
-                                    <script src="js/main.js"></script>
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            const prices = document.querySelectorAll('[id^="price-"]');
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
 
-                                            prices.forEach(priceElement => {
-                                                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                                                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                                                // Định dạng giá thành VND
-                                                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
 
-                                                // Cập nhật nội dung của thẻ h6
-                                                priceElement.textContent = formattedPrice + " VNĐ";
-                                            });
-                                        });
-                                    </script>
-                                    </body>
-                                    </html>
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
+        </script>
+    </body>
+</html>

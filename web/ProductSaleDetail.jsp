@@ -56,13 +56,8 @@
 
 
             <!-- Single Page Header start -->
-            <div class="container-fluid page-header py-5">
-                <h1 class="text-center text-white display-6">Chi tiết sản phẩm </h1>
-                <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="home" style="color: white">Home</a></li>
-                    <!--                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                                        <li class="breadcrumb-item active text-white">Shop Detail</li>-->
-                </ol>
+            <div class="container">
+                <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
             </div>
             <!-- Single Page Header End -->
 
@@ -109,6 +104,12 @@
                                     </button>
                                 </form>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
 
