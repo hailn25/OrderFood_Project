@@ -75,29 +75,31 @@
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">
-                            
                             <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <i class="fas fa-search text-primary"></i>
                             </button>
 
-                          <c:set value="${sessionScope.size}" var="size"></c:set>
-                            <a href="Cart.jsp" class="position-relative me-4 my-auto">
-                                <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
-                            </a>
-                            <a href="profile" class="my-auto" >
-                                <i class="fas fa-user fa-2x"></i>
+                            <c:set value="${sessionScope.size}" var="size"></c:set>
+                                <a href="Cart.jsp" class="position-relative me-4 my-auto">
+                                    <i class="fa fa-shopping-bag fa-2x"></i>
+                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
                             </a>
 
+                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
+                            <c:if test="${not empty sessionScope.account}">
+                                <a href="profile" class="my-auto">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </a>
+                            </c:if>
                         </div>
                     </div>
                 </nav>
             </div>
         </div>
         <!-- Navbar End -->
-    <!-- Modal Search Start -->
-     
-            <!-- Modal Search End -->
+        <!-- Modal Search Start -->
+
+        <!-- Modal Search End -->
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

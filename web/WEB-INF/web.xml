@@ -4,7 +4,7 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controller.LoginServlet</servlet-class>
     </servlet>
-      <servlet>
+    <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>controller.RegisterServlet</servlet-class>
     </servlet>
@@ -48,6 +48,10 @@
         <servlet-name>InsertFeedbackControll</servlet-name>
         <servlet-class>controller.InsertFeedbackControll</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OrderHistoryServlet</servlet-name>
+        <servlet-class>controller.OrderHistoryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -72,7 +76,7 @@
         <servlet-name>SearchController</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
@@ -95,5 +99,9 @@
     <servlet-mapping>
         <servlet-name>InsertFeedbackControll</servlet-name>
         <url-pattern>/insertFeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderHistoryServlet</servlet-name>
+        <url-pattern>/orderHistory</url-pattern>
     </servlet-mapping>
 </web-app>

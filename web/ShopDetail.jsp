@@ -87,7 +87,7 @@
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${detail.name}</h4>
                                 <p class="mb-3">Category: ${detail.categoryName}</p>
-                                <h5 class="fw-bold mb-3">${detail.price}</h5>
+                                <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
                                 <div class="d-flex mb-4" id="star-rating">
                                     <!-- Các ngôi sao sẽ được thêm động bởi JavaScript -->
                                 </div>
@@ -201,30 +201,25 @@
                         <div class="row g-4 fruite">
                             <div class="col-lg-12">
                                 <h4 class="mb-4">Sản phẩm nổi bật</h4>
-                                <c:forEach var="listProductSale" items="${listProductSale}">
-                                    <div class="d-flex align-items-center justify-content-start mb-4">
-                                        <div class="rounded" style="width: 100px; height: 100px;">
-                                            <img src="img/${listProductSale.image}" class="img-fluid rounded" alt="${listProductSale.name}">
-                                        </div>
-                                        <div class="ms-3">
-                                            <h6 class="mb-2">${listProductSale.name}</h6>
-                                            <div class="d-flex mb-2">
-                                                <c:forEach begin="1" end="5" varStatus="status">
-                                                    <i class="fa fa-star ${status.index <= listProductSale.rateStar ? 'text-secondary' : ''}"></i>
-                                                </c:forEach>
+                                <div id="productList">
+                                    <c:forEach var="listProductByIsSale" items="${listProductByIsSale}" varStatus="loop">
+                                        <div class="product-item d-flex align-items-center justify-content-start mb-4" style="display: ${loop.index < 2 ? 'block' : 'none'};">
+                                            <div class="rounded" style="width: 100px; height: 100px;">
+                                                <img src="img/${listProductByIsSale.image}" class="img-fluid rounded" alt="${listProductByIsSale.name}">
                                             </div>
-                                            <div class="d-flex mb-2">
-                                                <h5 class="fw-bold me-2">${listProductSale.salePrice} $</h5>
-                                                <h5 class="text-danger text-decoration-line-through">${listProductSale.discount} $</h5>
+                                            <div class="ms-3">
+                                                <h6 class="mb-2">${listProductByIsSale.name}</h6>
+                                                <div class="d-flex mb-2">
+                                                    <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${listProductByIsSale.id}">${listProductByIsSale.price}</h5>
+                                                    <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center;font-family: sans-serif;" id="price-${listProductByIsSale.id}">
+                                                        <c:out value="${listProductByIsSale.price * 1.11111111}"/>
+                                                    </h5>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </c:forEach>
-                                <div class="d-flex justify-content-center my-4">
-                                    <a href="#" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem thêm </a>
+                                    </c:forEach>
                                 </div>
                             </div>
-
                             <div class="col-lg-12">
                                 <div class="position-relative">
                                     <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
@@ -300,6 +295,22 @@
                     }
                     starContainer.appendChild(star);
                 }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
         </script>
     </body>
 

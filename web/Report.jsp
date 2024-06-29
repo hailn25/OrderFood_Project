@@ -34,15 +34,10 @@
                             </div>
                             <% } %>
 
-                            <form action="insertReport" method="POST">
+                            <form action="insertReport" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="description">Mô tả</label>
                                     <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="imageURL">imageURL</label>
-                                    <input type="text" class="form-control" id="imageURL" name="imageURL" required>
                                 </div>
 
                                 <div class="form-group">
@@ -61,8 +56,18 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="createDate">Ngày tạo</label>
-                                    <input type="text" class="form-control" id="createDate" name="createDate" required>
+                                    <label for="date">Date:</label>
+                                    <input type="text" class="form-control" id="displayDate" readonly>
+                                    <input type="hidden" id="date" name="date">
+                                </div>
+
+                                <div class="custom-file mt-3 mb-3">
+                                    <input id="imageURL" name="imageURL" type="file" class="custom-file-input" onchange="previewImage(event)" required>
+                                    <label class="custom-file-label" for="fileInput">Chọn ảnh</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <img id="imagePreview" src="#" style="display: none; max-height: 300px;">
                                 </div>
 
                                 <div class="form-group text-center">
@@ -76,44 +81,66 @@
                 </div>
             </div>
         </div>
-
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
-            document.getElementById('reportForm').addEventListener('submit', function (event) {
-                // Kiểm tra các trường nhập liệu
-                var description = document.getElementById('description').value.trim();
-                var imageURL = document.getElementById('imageURL').value.trim();
-                var restaurantId = document.getElementById('restaurantId').value.trim();
-                var status = document.getElementById('status').value.trim();
-                var createDate = document.getElementById('createDate').value.trim();
+                                        document.getElementById('reportForm').addEventListener('submit', function (event) {
+                                            // Kiểm tra các trường nhập liệu
+                                            var description = document.getElementById('description').value.trim();
+                                            var imageURL = document.getElementById('imageURL').value.trim();
+                                            var restaurantId = document.getElementById('restaurantId').value.trim();
+                                            var status = document.getElementById('status').value.trim();
+                                            var createDate = document.getElementById('createDate').value.trim();
 
-                var errorMessage = "";
+                                            var errorMessage = "";
 
-                // Kiểm tra từng trường có bị bỏ trống không
-                if (description === "") {
-                    errorMessage += "Mô tả không được để trống.\n";
-                }
-                if (imageURL === "") {
-                    errorMessage += "imageURL không được để trống.\n";
-                }
-                if (restaurantId === "") {
-                    errorMessage += "Restaurant ID không được để trống.\n";
-                }
-                if (status === "") {
-                    errorMessage += "Trạng thái không được để trống.\n";
-                }
-                if (createDate === "") {
-                    errorMessage += "Ngày tạo không được để trống.\n";
-                }
+                                            // Kiểm tra từng trường có bị bỏ trống không
+                                            if (description === "") {
+                                                errorMessage += "Mô tả không được để trống.\n";
+                                            }
+                                            if (imageURL === "") {
+                                                errorMessage += "imageURL không được để trống.\n";
+                                            }
+                                            if (restaurantId === "") {
+                                                errorMessage += "Restaurant ID không được để trống.\n";
+                                            }
+                                            if (status === "") {
+                                                errorMessage += "Trạng thái không được để trống.\n";
+                                            }
+                                            if (createDate === "") {
+                                                errorMessage += "Ngày tạo không được để trống.\n";
+                                            }
 
-                // Nếu có lỗi, ngăn không submit form và hiển thị thông báo lỗi
-                if (errorMessage !== "") {
-                    alert(errorMessage);
-                    event.preventDefault(); // Ngăn không submit form
+                                            // Nếu có lỗi, ngăn không submit form và hiển thị thông báo lỗi
+                                            if (errorMessage !== "") {
+                                                alert(errorMessage);
+                                                event.preventDefault(); // Ngăn không submit form
+                                            }
+                                        });
+        </script>
+        <script>
+            function previewImage(event) {
+                var input = event.target;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var dataURL = reader.result;
+                    var output = document.getElementById('imagePreview');
+                    output.src = dataURL;
+                    output.style.display = 'block'; // Hiển thị ảnh mới
+                };
+                if (input.files && input.files[0]) {
+                    reader.readAsDataURL(input.files[0]);
                 }
-            });
+            }
+
+
+            window.onload = function () {
+                var dateInput = document.getElementById('date');
+                var displayDateInput = document.getElementById('displayDate');
+                var currentDate = new Date().toISOString().split('T')[0];
+                dateInput.value = currentDate;
+                displayDateInput.value = currentDate;
+            }
         </script>
     </body>
 </html>

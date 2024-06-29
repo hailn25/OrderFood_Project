@@ -50,7 +50,7 @@
                             </div>
                             <% } %>
 
-                            <form action="insertFeedback" method="post">
+                            <form action="insertFeedback" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="rateStar">Rate Star:</label>
                                     <input type="text" class="form-control" id="rateStar" name="rateStar">
@@ -59,11 +59,6 @@
                                 <div class="form-group">
                                     <label for="feedback">Feedback:</label>
                                     <textarea class="form-control" id="feedback" name="feedback" rows="4"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="imageURL">Image URL:</label>
-                                    <input type="text" class="form-control" id="imageURL" name="imageURL">
                                 </div>
 
                                 <div class="form-group">
@@ -78,8 +73,19 @@
 
                                 <div class="form-group">
                                     <label for="date">Date:</label>
-                                    <input type="text" class="form-control" id="date" name="date">
+                                    <input type="text" class="form-control" id="displayDate" readonly>
+                                    <input type="hidden" id="date" name="date">
                                 </div>
+
+                                <div class="custom-file mt-3 mb-3">
+                                    <input id="imageURL" name="imageURL" type="file" class="custom-file-input" onchange="previewImage(event)" required>
+                                    <label class="custom-file-label" for="fileInput">Chọn ảnh</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <img id="imagePreview" src="#" style="display: none; max-height: 300px;">
+                                </div>
+
                                 <a href="OrderHistory.jsp" class="btn btn-secondary mr-2">Quay lại</a>
                                 <button type="submit" class="btn btn-primary">Submit Feedback</button>
                             </form>
@@ -91,5 +97,30 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <script>
+                                        function previewImage(event) {
+                                            var input = event.target;
+                                            var reader = new FileReader();
+                                            reader.onload = function () {
+                                                var dataURL = reader.result;
+                                                var output = document.getElementById('imagePreview');
+                                                output.src = dataURL;
+                                                output.style.display = 'block'; // Hiển thị ảnh mới
+                                            };
+                                            if (input.files && input.files[0]) {
+                                                reader.readAsDataURL(input.files[0]);
+                                            }
+                                        }
+
+                                        // Set the current date in the hidden date input field
+                                        window.onload = function () {
+                                            var dateInput = document.getElementById('date');
+                                            var displayDateInput = document.getElementById('displayDate');
+                                            var currentDate = new Date().toISOString().split('T')[0];
+                                            dateInput.value = currentDate;
+                                            displayDateInput.value = currentDate;
+                                        }
+        </script>
     </body>
 </html>

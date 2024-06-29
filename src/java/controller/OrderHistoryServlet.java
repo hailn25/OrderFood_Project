@@ -4,26 +4,22 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductDAO;
-import dao.ProductHomeDAO;
+import dao.ListOrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.Product;
-import model.ProductHome;
+import model.ListOrder;
 
 /**
  *
  * @author ADMIN
  */
-public class DetailServlet extends HttpServlet {
+public class OrderHistoryServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,39 +33,20 @@ public class DetailServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String id = request.getParameter("pid");
-        String fId = request.getParameter("ProductID");
-        String isSale = request.getParameter("isSale");
 
-        // Fetch the product details
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO fb = new FeedbackDAO();
-        ProductHome p = dao.getProductById(id);
+        HttpSession session = request.getSession();
+        String accountId = (String) session.getAttribute("account");
 
-        // Fetch the category ID from the product details
-        int categoryId = p.getCategoryId();
+        if (accountId == null || accountId.isEmpty()) {
+            response.sendRedirect("Login.jsp"); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+            return;
+        }
 
-        // Fetch products from the same category
-        List<ProductHome> listSameCategoryProducts = dao.getProductByCategoryId(categoryId);
-        List<ProductHome> listProductByIsSale = dao.getProductByIsSale();
+        ListOrderDAO dao = new ListOrderDAO();
+        List<ListOrder> orders = dao.getListOrderById(accountId);
 
-        // Fetch other necessary details    
-        List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-
-        // Fetch feedback for the product
-        List<Feedback> listFeedback = fb.getFeedbackByProductId(Integer.parseInt(id));
-
-        // Set attributes for the request
-        request.setAttribute("detail", p);
-        request.setAttribute("listSameCategoryProducts", listSameCategoryProducts);
-        request.setAttribute("listCategoryListDetail", listCategoryListDetail);
-        request.setAttribute("listProductByIsSale", listProductByIsSale);
-        request.setAttribute("listBSL", listBestSellerProduct);
-        request.setAttribute("reviews", listFeedback); // Add this line to set feedback
-
-        // Forward the request to the JSP page
-        request.getRequestDispatcher("ShopDetail.jsp").forward(request, response);
+        request.setAttribute("orders", orders);
+        request.getRequestDispatcher("OrderHistory.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

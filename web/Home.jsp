@@ -119,6 +119,9 @@
                 animation-timeline: view();
                 animation-range: entry 0% cover 40%;
             }
+
+
+
         </style>
     </head>
 
@@ -186,15 +189,16 @@
                                 <h1>Danh mục sản phẩm</h1>
                             </div>
                             <div class="col-lg-8 text-end">
-                                <ul class="nav nav-pills d-inline-flex text-center mb-5">
-                                <c:forEach items="${listC}" var="c">
-                                    <li class="nav-item">
-                                        <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
-                                            <a class="text-dark" style="width: 130px;" href="category?cid=${c.id}">${c.name}</a>
+                                <ul class="nav nav-pills d-inline-flex text-center mb-5" id="categoryList">
+                                <c:forEach items="${listC}" var="c" varStatus="status">
+                                    <li class="nav-item category-item" style="<c:if test='${status.index >= 4}'>display:none;</c:if>">
+                                            <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
+                                                <a class="text-dark" style="width: 130px;" href="category?cid=${c.id}">${c.name}</a>
                                         </div>
                                     </li>
                                 </c:forEach>
                             </ul>
+                            <button class="btn btn-primary" id="toggleButton" onclick="toggleCategories()">Xem thêm</button>
                         </div>
                     </div>
                 </div>
@@ -202,9 +206,9 @@
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
                             <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <c:forEach items="${listP}" var="p">
-                                        <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
+                                <div class="row g-4" id="product-container">
+                                    <c:forEach items="${listP}" var="p" varStatus="status">
+                                        <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
                                                     <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
@@ -216,11 +220,15 @@
                                                     </h4>
                                                     <p>${p.restaurantName}</p>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">${p.price}</p>
+                                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6> 
                                                         <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
                                                             <input type="hidden" name="productId" value="${p.id}">
-                                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary w-100">
-                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng</button>
+                                                            <form action="addtocart" method="post" >
+                                                                <input type="hidden" name="productId" value="${p.id}">
+                                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                </button>
+                                                            </form>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -228,6 +236,10 @@
                                         </div>
                                     </c:forEach>
                                 </div>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <button class="btn btn-primary px-4 py-2" id="load-more-btn" onclick="toggleProducts()">Xem thêm</button>
+                                <button class="btn btn-secondary px-4 py-2 d-none" id="show-less-btn" onclick="toggleProducts()">Thu gọn</button>
                             </div>
                         </div>
                     </div>
@@ -252,11 +264,11 @@
                                     <p class="truncate-description">${v.decription}</p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <p class="text-dark fs-5 fw-bold mb-0">${v.price}</p>
-                                    <form action="addtocart" method="post">
-                                        <input type="hidden" name="productId" value="${v.id}">
-                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                    <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${v.id}">${v.price}</h6>
+                                    <form action="addtocart" method="post" >
+                                        <input type="hidden" name="productId" value="${p.id}">
+                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -294,11 +306,14 @@
                                                 <i class="fas fa-star"></i>
                                             </c:forEach>
                                         </div>
-                                        <h4 class="mb-3">${b.price}</h4>
-                                        <form id="${b.id}" onsubmit="addToCart(${b.id}); return false;">
-                                            <input type="hidden" name="productId" value="${p.id}">
-                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary w-100">
-                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng</button>
+                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${b.id}">${b.price}</h6>
+                                        <form id="${b.id}" onsubmit="addToCart(${b.id});return false;">
+                                            <form action="addtocart" method="post" >
+                                                <input type="hidden" name="productId" value="${p.id}">
+                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                </button>
+                                            </form>
                                         </form>
                                     </div>
                                 </div>
@@ -308,122 +323,97 @@
                 </div>
             </div>
         </div>
-        <!-- Bestsaler Product End -->
+        <script>
+            function toggleCategories() {
+                var items = document.getElementsByClassName('category-item');
+                var button = document.getElementById('toggleButton');
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].style.display === "none") {
+                        items[i].style.display = "inline-flex";
+                    } else if (i >= 4) {
+                        items[i].style.display = "none";
+                    }
+                }
+                if (button.innerText === "Xem thêm") {
+                    button.innerText = "Thu gọn";
+                } else {
+                    button.innerText = "Xem thêm";
+                }
+            }
+        </script>
+        <script>
+            function addToCart(productId) {
+                var xhr = new XMLHttpRequest();
+                var url = "addtocart";
 
 
-
-        <!--         Fact Start 
-                <div class="container-fluid py-5">
-                    <div class="container">
-                        <div class="bg-light p-5 rounded">
-                            <div class="row g-4 justify-content-center">
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>satisfied customers</h4>
-                                        <h1>1963</h1>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>quality of service</h4>
-                                        <h1>99%</h1>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>quality certificates</h4>
-                                        <h1>33</h1>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>Available Products</h4>
-                                        <h1>789</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 Fact Start -->
+                xhr.open("POST", url, true);
 
 
-        <!-- Tastimonial Start -->
-        <div class="container-fluid testimonial py-5">
-            <div class="container py-5">
-                <div class="testimonial-header text-center">
-                    <h4 class="text-primary">Phản hồi</h4>
-                    <h1 class="display-5 mb-5 text-dark">Họ nói gì về chúng tôi!</h1>
-                </div>
-                <div class="owl-carousel testimonial-carousel">
-                    <c:forEach items="${listFeedback}" var="listFeedback">
-                        <div class="testimonial-item img-border-radius bg-light rounded p-4" >
-                            <div class="position-relative" >
-                                <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
-                                <div class="mb-4 pb-4 border-bottom border-secondary">
-                                    <p class="mb-0">${listFeedback.feedback}</p>
-                                </div>
-                                <div class="d-flex align-items-center flex-nowrap">
-                                    <div class="bg-secondary rounded">
-                                        <img src="img/${listFeedback.avatar}" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
-                                    </div>
-                                    <div class="ms-4 d-block">
-                                        <h4 class="text-dark">${listFeedback.name}</h4>
-                                        <p class="m-0 pb-3">${listFeedback.nameProduct}</p>
-                                        <div class="d-flex pe-5">
-                                            <c:forEach begin="1" end="${Math.floor(listFeedback.rateStar)}" var="star">
-                                                <i class="fas fa-star text-primary"></i>
-                                            </c:forEach>
-                                            <c:if test="${listFeedback.rateStar % 1 != 0}">
-                                                <i class="fas fa-star-half-alt text-primary"></i>
-                                            </c:if>
-                                            <c:forEach begin="1" end="${Math.floor(5 - listFeedback.rateStar)}" var="star">
-                                                <i class="fas fa-star"></i>
-                                            </c:forEach>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 10000) {
 
-            </div>
-        </div>
-        <!-- Tastimonial End -->
+                        alert("Đã thêm vào giỏ hàng thành công!");
+                    } else {
+                        // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
+                        alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+                    }
+                };
+
+
+                xhr.onerror = function () {
+                    alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+                };
+
+                // Gửi yêu cầu với dữ liệu sản phẩm
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("productId=" + productId);
+            }
+        </script>
 
         <script>
-             function addToCart(productId) {
-        var xhr = new XMLHttpRequest();
-        var url = "addtocart";
-        
-       
-        xhr.open("POST", url, true);
-        
-      
-        xhr.onload = function() {
-            if (xhr.status >= 200 && xhr.status < 10000) {
-               
-                alert("Đã thêm vào giỏ hàng thành công!");
-            } else {
-                // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
-                alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+            function toggleProducts() {
+                const hiddenItems = document.querySelectorAll('.product-item.d-none');
+                const loadMoreBtn = document.getElementById('load-more-btn');
+                const showLessBtn = document.getElementById('show-less-btn');
+
+                if (hiddenItems.length > 0) {
+                    // Show more items
+                    for (let i = 0; i < 8 && i < hiddenItems.length; i++) {
+                        hiddenItems[i].classList.remove('d-none');
+                    }
+
+                    // Hide the "Xem thêm" button if all items are shown
+                    if (document.querySelectorAll('.product-item.d-none').length === 0) {
+                        loadMoreBtn.classList.add('d-none');
+                        showLessBtn.classList.remove('d-none');
+                    }
+                } else {
+                    // Hide items back
+                    const items = document.querySelectorAll('.product-item');
+                    for (let i = 8; i < items.length; i++) {
+                        items[i].classList.add('d-none');
+                    }
+                    loadMoreBtn.classList.remove('d-none');
+                    showLessBtn.classList.add('d-none');
+                }
             }
-        };
-        
-        
-        xhr.onerror = function() {
-            alert("Đã xảy ra lỗi khi gửi yêu cầu.");
-        };
-        
-        // Gửi yêu cầu với dữ liệu sản phẩm
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.send("productId=" + productId);
-    }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
         </script>
 
         <jsp:include page="Footer.jsp"></jsp:include>

@@ -5,10 +5,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+
+@MultipartConfig
 public class SettingBannerControll extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -39,14 +46,22 @@ public class SettingBannerControll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String sliderTitle = request.getParameter("sliderTitle");
-        String imageAvatar = request.getParameter("imageAvatar");
         String createDate = request.getParameter("createDate");
         String updateDate = request.getParameter("updateDate");
         String backLink = request.getParameter("backLink");
 
+        Part filePart = request.getPart("imageAvatar");
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        InputStream fileContent = filePart.getInputStream();
+
+        String imagePath = fileName; // Define your upload directory
+
         try {
+            // Save the file to the server
+            Files.copy(fileContent, Paths.get(getServletContext().getRealPath("/") + imagePath));
+
             SliderDAO dao = new SliderDAO();
-            dao.insertSlider(sliderTitle, imageAvatar, 1, 1, 2, createDate, updateDate, backLink);
+            dao.insertSlider(sliderTitle, imagePath, 1, 1, 2, createDate, updateDate, backLink);
 
             // If insertion is successful, set a success message
             request.setAttribute("message", "Insert successful.");
@@ -59,6 +74,7 @@ public class SettingBannerControll extends HttpServlet {
             request.getRequestDispatcher("SettingBanner.jsp").forward(request, response);
         }
     }
+
 
     @Override
     public String getServletInfo() {
