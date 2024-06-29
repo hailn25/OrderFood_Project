@@ -62,7 +62,7 @@
         <!-- Modal Search End -->
 
         <!-- Fruits Shop Start-->
-        <div class="container-fluid fruite py-5">
+        <div class="container-fluid fruite py-5" style="margin-top: 100px">
             <div class="container py-5">
                 <h1 class="mb-4">Tìm kiếm</h1>
 
@@ -78,13 +78,25 @@
                                         <input type="search" class="form-control p-3" placeholder="Tên đồ ăn, đồ uống,..." aria-describedby="search-icon-1" name="productName" required="" value="${productName}">
                                         <button id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                                     </div>
-
-                                    <div class="mb-3" style="margin: 10px">
-                                        <h4 class="mb-2">Giá sản phẩm</h4>
-                                        <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000" value="0" oninput="updateAmount()">
-                                        <output id="amount" name="amount" min-velue="0" max-value="1000" for="rangeInput">0 VND - 1.000.000 VND</output>
-                                    </div>
                                 </form>
+                                <form id="rangeForm" action="shop" method="POST" style="display: none;">
+                                    <input type="hidden" id="hiddenRangeInput" name="rangeValue">
+                                </form>
+                                <div class="mb-3" style="margin: 10px">
+                                    <h4 class="mb-2">Giá sản phẩm</h4>
+                                    <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000" value="${not empty minPrice ? minPrice : 0}" oninput="updateAmount()" onchange="submitForm()">
+                                    <output id="amount" name="amount" min-value="0" max-value="1000" for="rangeInput">
+                                        <c:choose>
+                                            <c:when test="${not empty minPrice}">
+                                                <span id="formattedMinPrice"></span> - 1.000.000 VND
+                                            </c:when>
+                                            <c:otherwise>
+                                                0 VND - 1.000.000 VND
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </output>
+                                </div>
+
                             </div>
                             <div class="col-6"></div>
                             <!--                            <div class="col-xl-3">
@@ -161,57 +173,65 @@
                                 </div>
                             </div>
                             <div class="col-lg-9">
-                                <div class="row g-4 justify-content-center">
+                                <c:choose>
+                                    <c:when test="${not empty listProductDTO}">
+                                        <div class="row g-4 justify-content-center">
+                                            <c:forEach items="${listProductDTO}" var="p">
+                                                <c:if test="${p.quantity >= 1}">
+                                                    <div class="col-md-6 col-lg-6 col-xl-4">
+                                                        <div class="rounded position-relative fruite-item">
+                                                            <div class="fruite-img">
+                                                                <a href="detail?pid=${p.producId}">
+                                                                    <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
+                                                                </a>
+                                                            </div>
+                                                            <c:if test="${p.isSale == true}">
+                                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
+                                                            </c:if>
+                                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom" >
+                                                                <div style="height: 80px;">
+                                                                    <a href="detail?pid=${p.producId}" style="color: black; font-weight: bold; font-size: 20px;">${p.name}</a>
+                                                                </div>
 
-                                    <c:forEach items="${listProductDTO}" var="p">
-                                        <div class="col-md-6 col-lg-6 col-xl-4">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <a href="detail?pid=${p.producId}">
-                                                        <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
-                                                    </a>
-                                                </div>
-                                                <c:if test="${p.isSale == true}">
-                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
-                                                </c:if>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom" >
-                                                    <div style="height: 80px;">
-                                                        <a href="detail?pid=${p.producId}" style="color: black; font-weight: bold; font-size: 20px;">${p.name}</a>
-                                                    </div>
+                                                                <div style="display: flex; justify-content: space-between;">
+                                                                    <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>   
+                                                                    <div style="display: flex;">
+                                                                        <form action="addtocart" method="post" >
+                                                                            <input type="hidden" name="productId" value="${p.producId}">
+                                                                            <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                                <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                            </button>
+                                                                        </form>
+                                                                        <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                                    <div style="display: flex; justify-content: space-between;">
-                                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>   
-                                                        <div style="display: flex;">
-                                                            <form action="addtocart" method="post" >
-                                                                <input type="hidden" name="productId" value="${p.producId}">
-                                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                                </button>
-                                                            </form>
-                                                            <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                                <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </c:if>
+                                            </c:forEach>
 
+                                            <div class="col-12">
+                                                <div class="pagination d-flex justify-content-center mt-5">
+                                                    <a href="shop?page=${1}" class="rounded">&laquo;</a>
+                                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                                        <a href="shop?page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
+                                                    </c:forEach>
+                                                    <a href="shop?page=${totalPages}" class="rounded" >&raquo;</a>
                                                 </div>
                                             </div>
                                         </div>
-                                    </c:forEach>
-
-                                    <!--                                    <div class="col-12">
-                                                                            <div class="pagination d-flex justify-content-center mt-5">
-                                                                                <a href="#" class="rounded">&laquo;</a>
-                                                                                <a href="#" class="active rounded">1</a>
-                                                                                <a href="#" class="rounded">2</a>
-                                                                                <a href="#" class="rounded">3</a>
-                                                                                <a href="#" class="rounded">4</a>
-                                                                                <a href="#" class="rounded">5</a>
-                                                                                <a href="#" class="rounded">6</a>
-                                                                                <a href="#" class="rounded">&raquo;</a>
-                                                                            </div>
-                                                                        </div>-->
-                                </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="display: flex; justify-content: center;">
+                                            <img src="img/cantfind.png" width="100px" height="100px" alt="Không tìm thấy ảnh"/>
+                                            <h3 style="display: flex; align-items: center;">Không tìm thấy sản phẩm</h3>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
@@ -238,32 +258,54 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script>
-            function updateAmount() {
-                var rangeInput = document.getElementById('rangeInput');
-                var amount = document.getElementById('amount');
-                var value = rangeInput.value;
+                                        function updateAmount() {
+                                            var rangeInput = document.getElementById('rangeInput');
+                                            var amount = document.getElementById('amount');
+                                            var value = rangeInput.value;
 
-                // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            // Định dạng giá trị với dấu chấm phân tách hàng nghìn
+                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
-                amount.value = formattedValue;
-                amount.innerText = formattedValue;
-            }
+                                            amount.value = formattedValue;
+                                            amount.innerText = formattedValue;
+                                        }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const prices = document.querySelectorAll('[id^="price-"]');
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const prices = document.querySelectorAll('[id^="price-"]');
 
-                prices.forEach(priceElement => {
-                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                                            prices.forEach(priceElement => {
+                                                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                                                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                    // Định dạng giá thành VND
-                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                                                // Định dạng giá thành VND
+                                                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
 
-                    // Cập nhật nội dung của thẻ h6
-                    priceElement.textContent = formattedPrice + " VNĐ";
-                });
-            });
+                                                // Cập nhật nội dung của thẻ h6
+                                                priceElement.textContent = formattedPrice + " VNĐ";
+                                            });
+                                        });
+
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            // Định dạng giá trị của minPrice khi trang được tải
+                                            var minPrice = ${not empty minPrice ? minPrice : 0};
+                                            var formattedMinPrice = (minPrice * 1000).toLocaleString('vi-VN');
+                                            document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
+
+                                            // Định dạng giá trị của thanh trượt khi trang được tải
+                                            var rangeInput = document.getElementById('rangeInput');
+                                            var amount = document.getElementById('amount');
+                                            var value = rangeInput.value;
+                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            amount.value = formattedValue;
+                                            amount.innerText = formattedValue;
+                                        });
+
+                                        function submitForm() {
+                                            var rangeInput = document.getElementById('rangeInput').value;
+                                            var hiddenRangeInput = document.getElementById('hiddenRangeInput');
+                                            hiddenRangeInput.value = rangeInput;
+                                            document.getElementById('rangeForm').submit();
+                                        }
         </script>
     </body>
 

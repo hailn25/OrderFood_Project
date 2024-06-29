@@ -144,49 +144,38 @@
             </div>
             <!-- Modal Search End -->
 
-
-            <!-- Hero Start -->
-            <div class="container-fluid py-5 mb-5 hero-header">
-                <div class="container py-5">
-                    <div class="row g-5 align-items-center">
-                        <div class="col-md-12 col-lg-7">  
-                        </div>
-                        <div class="col-md-12 col-lg-5">
-                            <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
-                                <div class="carousel-inner" role="listbox">
-                                    <div class="carousel-item active rounded">
-                                        <img src="img/hero-img-1.png" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
-                                        <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
-                                    </div>
-                                    <div class="carousel-item rounded">
-                                        <img src="img/hero-img-2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
-                                        <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
-                                    </div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                        </div>
+            <div class="slider" style="margin-top: 200px">
+                <div class="list">
+                <c:forEach items="${listSlider}" var="s">
+                    <div class="item">
+                        <img src="img/${s.imageURL}" alt="Không thể tải ảnh"/>
                     </div>
-                </div>
+                </c:forEach>
             </div>
-            <!-- Hero End -->
-            <!-- Fruits Shop Start-->
-            <div class="container-fluid fruite py-5">
-                <div class="container py-5">
-                    <div class="tab-class text-center">
-                        <div class="row g-4">
-                            <div class="col-lg-4 text-start" id="Block">
-                                <h1>Danh mục sản phẩm</h1>
-                            </div>
-                            <div class="col-lg-8 text-end">
-                                <ul class="nav nav-pills d-inline-flex text-center mb-5">
+
+            <div class="buttons">
+                <button id="prev"><</button>
+                <button id="next">></button>
+            </div>
+
+            <ul class="dots">
+                <c:forEach begin="0" end="${listSlider.size() - 1}" var="i">
+                    <li class="${i == 0 ? 'active' : ''}" style="cursor: pointer"></li>
+                    </c:forEach>
+            </ul>
+        </div>
+
+
+        <!-- Fruits Shop Start-->
+        <div class="container-fluid fruite py-5">
+            <div class="container py-5">
+                <div class="tab-class text-center">
+                    <div class="row g-4">
+                        <div class="col-lg-4 text-start" id="Block">
+                            <h1>Danh mục sản phẩm</h1>
+                        </div>
+                        <div class="col-lg-8 text-end">
+                            <ul class="nav nav-pills d-inline-flex text-center mb-5">
                                 <c:forEach items="${listC}" var="c">
                                     <li class="nav-item">
                                         <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
@@ -397,33 +386,88 @@
         <!-- Tastimonial End -->
 
         <script>
-             function addToCart(productId) {
-        var xhr = new XMLHttpRequest();
-        var url = "addtocart";
-        
-       
-        xhr.open("POST", url, true);
-        
-      
-        xhr.onload = function() {
-            if (xhr.status >= 200 && xhr.status < 10000) {
-               
-                alert("Đã thêm vào giỏ hàng thành công!");
-            } else {
-                // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
-                alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+            function addToCart(productId) {
+                var xhr = new XMLHttpRequest();
+                var url = "addtocart";
+
+
+                xhr.open("POST", url, true);
+
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 10000) {
+
+                        alert("Đã thêm vào giỏ hàng thành công!");
+                    } else {
+                        // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
+                        alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+                    }
+                };
+
+
+                xhr.onerror = function () {
+                    alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+                };
+
+                // Gửi yêu cầu với dữ liệu sản phẩm
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("productId=" + productId);
             }
-        };
-        
-        
-        xhr.onerror = function() {
-            alert("Đã xảy ra lỗi khi gửi yêu cầu.");
-        };
-        
-        // Gửi yêu cầu với dữ liệu sản phẩm
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.send("productId=" + productId);
-    }
+
+            let list = document.querySelector('.slider .list');
+            let items = document.querySelectorAll('.slider .list .item');
+            let dots = document.querySelectorAll('.slider .dots li');
+            let prev = document.getElementById('prev');
+            let next = document.getElementById('next');
+
+            let active = 0;
+            let lengthItems = items.length - 1;
+
+            next.onclick = function () {
+                if (active + 1 > lengthItems) {
+                    active = 0;
+                } else {
+                    active += 1;
+                }
+                reloadSlider();
+            };
+
+            prev.onclick = function () {
+                if (active - 1 < 0) {
+                    active = lengthItems;
+                } else {
+                    active -= 1;
+                }
+                reloadSlider();
+            };
+
+            let refreshSlider = setInterval(() => {
+                next.click();
+            }, 5000);
+
+            function reloadSlider() {
+                let checkLeft = items[active].offsetLeft;
+                list.style.left = -checkLeft + 'px';
+
+                let lastActiveDot = document.querySelector('.slider .dots li.active');
+                if (lastActiveDot) {
+                    lastActiveDot.classList.remove('active');
+                }
+
+                dots[active].classList.add('active');
+                clearInterval(refreshSlider);
+                refreshSlider = setInterval(() => {
+                    next.click();
+                }, 5000);
+            }
+
+            dots.forEach((li, key) => {
+                li.addEventListener('click', function () {
+                    active = key;
+                    reloadSlider();
+                });
+            });
+
         </script>
 
         <jsp:include page="Footer.jsp"></jsp:include>

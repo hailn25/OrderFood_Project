@@ -106,25 +106,13 @@
                         </c:forEach>
 
                         <div class="col-12">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination pagination-lg m-0">
-                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link rounded-0" href="blog?page=${currentPage - 1}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
-                                        </a>
-                                    </li>
-                                    <c:forEach var="i" begin="1" end="${totalPages}">
-                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                            <a class="page-link" href="blog?page=${i}">${i}</a>
-                                        </li>
-                                    </c:forEach>
-                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link rounded-0" href="blog?page=${currentPage + 1}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="bi bi-arrow-right"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <div class="pagination d-flex justify-content-center mt-5">
+                                <a href="blog?page=${1}" class="rounded">&laquo;</a>
+                                <c:forEach var="i" begin="1" end="${totalPages}">
+                                    <a href="blog?page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
+                                </c:forEach>
+                                <a href="blog?page=${totalPages}" class="rounded" >&raquo;</a>
+                            </div>
                         </div>
                     </div>
                 </div>
