@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            String hashedPassword = EncodePassword.toSHA1(password);
+//            String hashedPassword = EncodePassword.toSHA1(password);
             if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
                 request.setAttribute("err", "Vui lòng nhập cả email và mật khẩu");
                 request.setAttribute("email", email);
@@ -45,7 +45,7 @@ public class LoginServlet extends HttpServlet {
                 return;
             }
             AccountDAO acc = new AccountDAO();
-            Account a = acc.checkLogin(email, hashedPassword);
+            Account a = acc.checkLogin(email, password);
 
             if (a == null) {
                 request.setAttribute("err", "Bạn đã nhập sai password hoặc email");

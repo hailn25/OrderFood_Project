@@ -223,7 +223,7 @@ public class ProductDAO {
             ps.setInt(1, pid);
 
             ResultSet rs = ps.executeQuery();
-
+         
             if (rs.next()) {
                 return rs.getInt(1);
             }

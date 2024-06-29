@@ -4,54 +4,65 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
- * @author ADMIN
+ * @author hailt
  */
 public class ProductSale {
-    private int id;
-    private String name;
-    private String image;
+    private Product product;
+    private Date startTime;
+    private Date endTime;
     private double salePrice;
     private double discount;
+    private boolean isFlashSale;
     private int quantity;
-    private int rateStar;
+    private int timeFrame;
+    private int updateBy;
+    private Date createDate;
 
     public ProductSale() {
     }
 
-    public ProductSale(int id, String name, String image, double salePrice, double discount, int quantity, int rateStar) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
+    public ProductSale(Product product, Date startTime, Date endTime, double salePrice, double discount, boolean isFlashSale, int quantity, int timeFrame, int updateBy, Date createDate) {
+        this.product = product;
+ 
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.salePrice = salePrice;
         this.discount = discount;
+        this.isFlashSale = isFlashSale;
         this.quantity = quantity;
-        this.rateStar = rateStar;
+        this.timeFrame = timeFrame;
+        this.updateBy = updateBy;
+        this.createDate = createDate;
     }
 
-    public int getId() {
-        return id;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getName() {
-        return name;
+   
+
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public String getImage() {
-        return image;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public double getSalePrice() {
@@ -70,6 +81,14 @@ public class ProductSale {
         this.discount = discount;
     }
 
+    public boolean isIsFlashSale() {
+        return isFlashSale;
+    }
+
+    public void setIsFlashSale(boolean isFlashSale) {
+        this.isFlashSale = isFlashSale;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -78,18 +97,36 @@ public class ProductSale {
         this.quantity = quantity;
     }
 
-    public int getRateStar() {
-        return rateStar;
+    public int getTimeFrame() {
+        return timeFrame;
     }
 
-    public void setRateStar(int rateStar) {
-        this.rateStar = rateStar;
+    public void setTimeFrame(int timeFrame) {
+        this.timeFrame = timeFrame;
+    }
+
+    public int getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(int updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override
     public String toString() {
-        return "ProductSale{" + "id=" + id + ", name=" + name + ", image=" + image + ", salePrice=" + salePrice + ", discount=" + discount + ", quantity=" + quantity + ", rateStar=" + rateStar + '}';
+        return "ProductSale{" + "product=" + product + ", startTime=" + startTime + ", endTime=" + endTime + ", salePrice=" + salePrice + ", discount=" + discount + ", isFlashSale=" + isFlashSale + ", quantity=" + quantity + ", timeFrame=" + timeFrame + ", updateBy=" + updateBy + ", createDate=" + createDate + '}';
     }
+
+   
 
     
     

@@ -4,28 +4,27 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductDAO;
-import dao.ProductHomeDAO;
 import dao.ProductSaleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.Product;
-import model.ProductHome;
-import model.ProductSale;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.ProductSaleDetailDTO;
 
 /**
  *
- * @author ADMIN
+ * @author hailt
  */
-public class DetailServlet extends HttpServlet {
+@WebServlet(name = "ProductSaleDetailServlet", urlPatterns = {"/psdetail"})
+public class ProductSaleDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,42 +36,19 @@ public class DetailServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String id = request.getParameter("pid");
-        String fId = request.getParameter("ProductID");
+        String pid = request.getParameter("pid");
+        int id = Integer.parseInt(pid);
 
-        // Fetch the product details
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO fb = new FeedbackDAO();
-        ProductHome p = dao.getProductById(id);
+        ProductSaleDAO dao = new ProductSaleDAO();
 
-        // Fetch the category ID from the product details
-        int categoryId = p.getCategoryId();
+        ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
+        request.setAttribute("fsdetail", ps);
 
-        // Fetch products from the same category
-        List<ProductHome> listSameCategoryProducts = dao.getProductByCategoryId(categoryId);
-
-        // Fetch other necessary details
-        ProductSaleDAO dao1 = new ProductSaleDAO();
-        List<ProductSale> listProductSale = dao1.getProductSale();
-        List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-
-        // Fetch feedback for the product
-        List<Feedback> listFeedback = fb.getFeedbackByProductId(Integer.parseInt(id));
-
-        // Set attributes for the request
-        request.setAttribute("detail", p);
-        request.setAttribute("listSameCategoryProducts", listSameCategoryProducts);
-        request.setAttribute("listProductSale", listProductSale);
-        request.setAttribute("listCategoryListDetail", listCategoryListDetail);
-        request.setAttribute("listBSL", listBestSellerProduct);
-        request.setAttribute("reviews", listFeedback); // Add this line to set feedback
-
-        // Forward the request to the JSP page
-        request.getRequestDispatcher("ShopDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -86,7 +62,11 @@ public class DetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductSaleDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -100,7 +80,11 @@ public class DetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductSaleDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

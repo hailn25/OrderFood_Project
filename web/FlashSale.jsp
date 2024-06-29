@@ -1,14 +1,14 @@
 <%-- 
-    Document   : Testimonial
-    Created on : May 25, 2024, 10:32:54 PM
+    Document   : FlashSale
+    Created on : Jun 26, 2024, 9:21:09 AM
     Author     : hailt
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
-
+<html>
     <head>
         <meta charset="utf-8">
         <title>4FOODHD</title>
@@ -36,91 +36,388 @@
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
         <style>
-            #countdown {
-                text-align: center;
-                background: #fff;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            .truncate-description {
+                display: -webkit-box;
+                -webkit-line-clamp: 3; /* Number of lines to show */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .fruite-item {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
             }
 
-            #timer {
-                font-size: 2em;
+            .fruite-img img {
+                object-fit: cover;
+                height: 280px;
             }
+
+            .fruite-item h4 {
+                min-height: 60px;
+            }
+
+            .fruite-item .p-4 {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .btn-add-to-cart {
+                width: 100%;
+            }
+
+
+            .vesitable-item {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .vesitable-img img {
+                height: 280px;
+                object-fit: cover;
+            }
+
+            .truncate-description {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3; /* number of lines to show */
+                -webkit-box-orient: vertical;
+            }
+
+            .vesitable-item {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                justify-content: space-between;
+            }
+
+            .p-4 {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            @keyframes appear{
+                from{
+                    opactity: 0;
+                    scale: 0.5;
+                }
+                to {
+                    opacity: 1;
+                    scale: 1;
+                }
+            }
+
+            #Block{
+                animation: appear linear;
+                animation-timeline: view();
+                animation-range: entry 0% cover 40%;
+            }
+
+
+            .status{
+                margin: auto 10px;
+                color: #fff;
+                background: #CB1C21;
+                border-radius: 5px;
+                padding: 0 8px;
+                line-height: 24px;
+                font-size: 16px;
+                font-weight: 400;
+                white-space: nowrap;
+            }
+            .col:hover {
+                cursor: pointer;
+            }
+            .selected{
+                background: #ff7604;
+            }
+            .hideP {
+                display: none;
+            }
+            .showP {
+                display: block;
+            }
+
+
         </style>
     </head>
-
     <body>
+        <jsp:include page="Header.jsp"></jsp:include>
 
-        <%@include file="Header.jsp" %>
-
-        <div class="container-fluid testimonial py-5">
-            <div class="container py-5">
-                <div class="testimonial-header text-center">
-                    <h1 class="display-5 mb-5 text-dark">Chào mừng bạn đến với Flashsale!</h1>
-                </div>
-                <h1 style="text-align: center;">Coming Soon!</h1>
-                <div id="countdown">
-                    <h1>Countdown Timer</h1>
-                    <div id="timer">
-                        <span id="days"></span> days 
-                        <span id="hours"></span> hours 
-                        <span id="minutes"></span> minutes 
-                        <span id="seconds"></span> seconds
+            <div class="container-fluid py-5 mb-5 hero-header">
+                <div class="container py-5">
+                    <div class="row g-5 align-items-center">
+                        <div class="col-md-12 col-lg-7">  
+                        </div>
+                        <div class="col-md-12 col-lg-5">
+                            <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="carousel-item active rounded">
+                                        <img src="img/hero-img-1.png" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
+                                        <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
+                                    </div>
+                                    <div class="carousel-item rounded">
+                                        <img src="img/hero-img-2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+                                        <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
+                                    </div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <header>
+                <div class="container">
+                    <div class="row " style="background: #6A737A">
+                        <!-- Khung thời gian 1 -->
+                        <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
+                            <span style="color: white;font-size: 30px" >08:00-14:00</span><br>
+                            <span class="status" id="status1"></span>
+                        </div>
+                        <!-- Khung thời gian 2 -->
+                        <div class="col" id="timeSlot2" onclick="window.location = 'flsale?timeFrame=2'" >
+                            <span style="color: white;font-size: 30px" >18:00-22:00</span><br>
+                            <span class="status"  id="status2"></span>
+                        </div>
+                        <!-- Khung thời gian 3 -->
+                        <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'">
+                            <span style="color: white;font-size: 30px" >08:00-14:00</span><br>
+                            <span class="status" >Ngày mai</span>
+                        </div>
+                        <!-- Khung thời gian 4 -->
+                        <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
+                            <span style="color: white;font-size: 30px" >18:00-22:00</span><br>
+                            <span class="status" >Ngày mai</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
+                            <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="container-fluid fruite py-5">
+                <div class="container py-5">
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="row g-4">
+                                <div class="col-lg-12">
+                                    <div class="row g-4">
+
+
+                                    <c:forEach items="${listPS}" var="p">
+                                        <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
+                                            <div class="rounded position-relative fruite-item">
+                                                <div class="fruite-img">
+                                                    <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
+                                                </div>
+                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px; color: red;">Flash Sale</div>
+
+                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                    <h4>
+                                                        <a href="psdetail?pid=${p.productId}" style="color: black;">${p.name}</a>
+                                                    </h4>
+                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <p style="display: flex; align-items: center;font-family: sans-serif;"id="price-${p.productId}">${p.salePrice}</p>
+                                                        <form id="${p.productId}" onsubmit="addToCart(${p.productId}); return false;">
+                                                            <input type="hidden" name="productId" value="${p.productId}">
+                                                            <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                            
+                                    </c:forEach>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>      
         </div>
 
-        <%@include file="Footer.jsp" %>
 
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-        <!-- JavaScript Libraries -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/lightbox/js/lightbox.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <script type="text/javascript">
+            // Biến toàn cục để lưu khung thời gian được chọn
+            var selectedTimeSlot = null;
 
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
-        <script>
-            var now = new Date().getTime();
-            var countDownDate = new Date(now + 60 * 1000).getTime();
+            // Hàm để xử lý sự kiện nhấp chuột vào một khung thời gian
+            function getParamFromURL(paramName) {
+                var url = new URL(window.location.href);
+                return url.searchParams.get(paramName);
+            }
+            selectedTimeSlot = getParamFromURL("timeFrame");
+           
 
-// Cập nhật đồng hồ đếm ngược mỗi giây
-            var x = setInterval(function () {
-
+            // Hàm để cập nhật trạng thái và đếm ngược
+            function updateStatusAndCountdown() {
                 // Lấy thời gian hiện tại
-                now = new Date().getTime();
+                var now = new Date();
+                var hour = now.getHours();
 
-                // Tính khoảng cách thời gian giữa hiện tại và thời gian đếm ngược
-                var distance = countDownDate - now;
-
-                // Tính toán ngày, giờ, phút và giây còn lại
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Hiển thị kết quả trong các phần tử với id tương ứng
-                document.getElementById("days").innerHTML = days;
-                document.getElementById("hours").innerHTML = hours;
-                document.getElementById("minutes").innerHTML = minutes;
-                document.getElementById("seconds").innerHTML = seconds;
-
-                // Nếu đếm ngược kết thúc, hiển thị thông báo
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("timer").innerHTML = "EXPIRED";
+                // Xác định khung thời gian và trạng thái
+                var timeSlot, status;
+                if (hour < 8) {
+                    timeSlot = document.getElementById('timeSlot1');
+                    status = 'Sắp diễn ra';
+                    document.getElementById("status1").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                } else if (hour < 14) {
+                    timeSlot = document.getElementById('timeSlot1');
+                    document.getElementById("status1").innerHTML = 'Đang diễn ra';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    status = 'Đang diễn ra';
+                } else if (hour < 18) {
+                    timeSlot = document.getElementById('timeSlot2');
+                    status = 'Sắp diễn ra';
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                } else if (hour < 22) {
+                    timeSlot = document.getElementById('timeSlot2');
+                    document.getElementById("status2").innerHTML = 'Đang diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    status = 'Đang diễn ra';
+                } else {
+                    // Nếu sau 22h, chuyển sang ngày mai
+                    timeSlot = document.getElementById('timeSlot3');
+                    status = 'Sắp diễn ra';
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Đã kết thúc';
+                    document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot2').style.pointerEvents = 'none';
                 }
-            }, 1000);
-        </script>
-    </body>
 
+                // Thêm lớp 'selected' cho khung thời gian được chọn
+                var timeSlots = document.querySelectorAll('.col');
+                for (var i = 0; i < timeSlots.length; i++) {
+                    timeSlots[i].classList.remove('selected');
+                }
+                var countdown = new Date(now);
+
+                if (selectedTimeSlot !== null) {
+                    document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
+                    timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(8, 0, 0, 0);
+                    }
+                    if (selectedTimeSlot === '2' && hour < 18) {
+                        status = 'Sắp diễn ra';
+                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                        countdown.setHours(18, 0, 0, 0);
+                    }
+                    if (selectedTimeSlot === '3') {
+                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                        countdown.setHours(8 + 24, 0, 0, 0);
+                        status = 'Sắp diễn ra';
+                    }
+                    if (selectedTimeSlot === '4') {
+                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                        countdown.setHours(18 + 24, 0, 0, 0);
+                        status = 'Sắp diễn ra';
+                    }
+                } else {
+                    timeSlot.classList.add('selected');
+                }
+
+                // Cập nhật đếm ngược
+                var itemsSale = document.querySelectorAll('.showP');
+                var hidden = document.querySelectorAll('.hideP');
+                if (status === 'Sắp diễn ra') {
+                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 8 : 18, 0, 0, 0);
+                    if (timeSlot === document.getElementById('timeSlot3')) {
+                        countdown.setHours(8 + 24, 0, 0, 0);
+                    }
+                    if (timeSlot === document.getElementById('timeSlot4')) {
+                        countdown.setHours(18 + 24, 0, 0, 0);
+                    }
+                    for (var i = 0; i < itemsSale.length; i++) {
+                        itemsSale[i].style.display = 'none';
+                    }
+                } else {
+                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 14 : 22, 0, 0, 0);
+                    for (var i = 0; i < hidden.length; i++) {
+                        hidden[i].style.display = 'none';
+                    }
+                }
+
+                var countdownElement = document.getElementById('time');
+
+                var countdownTime = countdown - now;
+
+                var hours = Math.floor((countdownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((countdownTime % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((countdownTime % (1000 * 60)) / 1000);
+
+                hours = String(hours).padStart(2, '0');
+                minutes = String(minutes).padStart(2, '0');
+                seconds = String(seconds).padStart(2, '0');
+
+                if ((selectedTimeSlot === '3' && hour < 8) || (selectedTimeSlot === '4' && hour < 18)) {
+                    countdownElement.textContent = '1 ngày ' + hours + ": " + minutes + ": " + seconds;
+                } else {
+                    countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
+                }
+            }
+            setInterval(updateStatusAndCountdown, 1000);
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
+        </script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.nicescroll.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/jquery.countdown.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 </html>
+
+
+
+
