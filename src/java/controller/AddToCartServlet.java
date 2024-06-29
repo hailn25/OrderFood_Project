@@ -75,6 +75,7 @@ public class AddToCartServlet extends HttpServlet {
      */
 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
+      session.setMaxInactiveInterval(180);
     Cart cart = null;
     Object o = session.getAttribute("cart");
     if(o != null){

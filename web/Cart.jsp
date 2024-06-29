@@ -67,7 +67,7 @@
                 <h1 class="text-center text-white display-6">Cart</h1>
                 <ol class="breadcrumb justify-content-center mb-0">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                    <li class="breadcrumb-item"><a href="#">Pages</li>
                     <li class="breadcrumb-item active text-white">Cart</li>
                 </ol>
             </div>
@@ -81,16 +81,15 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Sản phẩm </th>
+                                    <th scope="col">Sản phẩm</th>
                                     <th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Giá</th>
                                     <th scope="col">Số lượng</th>
-                                    <th scope="col">Thành tiền </th>
+                                    <th scope="col">Thành tiền</th>
                                     <th scope="col">Hủy</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                             <c:set var="o" value="${sessionScope.cart}"/>
                             <c:forEach var="i" items="${o.items}">
                                 <tr>
@@ -108,18 +107,13 @@
                                         </p>
                                     </td>
                                     <td>
-                                        <c:if test="${not empty requestScope.mes}">
-                                            <div class="alert alert-warning" role="alert">
-                                                ${requestScope.mes}
-                                            </div>
-                                        </c:if>
                                         <div class="input-group quantity mt-4" style="width: 100px;">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-sm btn-minus rounded-circle bg-light border">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-price="${i.price}">
+                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="${i.quantity}" data-product-id="${i.product.productId}" data-price="${i.price}">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                     <i class="fa fa-plus"></i>
@@ -135,21 +129,16 @@
                                     <td>
                                         <form id="deleteForm${i.product.productId}" action="process" method="post">
                                             <input type="hidden" name="id" value="${i.product.productId}"/>
-                                            <!-- Sử dụng button với icon x -->
                                             <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="confirmDelete(event, 'deleteForm${i.product.productId}')">
                                                 <i class="fa fa-times text-danger"></i>
                                             </button>
                                         </form>
                                     </td>
-
-
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </div>
-
-
 
                 <div class="mt-5">
                     <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
@@ -165,133 +154,133 @@
                                 <c:forEach var="i" items="${o.items}">
                                     <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
                                 </c:forEach>
+
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="mb-0 me-4">Subtotal:</h5>
-                                    <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
+                                    <span class="subtotal"><fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/></span>
                                 </div>
-                                <div class="mb-4">
-                                    <p class="mb-0 text-dark py-4">Shipping</p>
-                                    <div class="form-check text-start">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping" value="Free">
-                                        <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                                    </div>
-                                    <div class="form-check text-start">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping" value="FlatRate">
-                                        <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                                    </div>
-                                    <div class="form-check text-start">
-                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping" value="LocalPickup">
-                                        <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
-                                    </div>
+                                <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                    <h5 class="mb-0 ps-4 me-4">Total</h5>
+                                    <span class="cart-total"><fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/></span>
                                 </div>
+
+                                <form action="checkout" method="get">
+                                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                                </form>
                             </div>
-                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                <h5 class="mb-0 ps-4 me-4">Total</h5>
-                                <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
-                            </div>
-                            <form action="checkout" method="get">
-                                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
-                            </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
-
         <jsp:include page="Footer.jsp"></jsp:include>
 
-            <script>
+      <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
 
-                <script>
-                let clickCount = 0; 
-                function updateClickCount() {
-                        const clickCountDisplay = document.getElementById('clickCountDisplay');
-                clickCountDisplay.innerText = `Click count: ${clickCount}`;
+        function updateQuantityAndPrice(quantityInput, newQuantity) {
+            if (newQuantity < 1) {
+                console.error('Số lượng không hợp lệ');
+                return;
+            }
+            quantityInput.value = newQuantity;
+            updatePrice(quantityInput, newQuantity);
+            updateTotal();
+            const productId = quantityInput.dataset.productId;
+            const url = 'process?productId=' + productId + '&quantity=' + newQuantity;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // Bạn không cần cần thiết phải trả về JSON từ server nếu không có dữ liệu JSON để xử lý
+                    // return response.json();
+                })
+                .then(data => {
+                    // Xử lý dữ liệu nếu cần thiết
+                })
+                .catch(error => {
+                    console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                });
         }
-        
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const quantityInputs = document.querySelectorAll('.quantity-input');
-                // Function to update quantity and price
-                function updateQuantityAndPrice(quantityInput, change) {
-                let currentValue = parseInt(quantityInput.value);
-                let newValue = currentValue + change;
-                // Đảm bảo giá trị mới ít nhất là 1
-                if (newValue < 1) {
-                newValue = 1;
-                }
 
-                quantityInput.value = newValue;
-                // Cập nhật giá
-                updatePrice(quantityInput, newValue);
-                // Cập nhật tổng giá khi số lượng thay đổi
-                updateTotal();
-                // Tăng biến đếm click và hiển thị
-                clickCount++;
-                updateClickCount(); // Gọi hàm để hiển thị số lần click
-                }
+        function updatePrice(quantityInput, quantity) {
+            const pricePerItem = parseFloat(quantityInput.dataset.price);
+            const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
+            const totalPrice = quantity * pricePerItem;
+            totalPriceElement.innerText = totalPrice.toFixed(2);
+        }
 
-                // Function to update price per item
-                function updatePrice(quantityInput, quantity) {
-                const pricePerItem = parseFloat(quantityInput.dataset.price);
-                const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
-                const totalPrice = quantity * pricePerItem;
-                totalPriceElement.innerText = totalPrice.toFixed(2);
-                }
-
-                // Function to update total price
-                function updateTotal() {
-                let total = 0;
-                const rows = document.querySelectorAll('tbody > tr');
-                rows.forEach(function (row) {
+        function updateTotal() {
+            let total = 0;
+            const rows = document.querySelectorAll('tbody > tr');
+            rows.forEach(function (row) {
                 const priceElement = row.querySelector('.total-price');
                 total += parseFloat(priceElement.innerText);
-                });
-                // Cập nhật subtotal và các phần tử tổng
-                const subtotalElement = document.querySelector('.subtotal');
-                subtotalElement.innerText = total.toFixed(2);
-                const totalElement = document.querySelector('.cart-total');
-                totalElement.innerText = total.toFixed(2);
-                }
+            });
+            const subtotalElement = document.querySelector('.subtotal');
+            subtotalElement.innerText = total.toFixed(2);
+            const totalElement = document.querySelector('.cart-total');
+            totalElement.innerText = total.toFixed(2);
+        }
 
-                // Gắn lắng nghe sự kiện cho các input quantity
-                quantityInputs.forEach(function (quantityInput) {
-                const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
-                const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
-                btnPlus.addEventListener('click', function () {
-                updateQuantityAndPrice(quantityInput, 1); // Tăng số lượng lên 1
-                });
-                btnMinus.addEventListener('click', function () {
-                updateQuantityAndPrice(quantityInput, - 1); // Giảm số lượng xuống 1
-                });
-                // Cập nhật giá ban đầu dựa trên số lượng hiện tại
-                updatePrice(quantityInput, parseInt(quantityInput.value));
-                });
-                });
+        quantityInputs.forEach(function (quantityInput) {
+            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+            
+            btnPlus.addEventListener('click', function () {
+                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1);
+            });
+
+            btnMinus.addEventListener('click', function () {
+                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1);
+            });
+
+            quantityInput.addEventListener('input', function () {
+                let newValue = parseInt(quantityInput.value);
+                if (isNaN(newValue) || newValue < 1) {
+                    newValue = 1;
+                }
+                updateQuantityAndPrice(quantityInput, newValue);
+            });
+
+            quantityInput.addEventListener('keyup', function (event) {
+                if (event.keyCode === 13) {
+                    let newValue = parseInt(quantityInput.value);
+                    if (isNaN(newValue) || newValue < 1) {
+                        newValue = 1;
+                    }
+                    updateQuantityAndPrice(quantityInput, newValue);
+                }
+            });
+
+            updatePrice(quantityInput, parseInt(quantityInput.value));
+        });
+    });
 </script>
-<script>
-                    function confirmDelete(event, formId) {
-                        event.preventDefault(); // Ngăn chặn việc gửi form ngay lập tức
+ <script>
+            function confirmDelete(event, formId) {
+                event.preventDefault(); // Ngăn chặn việc gửi form ngay lập tức
                 if (confirm('Bạn có muốn xoá sản phẩm khỏi giỏ hàng không?')) {
-                document.getElementById(formId).submit(); // Gửi form nếu người dùng xác nhận
+                    document.getElementById(formId).submit(); // Gửi form nếu người dùng xác nhận
                 }
             }
-            </script>
+        </script>
 
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
 
-            <!-- JavaScript Libraries -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="lib/easing/easing.min.js"></script>
-            <script src="lib/waypoints/waypoints.min.js"></script>
-            <script src="lib/lightbox/js/lightbox.min.js"></script>
-            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <!-- JavaScript Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/waypoints/waypoints.min.js"></script>
+        <script src="lib/lightbox/js/lightbox.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-            <!-- Template Javascript -->
-
-        </body>
-
-    </html>
+        <!-- Template Javascript -->
+    </body>
+</html>

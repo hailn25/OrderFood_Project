@@ -63,44 +63,32 @@ public class ProcessControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+   protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        Cart cart = null;
-        Object o = session.getAttribute("cart");
-        if (o != null) {
-            cart = (Cart) o;
-        } else {
-            cart = new Cart();
-        }
-        String tnum = request.getParameter("num").trim();
-        String tid = request.getParameter("id");
-        int id, num;
-        try {
-            id = Integer.parseInt(tid);
-            num = Integer.parseInt(tnum);
-            OrderDAO od = new OrderDAO();
-            ProductDAO dao = new ProductDAO();
-            Product p = dao.getProductByID(id);
-            int q = dao.getQuantityProduct(id);
-            if ((num == -1 && (cart.getQuantityById(id) <= 1)) || num == 0) {
-                cart.removeItem(id);
-            } else {
-                if (num == 1 && cart.getQuantityById(id) >= q) {
-                    num = 0;
-                    request.setAttribute("mes", "Số lượng tối đa là " + q);
-                }
-                double price = p.getPrice() * 1.2;
-                Item t = new Item(p, num, price);
-                cart.addItem(t);
-            }
+        Cart cart = (Cart) session.getAttribute("cart");
 
-        } catch (Exception e) {
+        if (cart == null) {
+            cart = new Cart();
+            session.setAttribute("cart", cart);
         }
-        List<Item> list = cart.getItems();
-        session.setAttribute("cart", cart);
-        session.setAttribute("size", list.size());
-        request.getRequestDispatcher("Cart.jsp").forward(request, response);
+        String productIdStr = request.getParameter("productId");
+        String newQuantityStr = request.getParameter("quantity");
+
+        if (productIdStr != null && newQuantityStr != null) {
+            try {
+                int productId = Integer.parseInt(productIdStr);
+                int newQuantity = Integer.parseInt(newQuantityStr);
+                cart.updateItem(productId, newQuantity);
+                session.setAttribute("cart", cart);
+                response.sendRedirect(request.getContextPath() + "/Cart.jsp");
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     /**
@@ -115,20 +103,35 @@ public class ProcessControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        Cart cart = null;
-        Object o = session.getAttribute("cart");
-        if (o != null) {
-            cart = (Cart) o;
-        } else {
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart == null) {
             cart = new Cart();
+            session.setAttribute("cart", cart);
         }
-        int id = Integer.parseInt(request.getParameter("id"));
-        cart.removeItem(id);
-        List<Item> list = cart.getItems();
-        session.setAttribute("cart", cart);
-        session.setAttribute("size", list.size());
+
+        String productIdStr = request.getParameter("id");
+
+        if (productIdStr != null) {
+            try {
+                int productId = Integer.parseInt(productIdStr);
+
+                // Handle removing item from cart based on productId
+                // Example logic (you need to adjust based on your implementation):
+                // cart.removeItem(productId);
+
+                // Update session attribute
+                session.setAttribute("cart", cart);
+            } catch (NumberFormatException e) {
+                // Handle parsing error if necessary
+            }
+        }
+
+        // Redirect or forward to appropriate JSP page
         request.getRequestDispatcher("Cart.jsp").forward(request, response);
     }
+
+    // Other methods if needed
+
 
     /**
      * Returns a short description of the servlet.
