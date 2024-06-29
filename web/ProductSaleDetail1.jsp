@@ -82,8 +82,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${fsdetail.name}</h4>
-                                <p id="countdown"  style="font-size: 20px; color: orange "></p>
-                                <p style="display: flex; align-items: center;font-family: sans-serif;"id="price-${p.productId}">${fsdetail.salePrice}</p>
+                                <p style="display: flex; align-items: center;font-family: sans-serif;"id="price-${p.productId}">${fsdetail.price}</p>
                                 <div class="d-flex mb-4" id="star-rating">
                                     <!-- Các ngôi sao sẽ được thêm động bởi JavaScript -->
                                 </div>
@@ -109,85 +108,59 @@
                                     </button>
                                 </form>
                             </div>
+                            <div class="col-lg-12">
+                                <nav>
+                                    <div class="nav nav-tabs mb-3">
+                                        <button class="nav-link active border-white border-bottom-0" type="button" role="tab"
+                                                id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
+                                                aria-controls="nav-about" aria-selected="true">Description</button>
+                                        <button class="nav-link border-white border-bottom-0" type="button" role="tab"
+                                                id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                                aria-controls="nav-mission" aria-selected="false">Reviews</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content mb-5">
+                                    <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                        <p>${detail.decription}</p>
+                                    </div>
+                                </div>
+
+                                    <!-- Single Product End -->
 
 
+                                    <!-- Footer Start -->
 
-                            <!-- Single Product End -->
-
-
-                            <!-- Footer Start -->
-
-                            <jsp:include page="Footer.jsp"></jsp:include>
-                            <!-- Footer End -->
-                            <!-- Back to Top -->
-                            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+                                    <jsp:include page="Footer.jsp"></jsp:include>
+                                    <!-- Footer End -->
+                                    <!-- Back to Top -->
+                                    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-                            <!-- JavaScript Libraries -->
-                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                            <script src="lib/easing/easing.min.js"></script>
-                            <script src="lib/waypoints/waypoints.min.js"></script>
-                            <script src="lib/lightbox/js/lightbox.min.js"></script>
-                            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+                                    <!-- JavaScript Libraries -->
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+                                    <script src="lib/easing/easing.min.js"></script>
+                                    <script src="lib/waypoints/waypoints.min.js"></script>
+                                    <script src="lib/lightbox/js/lightbox.min.js"></script>
+                                    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-                            <!-- Template Javascript -->
-                            <script src="js/main.js"></script>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const prices = document.querySelectorAll('[id^="price-"]');
-                                    prices.forEach(priceElement => {
-                                        const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                                        const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                                    <!-- Template Javascript -->
+                                    <script src="js/main.js"></script>
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const prices = document.querySelectorAll('[id^="price-"]');
 
-                                        // Định dạng giá thành VND
-                                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
-                                        // Cập nhật nội dung của thẻ h6
-                                        priceElement.textContent = formattedPrice + " VNĐ";
-                                    });
-                                });
-                            </script>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    function updateCountdown() {
-                                        const now = new Date();
-                                        const hours = now.getHours();
-                                        const minutes = now.getMinutes();
-                                        const seconds = now.getSeconds();
-                                        let countdownTo;
-                                        let displayCountdown = true;
+                                            prices.forEach(priceElement => {
+                                                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                                                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                                        if (hours >= 8 && hours < 14) {
-                                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 14, 0, 0);
-                                        } else if (hours >= 18 && hours < 22) {
-                                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
-                                        } else {
-                                            displayCountdown = false; // Không hiển thị đếm ngược ngoài khung giờ
-                                        }
+                                                // Định dạng giá thành VND
+                                                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
 
-                                        const countdownElement = document.getElementById('countdown');
-
-                                        if (displayCountdown) {
-                                            const diff = countdownTo - now;
-                                            const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                            const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                                            const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
-                                            const hoursText = String(diffHours).padStart(2, '0');
-                                            const minutesText = String(diffMinutes).padStart(2, '0');
-                                            const secondsText = String(diffSeconds).padStart(2, '0');
-
-                                            // Thêm chữ "Flash Sale" ở đầu và đặt thời gian ở cuối
-                                            countdownElement.textContent = 'Flash Sale - ' + hoursText + ":" + minutesText + ":" + secondsText;
-
-                                            setTimeout(updateCountdown, 1000);
-                                        } else {
-                                            countdownElement.textContent = "Chương trình giảm giá sẽ sớm bắt đầu"; // Hoặc nội dung bạn muốn hiển thị khi ngoài khung giờ bán hàng
-                                        }
-                                    }
-
-                                    updateCountdown();
-                                });
-
-                            </script>
-                            </body>
-                            </html>
+                                                // Cập nhật nội dung của thẻ h6
+                                                priceElement.textContent = formattedPrice + " VNĐ";
+                                            });
+                                        });
+                                    </script>
+                                    </body>
+                                    </html>

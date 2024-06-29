@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.ProductDAO;
 import dao.ProductSaleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Product;
 import model.ProductSaleDetailDTO;
 
 /**
@@ -40,15 +42,25 @@ public class ProductSaleDetailServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String pid = request.getParameter("pid");
         int id = Integer.parseInt(pid);
-
+        LocalTime now = LocalTime.now();
+        LocalTime timeFrame1 = LocalTime.of(8, 00);
+        LocalTime timeFrame2 = LocalTime.of(14, 00);
+        LocalTime timeFrame3 = LocalTime.of(18, 00);
+        LocalTime timeFrame4 = LocalTime.of(22, 00);
+        LocalDate date = LocalDate.now();
         ProductSaleDAO dao = new ProductSaleDAO();
-
+        ProductDAO da = new ProductDAO();
+        if((now.isAfter(timeFrame1) && now.isBefore(timeFrame2))  || (now.isAfter(timeFrame3) && now.isBefore(timeFrame4))){
         ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
         request.setAttribute("fsdetail", ps);
-
         request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
+        } else {
+            Product p = da.getProductByID(id);
+        request.setAttribute("fsdetail", p);
+        request.getRequestDispatcher("ProductSaleDetail1.jsp").forward(request, response);
+        }
+     
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -245,7 +245,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                                            
+
                                     </c:forEach>
 
                                 </div>
@@ -255,7 +255,7 @@
                 </div>
             </div>      
         </div>
-
+        <jsp:include page="Footer.jsp"></jsp:include>
 
 
 
@@ -270,7 +270,7 @@
                 return url.searchParams.get(paramName);
             }
             selectedTimeSlot = getParamFromURL("timeFrame");
-           
+
 
             // Hàm để cập nhật trạng thái và đếm ngược
             function updateStatusAndCountdown() {
