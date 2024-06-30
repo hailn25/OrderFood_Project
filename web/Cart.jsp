@@ -103,7 +103,7 @@
                                     </td>
                                     <td>
                                         <p class="mb-0 mt-4">
-                                            <fmt:formatNumber value="${i.price}" maxFractionDigits="2"/>
+                                            <fmt:formatNumber value="${i.price*1000}" maxFractionDigits="2"/>
                                         </p>
                                     </td>
                                     <td>
@@ -123,7 +123,7 @@
                                     </td>
                                     <td>
                                         <p class="mb-0 mt-4 total-price">
-                                            <fmt:formatNumber value="${i.quantity * i.price}" maxFractionDigits="2"/>
+                                            <fmt:formatNumber value="${i.quantity * i.price*1000}" maxFractionDigits="0"/>
                                         </p>
                                     </td>
                                     <td>
@@ -152,7 +152,7 @@
                                 <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
                                 <c:set var="subtotal" value="0"/>
                                 <c:forEach var="i" items="${o.items}">
-                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
+                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price*1000)}"/>
                                 </c:forEach>
 
                                 <div class="d-flex justify-content-between mb-4">
@@ -176,92 +176,93 @@
 
         <jsp:include page="Footer.jsp"></jsp:include>
 
-      <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const quantityInputs = document.querySelectorAll('.quantity-input');
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const quantityInputs = document.querySelectorAll('.quantity-input');
 
-        function updateQuantityAndPrice(quantityInput, newQuantity) {
-            if (newQuantity < 1) {
-                console.error('Số lượng không hợp lệ');
-                return;
-            }
-            quantityInput.value = newQuantity;
-            updatePrice(quantityInput, newQuantity);
-            updateTotal();
-            const productId = quantityInput.dataset.productId;
-            const url = 'process?productId=' + productId + '&quantity=' + newQuantity;
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                function updateQuantityAndPrice(quantityInput, newQuantity) {
+                    if (newQuantity < 1) {
+                        console.error('Số lượng không hợp lệ');
+                        return;
                     }
-                    // Bạn không cần cần thiết phải trả về JSON từ server nếu không có dữ liệu JSON để xử lý
-                    // return response.json();
-                })
-                .then(data => {
-                    // Xử lý dữ liệu nếu cần thiết
-                })
-                .catch(error => {
-                    console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                    quantityInput.value = newQuantity;
+                    updatePrice(quantityInput, newQuantity);
+                    updateTotal();
+                    const productId = quantityInput.dataset.productId;
+                    const url = 'process?productId=' + productId + '&quantity=' + newQuantity;
+
+                    fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                // Bạn không cần cần thiết phải trả về JSON từ server nếu không có dữ liệu JSON để xử lý
+                                // return response.json();
+                            })
+                            .then(data => {
+                                // Xử lý dữ liệu nếu cần thiết
+                            })
+                            .catch(error => {
+                                console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                            });
+                }
+
+                function updatePrice(quantityInput, quantity) {
+                    const pricePerItem = parseFloat(quantityInput.dataset.price);
+                    const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
+                    const totalPrice = quantity * pricePerItem;
+                    totalPriceElement.innerText = totalPrice.toFixed(3) + " VND";
+
+                }
+
+                function updateTotal() {
+                    let total = 0;
+                    const rows = document.querySelectorAll('tbody > tr');
+                    rows.forEach(function (row) {
+                        const priceElement = row.querySelector('.total-price');
+                        total += parseFloat(priceElement.innerText);
+                    });
+                    const subtotalElement = document.querySelector('.subtotal');
+                    subtotalElement.innerText = total.toFixed(2);
+                    const totalElement = document.querySelector('.cart-total');
+                    totalElement.innerText = total.toFixed(2);
+                }
+
+                quantityInputs.forEach(function (quantityInput) {
+                    const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+                    const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+
+                    btnPlus.addEventListener('click', function () {
+                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1);
+                    });
+
+                    btnMinus.addEventListener('click', function () {
+                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1);
+                    });
+
+                    quantityInput.addEventListener('input', function () {
+                        let newValue = parseInt(quantityInput.value);
+                        if (isNaN(newValue) || newValue < 1) {
+                            newValue = 1;
+                        }
+                        updateQuantityAndPrice(quantityInput, newValue);
+                    });
+
+                    quantityInput.addEventListener('keyup', function (event) {
+                        if (event.keyCode === 13) {
+                            let newValue = parseInt(quantityInput.value);
+                            if (isNaN(newValue) || newValue < 1) {
+                                newValue = 1;
+                            }
+                            updateQuantityAndPrice(quantityInput, newValue);
+                        }
+                    });
+
+                    updatePrice(quantityInput, parseInt(quantityInput.value));
                 });
-        }
-
-        function updatePrice(quantityInput, quantity) {
-            const pricePerItem = parseFloat(quantityInput.dataset.price);
-            const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
-            const totalPrice = quantity * pricePerItem;
-            totalPriceElement.innerText = totalPrice.toFixed(2);
-        }
-
-        function updateTotal() {
-            let total = 0;
-            const rows = document.querySelectorAll('tbody > tr');
-            rows.forEach(function (row) {
-                const priceElement = row.querySelector('.total-price');
-                total += parseFloat(priceElement.innerText);
             });
-            const subtotalElement = document.querySelector('.subtotal');
-            subtotalElement.innerText = total.toFixed(2);
-            const totalElement = document.querySelector('.cart-total');
-            totalElement.innerText = total.toFixed(2);
-        }
-
-        quantityInputs.forEach(function (quantityInput) {
-            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
-            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
-            
-            btnPlus.addEventListener('click', function () {
-                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1);
-            });
-
-            btnMinus.addEventListener('click', function () {
-                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1);
-            });
-
-            quantityInput.addEventListener('input', function () {
-                let newValue = parseInt(quantityInput.value);
-                if (isNaN(newValue) || newValue < 1) {
-                    newValue = 1;
-                }
-                updateQuantityAndPrice(quantityInput, newValue);
-            });
-
-            quantityInput.addEventListener('keyup', function (event) {
-                if (event.keyCode === 13) {
-                    let newValue = parseInt(quantityInput.value);
-                    if (isNaN(newValue) || newValue < 1) {
-                        newValue = 1;
-                    }
-                    updateQuantityAndPrice(quantityInput, newValue);
-                }
-            });
-
-            updatePrice(quantityInput, parseInt(quantityInput.value));
-        });
-    });
-</script>
- <script>
+        </script>
+        <script>
             function confirmDelete(event, formId) {
                 event.preventDefault(); // Ngăn chặn việc gửi form ngay lập tức
                 if (confirm('Bạn có muốn xoá sản phẩm khỏi giỏ hàng không?')) {

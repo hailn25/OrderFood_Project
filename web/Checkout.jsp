@@ -129,12 +129,12 @@
                                             </th>
                                             <td class="py-5">${i.product.name}</td>
                                             <td class="py-5">
-                                                <fmt:formatNumber value="${i.price}" maxFractionDigits="1" />
+                                                <fmt:formatNumber value="${i.price*1000}" maxFractionDigits="1" />
                                             </td>
                                             <td class="py-5">${i.quantity}</td>
                                             <td class="py-5">
-                                                <fmt:formatNumber value="${i.quantity * i.price}" maxFractionDigits="2" />
-                                                <input type="hidden"value="${i.quantity * i.price}" />
+                                                <fmt:formatNumber value="${i.quantity * i.price*1000}" maxFractionDigits="2" />
+                                                <input type="hidden"value="${i.quantity * i.price*1000}" />
                                             </td>
 
 
@@ -152,10 +152,10 @@
                                             <div class="py-3 border-bottom border-top">
                                                 <c:set var="subtotal" value="0" />
                                                 <c:forEach var="i" items="${o.items}">
-                                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}" />
+                                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price*1000)}" />
                                                 </c:forEach>
                                                 <fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />
-                                                <input type="hidden" name="cost" value="<fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />" />
+                                                <input type="hidden" name="cost" value="${subtotal}" />
                                             </div>
 
                                         </td>

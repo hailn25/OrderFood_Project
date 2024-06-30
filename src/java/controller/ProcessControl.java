@@ -99,37 +99,24 @@ public class ProcessControl extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+      @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) {
+        Cart cart = null;
+        Object o = session.getAttribute("cart");
+        if (o != null) {
+            cart = (Cart) o;
+        } else {
             cart = new Cart();
-            session.setAttribute("cart", cart);
         }
-
-        String productIdStr = request.getParameter("id");
-
-        if (productIdStr != null) {
-            try {
-                int productId = Integer.parseInt(productIdStr);
-
-                // Handle removing item from cart based on productId
-                // Example logic (you need to adjust based on your implementation):
-                // cart.removeItem(productId);
-
-                // Update session attribute
-                session.setAttribute("cart", cart);
-            } catch (NumberFormatException e) {
-                // Handle parsing error if necessary
-            }
-        }
-
-        // Redirect or forward to appropriate JSP page
+        int id = Integer.parseInt(request.getParameter("id"));
+        cart.removeItem(id);
+        List<Item> list = cart.getItems();
+        session.setAttribute("cart", cart);
+        session.setAttribute("size", list.size());
         request.getRequestDispatcher("Cart.jsp").forward(request, response);
     }
-
     // Other methods if needed
 
 
