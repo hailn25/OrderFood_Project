@@ -27,8 +27,12 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="revenueAdmin">
-                    <h1 class="tm-site-title mb-0">Admin</h1>
+                <a class="navbar-brand" href="ManagerStaff.jsp">
+                    <c:if test="${not empty sessionScope.account.name}">
+                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
+                        </c:if>
+
+
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"
@@ -45,16 +49,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
 
-                        <c:if test="${sessionScope.account.roleId == 1}">
+                        <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
-                                <a class="nav-link" href="revenueAdmin">
-                                    <i class="fas fa-tachometer-alt"></i> Thống kê
+                                <a class="nav-link" href="ManagerStaff.jsp">
+                                    <i class="fas fa-home"></i> Trang chủ
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                         </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 1}">
+                        <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
                                 <a class="nav-link active" href="managerCategory">
                                     <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -62,22 +66,30 @@
                             </li>
                         </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 4}">                          
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="managerProduct">
-                                    <i class="fas fa-shopping-cart"></i> Sản phẩm
+                                <a class="nav-link" href="managerBlog">
+                                    <i class="far fa-file-alt"></i> Quản lý blog
                                 </a>
                             </li>
                         </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 1}">
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="managerAccount">
-                                    <i class="far fa-user"></i> Tài khoản
+                                <a class="nav-link" href="managerService">
+                                    <i class="fas fa-sliders-h"></i> Dịch vụ 
                                 </a>
                             </li>
                         </c:if>
 
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerReport">
+                                    <i class="far fa-comment-dots"></i> Quản lý báo cáo
+                                </a>
+                            </li>
+                        </c:if>
+                            
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">

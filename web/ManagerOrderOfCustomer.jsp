@@ -87,7 +87,7 @@
             .status-shipper-rejected {
                 color: darkred;
             }
-.status-waiting-for-restaurant {
+            .status-waiting-for-restaurant {
                 color: purple;
             }
 
@@ -121,15 +121,12 @@
             }
 
         </style>
-
-
-
     </head>
 
     <body id="reportsPage" style="background-color: #F6F6F6">
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="revenueRestaurant">
+                <a class="navbar-brand" href="HomeOfRestaurant.jsp">
                     <c:if test="${not empty sessionScope.account.name}">
                         <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
                         </c:if>
@@ -149,6 +146,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
                         <c:if test="${sessionScope.account.roleId == 4}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="HomeOfRestaurant.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                        <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item">
                                 <a class="nav-link" href="revenueRestaurant">
                                     <i class="fas fa-tachometer-alt"></i> Thống kê
@@ -156,7 +161,7 @@
                                 </a>
                             </li>
                         </c:if>
-                        <c:if test="${sessionScope.account.roleId == 1}">
+                        <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
                                 <a class="nav-link" href="managerCategory">
                                     <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -164,36 +169,36 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
-<li class="nav-item">
+                            <li class="nav-item">
                                 <a class="nav-link " href="managerOpenProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang bán
                                 </a>
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">                          
-                            <li class="nav-item">
+<!--                            <li class="nav-item">
                                 <a class="nav-link" href="managerCloseProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
                                 </a>
-                            </li>
+                            </li>-->
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle active" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                        <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
-                                        <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
-                                    </a>
-                                    <div class="dropdown-menu" id="dropdownMenu">
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
-                                    </div>
-                                </li>
+                                <a href="#" class="nav-link dropdown-toggle active" id="dropdownMenuLink" onclick="toggleDropdown(event)">
+                                    <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
+                                    <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                                </a>
+                                <div class="dropdown-menu" id="dropdownMenu">
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
+                                </div>
+                            </li>
 
                         </c:if>
 
@@ -208,7 +213,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <c:if test = "${sessionScope.account == null}">
-<a class="nav-link d-block" href="Login.jsp">
+                                <a class="nav-link d-block" href="Login.jsp">
                                     <b>Đăng nhập</b>
                                 </a>
                             </c:if> 
@@ -234,22 +239,22 @@
                 <table id="example" class="display" style="width:100%">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng</th>
-                            <th>Đơn giá</th>
+                            <th>Mã đơn hàng</th>
+                            <th>Tên người dùng</th>
+                            <!--<th>Số lượng</th>-->
+                            <th>Tổng giá trị</th>
                             <th>Trạng thái</th>
-                            <th>Ảnh</th>
+                            <!--<th>Ảnh</th>-->
                             <th>Tác vụ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach items="${listO}" var="o">
                             <tr>
-                                <td>${o.orderDetailId}</td>
+                                <td>${o.orderId}</td>
                                 <td>${o.name}</td>
-                                <td>${o.quantity}</td>
-                                <td><fmt:formatNumber value="${o.totalMoney}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
+                                <!--<td>${o.quantity}</td>-->
+                                <td><fmt:formatNumber value="${o.totalMoney * 1000}" pattern="###,### VNĐ" /></td>
                                 <td class="<c:choose>
                                         <c:when test="${o.orderStatusId == 1}">status-waiting-for-shipper</c:when>
                                         <c:when test="${o.orderStatusId == 2}">status-delivering</c:when>
@@ -261,7 +266,7 @@
                                         <c:otherwise>status-unknown</c:otherwise>
                                     </c:choose>">
                                     <c:choose>
-<c:when test="${o.orderStatusId == 1}">
+                                        <c:when test="${o.orderStatusId == 1}">
                                             Đang chờ xác nhận của shipper
                                         </c:when>
                                         <c:when test="${o.orderStatusId == 2}">
@@ -284,14 +289,14 @@
                                         </c:when>
                                     </c:choose>
                                 </td>
+                                <!--                                <td>
+                                                                    <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
+                                                                </td>-->
                                 <td>
-                                    <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
-                                </td>
-                                <td>
-                                    <a href="viewOrderByRestaurant?oid=${o.orderDetailId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                    <a href="viewOrderByRestaurant?oid=${o.orderId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
                                         <c:if test="${o.orderStatusId == 6}">
-                                        <a href="confirmOrder?oid=${o.orderDetailId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="cancelOrder?oid=${o.orderDetailId}" onclick="confirmCancel(event)" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
+                                        <a href="confirmOrder?oid=${o.orderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="cancelOrder?oid=${o.orderId}" onclick="confirmCancel(event)" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
                                         </c:if>
                                 </td>
                             </tr>

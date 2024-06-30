@@ -116,7 +116,7 @@ public class CheckoutServlet extends HttpServlet {
             account = (Account) a;
             int id = account.getAccountId();
             OrderDAO dao = new OrderDAO();
-            dao.insertNewOrder(1, id, Double.parseDouble(total), account.getName(), account.getEmail(), account.getPhone(), account.getAddress(), note);
+            dao.insertNewOrder(6, id, Double.parseDouble(total), account.getName(), account.getEmail(), account.getPhone(), account.getAddress(), note);
             int oid = dao.getOrderID();
             int orderDetailId = dao.getOrderDetailId();
             if (payment.equals("cod")) {

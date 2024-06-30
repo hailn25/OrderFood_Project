@@ -28,7 +28,7 @@ public class AddCloseProductControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        try {
+//        try {
             response.setContentType("text/html;charset=UTF-8");
             String name = request.getParameter("name");
             String price = request.getParameter("price");
@@ -77,16 +77,16 @@ public class AddCloseProductControl extends HttpServlet {
 
                 // Thêm sản phẩm mới vào cơ sở dữ liệu
                 ProductDAO dao = new ProductDAO();
-                dao.insertProduct(name, price, description, img, category, restaurantId, quantity, java.sql.Date.valueOf(updateDate), java.sql.Date.valueOf(createDate), status);
+//                dao.insertProduct(name, price, description, img, category, restaurantId, quantity, java.sql.Date.valueOf(updateDate), java.sql.Date.valueOf(createDate), status);
                 request.getRequestDispatcher("managerCloseProduct").forward(request, response);
             } else {
                 request.setAttribute("error", "Nhập không hợp lệ!");
                 request.getRequestDispatcher("managerAddCloseProduct").forward(request, response);
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(AddOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AddOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 

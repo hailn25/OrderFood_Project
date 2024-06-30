@@ -19,7 +19,7 @@ public class RevenueDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public long getTotalMoneyByMonth(int restaurantId, int month, int year) {
+    public double getTotalMoneyByMonth(int restaurantId, int month, int year) {
         String sql = "SELECT \n"
                 + "    MONTH(o.FinishDate) AS Month,\n"
                 + "    YEAR(o.FinishDate) AS Year,\n"
@@ -46,7 +46,7 @@ public class RevenueDAO {
             ps.setInt(3, year);
             rs = ps.executeQuery();
             if (rs.next()) {
-                long totalMoney = rs.getLong("TotalMoney");
+                double totalMoney = rs.getDouble("TotalMoney");
                 return totalMoney;
             }
         } catch (Exception e) {
@@ -55,20 +55,25 @@ public class RevenueDAO {
         return 0;
     }
 
-    public long getRevenueOfWeb(int month) {
+    public static void main(String[] args) {
+        RevenueDAO dao = new RevenueDAO();
+        System.out.println(dao.getRevenueOfWeb(7, 2024));
+    }
+    public double getRevenueOfWeb(int month, int year) {
         String sql = "SELECT \n"
-                + "    MONTH(O.FinishDate) AS month,\n"
-                + "    YEAR(O.FinishDate) AS year,\n"
-                + "    SUM(O.TotalMoney) AS total_revenue\n"
-                + "FROM \n"
-                + "    [Order] O\n"
-                + "WHERE \n"
-                + "    O.OrderStatusId = 3\n"
-                + "    AND MONTH(O.FinishDate) = ?\n"
-                + "GROUP BY \n"
-                + "    YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
-                + "ORDER BY \n"
-                + "    YEAR(O.FinishDate), MONTH(O.FinishDate);";
+                + "               MONTH(O.FinishDate) AS month,\n"
+                + "            YEAR(O.FinishDate) AS year,\n"
+                + "            SUM(O.TotalMoney) AS total_revenue\n"
+                + "        FROM \n"
+                + "        [Order] O\n"
+                + "          WHERE \n"
+                + "            O.OrderStatusId = 3\n"
+                + "                 AND MONTH(O.FinishDate) = ?\n"
+                + "				 AND YEAR(O.FinishDate) = ?\n"
+                + "              GROUP BY \n"
+                + "                YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
+                + "             ORDER BY \n"
+                + "                 YEAR(O.FinishDate), MONTH(O.FinishDate)";
 
         // Initialize resources
         Connection conn = null;
@@ -80,12 +85,13 @@ public class RevenueDAO {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, month);
+            ps.setInt(2, year);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                double totalRevenue = rs.getDouble("total_revenue");
+                double totalRevenue = rs.getDouble("total_revenue") * 1000;
                 double finalRevenue = totalRevenue * 0.05;
-                return (long) finalRevenue;
+                return  Math.ceil(finalRevenue);
             }
         } catch (Exception e) {
             // Handle exceptions and possibly log them
@@ -766,8 +772,4 @@ public class RevenueDAO {
         return 0;
     }
 
-    public static void main(String[] args) {
-        RevenueDAO dao = new RevenueDAO();
-        System.out.println(dao.AccountValid3(2024));
-    }
 }

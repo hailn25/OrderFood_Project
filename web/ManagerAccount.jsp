@@ -39,7 +39,7 @@
         <div class="" id="home">
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="revenueAdmin">
+                    <a class="navbar-brand" href="HomeOfAdmin.jsp">
                         <h1 class="tm-site-title mb-0">Admin</h1>
                     </a>
                     <button
@@ -56,6 +56,15 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
+
+                            <c:if test="${sessionScope.account.roleId == 1}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="HomeOfAdmin.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
                                     <a class="nav-link" href="revenueAdmin">
@@ -65,7 +74,7 @@
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 1}">
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerCategory">
                                         <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -90,7 +99,7 @@
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="managerAccount">
-                                        <i class="far fa-user"></i> Tài khoản
+                                        <i class="far fa-user"></i> Quản lý tài khoản
                                     </a>
                                 </li>
                             </c:if>
@@ -158,7 +167,7 @@
                                     </c:if>
                                     <c:if test="${o.status == false}">
                                         <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmOpen(event)" class="delete" data-toggle="modal">
-                                            <i class="material-icons fas fa-toggle-off" style="color: green" data-toggle="tooltip" title="Mở khoá tài khoản">&#xE872;</i>
+                                            <i class="material-icons fas fa-toggle-off" style="color: green" data-toggle="tooltip" title="Mở khoá tài khoản"></i>
                                         </a>
                                     </c:if>
 

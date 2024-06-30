@@ -39,18 +39,19 @@ public class RevenueAdmin extends HttpServlet {
         RevenueDAO dao = new RevenueDAO();
         LocalDate date = LocalDate.now();
         int year = date.getYear();
-        double t1 = dao.getRevenueOfWeb(1) + (dao.AccountValid1(year) * 1000000);
-        double t2 = dao.getRevenueOfWeb(2) + (dao.AccountValid2(year) * 1000000);
-        double t3 = dao.getRevenueOfWeb(3) + (dao.AccountValid3(year) * 1000000);
-        double t4 = dao.getRevenueOfWeb(4) + (dao.AccountValid4(year) * 1000000);
-        double t5 = dao.getRevenueOfWeb(5) + (dao.AccountValid5(year) * 1000000);
-        double t6 = dao.getRevenueOfWeb(6) + (dao.AccountValid6(year) * 1000000);
-        double t7 = dao.getRevenueOfWeb(7) + (dao.AccountValid7(year) * 1000000);
-        double t8 = dao.getRevenueOfWeb(8) + (dao.AccountValid8(year) * 1000000);
-        double t9 = dao.getRevenueOfWeb(9) + (dao.AccountValid9(year) * 1000000);
-        double t10 = dao.getRevenueOfWeb(10) + (dao.AccountValid10(year) * 1000000);
-        double t11 = dao.getRevenueOfWeb(11) + (dao.AccountValid11(year) * 1000000);
-        double t12 = dao.getRevenueOfWeb(12) + (dao.AccountValid12(year) * 1000000);
+        double t1 = dao.getRevenueOfWeb(1, year) + (dao.AccountValid1(year) * 1000000);
+        double t2 = dao.getRevenueOfWeb(2, year) + (dao.AccountValid2(year) * 1000000);
+        double t3 = dao.getRevenueOfWeb(3, year) + (dao.AccountValid3(year) * 1000000);
+        double t4 = dao.getRevenueOfWeb(4, year) + (dao.AccountValid4(year) * 1000000);
+        double t5 = dao.getRevenueOfWeb(5, year) + (dao.AccountValid5(year) * 1000000);
+        double t6 = dao.getRevenueOfWeb(6, year) + (dao.AccountValid6(year) * 1000000);
+        double t7 = dao.getRevenueOfWeb(7, year) + (dao.AccountValid7(year) * 1000000);
+        double t8 = dao.getRevenueOfWeb(8, year) + (dao.AccountValid8(year) * 1000000);
+        double t9 = dao.getRevenueOfWeb(9, year) + (dao.AccountValid9(year) * 1000000);
+        double t10 = dao.getRevenueOfWeb(10, year) + (dao.AccountValid10(year) * 1000000);
+        double t11 = dao.getRevenueOfWeb(11, year) + (dao.AccountValid11(year) * 1000000);
+        double t12 = dao.getRevenueOfWeb(12, year) + (dao.AccountValid12(year) * 1000000);
+
 
         request.setAttribute("t1", t1);
         request.setAttribute("t2", t2);

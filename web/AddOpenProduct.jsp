@@ -56,12 +56,21 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="category">Trạng thái</label>
-                                        <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
-                                            <option value="1">Bật</option>
-                                            <option value="0">Tắt</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="status">Trạng thái</label>
+                                            <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
+                                                <option value="1">Bán hàng</option>
+                                                <option value="0">Ẩn</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="sale">Sale</label>
+                                            <select style="color: white" class="custom-select tm-select-accounts" name="sale" required>
+                                                <option value="0">Tắt</option>
+                                                <option value="1">Bật</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">

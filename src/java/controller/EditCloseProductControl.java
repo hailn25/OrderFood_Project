@@ -23,7 +23,7 @@ public class EditCloseProductControl extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
+//        try {
             response.setContentType("text/html;charset=UTF-8");
 
             // Lấy các tham số từ form
@@ -62,7 +62,7 @@ public class EditCloseProductControl extends HttpServlet {
                 description = Validation.removeUnnecessaryBlank(description);
 
                 ProductDAO dao = new ProductDAO();
-                dao.editProduct(name, price, description, img, category, quantity, status, Date.valueOf(updateDate), id);
+//                dao.editProduct(name, price, description, img, category, quantity, status, Date.valueOf(updateDate), id);
 
                 response.sendRedirect("managerCloseProduct");
             } else {
@@ -70,9 +70,9 @@ public class EditCloseProductControl extends HttpServlet {
                 request.getRequestDispatcher("loadCloseProduct?pid=" + id + "&cid=" + category + "&status=" + status).forward(request, response);
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(EditOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(EditOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Override

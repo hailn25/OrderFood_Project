@@ -136,11 +136,12 @@ public class ProductDAO {
     }
 
     public void editProduct(String name, String price, String description,
-            String img, String categoryId, String quantity, String status,
+            String img, String categoryId, String isSale, String quantity, String status,
             Date updateDate, String productId) throws SQLException {
+
         try {
             String sql = "update [dbo].[Product]\n"
-                    + "set [Name] = ?, [Price] = ?, [Description] = ?, [ImageURL] = ?, [CategoryId] = ?, [Quantity] = ?, [Status] = ?, [UpdateDate] = ?\n"
+                    + "set [Name] = ?, [Price] = ?, [Description] = ?, [ImageURL] = ?, [CategoryId] = ?, [IsSale] = ?, [Quantity] = ?, [Status] = ?, [UpdateDate] = ?\n"
                     + "where [ProductId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -149,20 +150,81 @@ public class ProductDAO {
             ps.setString(3, description);
             ps.setString(4, img);
             ps.setString(5, categoryId);
-            ps.setString(6, quantity);
-            ps.setString(7, status);
-            ps.setDate(8, updateDate);
-            ps.setString(9, productId);
+            ps.setString(6, isSale);
+            ps.setString(7, quantity);
+            ps.setString(8, status);
+            ps.setDate(9, updateDate);
+            ps.setString(10, productId);
             ps.executeUpdate();
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+
+    public void updatePriceSale_on(String productId) {
+        try {
+            String sql = "update [dbo].[Product]\n"
+                    + "set  [Price] = [Price] * 0.9\n"
+                    + "where [ProductId] = ? and [IsSale] = 1";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String quantity, Date createDate, Date updateDate, String status) throws SQLException {
+    public void updatePriceSale_off(String productId) {
         try {
-            String sql = "insert into [dbo].[Product] ([Name], [Price], [Description], [ImageURL], [CategoryId], [RestaurantId], [Quantity], [CreateDate], [UpdateDate],[Status])\n"
-                    + "values (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "update [dbo].[Product]\n"
+                    + "set  [Price] = [Price] * (1/0.9)\n"
+                    + "where [ProductId] = ? and [IsSale] = 0";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String getCurrentIsSale(String productId) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT [IsSale]\n"
+                + "FROM [dbo].[Product] \n"
+                + "WHERE [ProductId] = ?";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, productId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {            
+            return rs.getString(1);
+        }
+        return null;
+    }
+    
+        public static void main(String[] args) {
+        try {
+            ProductDAO dao = new dao.ProductDAO();
+            System.out.println(dao.getCurrentIsSale("4"));;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String isSale, String quantity, Date createDate, Date updateDate, String status) throws SQLException {
+        try {
+            String sql = "insert into [dbo].[Product] ([Name], [Price], [Description], [ImageURL], [CategoryId], [RestaurantId], [IsSale], [Quantity], [CreateDate], [UpdateDate],[Status])\n"
+                    + "values (?,?,?,?,?,?,?,?,?,?,?)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, name);
@@ -171,17 +233,17 @@ public class ProductDAO {
             ps.setString(4, img);
             ps.setString(5, category);
             ps.setInt(6, RestaurantId);
-            ps.setString(7, quantity);
-            ps.setDate(8, createDate);
-            ps.setDate(9, updateDate);
-            ps.setString(10, status);
+            ps.setString(7, isSale);
+            ps.setString(8, quantity);
+            ps.setDate(9, createDate);
+            ps.setDate(10, updateDate);
+            ps.setString(11, status);
 
             ps.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 
     public Product getProductByID(int id) {
         try {
@@ -212,6 +274,7 @@ public class ProductDAO {
         }
         return null;
     }
+
     public int getQuantityProduct(int pid) {
         try {
 
@@ -232,6 +295,5 @@ public class ProductDAO {
         }
         return 0;
     }
-    
 
 }

@@ -35,13 +35,7 @@ public class ViewOrderByRestaurant extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         OrderDAO orderDAO = new OrderDAO();
-        String action = request.getParameter("action");
         int orderId = Integer.parseInt(request.getParameter("oid"));
-
-//        if ("view".equals(action)) {
-//            orderDAO.getOrderDetailByoid(orderId);
-//        }
-
         ViewDetail listView = orderDAO.getViewDetailslByoid(orderId);
         request.setAttribute("listV", listView);
 

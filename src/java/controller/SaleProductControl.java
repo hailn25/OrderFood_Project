@@ -4,8 +4,6 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.OrderDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,19 +12,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Category;
-import model.OrderDetailDTO_Huyvq;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadOrderDetailOfCustomerControl", urlPatterns = {"/loadOrderDetailOfCustomer"})
-public class LoadOrderDetailOfCustomerControl extends HttpServlet {
+@WebServlet(name = "SaleProductControl", urlPatterns = {"/saleProduct"})
+public class SaleProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,16 +34,23 @@ public class LoadOrderDetailOfCustomerControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            int orderDetailId = Integer.parseInt(request.getParameter("id"));
-            OrderDAO dao = new OrderDAO();
-            OrderDetailDTO_Huyvq o = dao.getOrderDetailById(orderDetailId);
-            request.setAttribute("detail", o);
-            
-            request.getRequestDispatcher("OrderDetailCustomer.jsp").forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadOrderDetailOfCustomerControl.class.getName()).log(Level.SEVERE, null, ex);
+
+        response.setContentType("text/html;charset=UTF-8");
+        String productId = request.getParameter("pid");
+        String isSale = request.getParameter("isSale");
+
+        ProductDAO dao = new ProductDAO();
+
+        if (isSale.equals("1")) {
+            dao.updatePriceSale_on(productId);
+            response.sendRedirect("managerOpenProduct");
+
+        } else if (isSale.equals("0")) {
+            dao.updatePriceSale_off(productId);
+            response.sendRedirect("managerOpenProduct");
+
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

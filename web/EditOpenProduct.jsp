@@ -24,7 +24,7 @@
             https://templatemo.com/tm-524-product-admin
         -->
     </head>
-    
+
     <body style="background-color: #F6F6F6">
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
@@ -44,6 +44,7 @@
                                     <div>
                                         <input id="id" name="id" type="hidden" value="${detail.productId}" class="form-control validate" />
                                         <input id="OldImage" name="OldImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />
+                                        <input id="saleStatus_Before" name="saleStatus_Before" type="hidden" value="${isSale}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Tên sản phẩm</label>
@@ -61,13 +62,25 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="category">Trạng thái</label>
-                                        <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
-                                            <option value="1" ${status == true ? "selected" : ""}>Bán hàng</option>
-                                            <option value="0" ${status == false  ? "selected" : ""}>Ẩn</option>
-                                        </select>
+
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="category">Trạng thái</label>
+                                            <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
+                                                <option value="0" ${detail.status == false  ? "selected" : ""}>Ẩn</option>
+                                                <option value="1" ${detail.status == true ? "selected" : ""}>Bán hàng</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="sale">Sale</label>
+                                            <select style="color: white" class="custom-select tm-select-accounts" name="isSale" required>
+                                                <option value="1" ${detail.isSale == true ? "selected" : ""}>Bật</option>
+                                                <option value="0" ${detail.isSale == false  ? "selected" : ""}>Tắt</option>
+                                            </select>
+                                        </div>
+
                                     </div>
+
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="price">Đơn giá</label>

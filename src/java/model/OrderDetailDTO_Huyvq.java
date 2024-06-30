@@ -10,6 +10,7 @@ package model;
  */
 public class OrderDetailDTO_Huyvq {
     private int orderDetailId;
+    private int orderId;
     private String name;
     private int quantity;
     private double totalMoney;
@@ -27,7 +28,23 @@ public class OrderDetailDTO_Huyvq {
         this.orderStatusId = orderStatusId;
         this.imageURL = imageURL;
     }
+    
+    public OrderDetailDTO_Huyvq(int orderId, String name, double totalMoney, int orderStatusId) {
+        this.orderId = orderId;
+        this.name = name;
+        this.totalMoney = totalMoney;
+        this.orderStatusId = orderStatusId;
+    }
 
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+    
+    
     public int getOrderDetailId() {
         return orderDetailId;
     }

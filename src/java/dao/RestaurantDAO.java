@@ -44,8 +44,58 @@ public class RestaurantDAO {
         return restaurantId;
     }
 
-//    public static void main(String[] args) {
-//        RestaurantDAO dao = new RestaurantDAO();
-//        System.out.println(dao.getRestaurantIdByAccountId(8));
-//    }
+    public void insertRestaurant(String name, String email, String phone, String address, String accountId) throws SQLException {
+        try {
+            String sql = "MERGE [dbo].[Restaurant] AS target\n"
+                    + "USING (SELECT 1 AS dummy) AS source\n"
+                    + "ON target.[AccountId] = ?\n"
+                    + "\n"
+                    + "WHEN MATCHED THEN \n"
+                    + "    UPDATE SET \n"
+                    + "        target.[Name] = ?, \n"
+                    + "        target.[Email] = ?, \n"
+                    + "        target.[Phone] = ?, \n"
+                    + "        target.[Address] = ?\n"
+                    + "\n"
+                    + "WHEN NOT MATCHED BY TARGET THEN\n"
+                    + "    INSERT ([Name], [Email], [Phone], [Address], [AccountId])\n"
+                    + "    VALUES (?, ?, ?, ?, ?);";
+
+            conn = new DBContext().getConnection(); // Assuming DBContext handles connection properly
+            ps = conn.prepareStatement(sql);
+
+            // Parameters for both UPDATE and INSERT parts of the MERGE statement
+            ps.setString(1, accountId);
+            ps.setString(2, name);
+            ps.setString(3, email);
+            ps.setString(4, phone);
+            ps.setString(5, address);
+
+            // Parameters specific to INSERT part of the MERGE statement
+            ps.setString(6, name);
+            ps.setString(7, email);
+            ps.setString(8, phone);
+            ps.setString(9, address);
+            ps.setString(10, accountId);
+
+            ps.executeUpdate();
+
+            // Close PreparedStatement and Connection properly
+            ps.close();
+            conn.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void main(String[] args) {
+        
+        try {
+            RestaurantDAO dao = new RestaurantDAO();
+            dao.insertRestaurant("của  Huy", "vuhuy@gmail.com", "0981222222", "Hà Nội", "7");
+        } catch (SQLException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 }

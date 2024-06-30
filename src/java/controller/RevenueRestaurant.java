@@ -46,18 +46,18 @@ public class RevenueRestaurant extends HttpServlet {
 
         RevenueDAO dao = new RevenueDAO();
 
-        long thang1 = dao.getTotalMoneyByMonth(restaurantId, 1, year);
-        long thang2 = dao.getTotalMoneyByMonth(restaurantId, 2, year);
-        long thang3 = dao.getTotalMoneyByMonth(restaurantId, 3, year);
-        long thang4 = dao.getTotalMoneyByMonth(restaurantId, 4, year);
-        long thang5 = dao.getTotalMoneyByMonth(restaurantId, 5, year);
-        long thang6 = dao.getTotalMoneyByMonth(restaurantId, 6, year);
-        long thang7 = dao.getTotalMoneyByMonth(restaurantId, 7, year);
-        long thang8 = dao.getTotalMoneyByMonth(restaurantId, 8, year);
-        long thang9 = dao.getTotalMoneyByMonth(restaurantId, 9, year);
-        long thang10 = dao.getTotalMoneyByMonth(restaurantId, 10, year);
-        long thang11 = dao.getTotalMoneyByMonth(restaurantId, 11, year);
-        long thang12 = dao.getTotalMoneyByMonth(restaurantId, 12, year);
+        double thang1 = dao.getTotalMoneyByMonth(restaurantId, 1, year) * 1000;
+        double thang2 = dao.getTotalMoneyByMonth(restaurantId, 2, year) * 1000;
+        double thang3 = dao.getTotalMoneyByMonth(restaurantId, 3, year) * 1000;
+        double thang4 = dao.getTotalMoneyByMonth(restaurantId, 4, year) * 1000;
+        double thang5 = dao.getTotalMoneyByMonth(restaurantId, 5, year) * 1000;
+        double thang6 = dao.getTotalMoneyByMonth(restaurantId, 6, year) * 1000;
+        double thang7 = dao.getTotalMoneyByMonth(restaurantId, 7, year) * 1000;
+        double thang8 = dao.getTotalMoneyByMonth(restaurantId, 8, year) * 1000;
+        double thang9 = dao.getTotalMoneyByMonth(restaurantId, 9, year) * 1000;
+        double thang10 = dao.getTotalMoneyByMonth(restaurantId, 10, year) * 1000;
+        double thang11 = dao.getTotalMoneyByMonth(restaurantId, 11, year) * 1000;
+        double thang12 = dao.getTotalMoneyByMonth(restaurantId, 12, year) * 1000;
 
         request.setAttribute("thang1", thang1);
         request.setAttribute("thang2", thang2);

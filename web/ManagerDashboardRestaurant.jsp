@@ -55,7 +55,7 @@
 
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="revenueRestaurant">
+                    <a class="navbar-brand" href="HomeOfRestaurant.jsp">
                         <c:if test="${not empty sessionScope.account.name}">
                             <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
                             </c:if>
@@ -75,7 +75,15 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 4}">
-<li class="nav-item">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="HomeOfRestaurant.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 4}">
+                                <li class="nav-item">
                                     <a class="nav-link active" href="revenueRestaurant">
                                         <i class="fas fa-tachometer-alt"></i> Thống kê
                                         <span class="sr-only">(current)</span>
@@ -83,7 +91,7 @@
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 1}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerCategory">
                                         <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -99,11 +107,11 @@
                                 </li>
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 4}">                          
-                                <li class="nav-item">
-                                    <a class="nav-link" href="managerCloseProduct">
-                                        <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
-                                    </a>
-                                </li>
+                                <!--                                <li class="nav-item">
+                                                                    <a class="nav-link" href="managerCloseProduct">
+                                                                        <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
+                                                                    </a>
+                                                                </li>-->
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 4}">
                                 <li class="nav-item dropdown">
@@ -160,7 +168,7 @@
 
                 function drawVisualization() {
                     var data = google.visualization.arrayToDataTable([
-                        ['Month', 'Doanh thu'],
+                        ['Tháng', 'Doanh thu'],
                         ['Tháng 1', ${requestScope.thang1}],
                         ['Tháng 2', ${requestScope.thang2}],
                         ['Tháng 3', ${requestScope.thang3}],
@@ -175,9 +183,21 @@
                         ['Tháng 12', ${requestScope.thang12}]
                     ]);
 
+                    var formatter = new google.visualization.NumberFormat({
+                        suffix: ' VNĐ',
+                        fractionDigits: 0
+                    });
+
+                    formatter.format(data, 1); // Định dạng cột thứ 2 (index 1) là số và thêm ' VNĐ' vào sau giá trị
+
+                    var currentYear = new Date().getFullYear();
+
                     var options = {
-                        title: 'Doanh thu của nhà hàng',
-vAxis: {title: 'VNĐ'},
+                        title: 'Doanh thu của nhà hàng trong năm ' + currentYear,
+                        vAxis: {
+                            title: 'Doanh thu (VNĐ)',
+                            format: '#,### VNĐ'  // Định dạng số với "VNĐ" sau
+                        },
                         hAxis: {title: 'Tháng'},
                         seriesType: 'bars'
                     };
@@ -185,6 +205,10 @@ vAxis: {title: 'VNĐ'},
                     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
                     chart.draw(data, options);
                 }
+
+
+
+
             </script>
             <div class="col-12 tm-block-col">
                 <div class=" tm-block-taller">

@@ -27,7 +27,7 @@
 
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="revenueAdmin">
+                    <a class="navbar-brand" href="HomeOfAdmin.jsp">
                         <c:if test="${not empty sessionScope.account.name}">
                             <h1 class="tm-site-title mb-0">Admin</h1>
                         </c:if>
@@ -48,6 +48,14 @@
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
+                                    <a class="nav-link" href="HomeOfAdmin.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 1}">
+                                <li class="nav-item">
                                     <a class="nav-link active" href="revenueAdmin">
                                         <i class="fas fa-tachometer-alt"></i> Thống kê
                                         <span class="sr-only">(current)</span>
@@ -55,7 +63,7 @@
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 1}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerCategory">
                                         <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -81,7 +89,7 @@
                             <c:if test="${sessionScope.account.roleId == 1}">                          
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerAccount">
-                                        <i class="far fa-user"></i> Tài khoản
+                                        <i class="far fa-user"></i> Quản lý tài khoản
                                     </a>
                                 </li>
                             </c:if>
@@ -106,66 +114,67 @@
                 </div>
             </nav>
 
+            <script type="text/javascript">
+                google.charts.load('current', {'packages': ['corechart']});
+                google.charts.setOnLoadCallback(drawChart);
 
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Tháng', 'Doanh thu'],
+                        ['Tháng 1', ${t1}],
+                        ['Tháng 2', ${t2}],
+                        ['Tháng 3', ${t3}],
+                        ['Tháng 4', ${t4}],
+                        ['Tháng 5', ${t5}],
+                        ['Tháng 6', ${t6}],
+                        ['Tháng 7', ${t7}],
+                        ['Tháng 8', ${t8}],
+                        ['Tháng 9', ${t9}],
+                        ['Tháng 10', ${t10}],
+                        ['Tháng 11', ${t11}],
+                        ['Tháng 12', ${t12}]
+                    ]);
 
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <html>
-                <head>
-                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                    <script type="text/javascript">
-                        google.charts.load('current', {'packages': ['corechart']});
-                        google.charts.setOnLoadCallback(drawChart);
+                    var formatter = new google.visualization.NumberFormat({
+                        suffix: ' VNĐ',
+                        fractionDigits: 0
+                    });
 
-                        function drawChart() {
-                            var data = google.visualization.arrayToDataTable([
-                                ['Tháng', 'Doanh thu'],
-                                ['Tháng 1', ${t1}],
-                                ['Tháng 2', ${t2}],
-                                ['Tháng 3', ${t3}],
-                                ['Tháng 4', ${t4}],
-                                ['Tháng 5', ${t5}],
-                                ['Tháng 6', ${t6}],
-                                ['Tháng 7', ${t7}],
-                                ['Tháng 8', ${t8}],
-                                ['Tháng 9', ${t9}],
-                                ['Tháng 10', ${t10}],
-                                ['Tháng 11', ${t11}],
-                                ['Tháng 12', ${t12}]
-                            ]);
+                    formatter.format(data, 1); // Định dạng cột thứ 2 (index 1) là số và thêm ' VNĐ' vào sau giá trị
+                    var currentYear = new Date().getFullYear();
+                    var options = {
+                        title: 'Doanh thu của web trong năm ' + currentYear,
+                        curveType: 'function',
+                        legend: {position: 'bottom'},
+                        vAxis: {
+                            title: 'Doanh thu (VNĐ)',
+                            format: '#,### VNĐ'  // Định dạng số với "VNĐ" sau
+                        },
+                    };
 
-                            var options = {
-                                title: 'Doanh thu của nhà hàng trong năm 2024',
-                                curveType: 'function',
-                                legend: {position: 'bottom'}
-                            };
+                    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
-                            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+                    chart.draw(data, options);
+                }
+            </script>
 
-                            chart.draw(data, options);
-                        }
-                    </script>
-                </head>
-                <div class="col-12 tm-block-col">
-                    <div class=" tm-block-taller">
-                        <div id="curve_chart" style="width: 1300px; height: 500px; margin: 50px auto"></div>
-                    </div>
+            <div class="col-12 tm-block-col">
+                <div class="tm-block-taller">
+                    <div id="curve_chart" style="width: 1300px; height: 500px; margin: 50px auto"></div>
                 </div>
+            </div>
+        </div>
 
-            </html>
-        </head>
-        
-    </div>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <!-- https://jquery.com/download/ -->
+        <script src="js/moment.min.js"></script>
+        <!-- https://momentjs.com/ -->
+        <script src="js/Chart.min.js"></script>
+        <!-- http://www.chartjs.org/docs/latest/ -->
+        <script src="js/bootstrap.min.js"></script>
+        <!-- https://getbootstrap.com/ -->
+        <script src="js/tooplate-scripts.js"></script>
 
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <!-- https://jquery.com/download/ -->
-    <script src="js/moment.min.js"></script>
-    <!-- https://momentjs.com/ -->
-    <script src="js/Chart.min.js"></script>
-    <!-- http://www.chartjs.org/docs/latest/ -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- https://getbootstrap.com/ -->
-    <script src="js/tooplate-scripts.js"></script>
-
-</body>
+    </body>
 
 </html>

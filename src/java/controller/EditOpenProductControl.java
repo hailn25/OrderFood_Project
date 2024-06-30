@@ -22,7 +22,7 @@ import utils.Validation;
 public class EditOpenProductControl extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException {
         try {
             response.setContentType("text/html;charset=UTF-8");
 
@@ -31,38 +31,75 @@ public class EditOpenProductControl extends HttpServlet {
             String name = request.getParameter("name");
             String description = request.getParameter("description");
             String category = request.getParameter("category");
-            String price = request.getParameter("price");
-            String quantity = request.getParameter("quantity");
+            String priceStr = request.getParameter("price");
+            String quantityStr = request.getParameter("quantity");
             String status = request.getParameter("status");
+            String isSale = request.getParameter("isSale");
             LocalDate updateDate = LocalDate.now();
+
+            // Kiểm tra các trường nhập liệu
+            int lengthName = Validation.removeAllBlank(name).length();
+            int lengthDescription = Validation.removeAllBlank(description).length();
+
+            double price = 0;
+            int quantity = 0;
+            boolean isNumeric = true;
+
+            // Kiểm tra xem giá trị của price và quantity có phải là số không và lớn hơn 0
+            try {
+                price = Double.parseDouble(priceStr);
+                quantity = Integer.parseInt(quantityStr);
+                if (price <= 0 || quantity <= 0) {
+                    isNumeric = false;
+                }
+            } catch (NumberFormatException e) {
+                isNumeric = false;
+            }
 
             // Xử lý file upload
             Part filePart = request.getPart("image");
             String fileName = filePart.getSubmittedFileName();
+            String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
             // Kiểm tra nếu có tệp mới được tải lên
             String img = null;
             if (fileName != null && !fileName.isEmpty()) {
-                String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
-                filePart.write(uploadPath);
-                img = fileName;
+                if (fileExtension.equals("jpg") || fileExtension.equals("png") || fileExtension.equals("webp")) {
+                    String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
+                    filePart.write(uploadPath);
+                    img = fileName;
+                } else {
+                    request.setAttribute("error", "Chỉ chấp nhận các tệp JPG, PNG, hoặc WebP!");
+                    request.getRequestDispatcher("loadOpenProduct?pid=" + id + "&cid=" + category + "&status=" + status).forward(request, response);
+                    return;
+                }
             } else {
                 img = request.getParameter("OldImage");
             }
 
-            int lengthName = Validation.removeAllBlank(name).length();
-            int lengthPrice = Validation.removeAllBlank(price).length();
-            int lengthQuantity = Validation.removeAllBlank(quantity).length();
-            int lengthDescription = Validation.removeAllBlank(description).length();
-            if (lengthName > 0 && lengthPrice > 0 && lengthQuantity > 0 && lengthDescription > 0) {
+            if (lengthName >= 2 && lengthName <= 30 && lengthDescription >= 4 && lengthDescription <= 500 && isNumeric) {
 
                 name = Validation.removeUnnecessaryBlank(name);
-                price = Validation.removeAllBlank(price);
-                quantity = Validation.removeAllBlank(quantity);
+                priceStr = Validation.removeAllBlank(priceStr);
+                quantityStr = Validation.removeAllBlank(quantityStr);
                 description = Validation.removeUnnecessaryBlank(description);
 
                 ProductDAO dao = new ProductDAO();
-                dao.editProduct(name, price, description, img, category, quantity, status, Date.valueOf(updateDate), id);
+
+                // Lấy giá trị isSale hiện tại của sản phẩm
+                String currentIsSale = dao.getCurrentIsSale(id);
+
+                // Cập nhật sản phẩm
+                dao.editProduct(name, priceStr, description, img, category, isSale, quantityStr, status, Date.valueOf(updateDate), id);
+
+                // Kiểm tra điều kiện và cập nhật giá bán nếu cần
+                if (!isSale.equals(currentIsSale)) {
+                    if (isSale.equals("1")) {
+                        dao.updatePriceSale_on(id);
+                    } else if (isSale.equals("0")) {
+                        dao.updatePriceSale_off(id);
+                    }
+                }
 
                 response.sendRedirect("managerOpenProduct");
             } else {
@@ -78,13 +115,21 @@ public class EditOpenProductControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EditOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EditOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

@@ -727,7 +727,7 @@ input[type="checkbox"]:focus {
 .read-only {
     color: #0266c4;
     pointer-events: none;
-    background-color: black;
+    background-color: white;
 }
 .select {
     background-color: white;

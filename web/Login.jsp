@@ -92,7 +92,7 @@
                                         <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Mật khẩu" required>
                                     </div>
                                     <p class="small mb-4"><a class="text-muted" href="ForgetPassword.jsp">Quên mật khẩu?</a></p>
-                                    <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>
+               
                                     <div style="color:red" id="error"></div>
                                     <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)">Đăng nhập</button>
                                     <hr class="my-4">
@@ -124,16 +124,7 @@
                 }
             }
 
-            function checkCaptcha(event) {
-                event.preventDefault();
-                var response = grecaptcha.getResponse();
-                var error = document.getElementById("error");
-                if (response.length === 0) {
-                    error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
-                } else {
-                    document.getElementById("login_form").submit();
-                }
-            }
+           
         </script>
     </body>
 </html>
