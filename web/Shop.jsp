@@ -1,8 +1,4 @@
-<%-- 
-    Document   : Shop
-    Created on : May 25, 2024, 10:30:39 PM
-    Author     : hailt
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -182,7 +178,7 @@
                                                         <div class="rounded position-relative fruite-item">
                                                             <div class="fruite-img">
                                                                 <a href="detail?pid=${p.producId}">
-                                                                    <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
+                                                                    <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 300px; object-fit: cover;">
                                                                 </a>
                                                             </div>
                                                             <c:if test="${p.isSale == true}">
