@@ -27,7 +27,7 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> getAllProductDTOByCategoryName(String categoryName) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
                     + "FROM     Product INNER JOIN\n"
                     + "                  Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
                     + "                  Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
@@ -50,7 +50,8 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getBoolean(12),
+                        rs.getInt(13)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,7 +64,7 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> searchProductByName(String productName) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
                     + "FROM     Product INNER JOIN\n"
                     + "Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
                     + "Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
@@ -85,7 +86,8 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getBoolean(12),
+                        rs.getInt(13)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,7 +100,7 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> getListProductByRestaurantId(int restaurantId) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
                     + "FROM     Account INNER JOIN\n"
                     + "Restaurant ON Account.AccountId = Restaurant.AccountId INNER JOIN\n"
                     + "Product ON Restaurant.RestaurantId = Product.RestaurantId\n"
@@ -120,7 +122,8 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getBoolean(12),
+                        rs.getInt(13)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,7 +136,7 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> searchByPrice(int minPrice) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
                     + "FROM    Product INNER JOIN\n"
                     + "		Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
                     + "		Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
@@ -156,7 +159,8 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getBoolean(12),
+                        rs.getInt(13)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,14 +176,14 @@ public class FunctionShopDAO {
 //        for (ProductDTO pt : dao.getAllProductDTOByCategoryName("Bánh kem")) {
 //            System.out.println(pt.toString());
 //        }
-        for (ProductDTO pt : dao.searchByPrice(50)) {
-            System.out.println(pt.toString());
-        }
+//        for (ProductDTO pt : dao.searchByPrice(50)) {
+//            System.out.println(pt.toString());
+//        }
 //        for (ProductDTO pt : dao.searchProductByAttribute("Cơm ", 0)) {
 //            System.out.println(pt.toString());
 //        }
-//        for (ProductDTO p : dao.getListProductByRestaurantId(1)) {
-//            System.out.println(p.toString());
-//        }
+        for (ProductDTO p : dao.getListProductByRestaurantId(1)) {
+            System.out.println(p.toString());
+        }
     }
 }

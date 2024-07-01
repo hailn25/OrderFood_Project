@@ -109,8 +109,8 @@ public class ShopDAO {
     public ArrayList<ProductDTO> getAllProductDTO() {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
-                    + "FROM     Account INNER JOIN\n"
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
+                    + "FROM Account INNER JOIN\n"
                     + "                  Restaurant ON Account.AccountId = Restaurant.AccountId INNER JOIN\n"
                     + "                  Product ON Restaurant.RestaurantId = Product.RestaurantId";
             con = new DBContext().getConnection();
@@ -129,7 +129,8 @@ public class ShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getBoolean(12),
+                        rs.getInt(13)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -175,9 +176,9 @@ public class ShopDAO {
 //        for (Category c : dao.getAllCategory()) {
 //            System.out.println(c.toString());
 //        }
-        for (CategoryDTO c : dao.getProductQuantityByCategory()) {
-              System.out.println(c.toString());
-        }
+//        for (CategoryDTO c : dao.getProductQuantityByCategory()) {
+//            System.out.println(c.toString());
+//        }
 //        for (ProductDTO pt : dao.getAllProductDTO()) {
 //            System.out.println(pt.toString());
 //        }

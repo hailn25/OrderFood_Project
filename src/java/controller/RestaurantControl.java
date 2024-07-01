@@ -6,6 +6,7 @@
 package controller;
 
 import dao.FunctionShopDAO;
+import dao.RestaurantDAO;
 import dao.ShopDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import model.ProductDTO;
+import model.RestaurantDTO;
 
 /**
  *
@@ -35,13 +37,16 @@ public class RestaurantControl extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         FunctionShopDAO dao = new FunctionShopDAO();
-
+        RestaurantDAO resDAO = new RestaurantDAO();
+        
         int restaurantId = -1;
         if (request.getParameter("restaurantId") != null) {
             restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
         }
         ArrayList<ProductDTO> listProductDTO = dao.getListProductByRestaurantId(restaurantId);
-        request.setAttribute("listProductDTO", listProductDTO);
+        
+        ArrayList<RestaurantDTO> listRestaurantDTO = resDAO.getRestaurantDTOByRestaurantId(restaurantId);
+        request.setAttribute("listRestaurantDTO", listRestaurantDTO);
         
         int itemsPerPage = 10;
         int currentPage = 1;

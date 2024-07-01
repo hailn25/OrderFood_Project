@@ -39,33 +39,35 @@
         <%@include file="Header.jsp" %>
 
         <div class="container mt-5">
-            <div class="row header">
-                <div class="col-md-6 header-left" style="background-image: url('img/anhnhahang.jpg'); margin-top: 150px;">
-                    <div class="header-left-detail">
-                        <img src="img/admin1.png" alt="Không thể tải ảnh"/>
-                        <h5>Nestlé Chính hãng</h5>
+            <c:forEach items="${listRestaurantDTO}" var="r">
+                <div class="row header">
+                    <div class="col-md-6 header-left" style="background-image: url('img/anhnhahang.jpg'); margin-top: 150px;">
+                        <div class="header-left-detail">
+                            <img src="img/${r.imageAvatar}" alt="Không thể tải ảnh"/>
+                            <h5>${r.name}</h5>
+                        </div>
+                        <div class="header-left-detail-chat">
+                            <i class="far fa-comments"></i>
+                            <a href="#">Chat</a>
+                        </div>
                     </div>
-                    <div class="header-left-detail-chat">
-                        <i class="far fa-comments"></i>
-                        <a href="#">Chat</a>
-                    </div>
-                </div>
 
-                <div class="col-md-6 header-right" style="margin-top: 150px;">
-                    <div class="header-right-detail">
-                        <i class="fas fa-store"></i>
-                        <p>Sản phẩm: <span>1,3k</span></p>
-                    </div>
-                    <div class="header-right-detail">
-                        <i class="fas fa-star"></i>
-                        <p>Đánh Giá: <span>4.9 (540k Đánh Giá)</span></p>
-                    </div>
-                    <div class="header-right-detail">
-                        <i class="fas fa-user-check"></i>
-                        <p>Tham Gia: <span>6 Năm Trước</span></p>
+                    <div class="col-md-6 header-right" style="margin-top: 150px;">
+                        <div class="header-right-detail">
+                            <i class="fas fa-store"></i>
+                            <p>Số lượng sản phẩm: <span>${r.quantityOfProduct}</span></p>
+                        </div>
+                        <div class="header-right-detail">
+                            <i class="fas fa-star"></i>
+                            <p>Đánh Giá: <span>${r.rateStar}</span></p>
+                        </div>
+                        <div class="header-right-detail">
+                            <i class="fas fa-user-check"></i>
+                            <p>Tham Gia: <span>${r.createDate}</span></p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </c:forEach>
 
             <div class="row justify-content-center">
                 <div class="col-lg-12">

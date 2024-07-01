@@ -606,7 +606,7 @@
     position: relative;
 }
 
-.header-left img {
+.header-left .header-left-detail img {
     border-radius: 50%;
     width: 30%;
     border: 2px solid black;
