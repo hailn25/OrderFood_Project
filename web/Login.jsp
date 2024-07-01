@@ -47,14 +47,14 @@
                                     </div>
                                     <!-- Forgot password -->
                                     <p class="small mb-5 pb-lg-2"><a class="text-muted" href="ForgetPassword.jsp">Quên mật khẩu?</a></p>
-                                    <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>
-                                    <div style="color:red" id= "error"></div>
-                                    <hr class="my-4">
+<!--                                    <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>
+                                    <div style="color:red" id= "error"></div>-->
+<!--                                    <hr class="my-4">
 
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)" style="background-color:#81C408 ">Đăng nhập</button>
+-->                                    <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)" style="background-color:#81C408 ">Đăng nhập</button><!--
 
 
-                                    <hr class="my-4">
+                                    <hr class="my-4">-->
                                 </form>
 
                                 <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force">
@@ -88,18 +88,18 @@
 
         </script>
         <script type="text/javascript">
-    function checkCaptcha(event) {
-        event.preventDefault(); 
-
-        var response = grecaptcha.getResponse();
-        var error = document.getElementById("error");
-
-        if (response.length === 0) { 
-            error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
-        } else {
-            document.getElementById("login_form").submit(); 
-        }
-    }
+//    function checkCaptcha(event) {
+//        event.preventDefault(); 
+//
+//        var response = grecaptcha.getResponse();
+//        var error = document.getElementById("error");
+//
+//        if (response.length === 0) { 
+//            error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
+//        } else {
+//            document.getElementById("login_form").submit(); 
+//        }
+//    }
 </script>
 
     </body>

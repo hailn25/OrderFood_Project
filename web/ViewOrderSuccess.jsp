@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
@@ -97,7 +96,6 @@
                             <th>Tổng tiền </th>
                             <th>Trạng thái đơn hàng </th>
                             <th>Hoạt Động </th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -105,24 +103,16 @@
                             <tr>
                                 <td>${o.orderId}</td>
                                 <td>${o.name}</td>
-
                                 <td>${o.phone}</td>
                                 <td>${o.address}</td>
                                 <td>${o.note}</td>
                                 <td>${o.createDate}</td>
                                 <td>${o.totalMoney}</td>
+                                <td>${o.status}</td>
                                 <td>
-                                    ${o.status }
-                                </td>
-
-                                <td>
-                                    <a href="managerActions?action=finish&oid=${o.orderId}" class="ok" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Giao thành công">&#xe92f;</i></a>
-
-
+                                    <a href="managerActions?action=finish&oid=${o.orderId}" class="ok" data-toggle="modal" onclick="return confirmFinish();"><i class="material-symbols-outlined" data-toggle="tooltip" title="Giao thành công">&#xe92f;</i></a>
                                     <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
-
                                 </td>
-
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -135,6 +125,10 @@
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
             new DataTable('#example');
+
+            function confirmFinish() {
+                return confirm('Xác nhận giao hàng thành công?');
+            }
         </script>
     </body>
 </html>

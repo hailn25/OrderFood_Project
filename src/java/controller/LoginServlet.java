@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
                     request.getRequestDispatcher("home").forward(request, response);
                     break;
                 case 3:
-                    request.getRequestDispatcher("Shipper.jsp").forward(request, response);
+                    request.getRequestDispatcher("managerShipper").forward(request, response);
                     break;
                 case 4:
                     request.getRequestDispatcher("revenueRestaurant").forward(request, response);

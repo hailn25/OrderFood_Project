@@ -62,34 +62,42 @@ public class ProcessControl extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession(true);
-        Cart cart = (Cart) session.getAttribute("cart");
+ @Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    OrderDAO dao = new OrderDAO();
+    HttpSession session = request.getSession(true);
+    Cart cart = (Cart) session.getAttribute("cart");
 
-        if (cart == null) {
-            cart = new Cart();
-            session.setAttribute("cart", cart);
-        }
-        String productIdStr = request.getParameter("productId");
-        String newQuantityStr = request.getParameter("quantity");
+    if (cart == null) {
+        cart = new Cart();
+        session.setAttribute("cart", cart);
+    }
+    String productIdStr = request.getParameter("productId");
+    String newQuantityStr = request.getParameter("quantity");
 
-        if (productIdStr != null && newQuantityStr != null) {
-            try {
-                int productId = Integer.parseInt(productIdStr);
-                int newQuantity = Integer.parseInt(newQuantityStr);
+    if (productIdStr != null && newQuantityStr != null) {
+        try {
+            int productId = Integer.parseInt(productIdStr);
+            int newQuantity = Integer.parseInt(newQuantityStr);
+            int maxQuantity = dao.getQuantity(productId);
+
+            if (newQuantity <= maxQuantity) {
                 cart.updateItem(productId, newQuantity);
                 session.setAttribute("cart", cart);
                 response.sendRedirect(request.getContextPath() + "/Cart.jsp");
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Quantity exceeds maximum available");
             }
-        } else {
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+    } else {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
+}
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
