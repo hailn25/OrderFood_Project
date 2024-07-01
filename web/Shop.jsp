@@ -129,12 +129,12 @@
                                         <c:forEach items="${listRestaurantDTO}" var="r" >
                                             <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
                                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                                    <a href="shop?restaurantId=${r.restaurantId}">
+                                                    <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}">
                                                         <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh" style="height: 80px; width: 80px; border: 2px solid black; border-radius: 8px">
                                                     </a>
                                                 </div>
                                                 <div>
-                                                    <a href="shop?restaurantId=${r.restaurantId}" style="font-weight: bold;">${r.name}</a>
+                                                    <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}" style="font-weight: bold;">${r.name}</a>
                                                     <div class="d-flex mb-2">
                                                         <c:forEach begin="1" end="5" var="i">
                                                             <c:choose>
@@ -199,7 +199,9 @@
                                                                             </button>
                                                                         </form>
                                                                         <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                                            <a href="restaurant?restaurantId=${p.restaurantId}&page=${1}">
+                                                                                <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>

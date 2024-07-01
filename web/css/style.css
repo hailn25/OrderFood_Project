@@ -671,3 +671,32 @@
 .header-right-detail p span {
     color: red;
 }
+
+.fruite-item-restaurant {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.fruite-img-restaurant img {
+    max-height: 200px;
+}
+
+.fruite-item-restaurant a {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.fruite-item-restaurant .p-4 {
+    flex-grow: 1;
+}
+
+@media (min-width: 992px) {
+    .col-lg-2-4 {
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+}
