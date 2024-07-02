@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import model.Report;
+import model.ReportDTO;
 
 /**
  *
@@ -34,7 +35,7 @@ public class ManagerReportControl extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ReportDAO reportDAO = new ReportDAO();
-        ArrayList<Report> listReport = reportDAO.getAllReport();
+        ArrayList<ReportDTO> listReport = reportDAO.getAllReportDTO();
         request.setAttribute("listReport", listReport);
         
         request.getRequestDispatcher("ManagerReport.jsp").forward(request, response);

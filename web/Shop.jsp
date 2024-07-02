@@ -173,7 +173,7 @@
                                     <c:when test="${not empty listProductDTO}">
                                         <div class="row g-4 justify-content-center">
                                             <c:forEach items="${listProductDTO}" var="p">
-                                                <c:if test="${p.quantity >= 1}">
+                                                <c:if test="${p.quantity >= 1 and p.status == true}">
                                                     <div class="col-md-6 col-lg-6 col-xl-4">
                                                         <div class="rounded position-relative fruite-item">
                                                             <div class="fruite-img">

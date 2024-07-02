@@ -49,8 +49,15 @@
                         </div>
                         <div class="header-left-detail-chat">
                             <i class="far fa-comments"></i>
-                            <a href="#">Chat</a>
+                            <a href="#">Nhắn tin</a>
                         </div>
+
+                        <c:if test="${sessionScope.account.roleId == 2}">                          
+                            <div class="header-left-detail-report">
+                                <i class="far fa-flag"></i>
+                                <a href="Report.jsp">Báo cáo</a>
+                            </div>
+                        </c:if>
                     </div>
 
                     <!-- Phần thứ hai -->
@@ -91,7 +98,7 @@
                 <div class="col-lg-12">
                     <div class="row g-4 justify-content-center">
                         <c:forEach items="${listProductDTO}" var="p">
-                            <c:if test="${p.quantity >= 1}">
+                            <c:if test="${p.quantity >= 1 and p.status == true}">
                                 <div class="col-6 col-md-4 col-lg-2-4">
                                     <div class="rounded position-relative fruite-item-restaurant" style="height: 400px;">
                                         <div class="fruite-img-restaurant">
@@ -115,9 +122,9 @@
                                                             <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                                         </button>
                                                     </form>
-<!--                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                        <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                    </div>-->
+                                                    <!--                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                                                                        </div>-->
                                                 </div>
                                             </div>
                                         </div>

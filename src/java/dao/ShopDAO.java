@@ -83,11 +83,12 @@ public class ShopDAO {
         try {
             String sql = "SELECT\n"
                     + "c.name,\n"
-                    + "COUNT(p.ProductId) \n"
+                    + "COUNT(p.ProductId)\n"
                     + "FROM \n"
                     + "Category c\n"
                     + "JOIN \n"
                     + "Product p ON c.CategoryId = p.CategoryId\n"
+                    + "WHERE p.Status = 1 and p.Quantity >= 1\n"
                     + "GROUP BY\n"
                     + "c.[Name]";
             con = new DBContext().getConnection();

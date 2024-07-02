@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Report;
+import model.ReportDTO;
 
 /**
  *
@@ -53,7 +54,7 @@ public class ReportDAO {
     public void changeStatusReport(int reportId, int status) {
         try {
             String sql = "UPDATE [dbo].[Report]\n"
-                    + "SET  [Status] = ?\n"
+                    + "SET [ReportStatusId]  = ?\n"
                     + "WHERE  [ReportId]= ?";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -68,10 +69,40 @@ public class ReportDAO {
         }
     }
 
+    public ArrayList<ReportDTO> getAllReportDTO() {
+        ArrayList<ReportDTO> listReport = new ArrayList<>();
+        try {
+            String sql = "SELECT Report.ReportId, Report.Description, Report.ImageURL, Report.CreateDate, Report.AccountId, Report.RestaurantId, ReportStatus.StatusName\n"
+                    + "FROM     Report INNER JOIN\n"
+                    + "                  ReportStatus ON Report.ReportStatusId = ReportStatus.ReportStatusId";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listReport.add(new ReportDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getString(7)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listReport;
+    }
+
     public static void main(String[] args) {
         ReportDAO dao = new ReportDAO();
-        for (Report r : dao.getAllReport()) {
-            System.out.println(r.toString());
-        }
+//        for (Report r : dao.getAllReport()) {
+//            System.out.println(r.toString());
+//        }
+//        for (ReportDTO r : dao.getAllReportDTO()) {
+//            System.out.println(r.toString());
+//        }
     }
 }

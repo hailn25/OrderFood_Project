@@ -161,7 +161,7 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listReport}" var="r">
-                            <c:if test="${r.status == 1}">
+                            <c:if test="${r.statusName == 'Đang chờ xác nhận'}">
                                 <tr>
                                     <td>${r.reportId}</td>
                                     <td>${r.description}</td>
@@ -169,7 +169,7 @@
                                         <img src="img/${r.imageURL}" alt="Không thể tải ảnh">
                                     </td>
                                     <td>${r.createDate}</td>
-                                    <td>Đang chờ giao hàng</td>
+                                    <td>${r.statusName}</td>
                                     <td>
                                         <a href="changeStatusReport?changeStatus=${3}&reportId=${r.reportId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
                                         <a href="changeStatusReport?changeStatus=${2}&reportId=${r.reportId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>

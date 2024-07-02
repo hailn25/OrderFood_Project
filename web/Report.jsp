@@ -56,17 +56,12 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="status">Trạng thái</label>
-                                    <input type="text" class="form-control" id="status" name="status" required>
-                                </div>
-
-                                <div class="form-group">
                                     <label for="createDate">Ngày tạo</label>
                                     <input type="text" class="form-control" id="createDate" name="createDate" required>
                                 </div>
 
                                 <div class="form-group text-center">
-                                    <a href="OrderHistory.jsp" class="btn btn-secondary mr-2">Quay lại</a>
+                                    <a onclick="window.history.back();" class="btn btn-secondary mr-2">Quay lại</a>
                                     <button type="submit" class="btn btn-danger">Gửi tố cáo</button>
                                 </div>
 
