@@ -36,7 +36,7 @@ public class ProductSaleDAO {
             conn = new DBContext().getConnection();
             if (conn != null) {
                 if (timeFrame == 1) {
-                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL\n"
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
                             + "FROM Product_Sale ps\n"
                             + "JOIN Product p\n"
                             + "ON p.ProductId = ps.ProductID\n"
@@ -47,7 +47,7 @@ public class ProductSaleDAO {
 
                 }
                 if (timeFrame == 2) {
-                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL\n"
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
                             + "FROM Product_Sale ps\n"
                             + "JOIN Product p\n"
                             + "ON p.ProductId = ps.ProductID\n"
@@ -60,7 +60,7 @@ public class ProductSaleDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6)));
+                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6) , rs.getDouble(7), rs.getInt(8)));
 
             }
         } catch (ClassNotFoundException ex) {
@@ -91,7 +91,7 @@ public class ProductSaleDAO {
 
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.getProductSaleDetailById(1));
+        System.out.println(dao.getProductIsFlashSale("2024-07-01", 1));
 
     }
 

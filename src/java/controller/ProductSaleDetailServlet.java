@@ -41,43 +41,52 @@ public class ProductSaleDetailServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         String pid = request.getParameter("pid");
+        String time = request.getParameter("ptimeframe");
+        int timeFrame = Integer.parseInt(time);
         int id = Integer.parseInt(pid);
         LocalTime now = LocalTime.now();
         LocalTime timeFrame1 = LocalTime.of(8, 00);
         LocalTime timeFrame2 = LocalTime.of(14, 00);
         LocalTime timeFrame3 = LocalTime.of(18, 00);
         LocalTime timeFrame4 = LocalTime.of(22, 00);
-        LocalDate date = LocalDate.now();
         ProductSaleDAO dao = new ProductSaleDAO();
         ProductDAO da = new ProductDAO();
-        if((now.isAfter(timeFrame1) && now.isBefore(timeFrame2))  || (now.isAfter(timeFrame3) && now.isBefore(timeFrame4))){
-        ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
-        request.setAttribute("fsdetail", ps);
-        request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
+        if ((now.isAfter(timeFrame1) && now.isBefore(timeFrame2)) && timeFrame == 1) {
+            ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
+            request.setAttribute("fsdetail", ps);
+            request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
+        } else if ((now.isAfter(timeFrame3) && now.isBefore(timeFrame4)) && timeFrame == 2) {
+            ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
+            request.setAttribute("fsdetail", ps);
+            request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
         } else {
-            Product p = da.getProductByID(id);
+            
+        Product p = da.getProductByID(id);
         request.setAttribute("fsdetail", p);
         request.getRequestDispatcher("ProductSaleDetail1.jsp").forward(request, response);
-        }
-     
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+}
+
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+/**
+ * Handles the HTTP <code>GET</code> method.
+ *
+ * @param request servlet request
+ * @param response servlet response
+ * @throws ServletException if a servlet-specific error occurs
+ * @throws IOException if an I/O error occurs
+ */
+@Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductSaleDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (SQLException ex) {
+            Logger.getLogger(ProductSaleDetailServlet.class  
+
+.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -90,12 +99,15 @@ public class ProductSaleDetailServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductSaleDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (SQLException ex) {
+            Logger.getLogger(ProductSaleDetailServlet.class  
+
+.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -105,7 +117,7 @@ public class ProductSaleDetailServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

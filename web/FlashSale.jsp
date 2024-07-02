@@ -196,8 +196,11 @@
 
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                     <h4>
-                                                        <a href="psdetail?pid=${p.productId}" style="color: black;">${p.name}</a>
+                                                        <a href="psdetail?pid=${p.productId}&ptimeframe=${p.timeFrame}" style="color: black;">${p.name}</a>
                                                     </h4>
+                                                     <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center; font-family: sans-serif; font-size: 15px;color: orange" id="price-${p.productId}">
+                                                        <c:out value="${p.price}"/>
+                                                    </h5>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                                         <p style="display: flex; align-items: center;font-family: sans-serif;"id="price-${p.productId}">${p.salePrice}</p>
                                                         <form id="${p.productId}" onsubmit="addToCart(${p.productId}); return false;">
@@ -236,7 +239,6 @@
             selectedTimeSlot = getParamFromURL("timeFrame");
 
 
-            // Hàm để cập nhật trạng thái và đếm ngược
             // Hàm để cập nhật trạng thái và đếm ngược
             function updateStatusAndCountdown() {
                 // Lấy thời gian hiện tại
@@ -287,16 +289,56 @@
                 for (var i = 0; i < timeSlots.length; i++) {
                     timeSlots[i].classList.remove('selected');
                 }
-
-                // Tính toán thời gian đếm ngược đến 8h sáng ngày mai
                 var countdown = new Date(now);
-                if (hour >= 8) {
-                    countdown.setDate(countdown.getDate() + 1); // Chuyển sang ngày mai
-                }
-                countdown.setHours(8, 0, 0, 0);
 
-                // Cập nhật và hiển thị đếm ngược
+                if (selectedTimeSlot !== null) {
+                    document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
+                    timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(8, 0, 0, 0);
+                    }
+                    if (selectedTimeSlot === '2' && hour < 18) {
+                        status = 'Sắp diễn ra';
+                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                        countdown.setHours(18, 0, 0, 0);
+                    }
+                    if (selectedTimeSlot === '3') {
+                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                        countdown.setHours(8 + 24, 0, 0, 0);
+                        status = 'Sắp diễn ra';
+                    }
+                    if (selectedTimeSlot === '4') {
+                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                        countdown.setHours(18 + 24, 0, 0, 0);
+                        status = 'Sắp diễn ra';
+                    }
+                } else {
+                    timeSlot.classList.add('selected');
+                }
+
+                // Cập nhật đếm ngược
+                var itemsSale = document.querySelectorAll('.showP');
+                var hidden = document.querySelectorAll('.hideP');
+                if (status === 'Sắp diễn ra') {
+                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 8 : 18, 0, 0, 0);
+                    if (timeSlot === document.getElementById('timeSlot3')) {
+                        countdown.setHours(8 + 24, 0, 0, 0);
+                    }
+                    if (timeSlot === document.getElementById('timeSlot4')) {
+                        countdown.setHours(18 + 24, 0, 0, 0);
+                    }
+                    for (var i = 0; i < itemsSale.length; i++) {
+                        itemsSale[i].style.display = 'none';
+                    }
+                } else {
+                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 14 : 22, 0, 0, 0);
+                    for (var i = 0; i < hidden.length; i++) {
+                        hidden[i].style.display = 'none';
+                    }
+                }
+
                 var countdownElement = document.getElementById('time');
+
                 var countdownTime = countdown - now;
 
                 var hours = Math.floor((countdownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -307,12 +349,13 @@
                 minutes = String(minutes).padStart(2, '0');
                 seconds = String(seconds).padStart(2, '0');
 
-                countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
+                if ((selectedTimeSlot === '3' && hour < 8) || (selectedTimeSlot === '4' && hour < 18)) {
+                    countdownElement.textContent = '1 ngày ' + hours + ": " + minutes + ": " + seconds;
+                } else {
+                    countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
+                }
             }
-
-// Tự động cập nhật đếm ngược mỗi giây
             setInterval(updateStatusAndCountdown, 1000);
-
 
             document.addEventListener('DOMContentLoaded', function () {
                 const prices = document.querySelectorAll('[id^="price-"]');
@@ -341,7 +384,3 @@
         <script src="js/main.js"></script>
     </body>
 </html>
-
-
-
-

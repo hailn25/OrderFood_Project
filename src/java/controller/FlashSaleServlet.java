@@ -83,14 +83,12 @@ public class FlashSaleServlet extends HttpServlet {
 
     }
     public static void main(String[] args) throws SQLException {
-         LocalTime now = LocalTime.now();
         LocalDate today = LocalDate.now();
         String date = today.toString();
-            ProductSaleDAO psdao = new ProductSaleDAO();
-         List<ProductSaleDTO> list = new ArrayList<>();
-         list = psdao.getProductIsFlashSale("2024-06-26", 1);
-         System.out.println(list);
+             ProductSaleDAO psdao = new ProductSaleDAO();
+             System.out.println(psdao.getProductIsFlashSale("2024-07-02 ", 2));
     }
+  
    
 
 
