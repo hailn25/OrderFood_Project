@@ -44,10 +44,10 @@ public class FlashSaleServlet extends HttpServlet {
         LocalTime now = LocalTime.now();
         LocalDate today = LocalDate.now();
         String date = today.toString();
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
-        LocalTime timeFrame1 = LocalTime.of(14, 00);
-        LocalTime timeFrame2 = LocalTime.of(22, 00);
-
+        LocalTime timeFrame1 = LocalTime.of(13, 00);
+        LocalTime timeFrame2 = LocalTime.of(16, 00);
+        LocalTime timeFrame3 = LocalTime.of(19, 00);
+        LocalTime timeFrame4 = LocalTime.of(22, 00);
         ProductSaleDAO psdao = new ProductSaleDAO();
         List<ProductSaleDTO> list = new ArrayList<>();
         if (timeFrame == null) {
@@ -57,9 +57,11 @@ public class FlashSaleServlet extends HttpServlet {
             if (now.isBefore(timeFrame2) && now.isAfter(timeFrame1)) {
                 list = psdao.getProductIsFlashSale(date, 2);
             }
-            if (now.isAfter(timeFrame2)) {
-                date = tomorrow.toString();
-                list = psdao.getProductIsFlashSale(date, 1);
+            if (now.isBefore(timeFrame3) && now.isAfter(timeFrame2)) {
+                list = psdao.getProductIsFlashSale(date, 3);
+            }
+            if (now.isBefore(timeFrame4) && now.isAfter(timeFrame3)) {
+                list = psdao.getProductIsFlashSale(date, 4);
             }
         }
         if (timeFrame != null) {
@@ -70,12 +72,10 @@ public class FlashSaleServlet extends HttpServlet {
                 list = psdao.getProductIsFlashSale(date, 2);
             }
             if (timeFrame.equals("3")) {
-                date = tomorrow.toString();
-                list = psdao.getProductIsFlashSale(date, 1);
+                list = psdao.getProductIsFlashSale(date, 3);
             }
             if (timeFrame.equals("4")) {
-                date = tomorrow.toString();
-                list = psdao.getProductIsFlashSale(date, 2);
+                list = psdao.getProductIsFlashSale(date, 4);
             }
         }
         request.setAttribute("listPS", list);
@@ -83,8 +83,6 @@ public class FlashSaleServlet extends HttpServlet {
 
     }
     public static void main(String[] args) throws SQLException {
-        LocalDate today = LocalDate.now();
-        String date = today.toString();
              ProductSaleDAO psdao = new ProductSaleDAO();
              System.out.println(psdao.getProductIsFlashSale("2024-07-02 ", 2));
     }

@@ -160,16 +160,23 @@
                     <div class="row " style="background: #6A737A">
                         <!-- Khung thời gian 1 -->
                         <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
-                            <span style="color: white;font-size: 30px" >08:00-14:00</span><br>
+                            <span style="color: white;font-size: 30px" >10:00-13:00</span><br>
                             <span class="status" id="status1"></span>
                         </div>
                         <!-- Khung thời gian 2 -->
                         <div class="col" id="timeSlot2" onclick="window.location = 'flsale?timeFrame=2'" >
-                            <span style="color: white;font-size: 30px" >18:00-22:00</span><br>
+                            <span style="color: white;font-size: 30px" >13:00-16:00</span><br>
                             <span class="status"  id="status2"></span>
                         </div>
                         <!-- Khung thời gian 3 -->
-
+                        <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'" >
+                            <span style="color: white;font-size: 30px" >16:00-19:00</span><br>
+                            <span class="status"  id="status3"></span>
+                        </div>
+                        <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
+                            <span style="color: white;font-size: 30px" >19:00-22:00</span><br>
+                            <span class="status"  id="status4"></span>
+                        </div>
                         <div class="col-md-3">
                             <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
                             <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
@@ -198,7 +205,7 @@
                                                     <h4>
                                                         <a href="psdetail?pid=${p.productId}&ptimeframe=${p.timeFrame}" style="color: black;">${p.name}</a>
                                                     </h4>
-                                                     <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center; font-family: sans-serif; font-size: 15px;color: orange" id="price-${p.productId}">
+                                                    <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center; font-family: sans-serif; font-size: 15px;color: orange" id="price-${p.productId}">
                                                         <c:out value="${p.price}"/>
                                                     </h5>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
@@ -247,41 +254,65 @@
 
                 // Xác định khung thời gian và trạng thái
                 var timeSlot, status;
-                if (hour < 8) {
+                if (hour < 10) {
                     timeSlot = document.getElementById('timeSlot1');
                     status = 'Sắp diễn ra';
                     document.getElementById("status1").innerHTML = 'Sắp diễn ra';
                     document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                } else if (hour < 14) {
+                } else if (hour < 13) {
                     timeSlot = document.getElementById('timeSlot1');
                     document.getElementById("status1").innerHTML = 'Đang diễn ra';
                     document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Kết thúc trong';
                     status = 'Đang diễn ra';
-                } else if (hour < 18) {
+                } else if (hour < 16) {
                     timeSlot = document.getElementById('timeSlot2');
                     status = 'Sắp diễn ra';
                     document.getElementById("status1").innerHTML = 'Đã kết thúc';
-                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
-                    document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
-                } else if (hour < 22) {
-                    timeSlot = document.getElementById('timeSlot2');
                     document.getElementById("status2").innerHTML = 'Đang diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Kết thúc trong';
-                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
                     document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                } else if (hour < 19) {
+                    timeSlot = document.getElementById('timeSlot3');
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status3").innerHTML = 'Đang diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot2').style.pointerEvents = 'none';
+                    status = 'Đang diễn ra';
+                } else if (hour < 22) {
+                    timeSlot = document.getElementById('timeSlot4');
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status3").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status4").innerHTML = 'Đang diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot2').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot3').style.pointerEvents = 'none';
                     status = 'Đang diễn ra';
                 } else {
                     // Nếu sau 22h, chuyển sang ngày mai
-                    timeSlot = document.getElementById('timeSlot3');
+                    timeSlot = document.getElementById('timeSlot1');
                     status = 'Sắp diễn ra';
-                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
-                    document.getElementById("status2").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status1").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Diễn ra sau';
                     document.getElementById('timeSlot1').style.pointerEvents = 'none';
                     document.getElementById('timeSlot2').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot3').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot4').style.pointerEvents = 'none';
                 }
 
                 // Thêm lớp 'selected' cho khung thời gian được chọn
@@ -295,22 +326,13 @@
                     document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
                     timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
                     if (selectedTimeSlot === '1') {
-                        countdown.setHours(8, 0, 0, 0);
-                    }
-                    if (selectedTimeSlot === '2' && hour < 18) {
-                        status = 'Sắp diễn ra';
-                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                        countdown.setHours(18, 0, 0, 0);
-                    }
-                    if (selectedTimeSlot === '3') {
-                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                        countdown.setHours(8 + 24, 0, 0, 0);
-                        status = 'Sắp diễn ra';
-                    }
-                    if (selectedTimeSlot === '4') {
-                        document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                        countdown.setHours(18 + 24, 0, 0, 0);
-                        status = 'Sắp diễn ra';
+                        countdown.setHours(10, 0, 0, 0);
+                    } else if (selectedTimeSlot === '2') {
+                        countdown.setHours(13, 0, 0, 0);
+                    } else if (selectedTimeSlot === '3') {
+                        countdown.setHours(16, 0, 0, 0);
+                    } else if (selectedTimeSlot === '4') {
+                        countdown.setHours(19, 0, 0, 0);
                     }
                 } else {
                     timeSlot.classList.add('selected');
@@ -320,25 +342,34 @@
                 var itemsSale = document.querySelectorAll('.showP');
                 var hidden = document.querySelectorAll('.hideP');
                 if (status === 'Sắp diễn ra') {
-                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 8 : 18, 0, 0, 0);
-                    if (timeSlot === document.getElementById('timeSlot3')) {
-                        countdown.setHours(8 + 24, 0, 0, 0);
-                    }
-                    if (timeSlot === document.getElementById('timeSlot4')) {
-                        countdown.setHours(18 + 24, 0, 0, 0);
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(10, 0, 0, 0);
+                    } else if (selectedTimeSlot === '2') {
+                        countdown.setHours(13, 0, 0, 0);
+                    } else if (selectedTimeSlot === '3') {
+                        countdown.setHours(16, 0, 0, 0);
+                    } else if (selectedTimeSlot === '4') {
+                        countdown.setHours(19, 0, 0, 0);
                     }
                     for (var i = 0; i < itemsSale.length; i++) {
                         itemsSale[i].style.display = 'none';
                     }
                 } else {
-                    countdown.setHours(timeSlot === document.getElementById('timeSlot1') ? 14 : 22, 0, 0, 0);
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(13, 0, 0, 0);
+                    } else if (selectedTimeSlot === '2') {
+                        countdown.setHours(16, 0, 0, 0);
+                    } else if (selectedTimeSlot === '3') {
+                        countdown.setHours(19, 0, 0, 0);
+                    } else if (selectedTimeSlot === '4') {
+                        countdown.setHours(22, 0, 0, 0);
+                    }
                     for (var i = 0; i < hidden.length; i++) {
                         hidden[i].style.display = 'none';
                     }
                 }
 
                 var countdownElement = document.getElementById('time');
-
                 var countdownTime = countdown - now;
 
                 var hours = Math.floor((countdownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -349,13 +380,12 @@
                 minutes = String(minutes).padStart(2, '0');
                 seconds = String(seconds).padStart(2, '0');
 
-                if ((selectedTimeSlot === '3' && hour < 8) || (selectedTimeSlot === '4' && hour < 18)) {
-                    countdownElement.textContent = '1 ngày ' + hours + ": " + minutes + ": " + seconds;
-                } else {
-                    countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
-                }
+                countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
             }
+
             setInterval(updateStatusAndCountdown, 1000);
+
+
 
             document.addEventListener('DOMContentLoaded', function () {
                 const prices = document.querySelectorAll('[id^="price-"]');

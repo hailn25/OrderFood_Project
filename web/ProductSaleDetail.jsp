@@ -113,82 +113,87 @@
 
 
 
-                            <!-- Single Product End -->
+        <!-- Single Product End -->
 
 
-                            <!-- Footer Start -->
+        <!-- Footer Start -->
 
-                            <jsp:include page="Footer.jsp"></jsp:include>
-                            <!-- Footer End -->
-                            <!-- Back to Top -->
-                            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+        <jsp:include page="Footer.jsp"></jsp:include>
+        <!-- Footer End -->
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-                            <!-- JavaScript Libraries -->
-                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                            <script src="lib/easing/easing.min.js"></script>
-                            <script src="lib/waypoints/waypoints.min.js"></script>
-                            <script src="lib/lightbox/js/lightbox.min.js"></script>
-                            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <!-- JavaScript Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/waypoints/waypoints.min.js"></script>
+        <script src="lib/lightbox/js/lightbox.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-                            <!-- Template Javascript -->
-                            <script src="js/main.js"></script>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const prices = document.querySelectorAll('[id^="price-"]');
-                                    prices.forEach(priceElement => {
-                                        const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                                        const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                                        // Định dạng giá thành VND
-                                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
-                                        // Cập nhật nội dung của thẻ h6
-                                        priceElement.textContent = formattedPrice + " VNĐ";
-                                    });
-                                });
-                            </script>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    function updateCountdown() {
-                                        const now = new Date();
-                                        const hours = now.getHours();
-                                        const minutes = now.getMinutes();
-                                        const seconds = now.getSeconds();
-                                        let countdownTo;
-                                        let displayCountdown = true;
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function updateCountdown() {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+                    let countdownTo;
+                    let displayCountdown = true;
 
-                                        if (hours >= 8 && hours < 14) {
-                                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 14, 0, 0);
-                                        } else if (hours >= 18 && hours < 22) {
-                                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
-                                        } else {
-                                            displayCountdown = false; // Không hiển thị đếm ngược ngoài khung giờ
-                                        }
+                    if (hours >= 10 && hours < 13) {
+                        countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 13, 0, 0);
+                    } else if (hours >= 13 && hours < 16) {
+                        countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
+                    } else if (hours >= 16 && hours < 19) {
+                        countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
+                    } else if (hours >= 19 && hours < 22) {
+                        countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
+                    } else {
+                        displayCountdown = false; // Không hiển thị đếm ngược ngoài khung giờ
+                    }
 
-                                        const countdownElement = document.getElementById('countdown');
+                    const countdownElement = document.getElementById('countdown');
 
-                                        if (displayCountdown) {
-                                            const diff = countdownTo - now;
-                                            const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                            const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                                            const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
-                                            const hoursText = String(diffHours).padStart(2, '0');
-                                            const minutesText = String(diffMinutes).padStart(2, '0');
-                                            const secondsText = String(diffSeconds).padStart(2, '0');
+                    if (displayCountdown) {
+                        const diff = countdownTo - now;
+                        const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+                        const hoursText = String(diffHours).padStart(2, '0');
+                        const minutesText = String(diffMinutes).padStart(2, '0');
+                        const secondsText = String(diffSeconds).padStart(2, '0');
 
-                                            // Thêm chữ "Flash Sale" ở đầu và đặt thời gian ở cuối
-                                            countdownElement.textContent = 'Flash Sale - ' + hoursText + ":" + minutesText + ":" + secondsText;
+                        // Thêm chữ "Flash Sale" ở đầu và đặt thời gian ở cuối
+                        countdownElement.textContent = 'Flash Sale - ' + hoursText + ":" + minutesText + ":" + secondsText;
 
-                                            setTimeout(updateCountdown, 1000);
-                                        } else {
-                                            countdownElement.textContent = "Chương trình giảm giá sẽ sớm bắt đầu"; // Hoặc nội dung bạn muốn hiển thị khi ngoài khung giờ bán hàng
-                                        }
-                                    }
+                        setTimeout(updateCountdown, 1000);
+                    } else {
+                        countdownElement.textContent = "Chương trình giảm giá sẽ sớm bắt đầu"; // Hoặc nội dung bạn muốn hiển thị khi ngoài khung giờ bán hàng
+                    }
+                }
 
-                                    updateCountdown();
-                                });
+                updateCountdown();
+            });
 
-                            </script>
-                            </body>
-                            </html>
+        </script>
+
+    </body>
+</html>

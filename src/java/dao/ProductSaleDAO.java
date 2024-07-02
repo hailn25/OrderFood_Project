@@ -14,8 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import java.sql.Timestamp;
+import java.util.AbstractList;
 import java.util.List;
 import model.ProductSaleDTO;
+import model.ProductSaleDTO1;
 import model.ProductSaleDetailDTO;
 
 /**
@@ -41,9 +43,9 @@ public class ProductSaleDAO {
                             + "JOIN Product p\n"
                             + "ON p.ProductId = ps.ProductID\n"
                             + "WHERE IsFlashSale = 1 \n"
-                            + "    AND TimeFrame != 2 \n"
-                            + "    AND startTime <= CAST('" + date + " 08:00:00' AS DATETIME)\n"
-                            + "    AND (endTime >= CAST('" + date + " 14:00:00' AS DATETIME) OR endTime IS NULL);";
+                            + "    AND TimeFrame = 1 \n"
+                            + "    AND startTime <= CAST('" + date + " 10:00:00' AS DATETIME)\n"
+                            + "    AND (endTime >= CAST('" + date + " 13:00:00' AS DATETIME) OR endTime IS NULL);";
 
                 }
                 if (timeFrame == 2) {
@@ -52,15 +54,35 @@ public class ProductSaleDAO {
                             + "JOIN Product p\n"
                             + "ON p.ProductId = ps.ProductID\n"
                             + "WHERE IsFlashSale = 1 \n"
-                            + "    AND TimeFrame != 1 \n"
-                            + "    AND startTime <= CAST('" + date + " 18:00:00' AS DATETIME)\n"
+                            + "    AND TimeFrame = 2 \n"
+                            + "    AND startTime <= CAST('" + date + " 13:00:00' AS DATETIME)\n"
+                            + "    AND (endTime >= CAST('" + date + " 16:00:00' AS DATETIME) OR endTime IS NULL);";
+                }
+                if (timeFrame == 3) {
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
+                            + "FROM Product_Sale ps\n"
+                            + "JOIN Product p\n"
+                            + "ON p.ProductId = ps.ProductID\n"
+                            + "WHERE IsFlashSale = 1 \n"
+                            + "    AND TimeFrame = 3 \n"
+                            + "    AND startTime <= CAST('" + date + " 16:00:00' AS DATETIME)\n"
+                            + "    AND (endTime >= CAST('" + date + " 19:00:00' AS DATETIME) OR endTime IS NULL);";
+                }
+                if (timeFrame == 4) {
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
+                            + "FROM Product_Sale ps\n"
+                            + "JOIN Product p\n"
+                            + "ON p.ProductId = ps.ProductID\n"
+                            + "WHERE IsFlashSale = 1 \n"
+                            + "    AND TimeFrame = 4 \n"
+                            + "    AND startTime <= CAST('" + date + " 19:00:00' AS DATETIME)\n"
                             + "    AND (endTime >= CAST('" + date + " 22:00:00' AS DATETIME) OR endTime IS NULL);";
                 }
             }
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6) , rs.getDouble(7), rs.getInt(8)));
+                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6), rs.getDouble(7), rs.getInt(8)));
 
             }
         } catch (ClassNotFoundException ex) {
@@ -81,7 +103,7 @@ public class ProductSaleDAO {
             ps.setInt(1, productId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                return new ProductSaleDetailDTO(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8));
+                return new ProductSaleDetailDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8));
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,9 +111,51 @@ public class ProductSaleDAO {
         return null;
     }
 
+    public List<ProductSaleDTO1> ListProductFlashSale(String date) throws SQLException {
+        List<ProductSaleDTO1> list = new ArrayList<>();
+        try {
+            String sql = "SELECT ps.ProductID, \n"
+                    + "       p.Name, \n"
+                    + "       ps.IsFlashSale, \n"
+                    + "       p.ImageURL, \n"
+                    + "       ps.Quantity, \n"
+                    + "       ps.Discount, \n"
+                    + "       ps.SalePrice, \n"
+                    + "       p.Price, \n"
+                    + "       ps.TimeFrame, \n"
+                    + "       ps.StartTime, \n"
+                    + "       ps.EndTime\n"
+                    + "FROM Product p\n"
+                    + "JOIN Product_Sale ps ON ps.ProductID = p.ProductId\n"
+                    + "WHERE startTime <= CAST('" + date + " 19:00:00' AS DATETIME)";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ProductSaleDTO1(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9)));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    public void ChangeStatusFlashSale(boolean isFlashSale, int productId) throws SQLException{
+        try {
+            String sql = "UPDATE [dbo].[Product_Sale] SET [IsFlashSale] = ? WHERE ProductID = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setBoolean(1, isFlashSale);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.getProductIsFlashSale("2024-07-01", 1));
+        System.out.println(dao.ListProductFlashSale("2024-07-02"));
 
     }
 
