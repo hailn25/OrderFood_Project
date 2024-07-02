@@ -586,6 +586,8 @@
     }
 }
 
+
+
 .header {
     padding: 20px;
     background-size: cover;
@@ -600,7 +602,6 @@
     display: flex;
     align-items: center;
     height: 200px;
-    width: 450px;
     border: none;
     border-radius: 8px;
     position: relative;
@@ -618,13 +619,13 @@
     align-items: center;
 }
 
-.header-left-detail h5{
+.header-left-detail h5 {
     margin-left: 10px;
     font-size: 24px;
     color: white;
 }
 
-.header-left-detail-chat{
+.header-left-detail-chat {
     display: flex;
     align-items: center;
     position: absolute;
@@ -636,11 +637,11 @@
     border-radius: 8px;
 }
 
-.header-left-detail-chat i{
+.header-left-detail-chat i {
     margin-left: 15px;
 }
 
-.header-left-detail-chat a{
+.header-left-detail-chat a {
     display: flex;
     color: white;
     margin-left: 5px;
@@ -680,7 +681,7 @@
 }
 
 .fruite-img-restaurant img {
-    max-height: 200px;
+    max-height: 300px;
 }
 
 .fruite-item-restaurant a {

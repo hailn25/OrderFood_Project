@@ -49,13 +49,20 @@ public class HomeServlet extends HttpServlet {
         List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
         List<ListProduct> listProductP = dao.getListProductP();
         ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-
+        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
+        
+        for (SliderDTO s : listSlider) {
+            if (s.getStatusName().equals("Xác nhận")) {
+                listSliderDot.add(s);
+            }
+        }
+        
         request.setAttribute("listP", list);
         request.setAttribute("listC", listAllCategory);
         request.setAttribute("listV", listProductP);
         request.setAttribute("listB", listBestSellerProduct);
         request.setAttribute("listSlider", listSlider);
-        
+        request.setAttribute("listSliderDot", listSliderDot);
         
         request.getRequestDispatcher("Home.jsp").forward(request, response);
     }

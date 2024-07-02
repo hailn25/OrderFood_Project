@@ -112,7 +112,7 @@ public class SliderDAO {
             ps.setString(2, imageAvatar);
             ps.setInt(3, 1);
             ps.setInt(4, 1);
-            ps.setInt(5, 2);
+            ps.setInt(5, updateBy);
             ps.setString(6, createDate);
             ps.setString(7, updateDate);
             ps.setString(8, backLink);

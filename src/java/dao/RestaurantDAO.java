@@ -91,5 +91,6 @@ public class RestaurantDAO {
 //        for (RestaurantDTO r : dao.getRestaurantDTOByRestaurantId(1)) {
 //            System.out.println(r.toString());
 //        }
+//        System.out.println(dao.getRestaurantIdByAccountId(8));
     }
 }

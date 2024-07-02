@@ -1,5 +1,6 @@
 package controller;
 
+import dao.RestaurantDAO;
 import dao.SliderDAO; // Import your DAO class
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,6 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Account;
 
 public class SettingBannerControll extends HttpServlet {
 
@@ -38,15 +41,20 @@ public class SettingBannerControll extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        RestaurantDAO resDAO = new RestaurantDAO();
+        
         String sliderTitle = request.getParameter("sliderTitle");
         String imageAvatar = request.getParameter("imageAvatar");
         String createDate = request.getParameter("createDate");
         String updateDate = request.getParameter("updateDate");
         String backLink = request.getParameter("backLink");
-
+        int updateBy = resDAO.getRestaurantIdByAccountId(account.getAccountId());
+        
         try {
             SliderDAO dao = new SliderDAO();
-            dao.insertSlider(sliderTitle, imageAvatar, 1, 1, 2, createDate, updateDate, backLink);
+            dao.insertSlider(sliderTitle, imageAvatar, 1, 1, updateBy, createDate, updateDate, backLink);
 
             // If insertion is successful, set a success message
             request.setAttribute("message", "Insert successful.");

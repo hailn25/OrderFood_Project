@@ -147,9 +147,13 @@
             <div class="slider" style="margin-top: 200px">
                 <div class="list">
                 <c:forEach items="${listSlider}" var="s">
-                    <div class="item">
-                        <img src="img/${s.imageURL}" alt="Không thể tải ảnh"/>
-                    </div>
+                    <c:if test="${s.statusName == 'Xác nhận'}">
+                        <div class="item">
+                            <a href="restaurant?restaurantId=${s.updateBy}&page=${1}">
+                                <img src="img/${s.imageURL}" alt="Không thể tải ảnh"/>
+                            </a>
+                        </div>
+                    </c:if>
                 </c:forEach>
             </div>
 
@@ -159,7 +163,7 @@
             </div>
 
             <ul class="dots">
-                <c:forEach begin="0" end="${listSlider.size() - 1}" var="i">
+                <c:forEach begin="0" end="${listSliderDot.size() - 1}" var="i">
                     <li class="${i == 0 ? 'active' : ''}" style="cursor: pointer"></li>
                     </c:forEach>
             </ul>

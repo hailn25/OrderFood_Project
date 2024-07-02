@@ -42,6 +42,7 @@ public class RestaurantControl extends HttpServlet {
         int restaurantId = -1;
         if (request.getParameter("restaurantId") != null) {
             restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
+            request.setAttribute("restaurantId", restaurantId);
         }
         ArrayList<ProductDTO> listProductDTO = dao.getListProductByRestaurantId(restaurantId);
         

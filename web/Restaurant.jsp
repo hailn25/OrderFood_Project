@@ -41,7 +41,8 @@
         <div class="container mt-5">
             <c:forEach items="${listRestaurantDTO}" var="r">
                 <div class="row header">
-                    <div class="col-md-6 header-left" style="background-image: url('img/anhnhahang.jpg'); margin-top: 150px;">
+                    <!-- Phần đầu tiên -->
+                    <div class="col-md-4 header-left" style="background-image: url('img/anhnhahang.jpg'); margin-top: 150px;">
                         <div class="header-left-detail">
                             <img src="img/${r.imageAvatar}" alt="Không thể tải ảnh"/>
                             <h5>${r.name}</h5>
@@ -52,18 +53,35 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 header-right" style="margin-top: 150px;">
+                    <!-- Phần thứ hai -->
+                    <div class="col-md-4 header-right" style="margin-top: 150px;">
                         <div class="header-right-detail">
                             <i class="fas fa-store"></i>
                             <p>Số lượng sản phẩm: <span>${r.quantityOfProduct}</span></p>
                         </div>
                         <div class="header-right-detail">
                             <i class="fas fa-star"></i>
-                            <p>Đánh Giá: <span>${r.rateStar}</span></p>
+                            <p>Đánh Giá: <span>${r.rateStar} / 5</span></p>
                         </div>
                         <div class="header-right-detail">
                             <i class="fas fa-user-check"></i>
                             <p>Tham Gia: <span>${r.createDate}</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Phần thứ ba -->
+                    <div class="col-md-4 header-right" style="margin-top: 150px;">
+                        <div class="header-right-detail">
+                            <i class="fas fa-phone-alt"></i>
+                            <p>Số điện thoại: <span>${r.phone}</span></p>
+                        </div>
+                        <div class="header-right-detail">
+                            <i class="fas fa-envelope"></i>
+                            <p>Email: <span>${r.email}</span></p>
+                        </div>
+                        <div class="header-right-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>Địa chỉ: <span>${r.address}</span></p>
                         </div>
                     </div>
                 </div>
@@ -78,7 +96,7 @@
                                     <div class="rounded position-relative fruite-item-restaurant" style="height: 400px;">
                                         <div class="fruite-img-restaurant">
                                             <a href="detail?pid=${p.producId}">
-                                                <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 200px; object-fit: cover;">
+                                                <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 260px; object-fit: cover;">
                                             </a>
                                         </div>
                                         <c:if test="${p.isSale == true}">
@@ -97,9 +115,9 @@
                                                             <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                                         </button>
                                                     </form>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+<!--                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
                                                         <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -110,16 +128,17 @@
 
                         <div class="col-12">
                             <div class="pagination d-flex justify-content-center mt-5">
-                                <a href="restaurant?page=${1}" class="rounded">&laquo;</a>
+                                <a href="restaurant?restaurantId=${restaurantId}&page=${1}" class="rounded">&laquo;</a>
                                 <c:forEach var="i" begin="1" end="${totalPages}">
-                                    <a href="restaurant?page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
+                                    <a href="restaurant?restaurantId=${restaurantId}&page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
                                 </c:forEach>
-                                <a href="restaurant?page=${totalPages}" class="rounded">&raquo;</a>
+                                <a href="restaurant?restaurantId=${restaurantId}&page=${totalPages}" class="rounded">&raquo;</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
 
