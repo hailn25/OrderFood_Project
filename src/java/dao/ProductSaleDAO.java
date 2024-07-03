@@ -111,23 +111,23 @@ public class ProductSaleDAO {
         return null;
     }
 
-    public List<ProductSaleDTO1> ListProductFlashSale(String date) throws SQLException {
+    public List<ProductSaleDTO1> ListProductFlashSale() throws SQLException {
         List<ProductSaleDTO1> list = new ArrayList<>();
         try {
-            String sql = "SELECT ps.ProductID, \n"
-                    + "       p.Name, \n"
-                    + "       ps.IsFlashSale, \n"
-                    + "       p.ImageURL, \n"
-                    + "       ps.Quantity, \n"
-                    + "       ps.Discount, \n"
-                    + "       ps.SalePrice, \n"
-                    + "       p.Price, \n"
-                    + "       ps.TimeFrame, \n"
-                    + "       ps.StartTime, \n"
+            String sql = "SELECT ps.ProductID,\n"
+                    + "       p.Name,\n"
+                    + "       ps.IsFlashSale,\n"
+                    + "       p.ImageURL,\n"
+                    + "       ps.Quantity,\n"
+                    + "       ps.Discount,\n"
+                    + "       ps.SalePrice,\n"
+                    + "       p.Price,\n"
+                    + "       ps.TimeFrame,\n"
+                    + "       ps.StartTime,\n"
                     + "       ps.EndTime\n"
                     + "FROM Product p\n"
-                    + "JOIN Product_Sale ps ON ps.ProductID = p.ProductId\n"
-                    + "WHERE startTime <= CAST('" + date + " 19:00:00' AS DATETIME)";
+                    + "JOIN Product_Sale ps ON ps.ProductID = p.ProductID\n"
+                    + "WHERE CAST(ps.StartTime AS DATE) = CAST(GETDATE() AS DATE);";
             conn = new DBContext().getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -139,7 +139,8 @@ public class ProductSaleDAO {
         }
         return list;
     }
-    public void ChangeStatusFlashSale(boolean isFlashSale, int productId) throws SQLException{
+
+    public void ChangeStatusFlashSale(boolean isFlashSale, int productId) throws SQLException {
         try {
             String sql = "UPDATE [dbo].[Product_Sale] SET [IsFlashSale] = ? WHERE ProductID = ?";
             conn = new DBContext().getConnection();
@@ -150,12 +151,12 @@ public class ProductSaleDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.ListProductFlashSale("2024-07-02"));
+        System.out.println(dao.ListProductFlashSale());
 
     }
 

@@ -170,7 +170,7 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listF}" var="f">
-                            <tr>
+                            <c:if test="${f.isFlashSale == false}">
                                 <td>${f.productId}</td>
                                 <td> ${f.name}</td>
                                 <td>
@@ -187,6 +187,7 @@
                                 </td>
                                 </td>
                             </tr>
+                        </c:if>
                         </c:forEach>
                     </tbody>
                 </table>

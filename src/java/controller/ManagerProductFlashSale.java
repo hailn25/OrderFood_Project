@@ -25,7 +25,7 @@ import model.ProductSaleDTO1;
  *
  * @author hailt
  */
-@WebServlet(name="ManagerProductFlashSale", urlPatterns={"/ManagerProductFlashSale"})
+@WebServlet(name="ManagerProductFlashSale", urlPatterns={"/managerProductFlashSale"})
 public class ManagerProductFlashSale extends HttpServlet {
    
     /** 
@@ -38,15 +38,14 @@ public class ManagerProductFlashSale extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-         LocalDate date1 = LocalDate.now();
-         String date = date1.toString();
         ProductSaleDAO dao = new ProductSaleDAO();
-        List<ProductSaleDTO1> listF = dao.ListProductFlashSale(date);
+        List<ProductSaleDTO1> listF = dao.ListProductFlashSale();
         request.setAttribute("listF", listF);
         request.getRequestDispatcher("ManagerFlashSale.jsp").forward(request, response);
         
         
     } 
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
