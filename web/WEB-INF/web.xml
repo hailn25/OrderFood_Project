@@ -48,10 +48,6 @@
         <servlet-name>InsertFeedbackControll</servlet-name>
         <servlet-class>controller.InsertFeedbackControll</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>OrderHistoryServlet</servlet-name>
-        <servlet-class>controller.OrderHistoryServlet</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -99,9 +95,5 @@
     <servlet-mapping>
         <servlet-name>InsertFeedbackControll</servlet-name>
         <url-pattern>/insertFeedback</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>OrderHistoryServlet</servlet-name>
-        <url-pattern>/orderHistory</url-pattern>
     </servlet-mapping>
 </web-app>

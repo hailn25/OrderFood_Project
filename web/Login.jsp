@@ -51,7 +51,7 @@
                                     <div style="color:red" id= "error"></div>
                                     <hr class="my-4">
 
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)" style="background-color:#81C408 ">Đăng nhập</button>
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color:#81C408 ">Đăng nhập</button>
 
 
                                     <hr class="my-4">
@@ -70,7 +70,6 @@
                 </div>
             </div>
         </section>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
                                         window.onload = function () {
                                             var registerSuccess = "<c:out value='${registerSuccess}' />";
@@ -87,21 +86,7 @@
                                         }
 
         </script>
-        <script type="text/javascript">
-    function checkCaptcha(event) {
-        event.preventDefault(); 
-
-        var response = grecaptcha.getResponse();
-        var error = document.getElementById("error");
-
-        if (response.length === 0) { 
-            error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
-        } else {
-            document.getElementById("login_form").submit(); 
-        }
-    }
-</script>
-
+       
     </body>
 </html>
 

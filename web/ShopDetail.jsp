@@ -202,16 +202,16 @@
                             <div class="col-lg-12">
                                 <h4 class="mb-4">Sản phẩm nổi bật</h4>
                                 <div id="productList">
-                                    <c:forEach var="listProductByIsSale" items="${listProductByIsSale}" varStatus="loop">
-                                        <div class="product-item d-flex align-items-center justify-content-start mb-4" style="display: ${loop.index < 2 ? 'block' : 'none'};">
+                                    <c:forEach var="listProductByIsSale" items="${listProductByIsSale}" varStatus="status">
+                                        <div class="product-item d-flex align-items-center justify-content-start mb-4 ${status.index >= 2 ? 'd-none more-item' : ''}" id="Block-${status.index}">
                                             <div class="rounded" style="width: 100px; height: 100px;">
                                                 <img src="img/${listProductByIsSale.image}" class="img-fluid rounded" alt="${listProductByIsSale.name}">
                                             </div>
                                             <div class="ms-3">
                                                 <h6 class="mb-2">${listProductByIsSale.name}</h6>
                                                 <div class="d-flex mb-2">
-                                                    <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${listProductByIsSale.id}">${listProductByIsSale.price}</h5>
-                                                    <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center;font-family: sans-serif;" id="price-${listProductByIsSale.id}">
+                                                    <h5 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${listProductByIsSale.id}">${listProductByIsSale.price}</h5>
+                                                    <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center; font-family: sans-serif;" id="price-${listProductByIsSale.id}">
                                                         <c:out value="${listProductByIsSale.price * 1.11111111}"/>
                                                     </h5>
                                                 </div>
@@ -219,99 +219,115 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="position-relative">
-                                    <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
-                                    <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
-                                        <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-primary px-4 py-2" id="load-more-btn" onclick="toggleProducts()">Xem thêm</button>
+                                    <button class="btn btn-secondary px-4 py-2 d-none" id="show-less-btn" onclick="toggleProducts()">Thu gọn</button>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="position-relative">
+                                        <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
+                                        <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
+                                            <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Related products -->
-                <h1 class="fw-bold mb-0">Sản Phẩm Liên Quan</h1>
-                <div class="vesitable">
-                    <div class="owl-carousel vegetable-carousel justify-content-center">
-                        <c:forEach var="relatedProduct" items="${listSameCategoryProducts}">
-                            <div class="border border-primary rounded position-relative vesitable-item">
-                                <div class="vesitable-img">
-                                    <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
-                                </div>
-                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
-                                <div class="p-4 pb-0 rounded-bottom">
-                                    <h4>${relatedProduct.name}</h4>
-                                    <p class="description">${relatedProduct.decription}</p>
-                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                        <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
-                                        <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                    <!-- Related products -->
+                    <h1 class="fw-bold mb-0">Sản Phẩm Liên Quan</h1>
+                    <div class="vesitable">
+                        <div class="owl-carousel vegetable-carousel justify-content-center">
+                            <c:forEach var="relatedProduct" items="${listSameCategoryProducts}">
+                                <div class="border border-primary rounded position-relative vesitable-item">
+                                    <div class="vesitable-img">
+                                        <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
+                                    </div>
+                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
+                                    <div class="p-4 pb-0 rounded-bottom">
+                                        <h4>${relatedProduct.name}</h4>
+                                        <p class="description">${relatedProduct.decription}</p>
+                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                            <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
+                                            <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </c:forEach>
+                            </c:forEach>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Single Product End -->
+            <!-- Single Product End -->
 
 
-        <!-- Footer Start -->
+            <!-- Footer Start -->
 
-        <jsp:include page="Footer.jsp"></jsp:include>
-            <!-- Footer End -->
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+            <jsp:include page="Footer.jsp"></jsp:include>
+                <!-- Footer End -->
+                <!-- Back to Top -->
+                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-            <!-- JavaScript Libraries -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="lib/easing/easing.min.js"></script>
-            <script src="lib/waypoints/waypoints.min.js"></script>
-            <script src="lib/lightbox/js/lightbox.min.js"></script>
-            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+                <!-- JavaScript Libraries -->
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="lib/easing/easing.min.js"></script>
+                <script src="lib/waypoints/waypoints.min.js"></script>
+                <script src="lib/lightbox/js/lightbox.min.js"></script>
+                <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-            <!-- Template Javascript -->
-            <script src="js/main.js"></script>
+                <!-- Template Javascript -->
+                <script src="js/main.js"></script>
+                <script>
+                                        // Lấy giá trị sao từ thuộc tính JSP
+                                        var rating = ${detail.rateStar};
+                                        var starContainer = document.getElementById('star-rating');
+
+                                        for (var i = 1; i <= 5; i++) {
+                                            var star = document.createElement('i');
+                                            star.className = 'fa fa-star';
+                                            if (i <= Math.floor(rating)) {
+                                                star.classList.add('text-primary'); // Đổi màu sao được đánh giá
+                                            } else {
+                                                star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
+                                            }
+                                            if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                                                star.className = 'fa fa-star-half'; // Nửa sao
+                                                star.classList.add('text-primary');
+                                            }
+                                            starContainer.appendChild(star);
+                                        }
+            </script>
             <script>
-                // Lấy giá trị sao từ thuộc tính JSP
-                var rating = ${detail.rateStar};
-                var starContainer = document.getElementById('star-rating');
+                document.addEventListener('DOMContentLoaded', function () {
+                    const prices = document.querySelectorAll('[id^="price-"]');
 
-                for (var i = 1; i <= 5; i++) {
-                    var star = document.createElement('i');
-                    star.className = 'fa fa-star';
-                    if (i <= Math.floor(rating)) {
-                        star.classList.add('text-primary'); // Đổi màu sao được đánh giá
-                    } else {
-                        star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
-                    }
-                    if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                        star.className = 'fa fa-star-half'; // Nửa sao
-                        star.classList.add('text-primary');
-                    }
-                    starContainer.appendChild(star);
-                }
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const prices = document.querySelectorAll('[id^="price-"]');
+                    prices.forEach(priceElement => {
+                        const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                        const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                prices.forEach(priceElement => {
-                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                        // Định dạng giá thành VND
+                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
 
-                    // Định dạng giá thành VND
-                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
-
-                    // Cập nhật nội dung của thẻ h6
-                    priceElement.textContent = formattedPrice + " VNĐ";
+                        // Cập nhật nội dung của thẻ h6
+                        priceElement.textContent = formattedPrice + " VNĐ";
+                    });
                 });
-            });
-        </script>
-    </body>
+            </script>
+            <script>
+                function toggleProducts() {
+                    const moreItems = document.querySelectorAll('.more-item');
+                    const loadMoreBtn = document.getElementById('load-more-btn');
+                    const showLessBtn = document.getElementById('show-less-btn');
 
+                    moreItems.forEach(item => {
+                        item.classList.toggle('d-none');
+                    });
+
+                    loadMoreBtn.classList.toggle('d-none');
+                    showLessBtn.classList.toggle('d-none');
+                }
+            </script>
+    </body>
 </html>

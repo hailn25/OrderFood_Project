@@ -208,32 +208,34 @@
                             <div class="col-lg-12">
                                 <div class="row g-4" id="product-container">
                                     <c:forEach items="${listP}" var="p" varStatus="status">
-                                        <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
-                                                </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${p.categoryName}</div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4>
-                                                        <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
-                                                    </h4>
-                                                    <p>${p.restaurantName}</p>
-                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6> 
-                                                        <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
-                                                            <input type="hidden" name="productId" value="${p.id}">
-                                                            <form action="addtocart" method="post" >
+                                        <c:if test="${p.quantity > 0}">
+                                            <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
+                                                <div class="rounded position-relative fruite-item">
+                                                    <div class="fruite-img">
+                                                        <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
+                                                    </div>
+                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${p.categoryName}</div>
+                                                    <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                        <h4>
+                                                            <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
+                                                        </h4>
+                                                        <p>${p.restaurantName}</p>
+                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6> 
+                                                            <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
                                                                 <input type="hidden" name="productId" value="${p.id}">
-                                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                                </button>
+                                                                <form action="addtocart" method="post" >
+                                                                    <input type="hidden" name="productId" value="${p.id}">
+                                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                    </button>
+                                                                </form>
                                                             </form>
-                                                        </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </c:if>
                                     </c:forEach>
                                 </div>
                             </div>

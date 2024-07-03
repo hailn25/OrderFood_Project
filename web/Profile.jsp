@@ -12,10 +12,26 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Thông tin cá nhân</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
+            .custom-header {
+                background-color: #81C408; /* Màu nền header */
+                color: #fff; /* Màu chữ của header */
+                padding: 10px; /* Khoảng cách giữa nội dung và viền header */
+                width: 100%; /* Chiều rộng header bằng 100% */
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Đổ bóng cho header */
+                border-top-left-radius: 50px; /* Bo tròn góc trái trên */
+                border-bottom-left-radius: 20px;
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 50px; /* Bo tròn góc phải dưới */
+
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem; /* Cỡ chữ của tiêu đề */
+            }
             body {
                 margin-top: 20px;
                 background: #f8f8f8
@@ -63,6 +79,13 @@
     </head>
     <body>
         <div class="container">
+            <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4">
+                <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
+                <div class="d-flex align-items-center">
+                    <span class="mr-3">Xin chào, ${account.name}</span>
+                    <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                </div>
+            </header>
             <div class="row flex-lg-nowrap">
                 <div class="col-12 col-lg-auto mb-3" style="width: 250px;">
                     <div class="card p-3">
@@ -95,7 +118,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="OrderHistory.jsp">
+                                            <a class="nav-link px-3" href="orderHistory?accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Lịch sử đơn hàng</span>
                                             </a>
@@ -111,9 +134,58 @@
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="revenueRestaurant"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>                                      
-                                        <li class="nav-item"><a class="nav-link px-3" href="ChangePasswordProfile.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Đổi mật khẩu</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="SettingBanner.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Setting banner</span></a></li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="SettingBanner.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Setting banner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </c:when>
+                                <c:when test="${sessionScope.account.roleId == 3}">
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="SettingBanner.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Setting banner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </c:when>
                             </c:choose>
@@ -129,7 +201,6 @@
                                 <div id="personalInfo" class="content-section">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h6 class="mb-3 text-primary">Thông Tin Cá Nhân</h6>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">

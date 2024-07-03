@@ -9,11 +9,12 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import model.Account;
 
 @MultipartConfig
 public class SettingBannerControll extends HttpServlet {
@@ -56,12 +57,16 @@ public class SettingBannerControll extends HttpServlet {
 
         String imagePath = fileName; // Define your upload directory
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        int updateBy = account.getAccountId();
+
         try {
             // Save the file to the server
             Files.copy(fileContent, Paths.get(getServletContext().getRealPath("/") + imagePath));
 
             SliderDAO dao = new SliderDAO();
-            dao.insertSlider(sliderTitle, imagePath, 1, 1, 2, createDate, updateDate, backLink);
+            dao.insertSlider(sliderTitle, imagePath, 1, 1, updateBy, createDate, updateDate, backLink);
 
             // If insertion is successful, set a success message
             request.setAttribute("message", "Insert successful.");
@@ -74,7 +79,6 @@ public class SettingBannerControll extends HttpServlet {
             request.getRequestDispatcher("SettingBanner.jsp").forward(request, response);
         }
     }
-
 
     @Override
     public String getServletInfo() {

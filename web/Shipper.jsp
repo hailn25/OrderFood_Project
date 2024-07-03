@@ -56,6 +56,13 @@
                                     </a>
                                 </li>
                             </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="Profile.jsp">
+                                        <i class="far fa-user"></i> Tài khoản
+                                    </a>
+                                </li>
+                            </c:if>
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">

@@ -11,35 +11,34 @@ import java.util.Date;
  * @author ADMIN
  */
 public class ListOrder {
-
-    int accountId;
-    String accountName;
-    String email;
-    String phone;
-    String address;
-    String paymentBy;
-    String paymantStatus;
-    Date createDate;
-    String note;
-    String ProductName;
-    double price;
-    int quantity;
-    double totalMoney;
+    private int accountId;
+    private String name;
+    private String email;
+    private String phonel;
+    private String address;
+    private String paymentBy;
+    private String paymentStatus;
+    private Date createDate;
+    private String note;
+    private String nameP;
+    private Double price;
+    private int quantity;
+    private Double totalMoney;
 
     public ListOrder() {
     }
 
-    public ListOrder(int accountId, String accountName, String email, String phone, String address, String paymentBy, String paymantStatus, Date createDate, String note, String ProductName, double price, int quantity, double totalMoney) {
+    public ListOrder(int accountId, String name, String email, String phonel, String address, String paymentBy, String paymentStatus, Date createDate, String note, String nameP, Double price, int quantity, Double totalMoney) {
         this.accountId = accountId;
-        this.accountName = accountName;
+        this.name = name;
         this.email = email;
-        this.phone = phone;
+        this.phonel = phonel;
         this.address = address;
         this.paymentBy = paymentBy;
-        this.paymantStatus = paymantStatus;
+        this.paymentStatus = paymentStatus;
         this.createDate = createDate;
         this.note = note;
-        this.ProductName = ProductName;
+        this.nameP = nameP;
         this.price = price;
         this.quantity = quantity;
         this.totalMoney = totalMoney;
@@ -53,12 +52,12 @@ public class ListOrder {
         this.accountId = accountId;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getName() {
+        return name;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -69,12 +68,12 @@ public class ListOrder {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhonel() {
+        return phonel;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhonel(String phonel) {
+        this.phonel = phonel;
     }
 
     public String getAddress() {
@@ -93,12 +92,12 @@ public class ListOrder {
         this.paymentBy = paymentBy;
     }
 
-    public String getPaymantStatus() {
-        return paymantStatus;
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 
-    public void setPaymantStatus(String paymantStatus) {
-        this.paymantStatus = paymantStatus;
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public Date getCreateDate() {
@@ -117,19 +116,19 @@ public class ListOrder {
         this.note = note;
     }
 
-    public String getProductName() {
-        return ProductName;
+    public String getNameP() {
+        return nameP;
     }
 
-    public void setProductName(String ProductName) {
-        this.ProductName = ProductName;
+    public void setNameP(String nameP) {
+        this.nameP = nameP;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -141,19 +140,18 @@ public class ListOrder {
         this.quantity = quantity;
     }
 
-    public double getTotalMoney() {
+    public Double getTotalMoney() {
         return totalMoney;
     }
 
-    public void setTotalMoney(double totalMoney) {
+    public void setTotalMoney(Double totalMoney) {
         this.totalMoney = totalMoney;
     }
 
     @Override
     public String toString() {
-        return "ListOrder{" + "accountId=" + accountId + ", accountName=" + accountName + ", email=" + email + ", phone=" + phone + ", address=" + address + ", paymentBy=" + paymentBy + ", paymantStatus=" + paymantStatus + ", createDate=" + createDate + ", note=" + note + ", ProductName=" + ProductName + ", price=" + price + ", quantity=" + quantity + ", totalMoney=" + totalMoney + '}';
+        return "ListOrder{" + "accountId=" + accountId + ", name=" + name + ", email=" + email + ", phonel=" + phonel + ", address=" + address + ", paymentBy=" + paymentBy + ", paymentStatus=" + paymentStatus + ", createDate=" + createDate + ", note=" + note + ", nameP=" + nameP + ", price=" + price + ", quantity=" + quantity + ", totalMoney=" + totalMoney + '}';
     }
     
     
-
 }
