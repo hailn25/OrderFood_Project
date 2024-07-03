@@ -21,10 +21,10 @@
             <div class="chatbox-message-wrapper">
                 <div class="chatbox-message-header">
                     <div class="chatbox-message-profile">
-                        <img src="img/staff1.png"
+                        <img src="img/admin3.png"
                              alt="" class="chatbox-message-image">
                         <div>
-                            <h4 class="chatbox-message-name">Lê Thị Thuỳ Dương</h4>
+                            <h4 class="chatbox-message-name">Linh Ka</h4>
                             <p class="chatbox-message-status">online</p>
                         </div>
                     </div>

@@ -115,11 +115,11 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="content">Nội dung</label>
-                                        <textarea class="form-control validate tm-small" rows="5" name="content" required></textarea>
+                                        <textarea class="form-control validate tm-small" rows="5" name="content" required id="content"></textarea>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="summary">Tóm tắt</label>
-                                        <textarea class="form-control validate tm-small" rows="3" name="summary" required></textarea>
+                                        <textarea class="form-control validate tm-small" rows="3" name="summary" required id="summary"></textarea>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="status">Trạng thái</label><br>
@@ -145,7 +145,7 @@
                                     <input type="button" class="btn btn-primary btn-block text-uppercase" value="Huỷ bỏ" onclick="window.history.back();" />
                                 </div>
                                 <div class="col-6">
-                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" />
+                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" id="createNow"/>
                                 </div>
                             </div>
                         </form>

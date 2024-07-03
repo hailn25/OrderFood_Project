@@ -111,7 +111,7 @@
                             <h2>Quản lý <b>Blog</b></h2>
                         </div>
                         <div class="col-sm-6">
-                            <a href="managerAddBlog"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm bài viết mới</span></a>
+                            <a href="managerAddBlog"  class="btn btn-success" data-toggle="modal" id="btn-add"><i class="material-icons">&#xE147;</i> <span>Thêm bài viết mới</span></a>
                         </div>
                     </div>
                 </div>
