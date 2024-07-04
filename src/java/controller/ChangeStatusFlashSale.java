@@ -35,10 +35,10 @@ public class ChangeStatusFlashSale extends HttpServlet {
     throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         ProductSaleDAO dao = new ProductSaleDAO();
-        boolean changeStatus = Boolean.valueOf(request.getParameter("changeStatus"));
+        int changeStatus = Integer.parseInt(request.getParameter("changeStatus"));
         int productId = Integer.parseInt(request.getParameter("pid"));
         dao.ChangeStatusFlashSale(changeStatus, productId);
-        request.getRequestDispatcher("ManagerProductFlashSale").forward(request, response);
+        request.getRequestDispatcher("managerProductFlashSale").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

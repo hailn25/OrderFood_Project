@@ -132,7 +132,7 @@ public class ProductSaleDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new ProductSaleDTO1(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9)));
+                list.add(new ProductSaleDTO1(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9)));
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,12 +140,12 @@ public class ProductSaleDAO {
         return list;
     }
 
-    public void ChangeStatusFlashSale(boolean isFlashSale, int productId) throws SQLException {
+    public void ChangeStatusFlashSale(int isFlashSale, int productId) throws SQLException {
         try {
             String sql = "UPDATE [dbo].[Product_Sale] SET [IsFlashSale] = ? WHERE ProductID = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setBoolean(1, isFlashSale);
+            ps.setInt(1, isFlashSale);
             ps.setInt(2, productId);
             ps.executeUpdate();
         } catch (ClassNotFoundException ex) {

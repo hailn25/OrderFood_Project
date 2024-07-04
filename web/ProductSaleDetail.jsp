@@ -99,8 +99,8 @@
                                 </div>
                                 <form action="addtocart" method="post">
                                     <input type="hidden" name="productId" value="${fsdetail.productId}">
-                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 200px;" title="Thêm vào giỏ hàng">
-                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i> Thêm vào giỏ hàng
+                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 150px;" title="Thêm vào giỏ hàng">
+                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i> Mua Ngay
                                     </button>
                                 </form>
                             </div>

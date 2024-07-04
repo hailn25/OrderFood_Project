@@ -8,7 +8,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
-            body, html {
+             body, html {
                 height: 100%;
                 margin: 0;
                 font-family: Arial, sans-serif;
@@ -72,7 +72,7 @@
         </style>
     </head>
     <body>
-        <section class="vh-100 d-flex align-items-center justify-content-center">
+        <section class="vh-100 " style="background-color: #81C408;">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col">
@@ -96,9 +96,10 @@
                                     <div style="color:red" id="error"></div>
                                     <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)">Đăng nhập</button>
                                     <hr class="my-4">
-                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force">
-                                        <button type="button" class="btn btn-google btn-lg btn-block">Đăng nhập bằng Google</button>
+                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force" style="text-decoration: none;">
+                                        <button type="button" class="btn btn-google btn-lg btn-block" style="color: white;">Đăng nhập bằng Google</button>
                                     </a>
+
                                     <hr class="my-4">
                                     <p>Không có tài khoản? <a href="Register.jsp" class="link-info">Đăng ký</a></p>
                                 </form>
@@ -110,30 +111,30 @@
         </section>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
-            window.onload = function () {
-                var registerSuccess = "<c:out value='${registerSuccess}' />";
-                if (registerSuccess === "true") {
-                    alert("Đăng ký thành công! Vui lòng đăng nhập.");
-                    <% session.removeAttribute("registerSuccess"); %>
-                }
+                                        window.onload = function () {
+                                            var registerSuccess = "<c:out value='${registerSuccess}' />";
+                                            if (registerSuccess === "true") {
+                                                alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            <% session.removeAttribute("registerSuccess"); %>
+                                            }
 
-                var passwordChangeSuccess = "<c:out value='${passwordChangeSuccess}' />";
-                if (passwordChangeSuccess === "true") {
-                    alert("Mật khẩu của bạn đã được đổi thành công! Vui lòng đăng nhập.");
-                    <% session.removeAttribute("passwordChangeSuccess"); %>
-                }
-            }
+                                            var passwordChangeSuccess = "<c:out value='${passwordChangeSuccess}' />";
+                                            if (passwordChangeSuccess === "true") {
+                                                alert("Mật khẩu của bạn đã được đổi thành công! Vui lòng đăng nhập.");
+            <% session.removeAttribute("passwordChangeSuccess"); %>
+                                            }
+                                        }
 
-            function checkCaptcha(event) {
-                event.preventDefault();
-                var response = grecaptcha.getResponse();
-                var error = document.getElementById("error");
-                if (response.length === 0) {
-                    error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
-                } else {
-                    document.getElementById("login_form").submit();
-                }
-            }
+                                        function checkCaptcha(event) {
+                                            event.preventDefault();
+                                            var response = grecaptcha.getResponse();
+                                            var error = document.getElementById("error");
+                                            if (response.length === 0) {
+                                                error.textContent = "Vui lòng xác nhận bạn không phải là người máy";
+                                            } else {
+                                                document.getElementById("login_form").submit();
+                                            }
+                                        }
         </script>
     </body>
 </html>

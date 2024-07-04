@@ -11,7 +11,7 @@ package model;
 public class ProductSaleDTO1 {
     private int productId;
     private String name;
-    private boolean isFlashSale;
+    private int isFlashSale;
     private String ImageURL;
     private int quantity;
     private double discount;
@@ -22,7 +22,7 @@ public class ProductSaleDTO1 {
     public ProductSaleDTO1() {
     }
 
-    public ProductSaleDTO1(int productId, String name, boolean isFlashSale, String ImageURL, int quantity, double discount, double salePrice, double price, int timeFrame) {
+    public ProductSaleDTO1(int productId, String name, int isFlashSale, String ImageURL, int quantity, double discount, double salePrice, double price, int timeFrame) {
         this.productId = productId;
         this.name = name;
         this.isFlashSale = isFlashSale;
@@ -34,6 +34,7 @@ public class ProductSaleDTO1 {
         this.timeFrame = timeFrame;
     }
 
+   
     public int getProductId() {
         return productId;
     }
@@ -50,13 +51,14 @@ public class ProductSaleDTO1 {
         this.name = name;
     }
 
-    public boolean isIsFlashSale() {
+    public int getIsFlashSale() {
         return isFlashSale;
     }
 
-    public void setIsFlashSale(boolean isFlashSale) {
+    public void setIsFlashSale(int isFlashSale) {
         this.isFlashSale = isFlashSale;
     }
+    
 
     public String getImageURL() {
         return ImageURL;
@@ -110,5 +112,7 @@ public class ProductSaleDTO1 {
     public String toString() {
         return "ProductSaleDTO1{" + "productId=" + productId + ", name=" + name + ", isFlashSale=" + isFlashSale + ", ImageURL=" + ImageURL + ", quantity=" + quantity + ", discount=" + discount + ", salePrice=" + salePrice + ", price=" + price + ", timeFrame=" + timeFrame + '}';
     }
+
+    
     
 }

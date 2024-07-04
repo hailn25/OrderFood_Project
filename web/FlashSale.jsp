@@ -248,12 +248,19 @@
 
             // Hàm để cập nhật trạng thái và đếm ngược
             function updateStatusAndCountdown() {
-                // Lấy thời gian hiện tại
                 var now = new Date();
                 var hour = now.getHours();
+                var countdown = new Date(now);
 
-                // Xác định khung thời gian và trạng thái
+                var timeSlots = document.querySelectorAll('.col');
+                for (var i = 0; i < timeSlots.length; i++) {
+                    timeSlots[i].classList.remove('selected');
+                }
+
+                var selectedTimeSlot = getParamFromURL("timeFrame");
+
                 var timeSlot, status;
+
                 if (hour < 10) {
                     timeSlot = document.getElementById('timeSlot1');
                     status = 'Sắp diễn ra';
@@ -301,7 +308,6 @@
                     document.getElementById('timeSlot3').style.pointerEvents = 'none';
                     status = 'Đang diễn ra';
                 } else {
-                    // Nếu sau 22h, chuyển sang ngày mai
                     timeSlot = document.getElementById('timeSlot1');
                     status = 'Sắp diễn ra';
                     document.getElementById("status1").innerHTML = 'Sắp diễn ra';
@@ -315,46 +321,9 @@
                     document.getElementById('timeSlot4').style.pointerEvents = 'none';
                 }
 
-                // Thêm lớp 'selected' cho khung thời gian được chọn
-                var timeSlots = document.querySelectorAll('.col');
-                for (var i = 0; i < timeSlots.length; i++) {
-                    timeSlots[i].classList.remove('selected');
-                }
-                var countdown = new Date(now);
-
                 if (selectedTimeSlot !== null) {
                     document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
                     timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
-                    if (selectedTimeSlot === '1') {
-                        countdown.setHours(10, 0, 0, 0);
-                    } else if (selectedTimeSlot === '2') {
-                        countdown.setHours(13, 0, 0, 0);
-                    } else if (selectedTimeSlot === '3') {
-                        countdown.setHours(16, 0, 0, 0);
-                    } else if (selectedTimeSlot === '4') {
-                        countdown.setHours(19, 0, 0, 0);
-                    }
-                } else {
-                    timeSlot.classList.add('selected');
-                }
-
-                // Cập nhật đếm ngược
-                var itemsSale = document.querySelectorAll('.showP');
-                var hidden = document.querySelectorAll('.hideP');
-                if (status === 'Sắp diễn ra') {
-                    if (selectedTimeSlot === '1') {
-                        countdown.setHours(10, 0, 0, 0);
-                    } else if (selectedTimeSlot === '2') {
-                        countdown.setHours(13, 0, 0, 0);
-                    } else if (selectedTimeSlot === '3') {
-                        countdown.setHours(16, 0, 0, 0);
-                    } else if (selectedTimeSlot === '4') {
-                        countdown.setHours(19, 0, 0, 0);
-                    }
-                    for (var i = 0; i < itemsSale.length; i++) {
-                        itemsSale[i].style.display = 'none';
-                    }
-                } else {
                     if (selectedTimeSlot === '1') {
                         countdown.setHours(13, 0, 0, 0);
                     } else if (selectedTimeSlot === '2') {
@@ -364,6 +333,27 @@
                     } else if (selectedTimeSlot === '4') {
                         countdown.setHours(22, 0, 0, 0);
                     }
+                } else {
+                    timeSlot.classList.add('selected');
+                }
+
+                var itemsSale = document.querySelectorAll('.showP');
+                var hidden = document.querySelectorAll('.hideP');
+
+                if (status === 'Sắp diễn ra') {
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(13, 0, 0, 0);
+                    } else if (selectedTimeSlot === '2') {
+                        countdown.setHours(16, 0, 0, 0);
+                    } else if (selectedTimeSlot === '3') {
+                        countdown.setHours(19, 0, 0, 0);
+                    } else if (selectedTimeSlot === '4') {
+                        countdown.setHours(22, 0, 0, 0);
+                    }
+                    for (var i = 0; i < itemsSale.length; i++) {
+                        itemsSale[i].style.display = 'none';
+                    }
+                } else {
                     for (var i = 0; i < hidden.length; i++) {
                         hidden[i].style.display = 'none';
                     }

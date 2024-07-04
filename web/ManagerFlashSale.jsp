@@ -170,20 +170,20 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listF}" var="f">
-                            <c:if test="${f.isFlashSale == false}">
+                            <c:if test="${f.isFlashSale == 0}">
                                 <td>${f.productId}</td>
                                 <td> ${f.name}</td>
                                 <td>
                                     <img src="img/${f.imageURL}" alt="Không thể tải ảnh">
                                 </td>
-                                <td style="color: ${f.isFlashSale ? 'green' : 'red'};">
-                                    ${f.isFlashSale ? "Đã xác nhận" : "Đang chờ xác nhận"}
+                                <td style="color: red;">
+                                    Đang chờ xác nhận
                                 </td>
                                 <td>${f.salePrice}</td>
                                 <td>${f.timeFrame}</td>                               
                                 <td>
-                                    <a href="changeStatusFlashSale?changeStatus=${true}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                    <a href="changeStatusFlashSale?changeStatus=${false}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                    <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                    <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
                                 </td>
                                 </td>
                             </tr>
