@@ -99,7 +99,7 @@
                                 <input type="tel" class="form-control" name="phone" value="${account.phone}">
                             </div>
                             <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address" onchange="redirectToCheckout()">
+                                <input class="form-check-input" type="checkbox" id="Address" name="Address" value="Address" onchange="redirectToCheckout()">
                                 <label class="form-check-label" for="Address-1">Ship to a different address?</label>
                             </div>
 
@@ -271,7 +271,7 @@
     </script>
     <script>
         function redirectToCheckout() {
-            var checkbox = document.getElementById("Address-1");
+            var checkbox = document.getElementById("Address");
             if (checkbox.checked) {
                 window.location.href = "Checkout_1.jsp";
             }

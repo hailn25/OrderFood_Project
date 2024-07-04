@@ -51,7 +51,7 @@
                                     <div style="color:red" id= "error"></div>-->
 <!--                                    <hr class="my-4">
 
--->                                    <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)" style="background-color:#81C408 ">Đăng nhập</button><!--
+-->                                    <button class="btn btn-primary btn-lg btn-block" type="submit" id="btn-login" onclick="checkCaptcha(event)" style="background-color:#81C408 ">Đăng nhập</button><!--
 
 
                                     <hr class="my-4">-->

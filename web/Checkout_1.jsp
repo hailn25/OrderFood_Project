@@ -72,7 +72,7 @@
                             <form action="checkout1" method="post" id="checkoutForm">
                                 <div class="form-item"  style="margin-bottom: 30px">
                                     <label class="form-label my-3">Họ và Tên <sup>*</sup></label>
-                                    <input type="text" class="form-control" name="fullName" value="">
+                                    <input type="text" class="form-control" name="fullName" value="" id="fullname">
                                 </div>
                                 <div class="form-item" style="margin-bottom: 30px">
                                     Giới tính  <input type="radio" name="gender" value="Male" checked /> Nam
@@ -80,17 +80,17 @@
                                 </div>
                                 <div class="form-item">
                                     <label class="form-label my-3">Địa chỉ <sup>*</sup></label>
-                                    <input type="text" class="form-control" name="address" value="">
+                                    <input type="text" class="form-control" name="address" value="" id="address">
                                 </div>
                                 <div class="form-item">
                                     <label class="form-label my-3">Email <sup>*</sup></label>
-                                    <input type="text" class="form-control" name="email" value="">
+                                    <input type="text" class="form-control" name="email" value="" id="email">
                                 </div>
                                 <div class="form-item" style="margin-bottom: 30px">
                                     <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
-                                    <input type="tel" class="form-control" name="phoneNumber" value="">
+                                    <input type="tel" class="form-control" name="phoneNumber" value="" id="phone">
                                 </div>
-                                <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú (thêm)"></textarea>
+                                <textarea name="text"   class="form-control" spellcheck="false" id="note" cols="30" rows="11" placeholder="Ghi chú (thêm)"></textarea>
 
                         </div>
                         <div class="col-md-12 col-lg-6 col-xl-5">
