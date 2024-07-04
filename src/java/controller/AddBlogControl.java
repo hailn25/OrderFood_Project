@@ -57,12 +57,23 @@ public class AddBlogControl extends HttpServlet {
         int lengthTitle = Validation.removeAllBlank(title).length();
         int lengthContent = Validation.removeAllBlank(content).length();
         int lengthSummary = Validation.removeAllBlank(summary).length();
-        if (lengthTitle < 5 || lengthTitle > 60 || lengthContent < 100 || lengthContent > 500 || 
-                                lengthSummary < 30 || lengthSummary > 50 || request.getParameter("status") == null 
-                                                        || request.getParameter("datesubmit") == null) {
-            request.setAttribute("error", error);
+        if (lengthTitle < 5 || lengthTitle > 60) {
+            request.setAttribute("error", "Độ dài tiêu đề phải lớn hơn 4 và nhỏ hơn 61");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else {
+        } else if(lengthContent < 100 || lengthContent > 500){
+            request.setAttribute("error", "Độ dài nội dung phải lớn hơn 99 và nhỏ hơn 501");
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        } else if(lengthSummary < 30 || lengthSummary > 50){
+            request.setAttribute("error", "Độ dài tóm tắt phải lớn hơn 29 và nhỏ hơn 51");
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        } else if(request.getParameter("status") == null ){
+            request.setAttribute("error", "Chưa chọn trạng thái");
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        } else if(request.getParameter("datesubmit") == null){
+            request.setAttribute("error", "Chưa chọn ngày đăng");
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        }
+        else {
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
             String dateSubmitStr = request.getParameter("datesubmit");
             if (fileName != null && !fileName.isEmpty()) {

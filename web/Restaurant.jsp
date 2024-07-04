@@ -38,6 +38,8 @@
 
         <%@include file="Header.jsp" %>
 
+        <%@include file="Chatbox.jsp"%>
+
         <div class="container mt-5">
             <c:forEach items="${listRestaurantDTO}" var="r">
                 <div class="row header">
@@ -49,7 +51,7 @@
                         </div>
                         <div class="header-left-detail-chat">
                             <i class="far fa-comments"></i>
-                            <a href="#">Nhắn tin</a>
+                            <a href="">Nhắn tin</a>
                         </div>
 
                         <c:if test="${sessionScope.account.roleId == 2}">                          
