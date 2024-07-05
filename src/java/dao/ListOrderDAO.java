@@ -26,35 +26,50 @@ public class ListOrderDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<ListOrder> getListOrderById(int accountId) {
+    public List<ListOrder> getListOrderById(int orderStatusId, int accountId) {
         List<ListOrder> listOrderById = new ArrayList<>();
         try {
 
-            String query = "SELECT o.AccountId, a.Name, a.Email, a.Phone, a.Address, od.PaymentBy, od.PaymentStatus, o.CreateDate, o.Note, p.Name, p.Price, od.Quantity, o.TotalMoney\n"
-                    + "FROM [Order] o\n"
-                    + "JOIN Account a ON o.AccountId = a.AccountId\n"
-                    + "JOIN OrderDetail od ON o.OrderId = od.OrderId\n"
-                    + "JOIN Product p ON od.ProductId = p.ProductId\n"
-                    + "WHERE a.AccountId = ?";
+            String query = "SELECT\n"
+                    + "    o.AccountId,\n"
+                    + "    p.Name,\n"
+                    + "    p.Price,\n"
+                    + "    p.ImageURL,\n"
+                    + "    r.Name,\n"
+                    + "    o.Name,\n"
+                    + "    o.Phone,\n"
+                    + "    o.Address,\n"
+                    + "    o.Note,\n"
+                    + "    od.Quantity,\n"
+                    + "    od.TotalMoney,\n"
+                    + "	os.OrderStatusId,\n"
+                    + "	os.Status\n"
+                    + "FROM [Order_Food_V8].[dbo].[Order] o\n"
+                    + "JOIN [Order_Food_V8].[dbo].[OrderDetail] od ON o.OrderId = od.OrderId\n"
+                    + "JOIN [Order_Food_V8].[dbo].[Product] p ON od.ProductId = p.ProductId\n"
+                    + "JOIN [Order_Food_V8].[dbo].[OrderStatus] os ON o.OrderStatusId = os.OrderStatusId\n"
+                    + "JOIN [Order_Food_V8].[dbo].[Restaurant] r ON p.RestaurantId = r.RestaurantId\n"
+                    + "WHERE o.OrderStatusId = ? AND o.AccountId = ?";
 
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
-            ps.setInt(1, accountId);
+            ps.setInt(1, orderStatusId);
+            ps.setInt(2, accountId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listOrderById.add(new ListOrder(rs.getInt(1),
                         rs.getString(2),
-                        rs.getString(3),
+                        rs.getDouble(3),
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDate(8),
+                        rs.getString(8),
                         rs.getString(9),
-                        rs.getString(10),
+                        rs.getInt(10),
                         rs.getDouble(11),
                         rs.getInt(12),
-                        rs.getDouble(13)));
+                        rs.getString(13)));
             }
 
         } catch (SQLException ex) {
@@ -119,6 +134,6 @@ public class ListOrderDAO {
 
     public static void main(String[] args) {
         ListOrderDAO dao = new ListOrderDAO();
-        System.out.println(dao.getShowOrderByaId(6));
+        System.out.println(dao.getListOrderById(3, 6));
     }
 }

@@ -4,7 +4,11 @@
  */
 package model;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -12,36 +16,36 @@ import java.util.Date;
  */
 public class ListOrder {
     private int accountId;
-    private String name;
-    private String email;
-    private String phonel;
+    private String productName;
+    private double price;
+    private String imageURL;
+    private String restaurant;
+    private String accountName;
+    private String phone;
     private String address;
-    private String paymentBy;
-    private String paymentStatus;
-    private Date createDate;
     private String note;
-    private String nameP;
-    private Double price;
     private int quantity;
-    private Double totalMoney;
+    private double totalMoney;
+    private int orderStatusId;
+    private String status;
 
     public ListOrder() {
     }
 
-    public ListOrder(int accountId, String name, String email, String phonel, String address, String paymentBy, String paymentStatus, Date createDate, String note, String nameP, Double price, int quantity, Double totalMoney) {
+    public ListOrder(int accountId, String productName, double price, String imageURL, String restaurant, String accountName, String phone, String address, String note, int quantity, double totalMoney, int orderStatusId, String status) {
         this.accountId = accountId;
-        this.name = name;
-        this.email = email;
-        this.phonel = phonel;
-        this.address = address;
-        this.paymentBy = paymentBy;
-        this.paymentStatus = paymentStatus;
-        this.createDate = createDate;
-        this.note = note;
-        this.nameP = nameP;
+        this.productName = productName;
         this.price = price;
+        this.imageURL = imageURL;
+        this.restaurant = restaurant;
+        this.accountName = accountName;
+        this.phone = phone;
+        this.address = address;
+        this.note = note;
         this.quantity = quantity;
         this.totalMoney = totalMoney;
+        this.orderStatusId = orderStatusId;
+        this.status = status;
     }
 
     public int getAccountId() {
@@ -52,28 +56,52 @@ public class ListOrder {
         this.accountId = accountId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getEmail() {
-        return email;
+    public double getPrice() {
+        return price;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public String getPhonel() {
-        return phonel;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setPhonel(String phonel) {
-        this.phonel = phonel;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(String restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -84,52 +112,12 @@ public class ListOrder {
         this.address = address;
     }
 
-    public String getPaymentBy() {
-        return paymentBy;
-    }
-
-    public void setPaymentBy(String paymentBy) {
-        this.paymentBy = paymentBy;
-    }
-
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public String getNameP() {
-        return nameP;
-    }
-
-    public void setNameP(String nameP) {
-        this.nameP = nameP;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public int getQuantity() {
@@ -140,17 +128,33 @@ public class ListOrder {
         this.quantity = quantity;
     }
 
-    public Double getTotalMoney() {
+    public double getTotalMoney() {
         return totalMoney;
     }
 
-    public void setTotalMoney(Double totalMoney) {
+    public void setTotalMoney(double totalMoney) {
         this.totalMoney = totalMoney;
+    }
+
+    public int getOrderStatusId() {
+        return orderStatusId;
+    }
+
+    public void setOrderStatusId(int orderStatusId) {
+        this.orderStatusId = orderStatusId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "ListOrder{" + "accountId=" + accountId + ", name=" + name + ", email=" + email + ", phonel=" + phonel + ", address=" + address + ", paymentBy=" + paymentBy + ", paymentStatus=" + paymentStatus + ", createDate=" + createDate + ", note=" + note + ", nameP=" + nameP + ", price=" + price + ", quantity=" + quantity + ", totalMoney=" + totalMoney + '}';
+        return "ListOrder{" + "accountId=" + accountId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + '}';
     }
     
     

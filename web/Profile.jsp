@@ -7,73 +7,123 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Thông tin cá nhân</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding: 20px;
+            }
+
             .custom-header {
-                background-color: #81C408; /* Màu nền header */
-                color: #fff; /* Màu chữ của header */
-                padding: 10px; /* Khoảng cách giữa nội dung và viền header */
-                width: 100%; /* Chiều rộng header bằng 100% */
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Đổ bóng cho header */
-                border-top-left-radius: 50px; /* Bo tròn góc trái trên */
+                background-color: #81C408;
+                color: #fff;
+                padding: 10px;
+                width: 100%;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                border-top-left-radius: 50px;
                 border-bottom-left-radius: 20px;
                 border-top-right-radius: 20px;
-                border-bottom-right-radius: 50px; /* Bo tròn góc phải dưới */
-
+                border-bottom-right-radius: 50px;
             }
 
             .navbar-brand {
-                font-size: 1.5rem; /* Cỡ chữ của tiêu đề */
-            }
-            body {
-                margin-top: 20px;
-                background: #f8f8f8
+                font-size: 1.5rem;
+                margin: 0;
             }
 
             .avatar {
                 display: flex;
-                justify-content: center; /* căn giữa theo chiều ngang */
-                align-items: center; /* căn giữa theo chiều dọc */
-                width: 190px; /* Chiều rộng cố định của avatar */
+                justify-content: center;
+                align-items: center;
+                width: 190px;
                 height: 190px;
-                overflow: hidden; /* Ảnh sẽ bị cắt bớt nếu vượt quá kích thước của avatar */
-
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin: 0 auto 20px;
             }
 
             .avatar-img {
-                max-width: 100%; /* hình ảnh không vượt quá kích thước của ô avatar */
-                max-height: 100%; /* hình ảnh không vượt quá kích thước của ô avatar */
-                display: block; /* đảm bảo hình ảnh không bị căn giữa dọc */
-                margin: auto; /* căn giữa hình ảnh */
+                max-width: 100%;
+                max-height: 100%;
             }
 
             .nav {
                 display: flex;
-                flex-wrap: wrap;
-                gap: 10px; /* Khoảng cách giữa các mục */
-                list-style-type: none; /* Loại bỏ các dấu đầu dòng */
-                padding: 0; /* Xóa padding mặc định của danh sách */
+                flex-direction: column;
+                gap: 10px;
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
             }
 
             .nav-item {
-                flex: 1 1 100%; /* Mỗi mục chiếm hết chiều rộng của cột */
-                max-width: 100%; /* Đảm bảo mỗi mục không vượt quá chiều rộng tối đa */
+                width: 100%;
             }
 
             .nav-link {
                 display: block;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #f8f9fa;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s;
             }
 
-            .username{
+            .nav-link:hover {
+                background-color: #e2e6ea;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-control {
+                border: none;
+                border-bottom: 2px solid #ddd;
+                padding: 0.5rem;
+                font-size: 1rem;
+                background-color: transparent;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-bottom: 2px solid #81C408;
+            }
+
+            .btn-primary {
+                background-color: #81C408;
+                border: none;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #6ba306;
+            }
+
+            .username {
                 display: block;
                 text-align: center;
+                margin-bottom: 10px;
+                font-size: 1.2rem;
+                color: #555;
+            }
+
+            .content-section {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
         </style>
     </head>
@@ -95,7 +145,6 @@
                                     <img id="avatarImage" src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
                                 </div>
                             </div>
-
                             <c:choose>
                                 <c:when test="${sessionScope.account.roleId == 2}">
                                     <ul class="nav">
@@ -117,20 +166,26 @@
                                                 <span>Voucher</span>
                                             </a>
                                         </li>
+                                        <!--                                        <li class="nav-item">
+                                                                                    <a class="nav-link px-3" href="orderHistory?accountId=${sessionScope.account.accountId}">
+                                                                                        <i class="fa fa-fw fa-cog mr-1"></i>
+                                                                                        <span>Lịch sử đơn hàng</span>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="nav-item">
+                                                                                    <a class="nav-link px-3" href="showOrder?accountId=${sessionScope.account.accountId}">
+                                                                                        <i class="fa fa-fw fa-cog mr-1"></i>
+                                                                                        <span>Theo dõi đơn hàng</span>
+                                                                                    </a>
+                                                                                </li>-->
+
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="orderHistory?accountId=${sessionScope.account.accountId}">
+                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Lịch sử đơn hàng</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="OrderTracking.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Theo dõi đơn hàng</span>
+                                                <span>Đơn hàng</span>
                                             </a>
                                         </li>
                                     </ul>
-
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
@@ -190,10 +245,8 @@
                                 </c:when>
                             </c:choose>
                         </div>
-
                     </div>
                 </div>
-
                 <div class="col">
                     <div class="row">
                         <div class="col mb-3">
