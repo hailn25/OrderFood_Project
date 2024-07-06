@@ -38,51 +38,67 @@ public class ProductSaleDAO {
             conn = new DBContext().getConnection();
             if (conn != null) {
                 if (timeFrame == 1) {
-                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
-                            + "FROM Product_Sale ps\n"
-                            + "JOIN Product p\n"
-                            + "ON p.ProductId = ps.ProductID\n"
-                            + "WHERE IsFlashSale = 1 \n"
-                            + "    AND TimeFrame = 1 \n"
-                            + "    AND startTime <= CAST('" + date + " 10:00:00' AS DATETIME)\n"
-                            + "    AND (endTime >= CAST('" + date + " 13:00:00' AS DATETIME) OR endTime IS NULL);";
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 1 \n"
+                            + "                                AND startTime <= CAST('" + date + " 10:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 13:00:00' AS DATETIME) OR endTime IS NULL);";
 
                 }
                 if (timeFrame == 2) {
-                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
-                            + "FROM Product_Sale ps\n"
-                            + "JOIN Product p\n"
-                            + "ON p.ProductId = ps.ProductID\n"
-                            + "WHERE IsFlashSale = 1 \n"
-                            + "    AND TimeFrame = 2 \n"
-                            + "    AND startTime <= CAST('" + date + " 13:00:00' AS DATETIME)\n"
-                            + "    AND (endTime >= CAST('" + date + " 16:00:00' AS DATETIME) OR endTime IS NULL);";
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 2 \n"
+                            + "                                AND startTime <= CAST('" + date + " 13:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 16:00:00' AS DATETIME) OR endTime IS NULL);";
                 }
                 if (timeFrame == 3) {
-                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
-                            + "FROM Product_Sale ps\n"
-                            + "JOIN Product p\n"
-                            + "ON p.ProductId = ps.ProductID\n"
-                            + "WHERE IsFlashSale = 1 \n"
-                            + "    AND TimeFrame = 3 \n"
-                            + "    AND startTime <= CAST('" + date + " 16:00:00' AS DATETIME)\n"
-                            + "    AND (endTime >= CAST('" + date + " 19:00:00' AS DATETIME) OR endTime IS NULL);";
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 3 \n"
+                            + "                                AND startTime <= CAST('" + date + " 16:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 19:00:00' AS DATETIME) OR endTime IS NULL);";
                 }
                 if (timeFrame == 4) {
-                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame\n"
-                            + "FROM Product_Sale ps\n"
-                            + "JOIN Product p\n"
-                            + "ON p.ProductId = ps.ProductID\n"
-                            + "WHERE IsFlashSale = 1 \n"
-                            + "    AND TimeFrame = 4 \n"
-                            + "    AND startTime <= CAST('" + date + " 19:00:00' AS DATETIME)\n"
-                            + "    AND (endTime >= CAST('" + date + " 22:00:00' AS DATETIME) OR endTime IS NULL);";
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 4 \n"
+                            + "                                AND startTime <= CAST('" + date + " 19:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 22:00:00' AS DATETIME) OR endTime IS NULL);";
                 }
             }
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6), rs.getDouble(7), rs.getInt(8)));
+                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6), rs.getDouble(7), rs.getInt(8),rs.getString(9),rs.getInt(10)));
 
             }
         } catch (ClassNotFoundException ex) {
@@ -156,7 +172,7 @@ public class ProductSaleDAO {
 
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.ListProductFlashSale());
+        System.out.println(dao.getProductIsFlashSale("2024-07-04", 2));
 
     }
 

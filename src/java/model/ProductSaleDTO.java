@@ -17,11 +17,13 @@ public class ProductSaleDTO {
         private String imageURL;
         private double price;
         private int timeFrame;
+        private int restaurantId;
+        private String restaurantImage;
 
     public ProductSaleDTO() {
     }
 
-    public ProductSaleDTO(int productId, String name, int quantity, double salePrice, double discount, String imageURL, double price, int timeFrame) {
+    public ProductSaleDTO(int productId, String name, int quantity, double salePrice, double discount, String imageURL, double price, int timeFrame,  String restaurantImage,int restaurantId) {
         this.productId = productId;
         this.name = name;
         this.quantity = quantity;
@@ -30,8 +32,28 @@ public class ProductSaleDTO {
         this.imageURL = imageURL;
         this.price = price;
         this.timeFrame = timeFrame;
+        this.restaurantId = restaurantId;
+        this.restaurantImage = restaurantImage;
     }
 
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public String getRestaurantImage() {
+        return restaurantImage;
+    }
+
+    public void setRestaurantImage(String restaurantImage) {
+        this.restaurantImage = restaurantImage;
+    }
+
+    
+    
     public int getTimeFrame() {
         return timeFrame;
     }

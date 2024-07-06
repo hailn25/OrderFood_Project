@@ -84,7 +84,7 @@ public class FlashSaleServlet extends HttpServlet {
     }
     public static void main(String[] args) throws SQLException {
              ProductSaleDAO psdao = new ProductSaleDAO();
-             System.out.println(psdao.getProductIsFlashSale("2024-07-02 ", 2));
+             System.out.println(psdao.getProductIsFlashSale("2024-07-04 ", 2));
     }
   
    
