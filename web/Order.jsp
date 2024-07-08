@@ -12,6 +12,8 @@
         <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css">
         <link rel="stylesheet" href="css/bootstrap.min_1.css">
         <link rel="stylesheet" href="css/templatemo-style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
         <style>
             body {
                 font-family: 'Roboto', sans-serif;
@@ -85,7 +87,7 @@
                    Đã huỷ
                </a>
                <a href="profile" 
-               class="button-link <c:if test='${param.orderStatusId == "4"}'>active</c:if>'">
+                  class="button-link <c:if test='${param.orderStatusId == "4"}'>active</c:if>'">
                    Profile
                </a>
             </div>
@@ -111,33 +113,34 @@
         <table>
             <thead>
                 <tr>
-                    <th>Product Name</th>
-                    <th>Image</th>
-                    <th>Restaurant</th>
-                    <th>Account Name</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Note</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total Money</th>
-                    <th>Status</th>
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Ghi chú</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="order" items="${listOrders}">
+                <c:forEach var="order" items="${listOrderById_V1}">
                     <tr>
-                        <td>${order.productName}</td>
-                        <td><img src="img/${order.imageURL}" alt="${order.productName}" style="max-width: 100px;"/></td>
-                        <td>${order.restaurant}</td>
-                        <td>${order.accountName}</td>
+                        <td>${order.name}</td>                  
                         <td>${order.phone}</td>
                         <td>${order.address}</td>
                         <td>${order.note}</td>
-                        <td>${order.price}</td>
-                        <td>${order.quantity}</td>
-                        <td>${order.totalMoney}</td>
+                        <td class="createDate">${order.createDate}</td>
+                        <td class="totalMoney">${order.totalMoney}</td>
                         <td>${order.status}</td>
+                        <td>
+                            <form action="viewMore" method="get" style="display: inline;"> <!-- Form to handle View More action -->
+                                <input type="hidden" name="orderId" value="#"/> <!-- Hidden input to pass order ID -->
+                                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                    <i class="fas fa-eye"></i> <!-- Font Awesome eye icon -->
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -146,5 +149,30 @@
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="jquery-ui-datepicker/jquery-ui.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script>
+            function formatVND(value) {
+                return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(value * 1000);
+            }
+
+            function formatDate(dateString) {
+                const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
+                const date = new Date(dateString);
+                return date.toLocaleDateString('vi-VN', options);
+            }
+
+            function formatAll() {
+                document.querySelectorAll('.totalMoney').forEach(function (element) {
+                    let value = parseFloat(element.textContent);
+                    element.textContent = formatVND(value);
+                });
+
+                document.querySelectorAll('.createDate').forEach(function (element) {
+                    let dateString = element.textContent;
+                    element.textContent = formatDate(dateString);
+                });
+            }
+
+            window.onload = formatAll;
+        </script>
     </body>
 </html>

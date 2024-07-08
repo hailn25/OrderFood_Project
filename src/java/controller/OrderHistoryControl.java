@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.ListOrder;
+import model.OrderDTO;
 
 /**
  *
@@ -47,8 +48,10 @@ public class OrderHistoryControl extends HttpServlet {
 
         ListOrderDAO listOrderDAO = new ListOrderDAO();
         List<ListOrder> listOrders = listOrderDAO.getListOrderById(orderStatusId, accountId);
-
         request.setAttribute("listOrders", listOrders);
+        
+        List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusId, accountId);
+        request.setAttribute("listOrderById_V1", listOrderById_V1);
 
         // Forward to profile page where order history will be displayed
         request.getRequestDispatcher("Order.jsp").forward(request, response);
