@@ -99,7 +99,7 @@
                                 <input type="tel" class="form-control" name="phone" value="${account.phone}">
                             </div>
                             <div class="form-check my-3">
-                                <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address" onchange="redirectToCheckout()">
+                                <input class="form-check-input" type="checkbox" id="Address" name="Address" value="Address" onchange="redirectToCheckout()">
                                 <label class="form-check-label" for="Address-1">Ship to a different address?</label>
                             </div>
 
@@ -129,12 +129,21 @@
                                             </th>
                                             <td class="py-5">${i.product.name}</td>
                                             <td class="py-5">
+<<<<<<< HEAD (a9a0b53) - code_haile
                                                 <fmt:formatNumber value="${i.price}" maxFractionDigits="1" />
+=======
+                                                <fmt:formatNumber value="${i.price*1000}" maxFractionDigits="1" />
+>>>>>>> origin/hungnv13 (c6b0c90) - hungnv13
                                             </td>
                                             <td class="py-5">${i.quantity}</td>
                                             <td class="py-5">
+<<<<<<< HEAD (a9a0b53) - code_haile
                                                 <fmt:formatNumber value="${i.quantity * i.price}" maxFractionDigits="2" />
                                                 <input type="hidden"value="${i.quantity * i.price}" />
+=======
+                                                <fmt:formatNumber value="${i.quantity * i.price*1000}" maxFractionDigits="2" />
+                                                <input type="hidden"value="${i.quantity * i.price*1000}" />
+>>>>>>> origin/hungnv13 (c6b0c90) - hungnv13
                                             </td>
 
 
@@ -152,34 +161,23 @@
                                             <div class="py-3 border-bottom border-top">
                                                 <c:set var="subtotal" value="0" />
                                                 <c:forEach var="i" items="${o.items}">
-                                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}" />
                                                 </c:forEach>
                                                 <fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />
-                                                <input type="hidden" name="cost" value="<fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />" />
+<<<<<<< HEAD (a9a0b53) - code_haile
+                                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}" />
+=======
+                                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price*1000)}" />
+>>>>>>> origin/hungnv13 (c6b0c90) - hungnv13
                                             </div>
 
+<<<<<<< HEAD (a9a0b53) - code_haile
+                                                <input type="hidden" name="cost" value="<fmt:formatNumber value="${subtotal}" maxFractionDigits="2" />" />
+=======
+                                                <input type="hidden" name="cost" value="${subtotal}" />
+>>>>>>> origin/hungnv13 (c6b0c90) - hungnv13
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td class="py-5">
-                                            <p class="mb-0 text-dark py-4">Shipping</p>
-                                        </td>
-                                        <td colspan="3" class="py-5">
-                                            <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                                            </div>
-                                            <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                                            </div>
-                                            <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
-                                            </div>
-                                        </td>
-                                    </tr>
+                               
                                     <tr>
                                         <th scope="row"></th>
                                         <td class="py-5">
@@ -271,10 +269,29 @@
     </script>
     <script>
         function redirectToCheckout() {
-            var checkbox = document.getElementById("Address-1");
-            if (checkbox.checked) {
-                window.location.href = "Checkout_1.jsp";
-            }
+<<<<<<< HEAD (a9a0b53) - code_haile
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td class="py-5">
+                                            <p class="mb-0 text-dark py-4">Shipping</p>
+                                        </td>
+                                        <td colspan="3" class="py-5">
+                                            <div class="form-check text-start">
+                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                                                <label class="form-check-label" for="Shipping-1">Free Shipping</label>
+                                            </div>
+                                            <div class="form-check text-start">
+                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
+                                                <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                                            </div>
+                                            <div class="form-check text-start">
+                                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
+                                                <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                                            </div>
+=======
+>>>>>>> origin/hungnv13 (c6b0c90) - hungnv13
         }
     </script>
 
@@ -296,3 +313,20 @@
 </body>
 
 </html>
+<<<<<<< HEAD (a9a0b53) - code_haile
+            var checkbox = document.getElementById("Address-1");
+            if (checkbox.checked) {
+                window.location.href = "Checkout_1.jsp";
+            }
+=======
+            var checkbox = document.getElementById("Address");
+            if (checkbox.checked) {
+                window.location.href = "Checkout_1.jsp";
+            }
+        }
+        
+        function handlePaymentSuccess() {
+            alert("Thanh toán thành công!");
+          
+           window.location.href = "home";
+>>>>>>> origin/hungnv13 (c6b0c90) - hungnv13

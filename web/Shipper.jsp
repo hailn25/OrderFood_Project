@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
@@ -56,6 +55,13 @@
                                     </a>
                                 </li>
                             </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="Profile.jsp">
+                                        <i class="far fa-user"></i> Tài khoản
+                                    </a>
+                                </li>
+                            </c:if>
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
@@ -81,7 +87,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Quản lý <b>đơn hàng </b></h2>
+                            <h2>Quản lý <b>đơn hàng</b></h2>
                         </div>
                     </div>
                 </div>
@@ -94,9 +100,9 @@
                             <th>Địa chỉ</th>
                             <th>Ghi chú</th>
                             <th>Ngày đặt</th>
-                            <th>Tổng tiền </th>
-                            <th>Trạng thái đơn hàng </th>
-                            <th>Hoạt Động </th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái đơn hàng</th>
+                            <th>Hoạt Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,19 +115,12 @@
                                 <td>${o.note}</td>
                                 <td>${o.createDate}</td>
                                 <td>${o.totalMoney}</td>
+                                <td>${o.status}</td>
                                 <td>
-                                    ${o.status}
+                                    <a href="managerActions?action=accept&oid=${o.orderId}" class="accept" data-toggle="modal" onclick="return confirm('Bạn có chắc chắn xác nhận đơn không?');"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xác nhận đơn hàng">&#xe5ca;</i></a>
+                                    <a href="managerActions?action=refuse&oid=${o.orderId}" class="refuse" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Không chấp nhận" style="color: red;">&#xe5cd;</i></a>
+                                    <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng">&#xe8f4;</i></a>
                                 </td>
-
-                                <td>
-                                    <a href="managerActions?action=accept&oid=${o.orderId}" class="accept" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xác nhận đơn hàng">&#xe5ca;</i></a>
-
-                                    <a href="managerActions?action=refuse&oid=${o.orderId}" class="refuse" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Không chấp nhận " style="color: red;">&#xe5cd;</i></a>
-
-                                    <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
-
-                                </td>
-
                             </tr>
                         </c:forEach>
                     </tbody>

@@ -207,6 +207,7 @@
                                                                 </div>
 
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </c:if>
@@ -261,49 +262,7 @@
                                             var amount = document.getElementById('amount');
                                             var value = rangeInput.value;
 
-                                            // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
-                                            amount.value = formattedValue;
-                                            amount.innerText = formattedValue;
-                                        }
-
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            const prices = document.querySelectorAll('[id^="price-"]');
-
-                                            prices.forEach(priceElement => {
-                                                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                                                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
-
-                                                // Định dạng giá thành VND
-                                                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
-
-                                                // Cập nhật nội dung của thẻ h6
-                                                priceElement.textContent = formattedPrice + " VNĐ";
-                                            });
-                                        });
-
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            // Định dạng giá trị của minPrice khi trang được tải
-                                            var minPrice = ${not empty minPrice ? minPrice : 0};
-                                            var formattedMinPrice = (minPrice * 1000).toLocaleString('vi-VN');
-                                            document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
-
-                                            // Định dạng giá trị của thanh trượt khi trang được tải
-                                            var rangeInput = document.getElementById('rangeInput');
-                                            var amount = document.getElementById('amount');
-                                            var value = rangeInput.value;
-                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
-                                            amount.value = formattedValue;
-                                            amount.innerText = formattedValue;
-                                        });
-
-                                        function submitForm() {
-                                            var rangeInput = document.getElementById('rangeInput').value;
-                                            var hiddenRangeInput = document.getElementById('hiddenRangeInput');
-                                            hiddenRangeInput.value = rangeInput;
-                                            document.getElementById('rangeForm').submit();
-                                        }
         </script>
     </body>
 

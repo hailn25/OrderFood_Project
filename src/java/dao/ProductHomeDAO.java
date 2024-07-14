@@ -19,11 +19,11 @@ import model.ProductHome;
  * @author ADMIN
  */
 public class ProductHomeDAO {
-
+    
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-
+    
     public List<ProductHome> getAllProduct() {
         List<ProductHome> listProduct = new ArrayList<>();
         String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
@@ -58,7 +58,7 @@ public class ProductHomeDAO {
         }
         return listProduct;
     }
-
+    
     public List<CategoryListDetail> getAllCategory() {
         List<CategoryListDetail> listAllCategory = new ArrayList<>();
         String query = "select c.CategoryId, c.Name \n"
@@ -76,7 +76,7 @@ public class ProductHomeDAO {
         }
         return listAllCategory;
     }
-
+    
     public List<ProductHome> getProductByCID(String cid) {
         List<ProductHome> list = new ArrayList<>();
         String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
@@ -113,7 +113,7 @@ public class ProductHomeDAO {
         }
         return list;
     }
-
+    
     public ProductHome getProductById(String id) {
         String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
                 + "from Product p\n"
@@ -149,7 +149,7 @@ public class ProductHomeDAO {
         }
         return null;
     }
-
+    
     public List<ProductHome> getAllBestSellerProduct() {
         List<ProductHome> listBestSellerProduct = new ArrayList<>();
         String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
@@ -185,7 +185,7 @@ public class ProductHomeDAO {
         }
         return listBestSellerProduct;
     }
-
+    
     public List<ListProduct> getListProductP() {
         List<ListProduct> listProductP = new ArrayList<>();
         String query = "select p.ProductId, p.Name, p.Description, p.Price, p.ImageURL, c.Name, p.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status\n"
@@ -215,7 +215,7 @@ public class ProductHomeDAO {
         }
         return listProductP;
     }
-
+    
     public List<CategoryListDetail> getCategoryListDetail() {
         List<CategoryListDetail> listCategoryListDetail = new ArrayList<>();
         String query = "select c.CategoryId, c.Name \n"
@@ -233,7 +233,7 @@ public class ProductHomeDAO {
         }
         return listCategoryListDetail;
     }
-
+    
     public List<ProductHome> getProductBySearchName(String txtSearch) {
         List<ProductHome> list = new ArrayList<>();
         String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
@@ -307,10 +307,46 @@ public class ProductHomeDAO {
         }
         return list;
     }
-
+ 
+    public List<ProductHome> getProductByIsSale() {
+        List<ProductHome> listProductByIsSale = new ArrayList<>();
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Product p\n"
+                + "join Restaurant r\n"
+                + "on p.RestaurantId = r.RestaurantId\n"
+                + "join Category c\n"
+                + "on p.CategoryId = c.CategoryId\n"
+                + "where p.IsSale = 1";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listProductByIsSale.add(new ProductHome(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getString(9),
+                        rs.getBoolean(10),
+                        rs.getInt(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getBoolean(14),
+                        rs.getDouble(15)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listProductByIsSale;
+    }
+    
     public static void main(String[] args) {
         ProductHomeDAO dao = new ProductHomeDAO();
-
-        System.out.println(dao.getAllProduct());
+        
+        System.out.println(dao.getProductByIsSale());
     }
 }

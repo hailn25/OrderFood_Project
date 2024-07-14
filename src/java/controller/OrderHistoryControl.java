@@ -4,25 +4,23 @@
  */
 package controller;
 
-import dao.AccountDAO;
 import dao.ListOrderDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Account;
+import java.util.List;
 import model.ListOrder;
+import model.OrderDTO;
 
 /**
  *
  * @author ADMIN
  */
-public class ProfileControl extends HttpServlet {
+@WebServlet(name = "OrderHistoryControl", urlPatterns = {"/orderHistory"})
+public class OrderHistoryControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,21 +35,26 @@ public class ProfileControl extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        // Lấy accountId từ session (sau khi người dùng đăng nhập)
-        HttpSession session = request.getSession();
-        String accountId = (String) session.getAttribute("accountId");
+        int accountId = 0;
+        int orderStatusId = 0;
 
-        // Call DAO để lấy thông tin tài khoản dựa trên accountId
-        AccountDAO accountDAO = new AccountDAO();
-        Account account = accountDAO.getAccountByAId(accountId);
-        
-        // Đặt thông tin tài khoản vào request attribute
-        request.setAttribute("account", account);
+        if (request.getParameter("accountId") != null) {
+            accountId = Integer.parseInt(request.getParameter("accountId"));
+        }
 
-        // Forward request tới Profile.jsp
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        if (request.getParameter("orderStatusId") != null) {
+            orderStatusId = Integer.parseInt(request.getParameter("orderStatusId"));
+        }
+
+        ListOrderDAO listOrderDAO = new ListOrderDAO();
+        List<ListOrder> listOrders = listOrderDAO.getListOrderById(orderStatusId, accountId);
+        request.setAttribute("listOrders", listOrders);
         
-        
+        List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusId, accountId);
+        request.setAttribute("listOrderById_V1", listOrderById_V1);
+
+        // Forward to profile page where order history will be displayed
+        request.getRequestDispatcher("Order.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

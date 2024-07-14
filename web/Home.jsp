@@ -119,6 +119,9 @@
                 animation-timeline: view();
                 animation-range: entry 0% cover 40%;
             }
+
+
+
         </style>
     </head>
 
@@ -144,6 +147,7 @@
             </div>
             <!-- Modal Search End -->
 
+
             <div class="slider" style="margin-top: 200px">
                 <div class="list">
                 <c:forEach items="${listSlider}" var="s">
@@ -156,8 +160,7 @@
                     </c:if>
                 </c:forEach>
             </div>
-
-            <div class="buttons">
+                <div class="buttons">
                 <button id="prev"><</button>
                 <button id="next">></button>
             </div>
@@ -168,327 +171,263 @@
                     </c:forEach>
             </ul>
         </div>
-
-
-        <!-- Fruits Shop Start-->
-        <div class="container-fluid fruite py-5">
-            <div class="container py-5">
-                <div class="tab-class text-center">
-                    <div class="row g-4">
-                        <div class="col-lg-4 text-start" id="Block">
-                            <h1>Danh mục sản phẩm</h1>
-                        </div>
-                        <div class="col-lg-8 text-end">
-                            <ul class="nav nav-pills d-inline-flex text-center mb-5">
-                                <c:forEach items="${listC}" var="c">
-                                    <li class="nav-item">
-                                        <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
-                                            <a class="text-dark" style="width: 130px;" href="category?cid=${c.id}">${c.name}</a>
-                                        </div>
-                                    </li>
-                                </c:forEach>
-                            </ul>
+            <!-- Hero End -->
+            <!-- Fruits Shop Start-->
+            <div class="container-fluid fruite py-5">
+                <div class="container py-5">
+                    <div class="tab-class text-center">
+                        <div class="row g-4">
+                            <div class="col-lg-4 text-start" id="Block">
+                                <h1>Danh mục sản phẩm</h1>
+                            </div>
+                            <div class="col-lg-8 text-end">
+                                <ul class="nav nav-pills d-inline-flex text-center mb-5" id="categoryList">
+                                    <c:forEach items="${listC}" var="c" varStatus="status">
+                                        <li class="nav-item category-item" style="<c:if test='${status.index >= 4}'>display:none;</c:if>">
+                                                <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
+                                                    <a class="text-dark" style="width: 130px;" href="category?cid=${c.id}">${c.name}</a>
+                                            </div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                                <button class="btn btn-primary" id="toggleButton" onclick="toggleCategories()">Xem thêm</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-content">
-                    <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <c:forEach items="${listP}" var="p">
-                                        <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
-                                                </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${p.categoryName}</div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4>
-                                                        <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
-                                                    </h4>
-                                                    <p>${p.restaurantName}</p>
-                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">${p.price}</p>
-                                                        <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
-                                                            <input type="hidden" name="productId" value="${p.id}">
-                                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary w-100">
-                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng</button>
-                                                        </form>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="row g-4">
+                                <div class="col-lg-12">
+                                    <div class="row g-4" id="product-container">
+                                        <c:forEach items="${listP}" var="p" varStatus="status">
+                                            <c:if test="${p.quantity > 0}">
+                                                <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
+                                                    <div class="rounded position-relative fruite-item">
+                                                        <div class="fruite-img">
+                                                            <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
+                                                        </div>
+                                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${p.categoryName}</div>
+                                                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                            <h4>
+                                                                <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
+                                                            </h4>
+                                                            <p>${p.restaurantName}</p>
+                                                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                                <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6> 
+                                                                <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
+                                                                    <input type="hidden" name="productId" value="${p.id}">
+                                                                    <form action="addtocart" method="post" >
+                                                                        <input type="hidden" name="productId" value="${p.id}">
+                                                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </form>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-primary px-4 py-2" id="load-more-btn" onclick="toggleProducts()">Xem thêm</button>
+                                    <button class="btn btn-secondary px-4 py-2 d-none" id="show-less-btn" onclick="toggleProducts()">Thu gọn</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>      
-        </div>
-        <!-- Fruits Shop End-->
-        <!-- Vesitable Shop Start-->
-        <div class="container-fluid vesitable py-5">
-            <div class="container py-5"id="Block" >
-                <h1 class="mb-0">Sản phẩm</h1>
-                <div class="owl-carousel vegetable-carousel justify-content-center">
-                    <c:forEach var="v" items="${listV}">
-                        <div class="border border-primary rounded position-relative vesitable-item" >
-                            <div class="vesitable-img">
-                                <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="${v.name}">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${v.cateName}</div>
-                            <div class="p-4 d-flex flex-column justify-content-between rounded-bottom flex-grow-1">
-                                <div>
-                                    <h4><a href="detail?pid=${v.id}" style="color: black;" class="product-name">${v.name}</a></h4>
-                                    <p class="truncate-description">${v.decription}</p>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <p class="text-dark fs-5 fw-bold mb-0">${v.price}</p>
-                                    <form action="addtocart" method="post">
-                                        <input type="hidden" name="productId" value="${v.id}">
-                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
+                </div>      
             </div>
-        </div>
-        <!-- Vesitable Shop End -->
-        <!-- Bestsaler Product Start -->
-        <div class="container-fluid py-5">
-            <div class="container py-5">
-                <div class="text-center mx-auto mb-5" style="max-width: 700px;">
-                    <h1 class="display-4">Sản phẩm bán chạy</h1>
-                </div>
-                <div class="row g-4">
-                    <c:forEach items="${listB}" var="b">
-                        <div class="col-lg-6 col-xl-4" id="Block">
-                            <div class="p-4 rounded bg-light">
-                                <div class="row align-items-center" >
-                                    <div class="col-6">
-                                        <img src="img/${b.image}" class="img-fluid rounded-circle w-100" alt="${b.name}">
+            <!-- Fruits Shop End-->
+            <!-- Vesitable Shop Start-->
+            <div class="container-fluid vesitable py-5">
+                <div class="container py-5"id="Block" >
+                    <h1 class="mb-0">Sản phẩm</h1>
+                    <div class="owl-carousel vegetable-carousel justify-content-center">
+                        <c:forEach var="v" items="${listV}">
+                            <div class="border border-primary rounded position-relative vesitable-item" >
+                                <div class="vesitable-img">
+                                    <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="${v.name}">
+                                </div>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${v.cateName}</div>
+                                <div class="p-4 d-flex flex-column justify-content-between rounded-bottom flex-grow-1">
+                                    <div>
+                                        <h4><a href="detail?pid=${v.id}" style="color: black;" class="product-name">${v.name}</a></h4>
+                                        <p class="truncate-description">${v.decription}</p>
                                     </div>
-                                    <div class="col-6">
-                                        <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
-                                        <div class="d-flex my-3">
-                                            <c:forEach begin="1" end="${Math.floor(b.rateStar)}" var="star">
-                                                <i class="fas fa-star text-primary"></i>
-                                            </c:forEach>
-                                            <c:if test="${b.rateStar % 1 != 0}">
-                                                <i class="fas fa-star-half-alt text-primary"></i>
-                                            </c:if>
-                                            <c:forEach begin="1" end="${Math.floor(5 - b.rateStar)}" var="star">
-                                                <i class="fas fa-star"></i>
-                                            </c:forEach>
-                                        </div>
-                                        <h4 class="mb-3">${b.price}</h4>
-                                        <form id="${b.id}" onsubmit="addToCart(${b.id}); return false;">
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${v.id}">${v.price}</h6>
+                                        <form action="addtocart" method="post" >
                                             <input type="hidden" name="productId" value="${p.id}">
-                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary w-100">
-                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng</button>
+                                            <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-        </div>
-        <!-- Bestsaler Product End -->
-
-
-
-        <!--         Fact Start 
-                <div class="container-fluid py-5">
-                    <div class="container">
-                        <div class="bg-light p-5 rounded">
-                            <div class="row g-4 justify-content-center">
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>satisfied customers</h4>
-                                        <h1>1963</h1>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>quality of service</h4>
-                                        <h1>99%</h1>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>quality certificates</h4>
-                                        <h1>33</h1>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xl-3">
-                                    <div class="counter bg-white rounded p-5">
-                                        <i class="fa fa-users text-secondary"></i>
-                                        <h4>Available Products</h4>
-                                        <h1>789</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </c:forEach>
                     </div>
                 </div>
-                 Fact Start -->
-
-
-        <!-- Tastimonial Start -->
-        <div class="container-fluid testimonial py-5">
-            <div class="container py-5">
-                <div class="testimonial-header text-center">
-                    <h4 class="text-primary">Phản hồi</h4>
-                    <h1 class="display-5 mb-5 text-dark">Họ nói gì về chúng tôi!</h1>
-                </div>
-                <div class="owl-carousel testimonial-carousel">
-                    <c:forEach items="${listFeedback}" var="listFeedback">
-                        <div class="testimonial-item img-border-radius bg-light rounded p-4" >
-                            <div class="position-relative" >
-                                <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
-                                <div class="mb-4 pb-4 border-bottom border-secondary">
-                                    <p class="mb-0">${listFeedback.feedback}</p>
-                                </div>
-                                <div class="d-flex align-items-center flex-nowrap">
-                                    <div class="bg-secondary rounded">
-                                        <img src="img/${listFeedback.avatar}" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
-                                    </div>
-                                    <div class="ms-4 d-block">
-                                        <h4 class="text-dark">${listFeedback.name}</h4>
-                                        <p class="m-0 pb-3">${listFeedback.nameProduct}</p>
-                                        <div class="d-flex pe-5">
-                                            <c:forEach begin="1" end="${Math.floor(listFeedback.rateStar)}" var="star">
-                                                <i class="fas fa-star text-primary"></i>
-                                            </c:forEach>
-                                            <c:if test="${listFeedback.rateStar % 1 != 0}">
-                                                <i class="fas fa-star-half-alt text-primary"></i>
-                                            </c:if>
-                                            <c:forEach begin="1" end="${Math.floor(5 - listFeedback.rateStar)}" var="star">
-                                                <i class="fas fa-star"></i>
-                                            </c:forEach>
+            </div>
+            <!-- Vesitable Shop End -->
+            <!-- Bestsaler Product Start -->
+            <div class="container-fluid py-5">
+                <div class="container py-5">
+                    <div class="text-center mx-auto mb-5" style="max-width: 700px;">
+                        <h1 class="display-4">Sản phẩm bán chạy</h1>
+                    </div>
+                    <div class="row g-4">
+                        <c:forEach items="${listB}" var="b">
+                            <div class="col-lg-6 col-xl-4" id="Block">
+                                <div class="p-4 rounded bg-light">
+                                    <div class="row align-items-center" >
+                                        <div class="col-6">
+                                            <img src="img/${b.image}" class="img-fluid rounded-circle w-100" alt="${b.name}">
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
+                                            <div class="d-flex my-3">
+                                                <c:forEach begin="1" end="${Math.floor(b.rateStar)}" var="star">
+                                                    <i class="fas fa-star text-primary"></i>
+                                                </c:forEach>
+                                                <c:if test="${b.rateStar % 1 != 0}">
+                                                    <i class="fas fa-star-half-alt text-primary"></i>
+                                                </c:if>
+                                                <c:forEach begin="1" end="${Math.floor(5 - b.rateStar)}" var="star">
+                                                    <i class="fas fa-star"></i>
+                                                </c:forEach>
+                                            </div>
+                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${b.id}">${b.price}</h6>
+                                            <form id="${b.id}" onsubmit="addToCart(${b.id});return false;">
+                                                <form action="addtocart" method="post" >
+                                                    <input type="hidden" name="productId" value="${p.id}">
+                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                    </button>
+                                                </form>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
+                    </div>
                 </div>
-
             </div>
-        </div>
-        <!-- Tastimonial End -->
-
-        <jsp:include page="Footer.jsp"></jsp:include>
-
-        <script>
-            function addToCart(productId) {
-                var xhr = new XMLHttpRequest();
-                var url = "addtocart";
-
-
-                xhr.open("POST", url, true);
-
-
-                xhr.onload = function () {
-                    if (xhr.status >= 200 && xhr.status < 10000) {
-
-                        alert("Đã thêm vào giỏ hàng thành công!");
-                    } else {
-                        // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
-                        alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+            <script>
+                function toggleCategories() {
+                    var items = document.getElementsByClassName('category-item');
+                    var button = document.getElementById('toggleButton');
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].style.display === "none") {
+                            items[i].style.display = "inline-flex";
+                        } else if (i >= 4) {
+                            items[i].style.display = "none";
+                        }
                     }
-                };
-
-
-                xhr.onerror = function () {
-                    alert("Đã xảy ra lỗi khi gửi yêu cầu.");
-                };
-
-                // Gửi yêu cầu với dữ liệu sản phẩm
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.send("productId=" + productId);
-            }
-
-            let list = document.querySelector('.slider .list');
-            let items = document.querySelectorAll('.slider .list .item');
-            let dots = document.querySelectorAll('.slider .dots li');
-            let prev = document.getElementById('prev');
-            let next = document.getElementById('next');
-
-            let active = 0;
-            let lengthItems = items.length - 1;
-
-            next.onclick = function () {
-                if (active + 1 > lengthItems) {
-                    active = 0;
-                } else {
-                    active += 1;
+                    if (button.innerText === "Xem thêm") {
+                        button.innerText = "Thu gọn";
+                    } else {
+                        button.innerText = "Xem thêm";
+                    }
                 }
-                reloadSlider();
-            };
+            </script>
+            <script>
+                function addToCart(productId) {
+                    var xhr = new XMLHttpRequest();
+                    var url = "addtocart";
 
-            prev.onclick = function () {
-                if (active - 1 < 0) {
-                    active = lengthItems;
-                } else {
-                    active -= 1;
+
+                    xhr.open("POST", url, true);
+
+
+                    xhr.onload = function () {
+                        if (xhr.status >= 200 && xhr.status < 10000) {
+
+                            alert("Đã thêm vào giỏ hàng thành công!");
+                        } else {
+                            // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
+                            alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+                        }
+                    };
+
+
+                    xhr.onerror = function () {
+                        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+                    };
+
+                    // Gửi yêu cầu với dữ liệu sản phẩm
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.send("productId=" + productId);
                 }
-                reloadSlider();
-            };
+            </script>
 
-            let refreshSlider = setInterval(() => {
-                next.click();
-            }, 5000);
+            <script>
+                function toggleProducts() {
+                    const hiddenItems = document.querySelectorAll('.product-item.d-none');
+                    const loadMoreBtn = document.getElementById('load-more-btn');
+                    const showLessBtn = document.getElementById('show-less-btn');
 
-            function reloadSlider() {
-                let checkLeft = items[active].offsetLeft;
-                list.style.left = -checkLeft + 'px';
+                    if (hiddenItems.length > 0) {
+                        // Show more items
+                        for (let i = 0; i < 8 && i < hiddenItems.length; i++) {
+                            hiddenItems[i].classList.remove('d-none');
+                        }
 
-                let lastActiveDot = document.querySelector('.slider .dots li.active');
-                if (lastActiveDot) {
-                    lastActiveDot.classList.remove('active');
+                        // Hide the "Xem thêm" button if all items are shown
+                        if (document.querySelectorAll('.product-item.d-none').length === 0) {
+                            loadMoreBtn.classList.add('d-none');
+                            showLessBtn.classList.remove('d-none');
+                        }
+                    } else {
+                        // Hide items back
+                        const items = document.querySelectorAll('.product-item');
+                        for (let i = 8; i < items.length; i++) {
+                            items[i].classList.add('d-none');
+                        }
+                        loadMoreBtn.classList.remove('d-none');
+                        showLessBtn.classList.add('d-none');
+                    }
                 }
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const prices = document.querySelectorAll('[id^="price-"]');
 
-                dots[active].classList.add('active');
-                clearInterval(refreshSlider);
-                refreshSlider = setInterval(() => {
-                    next.click();
-                }, 5000);
-            }
+                    prices.forEach(priceElement => {
+                        const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                        const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-            dots.forEach((li, key) => {
-                li.addEventListener('click', function () {
-                    active = key;
-                    reloadSlider();
+                        // Định dạng giá thành VND
+                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+
+                        // Cập nhật nội dung của thẻ h6
+                        priceElement.textContent = formattedPrice + " VNĐ";
+                    });
                 });
-            });
+            </script>
 
-        </script>
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+            <jsp:include page="Footer.jsp"></jsp:include>
 
 
-        <!-- JavaScript Libraries -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/lightbox/js/lightbox.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+
+
+            <!-- JavaScript Libraries -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="lib/easing/easing.min.js"></script>
+            <script src="lib/waypoints/waypoints.min.js"></script>
+            <script src="lib/lightbox/js/lightbox.min.js"></script>
+            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+            <!-- Template Javascript -->
+            <script src="js/main.js"></script>
 
 
     </body>

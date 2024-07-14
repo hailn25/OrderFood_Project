@@ -5,23 +5,25 @@
 package controller;
 
 import dao.FeedbackDAO;
+import dao.ProductDAO;
+import dao.ProductHomeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.File;
-import java.sql.SQLException;
+import java.util.List;
+import model.CategoryListDetail;
+import model.Feedback;
+import model.Product;
+import model.ProductHome;
 
 /**
  *
  * @author ADMIN
  */
-@MultipartConfig
-public class InsertFeedbackControll extends HttpServlet {
+public class DetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,18 +37,39 @@ public class InsertFeedbackControll extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet InsertFeedbackControll</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet InsertFeedbackControll at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        String id = request.getParameter("pid");
+        String fId = request.getParameter("ProductID");
+        String isSale = request.getParameter("isSale");
+
+        // Fetch the product details
+        ProductHomeDAO dao = new ProductHomeDAO();
+        FeedbackDAO fb = new FeedbackDAO();
+        ProductHome p = dao.getProductById(id);
+
+        // Fetch the category ID from the product details
+        int categoryId = p.getCategoryId();
+
+        // Fetch products from the same category
+        List<ProductHome> listSameCategoryProducts = dao.getProductByCategoryId(categoryId);
+        List<ProductHome> listProductByIsSale = dao.getProductByIsSale();
+
+        // Fetch other necessary details    
+        List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
+        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
+
+        // Fetch feedback for the product
+        List<Feedback> listFeedback = fb.getFeedbackByProductId(Integer.parseInt(id));
+
+        // Set attributes for the request
+        request.setAttribute("detail", p);
+        request.setAttribute("listSameCategoryProducts", listSameCategoryProducts);
+        request.setAttribute("listCategoryListDetail", listCategoryListDetail);
+        request.setAttribute("listProductByIsSale", listProductByIsSale);
+        request.setAttribute("listBSL", listBestSellerProduct);
+        request.setAttribute("reviews", listFeedback); // Add this line to set feedback
+
+        // Forward the request to the JSP page
+        request.getRequestDispatcher("ShopDetail.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,41 +98,7 @@ public class InsertFeedbackControll extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String rateStar = request.getParameter("rateStar");
-        String feedbackText = request.getParameter("feedback");
-        Part filePart = request.getPart("imageURL");
-        String accountId = request.getParameter("accountName");
-        String productId = request.getParameter("productId");
-        String date = request.getParameter("date");
-
-        String fileName = extractFileName(filePart);
-        String savePath = fileName;
-        File fileSaveDir = new File(savePath);
-        filePart.write(savePath);
-
-        String imageURL =fileName; // Update this based on your setup
-
-        try {
-            FeedbackDAO dao = new FeedbackDAO();
-            dao.insertFeedback(rateStar, feedbackText, imageURL, accountId, productId, date);
-            request.setAttribute("successMessage", "Phản hồi thành công!");
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-            request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
-        }
-
-        request.getRequestDispatcher("Feedback.jsp").forward(request, response);
-    }
-
-    private String extractFileName(Part part) {
-        String contentDisp = part.getHeader("content-disposition");
-        String[] items = contentDisp.split(";");
-        for (String s : items) {
-            if (s.trim().startsWith("filename")) {
-                return s.substring(s.indexOf("=") + 2, s.length() - 1);
-            }
-        }
-        return "";
+        processRequest(request, response);
     }
 
     /**

@@ -34,10 +34,9 @@ public class OrderDAO {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(insertOrderSQL, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            ps.setInt(1, u.getAccountId()); // accountId ở vị trí thứ nhất trong câu lệnh SQL
-            ps.setDouble(2, cart.getTotalMoney()); // totalMoney ở vị trí thứ hai trong câu lệnh SQL
-            ps.setDate(3, sqlDate); // createDate ở vị trí thứ ba trong câu lệnh SQL
-
+            ps.setInt(1, u.getAccountId());
+            ps.setDouble(2, cart.getTotalMoney());
+            ps.setDate(3, sqlDate);
             ps.executeUpdate();
 
             rs = ps.getGeneratedKeys();
@@ -412,6 +411,40 @@ public class OrderDAO {
         }
     }
 
+    public void insertShipper(int shipperId, int orderId) {
+        String sql = "UPDATE [Order]\n"
+                + "SET ShipperId = ?\n"
+                + "WHERE OrderId = ?;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, shipperId);
+            ps.setInt(2, orderId);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertDateFinish(int orderId) {
+    LocalDate curDate = LocalDate.now();
+    Date sqlDate = Date.valueOf(curDate);
+    String sql = "UPDATE [Order]\n"
+               + "SET FinishDate = ?\n"
+               + "WHERE OrderId = ?;";
+    try {
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setDate(1, sqlDate);
+        ps.setInt(2, orderId);
+       
+        ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
     public int getOrderDetailId() {
         String sql = "SELECT TOP 1 OrderDetailId\n"
                 + "FROM OrderDetail\n"
@@ -499,6 +532,27 @@ public class OrderDAO {
         }
         return null;
     }
+    public int getQuantity(int productId) {
+    String sql = "select quantity from Product where ProductId = ?";
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    
+    try {
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, productId);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    } catch (Exception e) {
+     
+    }
+    return 0;
+}
+
+  
 
     public void updatePaymentStatus(int oid, String paymentStatus) {
         String sql = "UPDATE [dbo].[OrderDetail]\n"
@@ -645,8 +699,9 @@ public class OrderDAO {
         }
     }
 
-//        public static void main(String[] args) throws Exception {
-//        OrderDAO db = new OrderDAO();
-//        db.confirmOrderOfCustomer("10");
-//    }
+    public static void main(String[] args) throws Exception {
+        OrderDAO db = new OrderDAO();
+        db.insertShipper(1, 81);
+
+    }
 }
