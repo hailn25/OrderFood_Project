@@ -124,7 +124,7 @@
 
     <body>
         <jsp:include page="Header.jsp"></jsp:include>
-        
+
             <!-- Modal Search Start -->
             <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-fullscreen">
@@ -389,6 +389,8 @@
         </div>
         <!-- Tastimonial End -->
 
+        <jsp:include page="Footer.jsp"></jsp:include>
+
         <script>
             function addToCart(productId) {
                 var xhr = new XMLHttpRequest();
@@ -473,11 +475,6 @@
             });
 
         </script>
-
-        <jsp:include page="Footer.jsp"></jsp:include>
-
-
-
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 

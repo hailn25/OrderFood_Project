@@ -60,38 +60,44 @@ public class AddBlogControl extends HttpServlet {
         if (lengthTitle < 5 || lengthTitle > 60) {
             request.setAttribute("error", "Độ dài tiêu đề phải lớn hơn 4 và nhỏ hơn 61");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if(lengthContent < 100 || lengthContent > 500){
+        } else if (lengthContent < 100 || lengthContent > 500) {
             request.setAttribute("error", "Độ dài nội dung phải lớn hơn 99 và nhỏ hơn 501");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if(lengthSummary < 30 || lengthSummary > 50){
+        } else if (lengthSummary < 30 || lengthSummary > 50) {
             request.setAttribute("error", "Độ dài tóm tắt phải lớn hơn 29 và nhỏ hơn 51");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if(request.getParameter("status") == null ){
+        } else if (request.getParameter("status") == null) {
             request.setAttribute("error", "Chưa chọn trạng thái");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if(request.getParameter("datesubmit") == null){
+        } else if (request.getParameter("datesubmit") == null) {
             request.setAttribute("error", "Chưa chọn ngày đăng");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        }
-        else {
+        } else {
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
             String dateSubmitStr = request.getParameter("datesubmit");
+            String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+
             if (fileName != null && !fileName.isEmpty()) {
-                String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
-                filePart.write(uploadPath);
-                img = fileName;
-                try {
-                    SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date dateSubmit = spf.parse(dateSubmitStr);
-                    if (dateSubmit.after(today)) {
-                        blogDAO.addBlog(title, content, img, summary, 2, status, createDate, dateSubmit);
-                        response.sendRedirect("managerBlog");
-                    } else {
-                        error = "Ngày đăng phải sau ngày hiện tại";
-                        request.setAttribute("error", error);
-                        request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+                if (fileExtension.equals("jpg") || fileExtension.equals("png")) {
+                    String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
+                    filePart.write(uploadPath);
+                    img = fileName;
+                    try {
+                        SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date dateSubmit = spf.parse(dateSubmitStr);
+                        if (dateSubmit.after(today)) {
+                            blogDAO.addBlog(title, content, img, summary, 2, status, createDate, dateSubmit);
+                            response.sendRedirect("managerBlog");
+                        } else {
+                            error = "Ngày đăng phải sau ngày hiện tại";
+                            request.setAttribute("error", error);
+                            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+                        }
+                    } catch (Exception e) {
                     }
-                } catch (Exception e) {
+                } else {
+                    request.setAttribute("error", "Chỉ chấp nhận các tệp JPG, PNG, hoặc WebP!");
+                    request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
                 }
             } else {
                 error = "Chưa chọn ảnh";
