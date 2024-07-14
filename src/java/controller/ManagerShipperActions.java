@@ -12,7 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import model.Account;
 import model.OrderDTO;
 import model.OrderDetailDTO;
 
@@ -34,6 +36,14 @@ public class ManagerShipperActions extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
         OrderDAO orderDAO = new OrderDAO();
         String action = request.getParameter("action");
         int orderId = Integer.parseInt(request.getParameter("oid"));
@@ -41,12 +51,15 @@ public class ManagerShipperActions extends HttpServlet {
         switch (action) {
             case "accept":
                 orderDAO.updateOrderStatus(orderId, 2);
+               int acc =   account.getAccountId();
+               orderDAO.insertShipper(1, orderId);
                 break;
             case "refuse":
                 orderDAO.updateOrderStatus(orderId, 5);
                 break;
             case "finish":
                 orderDAO.updateOrderStatus(orderId, 3);
+                orderDAO.insertDateFinish(orderId);
                 request.getRequestDispatcher("managerShipperSuccess").forward(request, response);
                 return;
             default:

@@ -1,8 +1,4 @@
-<%-- 
-    Document   : login
-    Created on : Sep 12, 2023, 1:53:33 PM
-    Author     : admin
---%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -89,11 +85,3 @@
        
     </body>
 </html>
-
-
-
-
-
-
-
-

@@ -5,6 +5,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,37 +19,54 @@ public class Cart {
     public Cart() {
         items = new ArrayList<>();
     }
-    public Cart(List<Item> items){
+
+    public Cart(List<Item> items) {
         this.items = items;
     }
-    private Item getItemById(int id){
+
+    private Item getItemById(int id) {
         for (Item i : items) {
             if (i.getProduct().getProductId() == id) {
-             return  i ;
+                return i;
             }
         }
         return null;
     }
-    public int getQuantityById(int id){
+
+    public int getQuantityById(int id) {
         return getItemById(id).getQuantity();
     }
-    public void addItem( Item t){
-        if (getItemById(t.getProduct().getProductId() )!= null) {
+
+    public void addItem(Item t) {
+        if (getItemById(t.getProduct().getProductId()) != null) {
             Item i = getItemById(t.getProduct().getProductId());
             i.setQuantity(i.getQuantity() + t.getQuantity());
-        }else{
+        } else {
             items.add(t);
         }
     }
-    public void removeItem(int id){
-        if (getItemById(id)!= null) {
+
+   public void updateItem(int productId, int newQuantity) {
+    for (Item item : items) {
+        if (item.getProduct().getProductId() == productId) {
+            item.setQuantity(newQuantity);
+            return;
+        }
+    }
+   
+}
+
+
+    public void removeItem(int id) {
+        if (getItemById(id) != null) {
             items.remove(getItemById(id));
         }
     }
-    public double getTotalMoney(){
+
+    public double getTotalMoney() {
         double t = 0;
         for (Item i : items) {
-            t+=i.getQuantity() * i.getPrice();
+            t += i.getQuantity() * i.getPrice();
         }
         return t;
     }
@@ -60,5 +78,6 @@ public class Cart {
     public void setItems(List<Item> items) {
         this.items = items;
     }
-}
 
+    
+}
