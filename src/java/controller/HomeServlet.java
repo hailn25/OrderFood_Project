@@ -7,16 +7,19 @@ package controller;
 import dao.FeedbackDAO;
 import dao.ProductDAO;
 import dao.ProductHomeDAO;
+import dao.SliderDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import model.CategoryListDetail;
 import model.Feedback;
 import model.ListProduct;
 import model.ProductHome;
+import model.SliderDTO;
 
 
 /**
@@ -39,20 +42,27 @@ public class HomeServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         ProductHomeDAO dao = new ProductHomeDAO();
         FeedbackDAO dao1 = new FeedbackDAO();
+        SliderDAO sliderDAO = new SliderDAO();
         
         List<ProductHome> list = dao.getAllProduct();
         List<CategoryListDetail> listAllCategory = dao.getAllCategory();
         List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
         List<ListProduct> listProductP = dao.getListProductP();
+        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
+        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
         
-
+        for (SliderDTO s : listSlider) {
+            if (s.getStatusName().equals("Xác nhận")) {
+                listSliderDot.add(s);
+            }
+        }
+        
         request.setAttribute("listP", list);
         request.setAttribute("listC", listAllCategory);
         request.setAttribute("listV", listProductP);
         request.setAttribute("listB", listBestSellerProduct);
-        
-        
-        
+        request.setAttribute("listSlider", listSlider);
+        request.setAttribute("listSliderDot", listSliderDot);
         
         request.getRequestDispatcher("Home.jsp").forward(request, response);
     }

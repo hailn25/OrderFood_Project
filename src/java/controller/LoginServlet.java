@@ -74,8 +74,7 @@ public class LoginServlet extends HttpServlet {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                            request.getRequestDispatcher("revenueRestaurant").forward(request, response);
-
+                    request.getRequestDispatcher("revenueRestaurant").forward(request, response);
                 }else if (a.getRoleId() == 5) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();

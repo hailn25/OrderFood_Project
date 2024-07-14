@@ -5,7 +5,8 @@
 
 package controller;
 
-import dao.ReportDAO;
+import dao.FunctionShopDAO;
+import dao.ShopDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,15 +15,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import model.Report;
-import model.ReportDTO;
+import model.Category;
+import model.CategoryDTO;
+import model.ProductDTO;
+import model.RestaurantDTO;
 
 /**
  *
  * @author quoch
  */
-@WebServlet(name="ManagerReportControl", urlPatterns={"/managerReport"})
-public class ManagerReportControl extends HttpServlet {
+@WebServlet(name="ProductRestaurantControl", urlPatterns={"/productRestaurant"})
+public class ProductRestaurantControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,11 +37,15 @@ public class ManagerReportControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ReportDAO reportDAO = new ReportDAO();
-        ArrayList<ReportDTO> listReport = reportDAO.getAllReportDTO();
-        request.setAttribute("listReport", listReport);
+        FunctionShopDAO dao = new FunctionShopDAO();   
         
-        request.getRequestDispatcher("ManagerReport.jsp").forward(request, response);
+        if (request.getParameter("restaurantId") != null) {
+            int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
+            ArrayList<ProductDTO>listProductDTO = dao.getListProductByRestaurantId(restaurantId);
+            request.setAttribute("listProductDTO", listProductDTO);
+        }
+
+        request.getRequestDispatcher("Shop.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

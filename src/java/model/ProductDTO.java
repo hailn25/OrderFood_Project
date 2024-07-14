@@ -23,11 +23,12 @@ public class ProductDTO {
     private Date createDate;
     private Date updateDate;
     private boolean status;
+    private int restaurantId;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(int producId, String name, double price, String description, String imageURL, int categoryId, String restaurantImage, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status) {
+    public ProductDTO(int producId, String name, double price, String description, String imageURL, int categoryId, String restaurantImage, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, int restaurantId) {
         this.producId = producId;
         this.name = name;
         this.price = price;
@@ -40,6 +41,7 @@ public class ProductDTO {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.status = status;
+        this.restaurantId = restaurantId;
     }
 
     public int getProducId() {
@@ -138,11 +140,19 @@ public class ProductDTO {
         this.status = status;
     }
 
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
     @Override
     public String toString() {
-        return "ProductDTO{" + "producId=" + producId + ", name=" + name + ", price=" + price + ", description=" + description + ", imageURL=" + imageURL + ", categoryId=" + categoryId + ", restaurantImage=" + restaurantImage + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + '}';
+        return "ProductDTO{" + "producId=" + producId + ", name=" + name + ", price=" + price + ", description=" + description + ", imageURL=" + imageURL + ", categoryId=" + categoryId + ", restaurantImage=" + restaurantImage + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", restaurantId=" + restaurantId + '}';
     }
     
-    
+
     
 }

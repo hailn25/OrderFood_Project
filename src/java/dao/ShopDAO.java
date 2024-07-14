@@ -78,18 +78,19 @@ public class ShopDAO {
         return listCategory;
     }
 
-    public ArrayList<CategoryDTO> getTotalQuantityByCategory() {
+    public ArrayList<CategoryDTO> getProductQuantityByCategory() {
         ArrayList<CategoryDTO> listCategoryDTO = new ArrayList<>();
         try {
-            String sql = "SELECT \n"
-                    + "    c.name,\n"
-                    + "    SUM(p.Quantity)\n"
+            String sql = "SELECT\n"
+                    + "c.name,\n"
+                    + "COUNT(p.ProductId)\n"
                     + "FROM \n"
-                    + "    Category c\n"
+                    + "Category c\n"
                     + "JOIN \n"
-                    + "    Product p ON c.CategoryId = p.CategoryId\n"
-                    + "GROUP BY \n"
-                    + "    c.[Name];";
+                    + "Product p ON c.CategoryId = p.CategoryId\n"
+                    + "WHERE p.Status = 1 and p.Quantity >= 1\n"
+                    + "GROUP BY\n"
+                    + "c.[Name]";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -109,8 +110,8 @@ public class ShopDAO {
     public ArrayList<ProductDTO> getAllProductDTO() {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status\n"
-                    + "FROM     Account INNER JOIN\n"
+            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
+                    + "FROM Account INNER JOIN\n"
                     + "                  Restaurant ON Account.AccountId = Restaurant.AccountId INNER JOIN\n"
                     + "                  Product ON Restaurant.RestaurantId = Product.RestaurantId";
             con = new DBContext().getConnection();
@@ -129,7 +130,8 @@ public class ShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getBoolean(12),
+                        rs.getInt(13)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -142,19 +144,21 @@ public class ShopDAO {
     public ArrayList<RestaurantDTO> getAllRestaurantDTO() {
         ArrayList<RestaurantDTO> listRestaurant = new ArrayList<>();
         try {
-            String sql = "SELECT Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar\n"
+            String sql = "SELECT Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar\n"
                     + "FROM     Account INNER JOIN\n"
-                    + "                  Restaurant ON Account.AccountId = Restaurant.AccountId\n"
+                    + "Restaurant ON Account.AccountId = Restaurant.AccountId\n"
                     + "ORDER BY Restaurant.RateStar DESC";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                listRestaurant.add(new RestaurantDTO(rs.getString(1),
+                listRestaurant.add(new RestaurantDTO(
+                        rs.getInt(1),
                         rs.getString(2),
-                        rs.getDouble(3),
-                        rs.getString(4)));
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getString(5)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,14 +177,14 @@ public class ShopDAO {
 //        for (Category c : dao.getAllCategory()) {
 //            System.out.println(c.toString());
 //        }
-//        for (CategoryDTO c : dao.getTotalQuantityByCategory()) {
-//              System.out.println(c.toString());
+//        for (CategoryDTO c : dao.getProductQuantityByCategory()) {
+//            System.out.println(c.toString());
 //        }
 //        for (ProductDTO pt : dao.getAllProductDTO()) {
 //            System.out.println(pt.toString());
 //        }
-        for (RestaurantDTO rs : dao.getAllRestaurantDTO()) {
-            System.out.println(rs.toString());
-        }
+//        for (RestaurantDTO rs : dao.getAllRestaurantDTO()) {
+//            System.out.println(rs.toString());
+//        }
     }
 }

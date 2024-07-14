@@ -5,7 +5,9 @@
 
 package controller;
 
-import dao.ReportDAO;
+import dao.FunctionShopDAO;
+import dao.RestaurantDAO;
+import dao.ShopDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,15 +16,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import model.Report;
-import model.ReportDTO;
+import model.ProductDTO;
+import model.RestaurantDTO;
 
 /**
  *
  * @author quoch
  */
-@WebServlet(name="ManagerReportControl", urlPatterns={"/managerReport"})
-public class ManagerReportControl extends HttpServlet {
+@WebServlet(name="RestaurantControl", urlPatterns={"/restaurant"})
+public class RestaurantControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,11 +36,39 @@ public class ManagerReportControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ReportDAO reportDAO = new ReportDAO();
-        ArrayList<ReportDTO> listReport = reportDAO.getAllReportDTO();
-        request.setAttribute("listReport", listReport);
+        FunctionShopDAO dao = new FunctionShopDAO();
+        RestaurantDAO resDAO = new RestaurantDAO();
         
-        request.getRequestDispatcher("ManagerReport.jsp").forward(request, response);
+        int restaurantId = -1;
+        if (request.getParameter("restaurantId") != null) {
+            restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
+            request.setAttribute("restaurantId", restaurantId);
+        }
+        ArrayList<ProductDTO> listProductDTO = dao.getListProductByRestaurantId(restaurantId);
+        
+        ArrayList<RestaurantDTO> listRestaurantDTO = resDAO.getRestaurantDTOByRestaurantId(restaurantId);
+        request.setAttribute("listRestaurantDTO", listRestaurantDTO);
+        
+        int itemsPerPage = 10;
+        int currentPage = 1;
+
+        if (request.getParameter("page") != null) {
+            currentPage = Integer.parseInt(request.getParameter("page"));
+        }
+
+        int totalItems = listProductDTO.size();
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        int start = (currentPage - 1) * itemsPerPage;
+        int end = Math.min(start + itemsPerPage, totalItems);
+
+        listProductDTO = new ArrayList<>(listProductDTO.subList(start, end));
+
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("listProductDTO", listProductDTO);
+        
+        request.getRequestDispatcher("Restaurant.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

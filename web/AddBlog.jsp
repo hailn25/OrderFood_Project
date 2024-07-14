@@ -22,7 +22,24 @@
         <!--
             Product Admin CSS Template
             https://templatemo.com/tm-524-product-admin
+        
         -->
+        <style>
+            input[type="date"] {
+                width: 100%;
+                padding: 0.5rem;
+                font-size: 1rem;
+                border: 1px solid #ced4da;
+                border-radius: 0.25rem;
+                transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            }
+
+            input[type="date"]:focus {
+                border-color: #80bdff;
+                outline: 0;
+                box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            }
+        </style>
     </head>
 
     <body style="background-color: #F6F6F6">
@@ -98,11 +115,11 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="content">Nội dung</label>
-                                        <textarea class="form-control validate tm-small" rows="5" name="content" required></textarea>
+                                        <textarea class="form-control validate tm-small" rows="5" name="content" required id="content"></textarea>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="summary">Tóm tắt</label>
-                                        <textarea class="form-control validate tm-small" rows="3" name="summary" required></textarea>
+                                        <textarea class="form-control validate tm-small" rows="3" name="summary" required id="summary"></textarea>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="status">Trạng thái</label><br>
@@ -111,6 +128,10 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                                    <div class="form-group mb-3">
+                                        <label for="datesubmit">Ngày đăng </label>
+                                        <input type="date" name="datesubmit" required="" id="datesubmit" class="form-control">
+                                    </div>
                                     <div class="tm-product-img-preview mx-auto">
                                         <img id="preview" src="" class="img-fluid d-block mx-auto" style="display:none;"/>
                                     </div>
@@ -124,7 +145,7 @@
                                     <input type="button" class="btn btn-primary btn-block text-uppercase" value="Huỷ bỏ" onclick="window.history.back();" />
                                 </div>
                                 <div class="col-6">
-                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" />
+                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" id="createNow"/>
                                 </div>
                             </div>
                         </form>
