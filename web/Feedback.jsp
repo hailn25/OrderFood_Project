@@ -86,7 +86,7 @@
                                     <img id="imagePreview" src="#" style="display: none; max-height: 300px;">
                                 </div>
 
-                                <a href="OrderHistory.jsp" class="btn btn-secondary mr-2">Quay lại</a>
+                                <a href="orderHistory?orderStatusId=3&accountId=6" class="btn btn-secondary mr-2">Quay lại</a>
                                 <button type="submit" class="btn btn-primary">Submit Feedback</button>
                             </form>
                         </div>

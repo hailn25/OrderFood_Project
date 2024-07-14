@@ -30,18 +30,216 @@
                 margin: 0 auto; /* Canh giữa nút */
                 display: block; /* Đảm bảo nút là một khối độc lập */
             }
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding: 0;
+            }
+
+            .custom-header {
+                background-color: #81C408;
+                color: #fff;
+                padding: 10px;
+                width: 100%;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+                margin: 0;
+            }
+
+            .avatar {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 190px;
+                height: 190px;
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin: 0 auto 20px;
+            }
+
+            .avatar-img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+            .nav {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #f8f9fa;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+            .nav-link:hover {
+                background-color: #e2e6ea;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-control {
+                border: none;
+                border-bottom: 2px solid #ddd;
+                padding: 0.5rem;
+                font-size: 1rem;
+                background-color: transparent;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-bottom: 2px solid #81C408;
+            }
+
+            .btn-primary {
+                background-color: #81C408;
+                border: none;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #6ba306;
+            }
+
+            .username {
+                display: block;
+                text-align: center;
+                margin-bottom: 10px;
+                font-size: 1.2rem;
+                color: #555;
+            }
+
+            .content-section {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
         </style>
     </head>
     <body>
         <div class="container">
+            <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4">
+                <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
+                <div class="d-flex align-items-center">
+                    <span class="mr-3">Xin chào, ${account.name}</span>
+                    <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                </div>
+            </header>
             <div class="row flex-lg-nowrap">
-                <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+                <div class="col-12 col-lg-auto mb-3" style="width: 250px;">
                     <div class="card p-3">
                         <div class="e-navlist e-navlist--active-bg">
-                            <ul class="nav">
-                                <li class="nav-item"><a class="nav-link px-3 active" href="home"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Home</span></a></li>
-                                <li class="nav-item"><a class="nav-link px-3" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Profile</span></a></li>
-                            </ul>
+                            <div class="user-profile">
+                                <div class="avatar">
+                                    <img id="avatarImage" src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
+                                </div>
+                            </div>
+                            <c:choose>
+                                <c:when test="${sessionScope.account.roleId == 2}">
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="home">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="#">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>                                 
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đơn hàng</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </c:when>
+                                <c:when test="${sessionScope.account.roleId == 4}">
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="SettingBanner.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Setting banner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </c:when>
+                                <c:when test="${sessionScope.account.roleId == 3}">
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="SettingBanner.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Setting banner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="#">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </c:when>
+                            </c:choose>
                         </div>
                     </div>
                 </div>
@@ -51,9 +249,6 @@
                         <div class="col mb-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <ul class="nav nav-tabs">
-                                        <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
-                                    </ul>
                                     <div class="tab-content pt-3">
                                         <div class="tab-pane active">
                                             <form action="editProfile" method="post" enctype="multipart/form-data">
@@ -87,7 +282,7 @@
                                                 <input id="OldImage" name="OldImage" type="hidden" value="${account.imageAvatar}" class="form-control validate" />
                                                 <div id="avatarPreview">
                                                     <h3>Xem trước ảnh đại diện mới</h3>
-                                                    <img id="currentImage" src="img/${account.imageAvatar}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto">
+                                                    <img id="currentImage" class="img-fluid d-block mx-auto">
                                                 </div>
                                                 <div class="custom-file mt-3 mb-3">
                                                     <input id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />

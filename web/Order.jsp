@@ -18,12 +18,47 @@
             body {
                 font-family: 'Roboto', sans-serif;
                 background-color: #f8f9fa;
+                margin: 0;
+                padding: 0;
             }
+
+            .header {
+                background-color: #81C408;
+                padding: 20px;
+                color: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .header h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+
+            .header nav {
+                display: flex;
+                gap: 20px;
+            }
+
+            .header a {
+                color: white;
+                text-decoration: none;
+                font-size: 18px;
+                transition: color 0.3s ease;
+            }
+
+            .header a:hover {
+                color: #007bff;
+            }
+
             .button-container {
                 display: flex;
                 justify-content: center;
                 margin: 20px 0;
             }
+
             .button-link {
                 display: inline-block;
                 padding: 10px 20px;
@@ -34,33 +69,41 @@
                 background-color: gray;
                 transition: background-color 0.3s ease;
             }
+
             .button-link:hover {
                 background-color: darkgray;
             }
+
             .button-link.active {
                 background-color: #007bff;
             }
+
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin: 20px 0;
                 box-shadow: 0 2px 3px rgba(0,0,0,0.1);
             }
+
             th, td {
                 padding: 12px;
                 text-align: left;
                 border-bottom: 1px solid #ddd;
             }
+
             th {
                 background-color: #343a40;
                 color: white;
             }
+
             tbody tr:nth-child(even) {
                 background-color: #f2f2f2;
             }
+
             tbody tr:hover {
                 background-color: #ddd;
             }
+
             h1 {
                 text-align: center;
                 margin: 20px 0;
@@ -69,77 +112,66 @@
         </style>
     </head>
     <body>
-        <div class="button-container">
-            <a href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}" 
-               class="button-link <c:if test='${param.orderStatusId == "1"}'>active</c:if>'">
-                   Chờ xác nhận
-               </a>
-               <a href="orderHistory?orderStatusId=2&accountId=${sessionScope.account.accountId}" 
-               class="button-link <c:if test='${param.orderStatusId == "2"}'>active</c:if>'">
-                   Đang giao hàng
-               </a>
-               <a href="orderHistory?orderStatusId=3&accountId=${sessionScope.account.accountId}" 
-               class="button-link <c:if test='${param.orderStatusId == "3"}'>active</c:if>'">
-                   Đã giao
-               </a>
-               <a href="orderHistory?orderStatusId=4&accountId=${sessionScope.account.accountId}" 
-               class="button-link <c:if test='${param.orderStatusId == "4"}'>active</c:if>'">
-                   Đã huỷ
-               </a>
-               <a href="profile" 
-                  class="button-link <c:if test='${param.orderStatusId == "4"}'>active</c:if>'">
-                   Profile
-               </a>
+        <div class="header">
+            <div class="button-container">
+                <a href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}" 
+                   class="button-link <c:if test='${param.orderStatusId == "1"}'>active</c:if>'">
+                       Chờ xác nhận
+                   </a>
+                   <a href="orderHistory?orderStatusId=2&accountId=${sessionScope.account.accountId}" 
+                   class="button-link <c:if test='${param.orderStatusId == "2"}'>active</c:if>'">
+                       Đang giao hàng
+                   </a>
+                   <a href="orderHistory?orderStatusId=3&accountId=${sessionScope.account.accountId}" 
+                   class="button-link <c:if test='${param.orderStatusId == "3"}'>active</c:if>'">
+                       Đã giao
+                   </a>
+                   <a href="orderHistory?orderStatusId=4&accountId=${sessionScope.account.accountId}" 
+                   class="button-link <c:if test='${param.orderStatusId == "4"}'>active</c:if>'">
+                       Đã huỷ
+                   </a>       
+                   <a href="orderHistory?orderStatusId=5&accountId=${sessionScope.account.accountId}" 
+                   class="button-link">
+                    Tất cả
+                </a>
             </div>
-
-        <c:choose>
-            <c:when test="${param.orderStatusId == '1'}">
-                <h1>Pending Orders</h1>
-            </c:when>
-            <c:when test="${param.orderStatusId == '2'}">
-                <h1>Orders in Delivery</h1>
-            </c:when>
-            <c:when test="${param.orderStatusId == '3'}">
-                <h1>Delivered Orders</h1>
-            </c:when>
-            <c:when test="${param.orderStatusId == '4'}">
-                <h1>Cancelled Orders</h1>
-            </c:when>
-            <c:otherwise>
-                <h1>Order Details</h1>
-            </c:otherwise>
-        </c:choose>
-
+            <nav>
+                <a href="home">Home</a>
+                <a href="profile">Profile</a>
+                <a href="logout">Logout</a>
+            </nav>
+        </div>
         <table>
             <thead>
                 <tr>
-                    <th>Họ và tên</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th>Ghi chú</th>
-                    <th>Ngày đặt</th>
-                    <th>Tổng tiền</th>
+                    <th>Ảnh</th>
+                    <th>Sản Phẩm</th>
+                    <th>Cửa hàng</th>
+                    <th>Giá</th>
+                    <th>Số Lượng</th>
+                    <th>Tổng</th>
                     <th>Trạng thái</th>
                     <th></th>
+
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="order" items="${listOrderById_V1}">
+                <c:forEach var="order" items="${listOrders}">
                     <tr>
-                        <td>${order.name}</td>                  
-                        <td>${order.phone}</td>
-                        <td>${order.address}</td>
-                        <td>${order.note}</td>
-                        <td class="createDate">${order.createDate}</td>
+                        <td><img src="img/${order.imageURL}" alt="${order.productName}" width="100"></td>                  
+                        <td>${order.productName}</td>
+                        <td>${order.restaurant}</td>
+                        <td class="price">${order.price}</td>
+                        <td>${order.quantity}</td>
                         <td class="totalMoney">${order.totalMoney}</td>
                         <td>${order.status}</td>
                         <td>
-                            <form action="viewMore" method="get" style="display: inline;"> <!-- Form to handle View More action -->
-                                <input type="hidden" name="orderId" value="#"/> <!-- Hidden input to pass order ID -->
-                                <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                    <i class="fas fa-eye"></i> <!-- Font Awesome eye icon -->
-                                </button>
-                            </form>
+                            <c:if test="${order.orderStatusId == 3}">
+                                <a href="Feedback.jsp" class="rating-button">Đánh giá</a>
+                            </c:if>
+                            <c:if test="${order.orderStatusId == 1}">
+                                <a href="#" class="rating-button">Huỷ</a>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
@@ -154,21 +186,14 @@
                 return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(value * 1000);
             }
 
-            function formatDate(dateString) {
-                const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
-                const date = new Date(dateString);
-                return date.toLocaleDateString('vi-VN', options);
-            }
-
             function formatAll() {
                 document.querySelectorAll('.totalMoney').forEach(function (element) {
                     let value = parseFloat(element.textContent);
                     element.textContent = formatVND(value);
                 });
-
-                document.querySelectorAll('.createDate').forEach(function (element) {
-                    let dateString = element.textContent;
-                    element.textContent = formatDate(dateString);
+                document.querySelectorAll('.price').forEach(function (element) {
+                    let value = parseFloat(element.textContent);
+                    element.textContent = formatVND(value);
                 });
             }
 

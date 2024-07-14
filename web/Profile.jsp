@@ -21,7 +21,7 @@
                 font-family: 'Roboto', sans-serif;
                 background-color: #f8f9fa;
                 margin: 0;
-                padding: 20px;
+                padding: 0;
             }
 
             .custom-header {
@@ -30,10 +30,6 @@
                 padding: 10px;
                 width: 100%;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                border-top-left-radius: 50px;
-                border-bottom-left-radius: 20px;
-                border-top-right-radius: 20px;
-                border-bottom-right-radius: 50px;
             }
 
             .navbar-brand {
@@ -161,24 +157,11 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                            <a class="nav-link px-3" href="#">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Voucher</span>
                                             </a>
-                                        </li>
-                                        <!--                                        <li class="nav-item">
-                                                                                    <a class="nav-link px-3" href="orderHistory?accountId=${sessionScope.account.accountId}">
-                                                                                        <i class="fa fa-fw fa-cog mr-1"></i>
-                                                                                        <span>Lịch sử đơn hàng</span>
-                                                                                    </a>
-                                                                                </li>
-                                                                                <li class="nav-item">
-                                                                                    <a class="nav-link px-3" href="showOrder?accountId=${sessionScope.account.accountId}">
-                                                                                        <i class="fa fa-fw fa-cog mr-1"></i>
-                                                                                        <span>Theo dõi đơn hàng</span>
-                                                                                    </a>
-                                                                                </li>-->
-
+                                        </li>                                 
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
@@ -236,7 +219,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                            <a class="nav-link px-3" href="#">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Voucher</span>
                                             </a>
