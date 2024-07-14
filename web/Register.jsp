@@ -12,6 +12,18 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <title>Register</title>
+        <style>
+         
+            body, html {
+                height: 100%;
+                margin-top: 50px;
+               background-color: #81C408;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+     
+        </style>
     </head>
     <body>
         <section class="vh-100 bg-image" style="background-color: #81C408;">
@@ -36,12 +48,12 @@
 
                                         <div class="form-outline mb-4">
                                              <small class="form-text" style="color: red;">* Bắt buộc</small>
-                                            <input name="repassword"  type="password" id="reInputPassword" class="form-control" placeholder="Nhập lại mật khẩu" required="">
+                                            <input name="repassword"  type="password" id="inputPassword" class="form-control" placeholder="Nhập lại mật khẩu" required="">
                                         </div>
 
                                         <div class="form-outline mb-4">
                                              <small class="form-text" style="color: red;">* Bắt buộc</small>
-                                            <input name="fullname"  type="text" id="inputName" class="form-control" placeholder="Họ và tên" required="">
+                                            <input name="fullname"  type="text" id="inputPassword" class="form-control" placeholder="Họ và tên" required="">
                                         </div>
 
                                         <div class="form-outline mb-4">
@@ -50,7 +62,7 @@
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <input name="phonenumber"  type="text" id="inputPhone" class="form-control" placeholder="Số điện thoại" >
+                                            <input name="phonenumber"  type="text" id="inputPassword" class="form-control" placeholder="Số điện thoại" >
                                         </div>
 
                                         <div class="form-outline mb-4">
@@ -58,11 +70,11 @@
                                         </div>
 
                                         <div class="d-flex justify-content-center">
-                                            <button type="submit" id="btnRegister"
+                                            <button type="submit"
                                                     class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Đăng ký</button>
                                         </div>
 
-                                        <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản? <a href="Login.jsp"
+                                        <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="Login.jsp"
                                                                                                                 ><u>Đăng nhập</u></a></p>
 
                                     </form>
