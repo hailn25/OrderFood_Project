@@ -49,7 +49,7 @@ public class AccountDAO {
         return listAccount;
     }
 
-    public Account getAccountByAId(String accountId) {
+   public Account getAccountByAId(String accountId) {
         String sql = "select *\n"
                 + "from Account\n"
                 + "where AccountId = ?";
@@ -83,7 +83,8 @@ public class AccountDAO {
         return null;
     }
 
-    public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
+
+     public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set RoleId = ?, [Status] = ?\n"
@@ -98,8 +99,7 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void editAccountR(String roleId, String status, String updateDate, String accountId) throws SQLException, ClassNotFoundException {
+     public void editAccountR(String roleId, String status, String updateDate, String accountId) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set RoleId = ?, [Status] = ?, [UpdateDate] = ?\n"
@@ -116,9 +116,7 @@ public class AccountDAO {
         }
     }
     
-
-
-    public void banAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
+    public void banAccount(String updateDate, String aid) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set [Status] = 0, [UpdateDate] = ?\n"
@@ -132,7 +130,7 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void unbanAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
@@ -148,6 +146,10 @@ public class AccountDAO {
         }
     }
     
+
+
+   
+ 
 
     public Account checkLogin(String email, String password) {
         String sql = "select * from Account where [Email] = ? and [Password] = ?";
@@ -178,7 +180,7 @@ public class AccountDAO {
         return null;
     }
 
-    public Account registerAccount(String email, String password, String fullName, boolean gender, String phone, String address) {
+   public Account registerAccount(String email, String password, String fullName, boolean gender, String phone, String address) {
         try {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
@@ -211,7 +213,6 @@ public class AccountDAO {
         }
       return null;
     }
-
     public boolean checkAccountExist(String email) {
         try {
             String sql = "select * from Account where Email = ?";
@@ -250,8 +251,7 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void ChangePassword(String email, String password) throws SQLException{
+ public void ChangePassword(String email, String password) throws SQLException{
         try {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
@@ -266,78 +266,6 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public Account getAccountByEmail(String email) throws SQLException{
-        try {
-            String sql = "select * from Account where Email = ?";
-            conn = new  DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, email);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Account(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getBoolean(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getInt(9),
-                        rs.getBoolean(10),
-                        rs.getDate(11),
-                        rs.getDate(12),
-                        rs.getDate(13),
-                        rs.getInt(14));
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         return null;
-    }
-    
-
-
-    public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
-        try {
-            LocalDate curDate = LocalDate.now();
-            String date = curDate.toString();
-            String sql = "INSERT INTO [dbo].[Account] ([Email],[LoginWith],[Status],[LastDateLogin],[CreateDate],[UpdateDate],[RoleId]) VALUES (?,?,?,?,?,?,?)";
-
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, email);
-            ps.setInt(2, loginWith);
-            ps.setBoolean(3, true);
-            ps.setString(4, date);
-            ps.setString(5, date);
-            ps.setString(6, date);
-            ps.setInt(7, 2);
-            ps.executeUpdate();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-
-    public ArrayList<Role> getAllRole() {
-        ArrayList<Role> listRole = new ArrayList<>();
-        String sql = "select * from Role";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                listRole.add(new Role(
-                        rs.getInt(1),
-                        rs.getString(2)
-                ));
-            }
-        } catch (Exception e) {
-        }
-        return listRole;
-}
     public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid, String imageAvatar ) {
         String query = "update Account\n"
                 + "  set [Name] = ?,\n"
@@ -422,4 +350,127 @@ public class AccountDAO {
     }
 
     
+    
+public Account getAccountByEmail(String email) throws SQLException{
+        try {
+            String sql = "select * from Account where Email = ?";
+            conn = new  DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Account(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getBoolean(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getInt(9),
+                        rs.getBoolean(10),
+                        rs.getDate(11),
+                        rs.getDate(12),
+                        rs.getDate(13),
+                        rs.getInt(14));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return null;
     }
+    
+
+
+
+    public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
+        try {
+            LocalDate curDate = LocalDate.now();
+            String date = curDate.toString();
+            String sql = "INSERT INTO [dbo].[Account] ([Email],[LoginWith],[Status],[LastDateLogin],[CreateDate],[UpdateDate],[RoleId]) VALUES (?,?,?,?,?,?,?)";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setInt(2, loginWith);
+            ps.setBoolean(3, true);
+            ps.setString(4, date);
+            ps.setString(5, date);
+            ps.setString(6, date);
+            ps.setInt(7, 2);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+
+    public ArrayList<Role> getAllRole() {
+        ArrayList<Role> listRole = new ArrayList<>();
+        String sql = "select * from Role";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listRole.add(new Role(
+                        rs.getInt(1),
+                        rs.getString(2)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        return listRole;
+
+}
+
+     public int getQuantityOfAccount() throws ClassNotFoundException {
+        try {
+            String sql = "select count(AccountId)\n"
+                    + "from [dbo].[Account]";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    
+
+    
+
+    
+    
+   
+
+    public int getAccountIdByRestaurantId(int restaurantId) {
+        int accountId = 0;
+        try {
+            String sql = "SELECT        Account.AccountId\n"
+                    + "FROM            Account INNER JOIN\n"
+                    + "                         Restaurant ON Account.AccountId = Restaurant.AccountId\n"
+                    + "WHERE RestaurantId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                accountId = rs.getInt(1);
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return accountId;
+    }
+
+}
+

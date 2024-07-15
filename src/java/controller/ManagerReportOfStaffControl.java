@@ -5,27 +5,22 @@
 
 package controller;
 
-import dao.OrderDAO;
+import dao.RestaurantDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.OrderDTO;
-import model.OrderDetailDTO;
-import  model.ViewDetail;
+import model.RestaurantReportedDTO;
 
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
-@WebServlet(name="ViewOrderByShipper", urlPatterns={"/viewOrderByShipper"})
-public class ViewOrderByShipper extends HttpServlet {
+@WebServlet(name="ManagerReportOfStaffControl", urlPatterns={"/managerReportOfStaff"})
+public class ManagerReportOfStaffControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,23 +30,14 @@ public class ViewOrderByShipper extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException, Exception {
-        OrderDAO orderDAO = new OrderDAO();
-    String action = request.getParameter("action");
-    int orderId = Integer.parseInt(request.getParameter("oid"));
+    throws ServletException, IOException {
+                response.setContentType("text/html;charset=UTF-8");
+        RestaurantDAO dao = new RestaurantDAO();
+        ArrayList<RestaurantReportedDTO> list = dao.getListRestaurantReported();
+        request.setAttribute("list", list);
+        
+        request.getRequestDispatcher("ManagerReportOfStaff.jsp").forward(request, response);
 
-    if ("view".equals(action)) {     
-        orderDAO.getOrderDetailByOidD(orderId);
-    }
-    
-    ViewDetail listView = orderDAO.getViewDetailslByoid(orderId);
-    request.setAttribute("listV", listView);
-    
-    ArrayList<OrderDetailDTO> listOrderDetail = orderDAO.getOrderDetailByOidD(orderId);
-    request.setAttribute("listOrderDetail", listOrderDetail);
-    
-    // Chuyển tiếp đến JSP hiển thị chi tiết đơn hàng
-    request.getRequestDispatcher("ViewOrderByShipper.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,11 +51,7 @@ public class ViewOrderByShipper extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ViewOrderByShipper.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     } 
 
     /** 
@@ -82,11 +64,7 @@ public class ViewOrderByShipper extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ViewOrderByShipper.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /** 

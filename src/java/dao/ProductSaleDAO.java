@@ -172,7 +172,7 @@ public class ProductSaleDAO {
 
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.getProductIsFlashSale("2024-07-04", 2));
+        System.out.println(dao.getProductIsFlashSale("2024-07-15", 2));
 
     }
 

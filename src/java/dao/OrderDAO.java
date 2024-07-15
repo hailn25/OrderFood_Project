@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Account;
 import model.Cart;
 import model.Item;
@@ -34,9 +36,10 @@ public class OrderDAO {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(insertOrderSQL, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            ps.setInt(1, u.getAccountId());
-            ps.setDouble(2, cart.getTotalMoney());
-            ps.setDate(3, sqlDate);
+            ps.setInt(1, u.getAccountId()); // accountId ở vị trí thứ nhất trong câu lệnh SQL
+            ps.setDouble(2, cart.getTotalMoney()); // totalMoney ở vị trí thứ hai trong câu lệnh SQL
+            ps.setDate(3, sqlDate); // createDate ở vị trí thứ ba trong câu lệnh SQL
+
             ps.executeUpdate();
 
             rs = ps.getGeneratedKeys();
@@ -62,6 +65,201 @@ public class OrderDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public ArrayList<OrderDetailDTO> getOrderDetailByOidD(int orderId) {
+        ArrayList<OrderDetailDTO> listOrderDetails = new ArrayList<>();
+        try {
+            String sql = "SELECT \n"
+                    + "    OrderDetail.OrderDetailId, \n"
+                    + "    OrderDetail.OrderId,\n"
+                    + "	Product.Name ,\n"
+                    + "    Product.Price, \n"
+                    + "    OrderDetail.Quantity, \n"
+                    + "    [Order].TotalMoney\n"
+                    + "FROM  [Order]\n"
+                    + "INNER JOIN \n"
+                    + "    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
+                    + "INNER JOIN \n"
+                    + "    Product ON OrderDetail.ProductId = Product.ProductId\n"
+                    + "WHERE \n"
+                    + "    [Order].OrderId = ?; ";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDetailDTO orderDetail = new OrderDetailDTO(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getInt(5),
+                        rs.getDouble(6)
+                );
+                listOrderDetails.add(orderDetail);
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
+        return listOrderDetails;
+    }
+
+    public int getQuantityOrderSuccessByRestaurantId(int restaurantId) throws SQLException {
+
+        try {
+            String sql = "SELECT \n"
+                    + "    COUNT(DISTINCT [Order].OrderId) AS UniqueOrderCount\n"
+                    + "FROM \n"
+                    + "    [Order]\n"
+                    + "INNER JOIN \n"
+                    + "    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
+                    + "INNER JOIN\n"
+                    + "    OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                    + "INNER JOIN \n"
+                    + "    Product ON OrderDetail.ProductId = Product.ProductId\n"
+                    + "WHERE \n"
+                    + "    Product.RestaurantId = ?\n"
+                    + "    AND OrderStatus.OrderStatusId = 3";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public int getQuantityOrderPendingByRestaurantId(int restaurantId) {
+        try {
+            String sql = "SELECT \n"
+                    + "    COUNT(DISTINCT [Order].OrderId) AS UniqueOrderCount\n"
+                    + "FROM \n"
+                    + "    [Order]\n"
+                    + "INNER JOIN \n"
+                    + "    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
+                    + "INNER JOIN\n"
+                    + "    OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                    + "INNER JOIN \n"
+                    + "    Product ON OrderDetail.ProductId = Product.ProductId\n"
+                    + "WHERE \n"
+                    + "    Product.RestaurantId = ?\n"
+                    + "    AND OrderStatus.OrderStatusId = 6";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public int getQuantity(int productId) {
+        String sql = "select quantity from Product where ProductId = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public int getOrderID() {
+        String sql = "SELECT top 1 * FROM [dbo].[Order]  ORDER BY  [OrderId ]DESC";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
+    public void insertNewOrderDetail(int orderId, int productId, int quantity, double totalMoney, String paymentBy, String paymentStatus) {
+        LocalDate curDate = LocalDate.now();
+        Date sqlDate = Date.valueOf(curDate);
+        String sql = "INSERT INTO [dbo].[OrderDetail]\n"
+                + "           ([OrderID]\n"
+                + "           ,[ProductID]\n"
+                + "           ,[Quantity]\n"
+                + "           ,[TotalMoney]\n"
+                + "           ,[PaymentBy]\n"
+                + "           ,[PaymentStatus]\n"
+                + "           ,[UpdateDate])\n"
+                + "     VALUES (?,?,?,?,?,?,?)";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.setInt(2, productId);
+            ps.setInt(3, quantity);
+            ps.setDouble(4, totalMoney);
+            ps.setString(5, paymentBy);
+            ps.setString(6, paymentStatus);
+            ps.setDate(7, sqlDate);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getOrderDetailId() {
+        String sql = "SELECT TOP 1 OrderDetailId\n"
+                + "FROM OrderDetail\n"
+                + "ORDER BY OrderDetailID DESC;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
+    public void updateQuantity(int pid, int quantity) {
+        String sql = "UPDATE [dbo].[Product]\n"
+                + "SET [quantity] = [quantity] - ?\n"
+                + "WHERE [ProductId] = ?;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, pid);
+            ps.executeUpdate();
+        } catch (Exception e) {
+
         }
     }
 
@@ -314,37 +512,40 @@ public class OrderDAO {
         ps.executeUpdate();
     }
 
-    public ArrayList<OrderDetailDTO_Huyvq_1> getOrderDetailByoid(int orderId) {
+    public ArrayList<OrderDetailDTO_Huyvq_1> getOrderDetailByoid(int orderId, int restaurantId) {
         ArrayList<OrderDetailDTO_Huyvq_1> listOrderDetails = new ArrayList<>();
         try {
             String sql = "SELECT \n"
-                    + "    OrderDetail.OrderDetailId, \n"
-                    + "    OrderDetail.OrderId,\n"
-                    + "	Product.Name ,\n"
-                    + "    Product.Price, \n"
-                    + "    OrderDetail.Quantity, \n"
-                    + "    [Order].TotalMoney\n"
-                    + "FROM  [Order]\n"
-                    + "INNER JOIN \n"
-                    + "    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
-                    + "INNER JOIN \n"
-                    + "    Product ON OrderDetail.ProductId = Product.ProductId\n"
-                    + "WHERE \n"
-                    + "    [Order].OrderId = ?; ";
+                    + "                    OrderDetail.OrderDetailId, \n"
+                    + "                    OrderDetail.OrderId,\n"
+                    + "                    Product.ProductId,\n"
+                    + "                    Product.Name ,\n"
+                    + "                    Product.Price, \n"
+                    + "                    OrderDetail.Quantity, \n"
+                    + "                    [Order].TotalMoney\n"
+                    + "                    FROM  [Order]\n"
+                    + "                    INNER JOIN \n"
+                    + "                    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
+                    + "                    INNER JOIN \n"
+                    + "                    Product ON OrderDetail.ProductId = Product.ProductId\n"
+                    + "                    WHERE \n"
+                    + "                    [Order].OrderId = ? and RestaurantId = ?; ";
 
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, orderId);
+            ps.setInt(2, restaurantId);
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 OrderDetailDTO_Huyvq_1 orderDetail = new OrderDetailDTO_Huyvq_1(
                         rs.getInt(1),
                         rs.getInt(2),
-                        rs.getString(3),
-                        rs.getDouble(4),
-                        rs.getInt(5),
-                        rs.getDouble(6)
+                        rs.getInt(3),
+                        rs.getString(4),
+                        rs.getDouble(5),
+                        rs.getInt(6),
+                        rs.getDouble(7)
                 );
                 listOrderDetails.add(orderDetail);
 
@@ -428,131 +629,22 @@ public class OrderDAO {
     }
 
     public void insertDateFinish(int orderId) {
-    LocalDate curDate = LocalDate.now();
-    Date sqlDate = Date.valueOf(curDate);
-    String sql = "UPDATE [Order]\n"
-               + "SET FinishDate = ?\n"
-               + "WHERE OrderId = ?;";
-    try {
-        conn = new DBContext().getConnection();
-        ps = conn.prepareStatement(sql);
-        ps.setDate(1, sqlDate);
-        ps.setInt(2, orderId);
-       
-        ps.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-    public int getOrderDetailId() {
-        String sql = "SELECT TOP 1 OrderDetailId\n"
-                + "FROM OrderDetail\n"
-                + "ORDER BY OrderDetailID DESC;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public void insertNewOrderDetail(int orderId, int productId, int quantity, double totalMoney, String paymentBy, String paymentStatus) {
         LocalDate curDate = LocalDate.now();
         Date sqlDate = Date.valueOf(curDate);
-        String sql = "INSERT INTO [dbo].[OrderDetail]\n"
-                + "           ([OrderID]\n"
-                + "           ,[ProductID]\n"
-                + "           ,[Quantity]\n"
-                + "           ,[TotalMoney]\n"
-                + "           ,[PaymentBy]\n"
-                + "           ,[PaymentStatus]\n"
-                + "           ,[UpdateDate])\n"
-                + "     VALUES (?,?,?,?,?,?,?)";
+        String sql = "UPDATE [Order]\n"
+                + "SET FinishDate = ?\n"
+                + "WHERE OrderId = ?;";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, orderId);
-            ps.setInt(2, productId);
-            ps.setInt(3, quantity);
-            ps.setDouble(4, totalMoney);
-            ps.setString(5, paymentBy);
-            ps.setString(6, paymentStatus);
-            ps.setDate(7, sqlDate);
+            ps.setDate(1, sqlDate);
+            ps.setInt(2, orderId);
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public void updateQuantity(int pid, int quantity) {
-        String sql = "UPDATE [dbo].[Product]\n"
-                + "SET [quantity] = [quantity] - ?\n"
-                + "WHERE [ProductId] = ?;";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, quantity);
-            ps.setInt(2, pid);
-            ps.executeUpdate();
-        } catch (Exception e) {
-
-        }
-    }
-
-    public int getOrderID() {
-        String sql = "SELECT top 1 * FROM [dbo].[Order]  ORDER BY  [OrderId ]DESC";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    public String getPayment(int orderDetailId) {
-        String sql = "SELECT PaymentBy FROM OrderDetail WHERE OrderDetailId = ?";
-        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderDetailId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("PaymentBy");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public int getQuantity(int productId) {
-    String sql = "select quantity from Product where ProductId = ?";
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    
-    try {
-        conn = new DBContext().getConnection();
-        ps = conn.prepareStatement(sql);
-        ps.setInt(1, productId);
-        rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1);
-        }
-    } catch (Exception e) {
-     
-    }
-    return 0;
-}
-
-  
 
     public void updatePaymentStatus(int oid, String paymentStatus) {
         String sql = "UPDATE [dbo].[OrderDetail]\n"
@@ -598,48 +690,6 @@ public class OrderDAO {
 
         }
         return viewDetail;
-    }
-
-    public ArrayList<OrderDetailDTO> getOrderDetailByOid(int orderId) {
-        ArrayList<OrderDetailDTO> listOrderDetails = new ArrayList<>();
-        try {
-            String sql = "SELECT \n"
-                    + "    OrderDetail.OrderDetailId, \n"
-                    + "    OrderDetail.OrderId,\n"
-                    + "	Product.Name ,\n"
-                    + "    Product.Price, \n"
-                    + "    OrderDetail.Quantity, \n"
-                    + "    [Order].TotalMoney\n"
-                    + "FROM  [Order]\n"
-                    + "INNER JOIN \n"
-                    + "    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
-                    + "INNER JOIN \n"
-                    + "    Product ON OrderDetail.ProductId = Product.ProductId\n"
-                    + "WHERE \n"
-                    + "    [Order].OrderId = ?; ";
-
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, orderId);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                OrderDetailDTO orderDetail = new OrderDetailDTO(
-                        rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getString(3),
-                        rs.getDouble(4),
-                        rs.getInt(5),
-                        rs.getDouble(6)
-                );
-                listOrderDetails.add(orderDetail);
-
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
-        return listOrderDetails;
     }
 
     public ArrayList<OrderDTO> getAllOrder(int OrderStatusId) {
@@ -697,6 +747,31 @@ public class OrderDAO {
                 e.printStackTrace();
             }
         }
+    }
+     public void cancelOrderOfCustomer(String orderId) throws ClassNotFoundException, SQLException {
+        String sql = "UPDATE o\n"
+                + "SET o.OrderStatusId = 7\n"
+                + "FROM [Order] o\n"
+                + "WHERE o.OrderId = ?";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ps.executeUpdate();
+    }
+
+     public String getPayment(int orderDetailId) {
+        String sql = "SELECT PaymentBy FROM OrderDetail WHERE OrderDetailId = ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderDetailId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("PaymentBy");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void main(String[] args) throws Exception {

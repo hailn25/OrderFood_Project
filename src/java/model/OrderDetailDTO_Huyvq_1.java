@@ -12,12 +12,21 @@ public class OrderDetailDTO_Huyvq_1 {
 
     int orderDetail;
     int orderId;
+    int productId;
     String productName;
     Double price;
     int quantity;
     Double totalMoney;
 
     public OrderDetailDTO_Huyvq_1() {
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public int getOrderDetail() {
@@ -68,9 +77,10 @@ public class OrderDetailDTO_Huyvq_1 {
         this.totalMoney = totalMoney;
     }
 
-    public OrderDetailDTO_Huyvq_1(int orderDetail, int orderId, String productName, Double price, int quantity, Double totalMoney) {
+    public OrderDetailDTO_Huyvq_1(int orderDetail, int orderId, int productId, String productName, Double price, int quantity, Double totalMoney) {
         this.orderDetail = orderDetail;
         this.orderId = orderId;
+        this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.quantity = quantity;

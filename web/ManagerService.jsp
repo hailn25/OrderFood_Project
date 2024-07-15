@@ -121,8 +121,15 @@
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
-                                <a class="nav-link" href="managerProductFlashSale">
+                                <a class="nav-link " href="managerProductFlashSale">
                                     <i class="far fa-clock"></i> Flash Sale
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerVoucher">
+                                    <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
                                 </a>
                             </li>
                         </c:if>
@@ -207,92 +214,5 @@
         </script>
     </body>
 </html>
-                           
-                            <c:if test="${sessionScope.account.roleId == 5}">                          
-                                <li class="nav-item">
-                                    <a class="nav-link" href="managerVoucher">
-                                       <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
-                                    </a>
-                                </li>
-                            </c:if>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <c:if test = "${sessionScope.account == null}"> 
-                                <a class="nav-link d-block" href="Login.jsp">
-                                    <b>Đăng nhập</b>
-                                </a>
-
-                            </c:if> 
-                            <c:if test = "${sessionScope.account != null}"> 
-                                <a class="nav-link d-block" href="logout">
-                                    <b>Đăng xuất</b>
-                                </a>
-                            </c:if> 
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container">
-            <div class="table-wrapper">
-                <div class="table-title">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h2>Yêu cầu quảng cáo từ <b>Nhà hàng</b></h2>
-                        </div>
-                    </div>
-                </div>
-                <table id="example" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tiêu đề</th>
-                            <th>Ảnh</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${listSlider}" var="s">
-                            <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
-                                <tr>
-                                    <td>${s.sliderId}</td>
-                                    <td class="title" data-title>${s.sliderTitle}</td>
-                                    <td>
-                                        <img src="img/${s.imageURL}" alt="Không thể tải ảnh">
-                                    </td>
-                                    <td>${s.statusName}</td>
-                                    <td>
-                                        <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
-                                    </td>
-                                </tr>
-                            </c:if>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
 
-
-        <!--cai nay cua ProGear-->
-        <script src="js/manager_1.js" type="text/javascript"></script>
-
-        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-        <script>
-                                            new DataTable('#example');
-
-                                            function confirmDelete(event) {
-                                                event.preventDefault();
-                                                var confirmAction = confirm("Bạn có muốn từ chối yêu cầu này không?");
-                                                if (confirmAction) {
-                                                    window.location.href = event.target.closest('a').href;
-                                                }
-                                            }
-        </script>
-    </body>
-</html>

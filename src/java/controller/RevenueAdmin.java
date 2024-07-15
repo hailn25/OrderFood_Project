@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dao.AccountDAO;
+import dao.ProductDAO;
 import dao.RestaurantDAO;
 import dao.RevenueDAO;
 import java.io.IOException;
@@ -12,10 +10,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import model.Account;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,23 +32,35 @@ public class RevenueAdmin extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         RevenueDAO dao = new RevenueDAO();
+        AccountDAO dao1 = new AccountDAO();
+        RestaurantDAO dao2 = new RestaurantDAO();
+        ProductDAO dao3 = new ProductDAO();
         LocalDate date = LocalDate.now();
         int year = date.getYear();
-        double t1 = dao.getRevenueOfWeb(1) + (dao.AccountValid1(year) * 1000000);
-        double t2 = dao.getRevenueOfWeb(2) + (dao.AccountValid2(year) * 1000000);
-        double t3 = dao.getRevenueOfWeb(3) + (dao.AccountValid3(year) * 1000000);
-        double t4 = dao.getRevenueOfWeb(4) + (dao.AccountValid4(year) * 1000000);
-        double t5 = dao.getRevenueOfWeb(5) + (dao.AccountValid5(year) * 1000000);
-        double t6 = dao.getRevenueOfWeb(6) + (dao.AccountValid6(year) * 1000000);
-        double t7 = dao.getRevenueOfWeb(7) + (dao.AccountValid7(year) * 1000000);
-        double t8 = dao.getRevenueOfWeb(8) + (dao.AccountValid8(year) * 1000000);
-        double t9 = dao.getRevenueOfWeb(9) + (dao.AccountValid9(year) * 1000000);
-        double t10 = dao.getRevenueOfWeb(10) + (dao.AccountValid10(year) * 1000000);
-        double t11 = dao.getRevenueOfWeb(11) + (dao.AccountValid11(year) * 1000000);
-        double t12 = dao.getRevenueOfWeb(12) + (dao.AccountValid12(year) * 1000000);
+        int currentMonth = date.getMonthValue();
+        int quantityOfAccount = dao1.getQuantityOfAccount();
+        int quantityOfRestaurant = dao2.getQuantityOfRestaurant();
+        int quantityOfProduct = dao3.getQuantityOfProduct();
+        
+        double t1 = (currentMonth >= 1) ? dao.getRevenueOfWeb(1, year) + (dao.AccountValid1(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t2 = (currentMonth >= 2) ? dao.getRevenueOfWeb(2, year) + (dao.AccountValid2(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t3 = (currentMonth >= 3) ? dao.getRevenueOfWeb(3, year) + (dao.AccountValid3(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t4 = (currentMonth >= 4) ? dao.getRevenueOfWeb(4, year) + (dao.AccountValid4(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t5 = (currentMonth >= 5) ? dao.getRevenueOfWeb(5, year) + (dao.AccountValid5(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t6 = (currentMonth >= 6) ? dao.getRevenueOfWeb(6, year) + (dao.AccountValid6(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t7 = (currentMonth >= 7) ? dao.getRevenueOfWeb(7, year) + (dao.AccountValid7(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t8 = (currentMonth >= 8) ? dao.getRevenueOfWeb(8, year) + (dao.AccountValid8(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t9 = (currentMonth >= 9) ? dao.getRevenueOfWeb(9, year) + (dao.AccountValid9(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t10 = (currentMonth >= 10) ? dao.getRevenueOfWeb(10, year) + (dao.AccountValid10(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t11 = (currentMonth >= 11) ? dao.getRevenueOfWeb(11, year) + (dao.AccountValid11(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t12 = (currentMonth >= 12) ? dao.getRevenueOfWeb(12, year) + (dao.AccountValid12(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+
+        double totalRevenue = t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9 + t10 + t11 + t12;
+
+        DecimalFormat df = new DecimalFormat("#,###");
 
         request.setAttribute("t1", t1);
         request.setAttribute("t2", t2);
@@ -64,6 +74,11 @@ public class RevenueAdmin extends HttpServlet {
         request.setAttribute("t10", t10);
         request.setAttribute("t11", t11);
         request.setAttribute("t12", t12);
+        request.setAttribute("totalRevenue", df.format(totalRevenue));
+        
+        request.setAttribute("totalAccounts", quantityOfAccount);
+        request.setAttribute("totalStores", quantityOfRestaurant);
+        request.setAttribute("totalProducts", quantityOfProduct);
 
         request.getRequestDispatcher("ManagerDashboardAdmin.jsp").forward(request, response);
     }
@@ -80,7 +95,11 @@ public class RevenueAdmin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RevenueAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -94,7 +113,11 @@ public class RevenueAdmin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RevenueAdmin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

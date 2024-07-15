@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Report;
 import model.ReportDTO;
+import model.ReportDTO_1;
 
 /**
  *
@@ -49,6 +50,36 @@ public class ReportDAO {
             Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listReport;
+    }
+
+    public ReportDTO_1 getReportedAboutRestaurant(int restaurantId) throws ClassNotFoundException, SQLException {
+        String sql = """
+                     SELECT        Restaurant.Name, Report.Description, Report.ImageURL, Report.CreateDate
+                                          FROM            Report INNER JOIN
+                                                                   Restaurant ON Report.RestaurantId = Restaurant.RestaurantId
+                                          WHERE dbo.Restaurant.RestaurantId = ? and ReportStatusId = 3""";
+        con = new DBContext().getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            return new ReportDTO_1(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4));
+        }
+        return null;
+    }
+
+    public void deleteReport(String RestaurantId) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = "DELETE FROM [dbo].[Report]\n"
+                    + "WHERE RestaurantId = ?;";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, RestaurantId);
+            ps.executeQuery();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void changeStatusReport(int reportId, int status) {

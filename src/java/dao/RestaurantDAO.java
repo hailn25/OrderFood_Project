@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.RestaurantDTO;
+import model.RestaurantReportedDTO;
 
 /**
  *
@@ -44,6 +45,22 @@ public class RestaurantDAO {
             Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return restaurantId;
+    }
+
+    public int getQuantityOfRestaurant() throws ClassNotFoundException {
+        try {
+            String sql = "select COUNT(RestaurantId)\n"
+                    + "from [dbo].[Restaurant]";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     public ArrayList<RestaurantDTO> getRestaurantDTOByRestaurantId(int restaurantId) {
@@ -83,6 +100,80 @@ public class RestaurantDAO {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listRestaurant;
+    }
+
+    public ArrayList<RestaurantReportedDTO> getListRestaurantReported() {
+        ArrayList<RestaurantReportedDTO> list = new ArrayList<>();
+        String sql = """
+                     SELECT Restaurant.RestaurantId, Restaurant.Name, Account.ImageAvatar, Restaurant.RateStar, Account.Status
+                     FROM Account INNER JOIN
+                     Report ON Account.AccountId = Report.AccountId INNER JOIN
+                     Restaurant ON Account.AccountId = Restaurant.AccountId AND Report.RestaurantId = Restaurant.RestaurantId
+                     WHERE dbo.Report.ReportStatusId = 3 and Account.Status = 1""";
+        try {
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new RestaurantReportedDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getBoolean(5)
+                ));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public void insertRestaurant(String name, String email, String phone, String address, String accountId) throws SQLException {
+        try {
+            String sql = "MERGE [dbo].[Restaurant] AS target\n"
+                    + "USING (SELECT 1 AS dummy) AS source\n"
+                    + "ON target.[AccountId] = ?\n"
+                    + "\n"
+                    + "WHEN MATCHED THEN \n"
+                    + "    UPDATE SET \n"
+                    + "        target.[Name] = ?, \n"
+                    + "        target.[Email] = ?, \n"
+                    + "        target.[Phone] = ?, \n"
+                    + "        target.[Address] = ?\n"
+                    + "\n"
+                    + "WHEN NOT MATCHED BY TARGET THEN\n"
+                    + "    INSERT ([Name], [Email], [Phone], [Address], [AccountId])\n"
+                    + "    VALUES (?, ?, ?, ?, ?);";
+
+            conn = new DBContext().getConnection(); // Assuming DBContext handles connection properly
+            ps = conn.prepareStatement(sql);
+
+            // Parameters for both UPDATE and INSERT parts of the MERGE statement
+            ps.setString(1, accountId);
+            ps.setString(2, name);
+            ps.setString(3, email);
+            ps.setString(4, phone);
+            ps.setString(5, address);
+
+            // Parameters specific to INSERT part of the MERGE statement
+            ps.setString(6, name);
+            ps.setString(7, email);
+            ps.setString(8, phone);
+            ps.setString(9, address);
+            ps.setString(10, accountId);
+
+            ps.executeUpdate();
+
+            // Close PreparedStatement and Connection properly
+            ps.close();
+            conn.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static void main(String[] args) {

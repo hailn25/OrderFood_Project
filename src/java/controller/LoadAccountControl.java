@@ -40,10 +40,9 @@ public class LoadAccountControl extends HttpServlet {
         String status = request.getParameter("status");
         AccountDAO dao = new AccountDAO();
         Account a = dao.getAccountByAId(aId);
-//            ArrayList<Category> listC = db.getAllCategory();
         ArrayList<Role> listRole = dao.getAllRole();
+        
         request.setAttribute("detail", a);
-//            request.setAttribute("cid", cID);
         request.setAttribute("listRole", listRole);
         request.setAttribute("roleId", roleId);
         request.setAttribute("status", status);

@@ -4,11 +4,7 @@
  */
 package controller;
 
-import dal.DBContext;
-import dao.CategoryDAO;
 import dao.ProductDAO;
-import model.Category;
-import model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,7 +13,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,8 +20,8 @@ import java.util.logging.Logger;
  *
  * @author Vu Huy
  */
-@WebServlet(name = "LoadOpenControl", urlPatterns = {"/loadOpenProduct"})
-public class LoadOpenProductControl extends HttpServlet {
+@WebServlet(name = "SaleProductControl", urlPatterns = {"/saleProduct"})
+public class SaleProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,27 +33,22 @@ public class LoadOpenProductControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception {
-        try {
-            response.setContentType("text/html;charset=UTF-8");
-            String pID = request.getParameter("pid");
-            String cID = request.getParameter("cid");
-            String status = request.getParameter("status");
-            String isSale = request.getParameter("isSale");
-            ProductDAO dao = new ProductDAO();
-            CategoryDAO dao1 = new CategoryDAO();
-            Product p = dao.getProductByID(Integer.parseInt(pID));
-            ArrayList<Category> listC = dao1.getAllCategory();
+            throws ServletException, IOException {
 
-            request.setAttribute("detail", p);
-            request.setAttribute("cid", cID);
-            request.setAttribute("listC", listC);
-            request.setAttribute("status", status);
-            request.setAttribute("isSale", isSale);
+        response.setContentType("text/html;charset=UTF-8");
+        String productId = request.getParameter("pid");
+        String isSale = request.getParameter("isSale");
 
-            request.getRequestDispatcher("EditOpenProduct.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        ProductDAO dao = new ProductDAO();
+
+        if (isSale.equals("0")) {
+            dao.updatePriceSale_on(productId);
+            response.sendRedirect("managerOpenProduct");
+
+        } else if (isSale.equals("1")) {
+            dao.updatePriceSale_off(productId);
+            response.sendRedirect("managerOpenProduct");
+
         }
 
     }
@@ -75,11 +65,7 @@ public class LoadOpenProductControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -93,11 +79,7 @@ public class LoadOpenProductControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(LoadOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

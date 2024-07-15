@@ -25,13 +25,58 @@
             }
         </style>
         <style>
-            .material-symbols-outlined {
-                font-variation-settings:
-                    'FILL' 0,
-                    'wght' 400,
-                    'GRAD' 0,
-                    'opsz' 24
+            img{
+                width: 150px;
+                height: 150px;
             }
+            .btn {
+                display: inline-block;
+                padding: 5px 10px;
+                font-size: 16px;
+                font-weight: bold;
+                color: white;
+                background-color: #28a745;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-blue {
+                background-color: #74C0FC;
+                color: white;
+            }
+
+            .btn-green {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .btn-green:hover {
+                background-color: #218838;
+                color: white;
+            }
+
+            .btn-blue:hover {
+                background-color: #58A6FF;
+                color: white;
+            }
+
+            .btn-red {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .btn-red:hover {
+                background-color: #c82333;
+                color: white;
+            }
+            .custom-star {
+            color: #FFB524 !important;
+        }
+
         </style>
     </head>
 
@@ -98,7 +143,7 @@
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="managerAccount">
+                                    <a class="nav-link" href="managerAccount">
                                         <i class="far fa-user"></i> Quản lý tài khoản
                                     </a>
                                 </li>
@@ -106,7 +151,7 @@
 
                             <c:if test="${sessionScope.account.roleId == 1}">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerReportOfStaff">
+                                    <a class="nav-link active" href="managerReportOfStaff">
                                         <i class="far fa-comment-dots"></i> Quản lý báo cáo của nhân viên
                                     </a>
                                 </li>
@@ -138,7 +183,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Quản lý <b>tài khoản</b></h2>
+                            <h2>Quản lý <b>lệnh cấm nhà hàng của nhân viên</b></h2>
                         </div>
 
                     </div>
@@ -147,38 +192,40 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Email</th>
-                            <th>Họ và tên</th>
-                            <th>Vai trò</th>
-                            <th>Trạng thái</th>
+                            <th>Tên nhà hàng</th>
                             <th>Ảnh đại diện</th>
+                            <th>Đánh giá</th>
+                            <th>Trạng thái</th>
                             <th>Tác vụ</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${listA}" var="o">
+                        <c:forEach items="${list}" var="o">
                             <tr>
-                                <td>${o.accountId}</td>
-                                <td>${o.email}</td>
-                                <td>${o.name}</td>
-                                <td>
-                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Người dùng" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Nhà hàng" : (o.roleId == 5 ? "Nhân viên" : "Unknown role"))))}
-                                </td>
-                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Hoạt động" : "Bị cấm"}</td>
+                                <td>${o.restaurantId}</td>
+                                <td>${o.restaurantName}</td>
                                 <td><img src="img/${o.imageAvatar}" alt="Không thể tải ảnh"></td>
                                 <td>
-                                    <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons fas fa-edit" style="color: #5c98ff" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
-                                    <c:if test="${o.status == true}">
-                                        <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmDelete(event)" class="delete" data-toggle="modal">
-                                            <i class="material-icons fas fa-toggle-on" style="color: green" data-toggle="tooltip" title="Khoá tài khoản"></i>
-                                        </a>
-                                    </c:if>
-                                    <c:if test="${o.status == false}">
-                                        <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmOpen(event)" class="delete" data-toggle="modal">
-                                            <i class="material-icons fas fa-toggle-off" style="color: green" data-toggle="tooltip" title="Mở khoá tài khoản"></i>
-                                        </a>
-                                    </c:if>
+                                    <c:forEach begin="1" end="5" var="i">
+                                        <c:choose>
+                                            <c:when test="${i <= o.rateStar}">
+                                                <i class="fa fa-star text-secondary custom-star"></i>
+                                            </c:when>
+                                            <c:when test="${i - 0.5 == o.rateStar}">
+                                                <i class="fa fa-star-half-alt text-secondary custom-star"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="far fa-star custom-star"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </td>
 
+                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Hoạt động" : "Bị cấm"}</td>
+                                <td>
+                                    <a href="loadReportedOfStaff?rid=${o.restaurantId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                    <a href="confirmBanRestaurant?rid=${o.restaurantId}" onclick="confirmAccecpt(event)" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                    <!--<a href="cancelBanRestaurant?rid=${o.restaurantId}" onclick="confirmCancel(event)" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>-->
                                 </td>
                             </tr>
                         </c:forEach>
@@ -193,43 +240,23 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                            new DataTable('#example');
-
-                                            function confirmDelete(event) {
-                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
-
-                                                var confirmAction = confirm("Bạn có chắc chắn muốn khoá tài khoản này không?");
-
-                                                if (confirmAction) {
-                                                    window.location.href = event.target.closest('a').href;
-                                                }
-                                            }
-
-                                            function confirmOpen(event) {
-                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
-
-                                                var userConfirmed = confirm("Bạn có chắc muốn mở khoá tài khoản này không?");
-
-                                                if (userConfirmed) {
-                                                    window.location.href = event.currentTarget.href;
-                                                }
-                                            }
-
-// Gắn hàm confirmDelete vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Khoá tài khoản"
-                                            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Khoá tài khoản"]').forEach(function (element) {
-                                                element.onclick = function (event) {
-                                                    confirmDelete(event);
-                                                };
-                                            });
-
-// Gắn hàm confirmOpen vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Mở khoá tài khoản"
-                                            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Mở khoá tài khoản"]').forEach(function (element) {
-                                                element.onclick = function (event) {
-                                                    confirmOpen(event);
-                                                };
-                                            });
-
-
+                                        new DataTable('#example');
+        </script>
+        <script>
+            function confirmCancel(event) {
+                event.preventDefault();
+                var confirmAction = confirm("Bạn có chắc chắn muốn bỏ qua báo cáo?");
+                if (confirmAction) {
+                    window.location.href = event.target.closest('a').href;
+                }
+            }
+            function confirmAccecpt(event) {
+                event.preventDefault();
+                var confirmAction = confirm("Bạn có chắc chắn muốn cấm nhà hàng này không?");
+                if (confirmAction) {
+                    window.location.href = event.target.closest('a').href;
+                }
+            }
         </script>
 
 

@@ -234,6 +234,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD (2c6ac93) - code_haile
 
                     <!-- Related products -->
                     <h1 class="fw-bold mb-0">Sản Phẩm Liên Quan</h1>
@@ -252,6 +253,25 @@
                                             <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
                                             <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                                         </div>
+=======
+                </div>
+                <!-- Related products -->
+                <h1 class="fw-bold mb-0">Sản Phẩm Liên Quan</h1>
+                <div class="vesitable">
+                    <div class="owl-carousel vegetable-carousel justify-content-center">
+                        <c:forEach var="relatedProduct" items="${listSameCategoryProducts}">
+                            <div class="border border-primary rounded position-relative vesitable-item">
+                                <div class="vesitable-img">
+                                    <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
+                                </div>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
+                                <div class="p-4 pb-0 rounded-bottom">
+                                    <h4>${relatedProduct.name}</h4>
+                                    <p class="description">${relatedProduct.decription}</p>
+                                    <div class="d-flex justify-content-between flex-lg-wrap">
+                                        <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
+                                        <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+>>>>>>> origin/HuyVu (051f092) - Merge origin/ma
                                     </div>
                                 </div>
                             </c:forEach>
@@ -262,10 +282,6 @@
             <!-- Single Product End -->
 
 
-            <!-- Footer Start -->
-
-
-                                      
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const prices = document.querySelectorAll('[id^="price-"]');
@@ -335,3 +351,28 @@
             </script>
     </body>
 </html>
+<<<<<<< HEAD (2c6ac93) - code_haile
+            <!-- Footer Start -->
+
+
+                                      
+=======
+        <!-- Footer Start -->
+
+        <jsp:include page="Footer.jsp"></jsp:include>
+            <!-- Footer End -->
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+
+
+            <!-- JavaScript Libraries -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="lib/easing/easing.min.js"></script>
+            <script src="lib/waypoints/waypoints.min.js"></script>
+            <script src="lib/lightbox/js/lightbox.min.js"></script>
+            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+            <!-- Template Javascript -->
+            <script src="js/main.js"></script>
+>>>>>>> origin/HuyVu (051f092) - Merge origin/ma

@@ -22,6 +22,75 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
 
+    <!--đây là css của các ô vuông trên biểu đồ-->
+    <style>
+        .info-square {
+            width: 250px;
+            height: auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .info-square:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-square h2 {
+            margin: 20px 0 0;
+            font-size: 1.5em;
+            word-wrap: break-word;
+            width: 100%;
+        }
+
+        .info-square p {
+            margin: 5px 0 0;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .info-square .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .info-square .icon-revenue {
+            color: #4CAF50;
+        }
+
+        .info-square .icon-products {
+            color: #9C27B0;
+        }
+
+        .info-square .icon-orders-pending {
+            color: #FF9800;
+        }
+
+        .info-square .icon-orders-success {
+            color: #2196F3;
+        }
+
+        .info-container {
+            padding: 30px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .info-square h2.default-text {
+            color: black; /* Use inherit to set it to the default color of its parent */
+        }
+    </style>
+
     <style>
         /* Ẩn dropdown menu mặc định */
         .dropdown-menu {
@@ -55,7 +124,7 @@
 
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="revenueRestaurant">
+                    <a class="navbar-brand" href="HomeOfRestaurant.jsp">
                         <c:if test="${not empty sessionScope.account.name}">
                             <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
                             </c:if>
@@ -75,7 +144,15 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
                             <c:if test="${sessionScope.account.roleId == 4}">
-<li class="nav-item">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="HomeOfRestaurant.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 4}">
+                                <li class="nav-item">
                                     <a class="nav-link active" href="revenueRestaurant">
                                         <i class="fas fa-tachometer-alt"></i> Thống kê
                                         <span class="sr-only">(current)</span>
@@ -83,7 +160,7 @@
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 1}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerCategory">
                                         <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -99,11 +176,11 @@
                                 </li>
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 4}">                          
-                                <li class="nav-item">
-                                    <a class="nav-link" href="managerCloseProduct">
-                                        <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
-                                    </a>
-                                </li>
+                                <!--                                <li class="nav-item">
+                                                                    <a class="nav-link" href="managerCloseProduct">
+                                                                        <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
+                                                                    </a>
+                                                                </li>-->
                             </c:if>
                             <c:if test="${sessionScope.account.roleId == 4}">
                                 <li class="nav-item dropdown">
@@ -160,7 +237,7 @@
 
                 function drawVisualization() {
                     var data = google.visualization.arrayToDataTable([
-                        ['Month', 'Doanh thu'],
+                        ['Tháng', 'Doanh thu'],
                         ['Tháng 1', ${requestScope.thang1}],
                         ['Tháng 2', ${requestScope.thang2}],
                         ['Tháng 3', ${requestScope.thang3}],
@@ -175,9 +252,21 @@
                         ['Tháng 12', ${requestScope.thang12}]
                     ]);
 
+                    var formatter = new google.visualization.NumberFormat({
+                        suffix: ' VNĐ',
+                        fractionDigits: 0
+                    });
+
+                    formatter.format(data, 1); // Định dạng cột thứ 2 (index 1) là số và thêm ' VNĐ' vào sau giá trị
+
+                    var currentYear = new Date().getFullYear();
+
                     var options = {
-                        title: 'Doanh thu của nhà hàng',
-vAxis: {title: 'VNĐ'},
+                        title: 'Doanh thu của nhà hàng trong năm ' + currentYear,
+                        vAxis: {
+                            title: 'Doanh thu (VNĐ)',
+                            format: '#,### VNĐ'  // Định dạng số với "VNĐ" sau
+                        },
                         hAxis: {title: 'Tháng'},
                         seriesType: 'bars'
                     };
@@ -185,7 +274,50 @@ vAxis: {title: 'VNĐ'},
                     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
                     chart.draw(data, options);
                 }
+
+
+
+
             </script>
+
+            <!-- Info squares -->
+            <div class="info-container">
+                <div class="info-square">
+                    <i class="fas fa-dollar-sign icon icon-revenue"></i>
+                    <div>
+                        <h2 class="revenue-text">${totalRevenue} VNĐ</h2>
+                        <p>Doanh thu</p>
+                    </div>
+                </div>
+                <a href="managerOpenProduct">
+                    <div class="info-square">
+                        <i class="fas fa-box icon icon-products"></i>
+                        <div>
+                            <h2 class="default-text">${totalProducts}</h2>
+                            <p>Sản phẩm đang bán</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="managerOrderOfCustomer_6">
+                    <div class="info-square">
+                        <i class="fas fa-clock icon icon-orders-pending"></i>
+                        <div>
+                            <h2 class="default-text">${totalPendingOrders}</h2>
+                            <p>Đơn hàng đang chờ xác nhận</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="managerOrderOfCustomer_3">
+                    <div class="info-square">
+                        <i class="fas fa-check-circle icon icon-orders-success"></i>
+                        <div>
+                            <h2 class="default-text">${totalCompletedOrders}</h2>
+                            <p>Đơn hàng đã giao thành công</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
             <div class="col-12 tm-block-col">
                 <div class=" tm-block-taller">
                     <div id="chart_div" style="width: 1300px; height: 500px; margin: 50px auto;"></div>
