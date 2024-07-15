@@ -89,7 +89,7 @@ public class EditVoucher extends HttpServlet {
         
         if (lengthVoucherName == 0 || lengthDescription == 0 || request.getParameter("status") == null) {
             request.setAttribute("error", error);
-            request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status")), discount, voucherCategoryId));
+          //  request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status")), discount, voucherCategoryId));
             request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
         } else {
             int status = Integer.parseInt(request.getParameter("status"));

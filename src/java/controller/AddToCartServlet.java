@@ -97,7 +97,7 @@ public class AddToCartServlet extends HttpServlet {
                 ProductDAO dao = new ProductDAO();
                 Product p = dao.getProductByID(id);
                 double price = p.getPrice();
-                 
+                
                 int maxquantity = dao.getQuantityProduct(id);
                   session.setAttribute("maxquantity",maxquantity );
                 Item t = new Item(p, num, price);
