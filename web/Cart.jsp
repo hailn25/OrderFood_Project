@@ -200,7 +200,7 @@
 
                 function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
                     if (newQuantity < 1) {
-                        confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId); // Gọi hàm xóa sản phẩm khi số lượng < 1
+                        confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId); 
                         return;
                     }
                     if (newQuantity > maxQuantity) {

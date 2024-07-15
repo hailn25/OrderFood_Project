@@ -89,29 +89,31 @@
                                 <p class="mb-3">Category: ${detail.categoryName}</p>
                                 <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
                                 <div class="d-flex mb-4" id="star-rating">
-                                    <!-- Các ngôi sao sẽ được thêm động bởi JavaScript -->
+
                                 </div>
                                 <p class="mb-4">${detail.decription}</p>
                                 <p class="mb-4">Quantity: ${detail.quantity}</p>
-                                <div class="input-group quantity mb-5" style="width: 100px;">
+                                <div class="input-group quantity mt-4" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                    <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
-                                <form action="addtocart" method="post">
+                                <form id="addToCartForm" action="addtocart" method="post">
                                     <input type="hidden" name="productId" value="${detail.id}">
+                                    <input type="hidden" name="quantity" id="addToCartQuantity" value="1">
                                     <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
                                         <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
                                     </button>
                                 </form>
+
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -153,48 +155,15 @@
                                                         </div>
                                                     </div>
                                                     <p>${review.feedback}</p>
+                                                    <c:if test="${not empty review.imageURL}">
+                                                        <img src="img/${review.imageURL}" style="width: 100px; height: 100px;">
+                                                    </c:if>
                                                 </div>
                                             </div>
                                         </c:forEach>
                                     </div>
-
                                 </div>
-                            </div>
-                            <form action="#">
-                                <h4 class="mb-5 fw-bold">Leave a Reply</h4>
-                                <div class="row g-4">
-                                    <div class="col-lg-6">
-                                        <div class="border-bottom rounded">
-                                            <input type="text" class="form-control border-0 me-4" placeholder="Yur Name *">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="border-bottom rounded">
-                                            <input type="email" class="form-control border-0" placeholder="Your Email *">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="border-bottom rounded my-4">
-                                            <textarea name="" id="" class="form-control border-0" cols="30" rows="8" placeholder="Your Review *" spellcheck="false"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="d-flex justify-content-between py-3 mb-5">
-                                            <div class="d-flex align-items-center">
-                                                <p class="mb-0 me-3">Please rate:</p>
-                                                <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                    <i class="fa fa-star text-muted"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <a href="#" class="btn border border-secondary text-primary rounded-pill px-4 py-3"> Post Comment</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>                           
                         </div>
                     </div>
                     <div class="col-lg-4 col-xl-3">
@@ -218,24 +187,10 @@
                                             </div>
                                         </div>
                                     </c:forEach>
-                                </div>
-                                <div class="col-lg-12 text-center">
-                                    <button class="btn btn-primary px-4 py-2" id="load-more-btn" onclick="toggleProducts()">Xem thêm</button>
-                                    <button class="btn btn-secondary px-4 py-2 d-none" id="show-less-btn" onclick="toggleProducts()">Thu gọn</button>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="position-relative">
-                                        <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
-                                        <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
-                                            <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                              
                             </div>
                         </div>
                     </div>
-<<<<<<< HEAD (2c6ac93) - code_haile
-
                     <!-- Related products -->
                     <h1 class="fw-bold mb-0">Sản Phẩm Liên Quan</h1>
                     <div class="vesitable">
@@ -253,25 +208,6 @@
                                             <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
                                             <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                                         </div>
-=======
-                </div>
-                <!-- Related products -->
-                <h1 class="fw-bold mb-0">Sản Phẩm Liên Quan</h1>
-                <div class="vesitable">
-                    <div class="owl-carousel vegetable-carousel justify-content-center">
-                        <c:forEach var="relatedProduct" items="${listSameCategoryProducts}">
-                            <div class="border border-primary rounded position-relative vesitable-item">
-                                <div class="vesitable-img">
-                                    <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
-                                </div>
-                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
-                                <div class="p-4 pb-0 rounded-bottom">
-                                    <h4>${relatedProduct.name}</h4>
-                                    <p class="description">${relatedProduct.decription}</p>
-                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                        <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
-                                        <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
->>>>>>> origin/HuyVu (051f092) - Merge origin/ma
                                     </div>
                                 </div>
                             </c:forEach>
@@ -282,6 +218,124 @@
             <!-- Single Product End -->
 
 
+            <!-- Footer Start -->
+
+            <jsp:include page="Footer.jsp"></jsp:include>
+                <!-- Footer End -->
+                <!-- Back to Top -->
+                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+
+
+                <!-- JavaScript Libraries -->
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="lib/easing/easing.min.js"></script>
+                <script src="lib/waypoints/waypoints.min.js"></script>
+                <script src="lib/lightbox/js/lightbox.min.js"></script>
+                <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+                <!-- Template Javascript -->
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const quantityInputs = document.querySelectorAll('.quantity-input');
+                        const addToCartForm = document.getElementById('addToCartForm');
+                        const addToCartQuantityInput = document.getElementById('addToCartQuantity');
+
+                        quantityInputs.forEach(function (quantityInput) {
+                            const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+                            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+                            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+
+                            btnPlus.addEventListener('click', function () {
+                                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+                            });
+
+                            btnMinus.addEventListener('click', function () {
+                                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+                            });
+
+                            quantityInput.addEventListener('input', function () {
+                                let newValue = parseInt(quantityInput.value);
+                                if (isNaN(newValue) || newValue < 1) {
+                                    newValue = 1;
+                                }
+                                updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                            });
+
+                            // Function to update quantity and price
+                            function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
+                                if (newQuantity < 1) {
+                                    confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
+                                    return;
+                                }
+                                if (newQuantity > maxQuantity) {
+                                    alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                                    return;
+                                }
+
+                                quantityInput.value = newQuantity;
+                                addToCartQuantityInput.value = newQuantity; // Update quantity hidden input for addToCartForm
+                                updatePrice(quantityInput, newQuantity);
+                            }
+
+                            function updatePrice(quantityInput, quantity) {
+                                const pricePerItem = parseFloat(quantityInput.dataset.price);
+                                // Example of updating total price display based on quantity
+                                const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
+                                const totalPrice = quantity * pricePerItem * 1000;
+                                totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+                            }
+
+                            updatePrice(quantityInput, parseInt(quantityInput.value));
+                        });
+
+                        // Example of submitting form
+                        addToCartForm.addEventListener('submit', function (event) {
+                            // You can add additional validation or actions before submitting the form
+                            // event.preventDefault(); // Uncomment to prevent default form submission for testing
+                            // Example of fetching data if needed
+                            const formData = new FormData(addToCartForm);
+                            fetch(addToCartForm.action, {
+                                method: 'POST',
+                                body: formData
+                            })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.text();
+                                    })
+                                    .then(data => {
+                                        // Handle response data if necessary
+                                    })
+                                    .catch(error => {
+                                        console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                                    });
+                        });
+                    });
+                </script>
+
+                <script>
+                    // Lấy giá trị sao từ thuộc tính JSP
+                    var rating = ${detail.rateStar};
+                    var starContainer = document.getElementById('star-rating');
+
+                    for (var i = 1; i <= 5; i++) {
+                        var star = document.createElement('i');
+                        star.className = 'fa fa-star';
+                        if (i <= Math.floor(rating)) {
+                            star.classList.add('text-primary'); // Đổi màu sao được đánh giá
+                        } else {
+                            star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
+                        }
+                        if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                            star.className = 'fa fa-star-half'; // Nửa sao
+                            star.classList.add('text-primary');
+                        }
+                        starContainer.appendChild(star);
+                    }
+            </script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const prices = document.querySelectorAll('[id^="price-"]');
@@ -312,67 +366,5 @@
                     showLessBtn.classList.toggle('d-none');
                 }
             </script>
-
-
-            <jsp:include page="Footer.jsp"></jsp:include>
-                <!-- Footer End -->
-                <!-- Back to Top -->
-                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
-
-
-                <!-- JavaScript Libraries -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="lib/easing/easing.min.js"></script>
-                <script src="lib/waypoints/waypoints.min.js"></script>
-                <script src="lib/lightbox/js/lightbox.min.js"></script>
-                <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-                <!-- Template Javascript -->
-                <script src="js/main.js"></script>
-                <script>
-                                        // Lấy giá trị sao từ thuộc tính JSP
-                                        var rating = ${detail.rateStar};
-                                        var starContainer = document.getElementById('star-rating');
-                                          for (var i = 1; i <= 5; i++) {
-                                            var star = document.createElement('i');
-                                            star.className = 'fa fa-star';
-                                            if (i <= Math.floor(rating)) {
-                                                star.classList.add('text-primary'); // Đổi màu sao được đánh giá
-                                            } else {
-                                                star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
-                                            }
-                                            if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                                                star.className = 'fa fa-star-half'; // Nửa sao
-                                                star.classList.add('text-primary');
-                                            }
-                                            starContainer.appendChild(star);
-                                        }
-            </script>
     </body>
 </html>
-<<<<<<< HEAD (2c6ac93) - code_haile
-            <!-- Footer Start -->
-
-
-                                      
-=======
-        <!-- Footer Start -->
-
-        <jsp:include page="Footer.jsp"></jsp:include>
-            <!-- Footer End -->
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
-
-
-            <!-- JavaScript Libraries -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="lib/easing/easing.min.js"></script>
-            <script src="lib/waypoints/waypoints.min.js"></script>
-            <script src="lib/lightbox/js/lightbox.min.js"></script>
-            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-            <!-- Template Javascript -->
-            <script src="js/main.js"></script>
->>>>>>> origin/HuyVu (051f092) - Merge origin/ma

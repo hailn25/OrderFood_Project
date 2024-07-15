@@ -88,26 +88,28 @@ public class AddToCartServlet extends HttpServlet {
         }
 
         String productId = request.getParameter("productId");
-        int num, id;
+        String quantityStr = request.getParameter("quantity"); // Lấy giá trị quantity từ request
+        int quantity = 1; // Giá trị mặc định
+
+        if (quantityStr != null && !quantityStr.isEmpty()) {
+            quantity = Integer.parseInt(quantityStr);
+        }
 
         try {
             if (productId != null) {
-                num = 1;
-                id = Integer.parseInt(productId);
+                int id = Integer.parseInt(productId);
                 ProductDAO dao = new ProductDAO();
                 Product p = dao.getProductByID(id);
                 double price = p.getPrice();
-                
                 int maxquantity = dao.getQuantityProduct(id);
-                  session.setAttribute("maxquantity",maxquantity );
-                Item t = new Item(p, num, price);
+                session.setAttribute("maxquantity", maxquantity);
+                Item t = new Item(p, quantity, price); // Sử dụng giá trị quantity lấy từ request
                 cart.addItem(t);
-            } else {
-                num = 1;
             }
         } catch (Exception e) {
-            num = 1;
+            e.printStackTrace();
         }
+
         List<Item> list = cart.getItems();
         session.setAttribute("cart", cart);
         session.setAttribute("size", list.size());
