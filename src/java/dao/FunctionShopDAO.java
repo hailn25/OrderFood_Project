@@ -64,12 +64,14 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> searchProductByName(String productName) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
+
             String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
                     + "FROM     Product INNER JOIN\n"
                     + "Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
                     + "Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
                     + "Account ON Restaurant.AccountId = Account.AccountId\n"
                     + "WHERE Product.Name like N'%" + productName + "%'";
+
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -176,14 +178,7 @@ public class FunctionShopDAO {
 //        for (ProductDTO pt : dao.getAllProductDTOByCategoryName("Bánh kem")) {
 //            System.out.println(pt.toString());
 //        }
-//        for (ProductDTO pt : dao.searchByPrice(50)) {
 //            System.out.println(pt.toString());
 //        }
-//        for (ProductDTO pt : dao.searchProductByAttribute("Cơm ", 0)) {
-//            System.out.println(pt.toString());
-//        }
-        for (ProductDTO p : dao.getListProductByRestaurantId(1)) {
-            System.out.println(p.toString());
-        }
     }
 }

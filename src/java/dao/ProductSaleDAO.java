@@ -8,13 +8,21 @@ import dal.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import java.sql.Timestamp;
+import java.util.AbstractList;
 import java.util.List;
-import model.ProductSale;
+import model.ProductSaleDTO;
+import model.ProductSaleDTO1;
+import model.ProductSaleDetailDTO;
 
 /**
  *
- * @author ADMIN
+ * @author hailt
  */
 public class ProductSaleDAO {
 
@@ -22,38 +30,150 @@ public class ProductSaleDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<ProductSale> getProductSale() {
-        List<ProductSale> listProductSale = new ArrayList<>();
-        String query = "select p.ProductId, p.Name, p.ImageURL, ps.SalePrice, ps.Discount, ps.Quantity, r.RateStar \n"
-                + "  from Product p\n"
-                + "  join Product_Sale ps\n"
-                + "  on p.ProductId = ps.ProductID\n"
-                + "  join Restaurant r\n"
-                + "  on p.RestaurantId = r.RestaurantId";
+    public List<ProductSaleDTO> getProductIsFlashSale(String date, int timeFrame) throws SQLException {
+        List<ProductSaleDTO> listSale = new ArrayList<>();
+        ProductDAO dao = new ProductDAO();
         try {
+            String sql = "";
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
+            if (conn != null) {
+                if (timeFrame == 1) {
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 1 \n"
+                            + "                                AND startTime <= CAST('" + date + " 10:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 13:00:00' AS DATETIME) OR endTime IS NULL);";
+
+                }
+                if (timeFrame == 2) {
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 2 \n"
+                            + "                                AND startTime <= CAST('" + date + " 13:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 16:00:00' AS DATETIME) OR endTime IS NULL);";
+                }
+                if (timeFrame == 3) {
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 3 \n"
+                            + "                                AND startTime <= CAST('" + date + " 16:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 19:00:00' AS DATETIME) OR endTime IS NULL);";
+                }
+                if (timeFrame == 4) {
+                    sql = "SELECT ps.ProductID, p.Name,ps.Quantity,ps.SalePrice,ps.Discount ,p.ImageURL, p.Price, ps.TimeFrame,a.ImageAvatar,r.RestaurantId\n"
+                            + "                            FROM Product_Sale ps\n"
+                            + "                            JOIN Product p\n"
+                            + "                           ON p.ProductId = ps.ProductID\n"
+                            + "						   JOIN Restaurant r\n"
+                            + "						   ON r.RestaurantId = p.RestaurantId\n"
+                            + "						   JOIN Account a\n"
+                            + "						   ON a.AccountId = r.AccountId\n"
+                            + "                            WHERE IsFlashSale = 1 \n"
+                            + "                                AND TimeFrame = 4 \n"
+                            + "                                AND startTime <= CAST('" + date + " 19:00:00' AS DATETIME)\n"
+                            + "                            AND (endTime >= CAST('" + date + " 22:00:00' AS DATETIME) OR endTime IS NULL);";
+                }
+            }
+            ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listProductSale.add(new ProductSale(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getDouble(4),
-                        rs.getDouble(5),
-                        rs.getInt(6),
-                        rs.getInt(7)
-                ));
+                listSale.add(new ProductSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5), rs.getString(6), rs.getDouble(7), rs.getInt(8),rs.getString(9),rs.getInt(10)));
+
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return listProductSale;
+        return listSale;
     }
-    public static void main(String[] args) {
+
+    public ProductSaleDetailDTO getProductSaleDetailById(int productId) throws SQLException {
+        try {
+            String sql = "select ps.ProductID, p.Name,p.Description,p.ImageURL , ps.Quantity, ps.Discount, ps.SalePrice,p.Price\n"
+                    + "from Product p\n"
+                    + "join Product_Sale ps\n"
+                    + "on ps.ProductID = p.ProductId\n"
+                    + "where ps.ProductID = ?";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new ProductSaleDetailDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public List<ProductSaleDTO1> ListProductFlashSale() throws SQLException {
+        List<ProductSaleDTO1> list = new ArrayList<>();
+        try {
+            String sql = "SELECT ps.ProductID,\n"
+                    + "       p.Name,\n"
+                    + "       ps.IsFlashSale,\n"
+                    + "       p.ImageURL,\n"
+                    + "       ps.Quantity,\n"
+                    + "       ps.Discount,\n"
+                    + "       ps.SalePrice,\n"
+                    + "       p.Price,\n"
+                    + "       ps.TimeFrame,\n"
+                    + "       ps.StartTime,\n"
+                    + "       ps.EndTime\n"
+                    + "FROM Product p\n"
+                    + "JOIN Product_Sale ps ON ps.ProductID = p.ProductID\n"
+                    + "WHERE CAST(ps.StartTime AS DATE) = CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ProductSaleDTO1(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9)));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public void ChangeStatusFlashSale(int isFlashSale, int productId) throws SQLException {
+        try {
+            String sql = "UPDATE [dbo].[Product_Sale] SET [IsFlashSale] = ? WHERE ProductID = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, isFlashSale);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        List<ProductSale> listProductSale = dao.getProductSale();
-        for (ProductSale productSale : listProductSale) {
-            System.out.println(productSale);
-            
-        }
+        System.out.println(dao.getProductIsFlashSale("2024-07-15", 2));
+
     }
+
 }

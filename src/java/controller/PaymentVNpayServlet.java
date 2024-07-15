@@ -52,7 +52,7 @@ public class PaymentVNpayServlet extends HttpServlet {
             String vnp_Version = "2.1.0";
             String vnp_Command = "pay";
             String orderType = "billpayment";
-            long amount = cost * 10000;
+            long amount = cost *100;
             String bankCode = "";
 
             String vnp_TxnRef = Config.getRandomNumber(8);

@@ -44,6 +44,7 @@ public class LoadOpenProductControl extends HttpServlet {
             String pID = request.getParameter("pid");
             String cID = request.getParameter("cid");
             String status = request.getParameter("status");
+            String isSale = request.getParameter("isSale");
             ProductDAO dao = new ProductDAO();
             CategoryDAO dao1 = new CategoryDAO();
             Product p = dao.getProductByID(Integer.parseInt(pID));
@@ -53,6 +54,7 @@ public class LoadOpenProductControl extends HttpServlet {
             request.setAttribute("cid", cID);
             request.setAttribute("listC", listC);
             request.setAttribute("status", status);
+            request.setAttribute("isSale", isSale);
 
             request.getRequestDispatcher("EditOpenProduct.jsp").forward(request, response);
         } catch (SQLException ex) {

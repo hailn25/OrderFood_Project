@@ -7,7 +7,6 @@ package controller;
 import dao.FeedbackDAO;
 import dao.ProductDAO;
 import dao.ProductHomeDAO;
-import dao.ProductSaleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,7 +18,6 @@ import model.CategoryListDetail;
 import model.Feedback;
 import model.Product;
 import model.ProductHome;
-import model.ProductSale;
 
 /**
  *
@@ -41,6 +39,7 @@ public class DetailServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("pid");
         String fId = request.getParameter("ProductID");
+        String isSale = request.getParameter("isSale");
 
         // Fetch the product details
         ProductHomeDAO dao = new ProductHomeDAO();
@@ -52,10 +51,9 @@ public class DetailServlet extends HttpServlet {
 
         // Fetch products from the same category
         List<ProductHome> listSameCategoryProducts = dao.getProductByCategoryId(categoryId);
+        List<ProductHome> listProductByIsSale = dao.getProductByIsSale();
 
-        // Fetch other necessary details
-        ProductSaleDAO dao1 = new ProductSaleDAO();
-        List<ProductSale> listProductSale = dao1.getProductSale();
+        // Fetch other necessary details    
         List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
         List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
 
@@ -65,8 +63,8 @@ public class DetailServlet extends HttpServlet {
         // Set attributes for the request
         request.setAttribute("detail", p);
         request.setAttribute("listSameCategoryProducts", listSameCategoryProducts);
-        request.setAttribute("listProductSale", listProductSale);
         request.setAttribute("listCategoryListDetail", listCategoryListDetail);
+        request.setAttribute("listProductByIsSale", listProductByIsSale);
         request.setAttribute("listBSL", listBestSellerProduct);
         request.setAttribute("reviews", listFeedback); // Add this line to set feedback
 

@@ -46,7 +46,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="description">Mô tả</label>
-                                        <textarea class="form-control validate tm-small" rows="5" name="description" required></textarea>
+                                        <textarea id="description1" class="form-control validate tm-small" rows="5" name="description" required></textarea>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Loại sản phẩm</label>
@@ -56,12 +56,21 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="category">Trạng thái</label>
-                                        <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
-                                            <option value="1">Bật</option>
-                                            <option value="0">Tắt</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="status">Trạng thái</label>
+                                            <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
+                                                <option value="1">Bán hàng</option>
+                                                <option value="0">Ẩn</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="sale">Sale</label>
+                                            <select style="color: white" class="custom-select tm-select-accounts" name="sale" required>
+                                                <option value="0">Tắt</option>
+                                                <option value="1">Bật</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
@@ -104,7 +113,7 @@
                                     <a href="managerOpenProduct" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
                                 </div>
                                 <div class="col-6">
-                                    <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" />
+                                    <input type="submit" id="submit" class="btn btn-primary btn-block text-uppercase" value="Tạo ngay" />
                                 </div>
                             </div>
                         </form>

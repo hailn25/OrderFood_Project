@@ -64,24 +64,26 @@ public class LoginServlet extends HttpServlet {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                    request.getRequestDispatcher("revenueAdmin").forward(request, response);
+                    request.getRequestDispatcher("HomeOfAdmin.jsp").forward(request, response);
                 } else if (a.getRoleId() == 3) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                    request.getRequestDispatcher("Shipper.jsp").forward(request, response);
+                    request.getRequestDispatcher("managerShipper").forward(request, response);
                 } else if (a.getRoleId() == 4) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
-                    request.getRequestDispatcher("revenueRestaurant").forward(request, response);
-                }else if (a.getRoleId() == 5) {
+
+                    request.getRequestDispatcher("HomeOfRestaurant.jsp").forward(request, response);
+
+                } else if (a.getRoleId() == 5) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("ManagerStaff.jsp").forward(request, response);
                 }
-                
+
             }
         }
     }

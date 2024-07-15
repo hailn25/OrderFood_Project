@@ -7,62 +7,131 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Thông tin cá nhân</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
             body {
-                margin-top: 20px;
-                background: #f8f8f8
+                font-family: 'Roboto', sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding: 0;
+            }
+
+            .custom-header {
+                background-color: #81C408;
+                color: #fff;
+                padding: 10px;
+                width: 100%;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+                margin: 0;
             }
 
             .avatar {
                 display: flex;
-                justify-content: center; /* căn giữa theo chiều ngang */
-                align-items: center; /* căn giữa theo chiều dọc */
-                width: 190px; /* Chiều rộng cố định của avatar */
+                justify-content: center;
+                align-items: center;
+                width: 190px;
                 height: 190px;
-                overflow: hidden; /* Ảnh sẽ bị cắt bớt nếu vượt quá kích thước của avatar */
-
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin: 0 auto 20px;
             }
 
             .avatar-img {
-                max-width: 100%; /* hình ảnh không vượt quá kích thước của ô avatar */
-                max-height: 100%; /* hình ảnh không vượt quá kích thước của ô avatar */
-                display: block; /* đảm bảo hình ảnh không bị căn giữa dọc */
-                margin: auto; /* căn giữa hình ảnh */
+                max-width: 100%;
+                max-height: 100%;
             }
 
             .nav {
                 display: flex;
-                flex-wrap: wrap;
-                gap: 10px; /* Khoảng cách giữa các mục */
-                list-style-type: none; /* Loại bỏ các dấu đầu dòng */
-                padding: 0; /* Xóa padding mặc định của danh sách */
+                flex-direction: column;
+                gap: 10px;
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
             }
 
             .nav-item {
-                flex: 1 1 100%; /* Mỗi mục chiếm hết chiều rộng của cột */
-                max-width: 100%; /* Đảm bảo mỗi mục không vượt quá chiều rộng tối đa */
+                width: 100%;
             }
 
             .nav-link {
                 display: block;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #f8f9fa;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s;
             }
 
-            .username{
+            .nav-link:hover {
+                background-color: #e2e6ea;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-control {
+                border: none;
+                border-bottom: 2px solid #ddd;
+                padding: 0.5rem;
+                font-size: 1rem;
+                background-color: transparent;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-bottom: 2px solid #81C408;
+            }
+
+            .btn-primary {
+                background-color: #81C408;
+                border: none;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #6ba306;
+            }
+
+            .username {
                 display: block;
                 text-align: center;
+                margin-bottom: 10px;
+                font-size: 1.2rem;
+                color: #555;
+            }
+
+            .content-section {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
         </style>
     </head>
     <body>
         <div class="container">
+            <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4">
+                <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
+                <div class="d-flex align-items-center">
+                    <span class="mr-3">Xin chào, ${account.name}</span>
+                    <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                </div>
+            </header>
             <div class="row flex-lg-nowrap">
                 <div class="col-12 col-lg-auto mb-3" style="width: 250px;">
                     <div class="card p-3">
@@ -72,32 +141,95 @@
                                     <img id="avatarImage" src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
                                 </div>
                             </div>
-
                             <c:choose>
                                 <c:when test="${sessionScope.account.roleId == 2}">
                                     <ul class="nav">
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="home"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Thông tin cá nhân</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="ChangePasswordProfile.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Đổi mật khẩu</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="Voucher.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>voucher</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="OrderHistory.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Lịch sử đơn hàng</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="OrderTracking.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Theo dõi đơn hàng</span></a></li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="home">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="#">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>                                 
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đơn hàng</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
-                                        <li class="nav-item"><a class="nav-link px-3 active" href="revenueRestaurant"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Trang chủ</span></a></li>                                      
-                                        <li class="nav-item"><a class="nav-link px-3" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Thông tin cá nhân</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="ChangePasswordProfile.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Đổi mật khẩu</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-3" href="SettingBanner.jsp"><i class="fa fa-fw fa-cog mr-1"></i><span>Setting banner</span></a></li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="SettingBanner.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Setting banner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </c:when>
+                                <c:when test="${sessionScope.account.roleId == 3}">
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
+                                                <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Đổi mật khẩu</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="SettingBanner.jsp">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Setting banner</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="#">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </c:when>
                             </c:choose>
                         </div>
-
                     </div>
                 </div>
-
                 <div class="col">
                     <div class="row">
                         <div class="col mb-3">
@@ -105,7 +237,6 @@
                                 <div id="personalInfo" class="content-section">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h6 class="mb-3 text-primary">Thông Tin Cá Nhân</h6>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">

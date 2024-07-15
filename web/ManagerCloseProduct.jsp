@@ -87,7 +87,7 @@
                             </li>
                         </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 1}">
+                        <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
                                 <a class="nav-link" href="managerCategory">
                                     <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -104,11 +104,11 @@
                         </c:if>
 
                         <c:if test="${sessionScope.account.roleId == 4}">                          
-                            <li class="nav-item">
+<!--                            <li class="nav-item">
                                 <a class="nav-link active" href="managerCloseProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
                                 </a>
-                            </li>
+                            </li>-->
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item dropdown">

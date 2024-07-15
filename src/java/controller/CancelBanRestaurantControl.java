@@ -4,7 +4,8 @@
  */
 package controller;
 
-import dao.RevenueDAO;
+import dao.AccountDAO;
+import dao.ReportDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +13,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author hailt
+ * @author Vu Huy
  */
-@WebServlet(name = "RevenueOfWeb", urlPatterns = {"/RevenueOfWeb"})
-public class RevenueOfWeb extends HttpServlet {
+@WebServlet(name = "CancelBanRestaurantControl", urlPatterns = {"/cancelBanRestaurant"})
+public class CancelBanRestaurantControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,36 +37,18 @@ public class RevenueOfWeb extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RevenueDAO dao = new RevenueDAO();
-        LocalDate date = LocalDate.now();
-        int year = date.getYear();
-        double t1 = dao.getRevenueOfWeb(1) + (dao.AccountValid1(year) * 1000000);
-        double t2 = dao.getRevenueOfWeb(2) + (dao.AccountValid2(year) * 1000000);
-        double t3 = dao.getRevenueOfWeb(3) + (dao.AccountValid3(year) * 1000000);
-        double t4 = dao.getRevenueOfWeb(4) + (dao.AccountValid4(year) * 1000000);
-        double t5 = dao.getRevenueOfWeb(5) + (dao.AccountValid5(year) * 1000000);
-        double t6 = dao.getRevenueOfWeb(6) + (dao.AccountValid6(year) * 1000000);
-        double t7 = dao.getRevenueOfWeb(7) + (dao.AccountValid7(year) * 1000000);
-        double t8 = dao.getRevenueOfWeb(8) + (dao.AccountValid8(year) * 1000000);
-        double t9 = dao.getRevenueOfWeb(9) + (dao.AccountValid9(year) * 1000000);
-        double t10 = dao.getRevenueOfWeb(10) + (dao.AccountValid10(year) * 1000000);
-        double t11 = dao.getRevenueOfWeb(11) + (dao.AccountValid11(year) * 1000000);
-        double t12 = dao.getRevenueOfWeb(12) + (dao.AccountValid12(year) * 1000000);
-
-        request.setAttribute("t1", t1);
-        request.setAttribute("t2", t2);
-        request.setAttribute("t3", t3);
-        request.setAttribute("t4", t4);
-        request.setAttribute("t5", t5);
-        request.setAttribute("t6", t6);
-        request.setAttribute("t7", t7);
-        request.setAttribute("t8", t8);
-        request.setAttribute("t9", t9);
-        request.setAttribute("t10", t10);
-        request.setAttribute("t11", t11);
-        request.setAttribute("t12", t12);
-        request.getRequestDispatcher("ManagerDashboard.jsp").forward(request, response);
-
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet CancelBanRestaurantControl</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet CancelBanRestaurantControl at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -77,7 +63,17 @@ public class RevenueOfWeb extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            ReportDAO dao = new ReportDAO();
+            int restaurantId = Integer.parseInt(request.getParameter("rid"));
+
+            dao.deleteReport(String.valueOf(restaurantId));
+            request.getRequestDispatcher("managerReportOfStaff").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConfirmBanRestaurantControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ConfirmBanRestaurantControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

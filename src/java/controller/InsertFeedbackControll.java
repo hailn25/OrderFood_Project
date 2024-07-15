@@ -8,19 +8,19 @@ import dao.FeedbackDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author ADMIN
  */
+@MultipartConfig
 public class InsertFeedbackControll extends HttpServlet {
 
     /**
@@ -77,29 +77,40 @@ public class InsertFeedbackControll extends HttpServlet {
             throws ServletException, IOException {
         String rateStar = request.getParameter("rateStar");
         String feedbackText = request.getParameter("feedback");
-        String imageURL = request.getParameter("imageURL");
+        Part filePart = request.getPart("imageURL");
         String accountId = request.getParameter("accountName");
         String productId = request.getParameter("productId");
         String date = request.getParameter("date");
 
+        String fileName = extractFileName(filePart);
+        String savePath = fileName;
+        File fileSaveDir = new File(savePath);
+        filePart.write(savePath);
+
+        String imageURL =fileName; // Update this based on your setup
+
         try {
             FeedbackDAO dao = new FeedbackDAO();
             dao.insertFeedback(rateStar, feedbackText, imageURL, accountId, productId, date);
-
-            // Set success message in request attribute
             request.setAttribute("successMessage", "Phản hồi thành công!");
         } catch (SQLException | ClassNotFoundException ex) {
-            // Handle exceptions
             ex.printStackTrace();
-            // Set error message in request attribute
             request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
         }
 
-        // Forward to the same page (Feedback.jsp)
         request.getRequestDispatcher("Feedback.jsp").forward(request, response);
     }
 
-    
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+        }
+        return "";
+    }
 
     /**
      * Returns a short description of the servlet.

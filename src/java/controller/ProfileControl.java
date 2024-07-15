@@ -5,6 +5,7 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.ListOrderDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.ListOrder;
 
 /**
  *
@@ -42,7 +44,7 @@ public class ProfileControl extends HttpServlet {
         // Call DAO để lấy thông tin tài khoản dựa trên accountId
         AccountDAO accountDAO = new AccountDAO();
         Account account = accountDAO.getAccountByAId(accountId);
-
+        
         // Đặt thông tin tài khoản vào request attribute
         request.setAttribute("account", account);
 

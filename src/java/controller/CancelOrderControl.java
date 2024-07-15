@@ -35,7 +35,7 @@ public class CancelOrderControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int oid = Integer.parseInt(request.getParameter("oid"));
+            String oid = request.getParameter("oid");
             OrderDAO dao = new OrderDAO();
             dao.cancelOrderOfCustomer(oid);
             request.getRequestDispatcher("managerOrderOfCustomer_6").forward(request, response);
@@ -44,7 +44,6 @@ public class CancelOrderControl extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(CancelOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -86,5 +85,3 @@ public class CancelOrderControl extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
-
-    

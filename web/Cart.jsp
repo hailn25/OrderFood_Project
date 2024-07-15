@@ -1,12 +1,6 @@
-<%-- 
-    Document   : Cart
-    Created on : May 26, 2024, 2:54:53 PM
-    Author     : ADMIN
---%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +14,7 @@
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
         <!-- Icon Font Stylesheet -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
@@ -29,7 +23,6 @@
         <!-- Libraries Stylesheet -->
         <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -46,11 +39,9 @@
         </div>
         <!-- Spinner End -->
 
-
         <!-- Navbar start -->
         <jsp:include page="Header.jsp"></jsp:include>
             <!-- Navbar End -->
-
 
             <!-- Modal Search Start -->
             <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -71,7 +62,6 @@
             </div>
             <!-- Modal Search End -->
 
-
             <!-- Single Page Header start -->
             <div class="container-fluid page-header py-5">
                 <h1 class="text-center text-white display-6">Cart</h1>
@@ -83,140 +73,126 @@
             </div>
             <!-- Single Page Header End -->
 
-
             <!-- Cart Page Start -->
             <div class="container-fluid py-5">
                 <div class="container py-5">
-
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Products</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Handle</th>
+                                    <th scope="col">Sản phẩm</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
+                                    <th scope="col">Hủy</th>
                                 </tr>
                             </thead>
-
-                        <c:set var="o" value="${sessionScope.cart}"/>
-                        <c:forEach var="i" items="${o.items}"  >
-
-
-                            <tr>
-                                <th scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="img/${i.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                    </div>
-                                </th>
-                                <td>
-                                    <p class="mb-0 mt-4">${i.product.name}</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">
-                                        <fmt:formatNumber value="${i.price}" maxFractionDigits="3"/>
-                                    </p>
-
-                                </td>
-                                <td>
-                                    <c:if test="${not empty requestScope.mes}">
-                                        <div class="alert alert-warning" role="alert">
-                                            ${requestScope.mes}
+                            <tbody>
+                            <c:set var="o" value="${sessionScope.cart}"/>
+                            <c:forEach var="i" items="${o.items}">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="img/${i.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                         </div>
-                                    </c:if>
-                                    <div class="input-group  mt-4" style="width: 100px; border: none">
-                                        <div class="input-group-btn" style="border: none;">
-                                            <button><a href="process?num=-1&id=${i.product.productId}" style="border: none">-</a></button>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4">${i.product.name}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4">
+                                            <fmt:formatNumber value="${i.price*1000}" currencySymbol="VND" maxFractionDigits="0"/>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="${i.quantity}" data-product-id="${i.product.productId}" data-price="${i.price}" data-max-quantity="10">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <input type="text" style="width: 40px" readonly value="${i.quantity}"/>
-                                        <div class="input-group-btn">
-                                            <button><a href="process?num=1&id=${i.product.productId}">+</a></button>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>
-
-                                    <p class="mb-0 mt-4">
-                                        <fmt:formatNumber value="${i.quantity*i.price}" maxFractionDigits="3"/>
-                                    </p>
-                                </td>
-                                <td>
-                                    <!--                                    <form action="process" method="post">
-                                    
-                                                                            <input type="hidden" name="id" value="${i.product.productId}"/>
-                                                                            <input style="cursor: pointer; margin-top: 20px"  type="submit" value="Delete"/>
-                                    
-                                    
-                                                                        </form>-->
-                                    <form id="deleteForm${i.product.productId}" action="process" method="post">
-                                        <input type="hidden" name="id" value="${i.product.productId}"/>
-                                        <input style="cursor: pointer; margin-top: 20px" type="button" value="Delete" onclick="confirmDelete(event, 'deleteForm${i.product.productId}')"/>
-                                    </form>
-
-                                </td>
-
-                            </tr>
-                        </c:forEach>
-
-
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4 total-price">
+                                            <fmt:formatNumber value="${i.quantity * i.price*1000}" type="currency" currencySymbol="VND" maxFractionDigits="0"/>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <form id="deleteForm${i.product.productId}" action="process" method="post">
+                                            <input type="hidden" name="id" value="${i.product.productId}"/>
+                                            <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="confirmDelete(event, 'deleteForm${i.product.productId}')">
+                                                <i class="fa fa-times text-danger"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-5">
-                    <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
+                <div class="container mt-5">
+                    <div class="mt-5">
+                        <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Chọn Voucher</button>
+                    </div>
+                         
+                        <th scope="row"></th>
+                        <td class="py-5">
+                            <p class="mb-0 text-dark py-4">Shipping</p>
+                        </td>
+                        <td colspan="3" class="py-5">
+                            <div class="form-check text-start">
+                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                                <label class="form-check-label" for="Shipping-1">Free Shipping</label>
+                            </div>
+                            <div class="form-check text-start">
+                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
+                                <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                            </div>
+                            <div class="form-check text-start">
+                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
+                                <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                            </div>
+                        
+                    </tr>
                 </div>
+
                 <div class="row g-4 justify-content-end">
-                    <div class="col-8"></div>
-                    <div class="row g-4 justify-content-end">
-                        <div class="col-8"></div>
-                        <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
-                            <div class="bg-light rounded">
-                                <div class="p-4">
-                                    <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
-                                    <c:set var="subtotal" value="0"/>
-                                    <c:forEach var="i" items="${o.items}">
-                                        <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
-                                    </c:forEach>
-                                    <div class="d-flex justify-content-between mb-4">
-                                        <h5 class="mb-0 me-4">Subtotal:</h5>
-                                        <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
-                                    </div>
-                                    <div class="mb-4">
-                                        <p class="mb-0 text-dark py-4">Shipping</p>
-                                        <div class="form-check text-start">
-                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping" value="Free">
-                                            <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                                        </div>
-                                        <div class="form-check text-start">
-                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping" value="FlatRate">
-                                            <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                                        </div>
-                                        <div class="form-check text-start">
-                                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping" value="LocalPickup">
-                                            <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
-                                        </div>
-                                    </div>
+                    <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                        <div class="bg-light rounded">
+                            <div class="p-4">
+                                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                                <c:set var="subtotal" value="0"/>
+                                <c:forEach var="i" items="${o.items}">
+                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price*1000)}"/>
+                                </c:forEach>
+
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="mb-0 me-4">Subtotal:</h5>
+                                    <span class="subtotal"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0"/></span>
                                 </div>
                                 <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                     <h5 class="mb-0 ps-4 me-4">Total</h5>
-                                    <fmt:formatNumber value="${subtotal}" maxFractionDigits="2"/>
+                                    <span class="cart-total"><fmt:formatNumber value="${subtotal}"  currencySymbol="VND" maxFractionDigits="0"/></span>
                                 </div>
+
                                 <form action="checkout" method="get">
                                     <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
                                 </form>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
-        <!-- Cart Page End -->
 
         <jsp:include page="Footer.jsp"></jsp:include>
         <script>
@@ -228,10 +204,109 @@
             }
         </script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const quantityInputs = document.querySelectorAll('.quantity-input');
+
+                function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
+                    if (newQuantity < 1) {
+                        alert('Số lượng không hợp lệ');
+                        return;
+                    }
+                    if (newQuantity > maxQuantity) {
+                        alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                        return;
+                    }
+
+                    quantityInput.value = newQuantity;
+                    updatePrice(quantityInput, newQuantity);
+                    updateTotal();
+
+                    const productId = quantityInput.dataset.productId;
+                    const url = 'process?productId=' + productId + '&quantity=' + newQuantity;
+
+                    fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                            })
+                            .then(data => {
+                                // Handle any response data if necessary
+                            })
+                            .catch(error => {
+                                console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                            });
+                }
+
+                function updatePrice(quantityInput, quantity) {
+                    const pricePerItem = parseFloat(quantityInput.dataset.price);
+                    const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
+                    const totalPrice = quantity * pricePerItem * 1000;
+                    totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+                }
+
+                function updateTotal() {
+                    let total = 0;
+                    const rows = document.querySelectorAll('tbody > tr');
+                    rows.forEach(function (row) {
+                        const priceElement = row.querySelector('.total-price');
+                        total += parseFloat(priceElement.innerText.replace(/[^\d.-]/g, ''));
+                    });
+                    const subtotalElement = document.querySelector('.subtotal');
+                    subtotalElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(total);
+                    const totalElement = document.querySelector('.cart-total');
+                    totalElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(total);
+                }
+
+                quantityInputs.forEach(function (quantityInput) {
+                    const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+                    const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+                    const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+
+                    btnPlus.addEventListener('click', function () {
+                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+                    });
+
+                    btnMinus.addEventListener('click', function () {
+                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+                    });
+
+                    quantityInput.addEventListener('input', function () {
+                        let newValue = parseInt(quantityInput.value);
+                        if (isNaN(newValue) || newValue < 1) {
+                            newValue = 1;
+                        }
+                        updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                    });
+
+                    quantityInput.addEventListener('keyup', function (event) {
+                        if (event.keyCode === 13) {
+                            let newValue = parseInt(quantityInput.value);
+                            if (isNaN(newValue) || newValue < 1) {
+                                newValue = 1;
+                            }
+                            updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                        }
+                    });
+
+                    updatePrice(quantityInput, parseInt(quantityInput.value));
+                });
+            });
+
+        </script>
+        <script>
+            function confirmDelete(event, formId) {
+                event.preventDefault(); // Ngăn chặn việc gửi form ngay lập tức
+                if (confirm('Bạn có muốn xoá sản phẩm khỏi giỏ hàng không?')) {
+                    document.getElementById(formId).submit(); // Gửi form nếu người dùng xác nhận
+                }
+            }
+        </script>
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
-
+        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
 
         <!-- JavaScript Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -242,7 +317,6 @@
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
         <!-- Template Javascript -->
-        <script src="js/main.js"></script>
     </body>
 
 </html>

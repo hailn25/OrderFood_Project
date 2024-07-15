@@ -5,6 +5,8 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.RestaurantDAO;
+import dao.ShipperDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -39,12 +41,27 @@ public class EditAccountControl extends HttpServlet {
             String status = request.getParameter("status");
             String roleId = request.getParameter("role");
             String oldRoleId = request.getParameter("oldRoleId");
+            String oldStatus = request.getParameter("oldStatus");
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
 
-            if (oldRoleId.compareTo(roleId) == 0) {
+            if (oldRoleId.compareTo(roleId) != 0 || oldStatus.compareTo(oldStatus) != 0) {
                 LocalDate updateDate = LocalDate.now();
                 AccountDAO dao = new AccountDAO();
-                dao.editAccountR(roleId, status,updateDate.toString() ,accountId);
+                dao.editAccountR(roleId, status, updateDate.toString(), accountId);
+
+                if (roleId.compareTo("4") == 0) {
+                    RestaurantDAO dao1 = new RestaurantDAO();
+                    dao1.insertRestaurant(name, email, phone, address, accountId);
+                }
+                if (roleId.compareTo("3") == 0) {
+                    ShipperDAO dao2 = new ShipperDAO();
+                    dao2.insertShipper(name, phone, accountId);
+                }
                 request.getRequestDispatcher("managerAccount").forward(request, response);
+
             } else {
                 AccountDAO dao = new AccountDAO();
                 dao.editAccount(roleId, status, accountId);

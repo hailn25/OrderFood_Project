@@ -4,45 +4,43 @@
  */
 package model;
 
-import java.util.Date;
 
 /**
  *
  * @author ADMIN
  */
 public class ListOrder {
-
-    int accountId;
-    String accountName;
-    String email;
-    String phone;
-    String address;
-    String paymentBy;
-    String paymantStatus;
-    Date createDate;
-    String note;
-    String ProductName;
-    double price;
-    int quantity;
-    double totalMoney;
+    private int accountId;
+    private String productName;
+    private double price;
+    private String imageURL;
+    private String restaurant;
+    private String accountName;
+    private String phone;
+    private String address;
+    private String note;
+    private int quantity;
+    private double totalMoney;
+    private int orderStatusId;
+    private String status;
 
     public ListOrder() {
     }
 
-    public ListOrder(int accountId, String accountName, String email, String phone, String address, String paymentBy, String paymantStatus, Date createDate, String note, String ProductName, double price, int quantity, double totalMoney) {
+    public ListOrder(int accountId, String productName, double price, String imageURL, String restaurant, String accountName, String phone, String address, String note, int quantity, double totalMoney, int orderStatusId, String status) {
         this.accountId = accountId;
+        this.productName = productName;
+        this.price = price;
+        this.imageURL = imageURL;
+        this.restaurant = restaurant;
         this.accountName = accountName;
-        this.email = email;
         this.phone = phone;
         this.address = address;
-        this.paymentBy = paymentBy;
-        this.paymantStatus = paymantStatus;
-        this.createDate = createDate;
         this.note = note;
-        this.ProductName = ProductName;
-        this.price = price;
         this.quantity = quantity;
         this.totalMoney = totalMoney;
+        this.orderStatusId = orderStatusId;
+        this.status = status;
     }
 
     public int getAccountId() {
@@ -53,20 +51,44 @@ public class ListOrder {
         this.accountId = accountId;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(String restaurant) {
+        this.restaurant = restaurant;
+    }
+
     public String getAccountName() {
         return accountName;
     }
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhone() {
@@ -85,52 +107,12 @@ public class ListOrder {
         this.address = address;
     }
 
-    public String getPaymentBy() {
-        return paymentBy;
-    }
-
-    public void setPaymentBy(String paymentBy) {
-        this.paymentBy = paymentBy;
-    }
-
-    public String getPaymantStatus() {
-        return paymantStatus;
-    }
-
-    public void setPaymantStatus(String paymantStatus) {
-        this.paymantStatus = paymantStatus;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public String getProductName() {
-        return ProductName;
-    }
-
-    public void setProductName(String ProductName) {
-        this.ProductName = ProductName;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public int getQuantity() {
@@ -149,11 +131,26 @@ public class ListOrder {
         this.totalMoney = totalMoney;
     }
 
+    public int getOrderStatusId() {
+        return orderStatusId;
+    }
+
+    public void setOrderStatusId(int orderStatusId) {
+        this.orderStatusId = orderStatusId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "ListOrder{" + "accountId=" + accountId + ", accountName=" + accountName + ", email=" + email + ", phone=" + phone + ", address=" + address + ", paymentBy=" + paymentBy + ", paymantStatus=" + paymantStatus + ", createDate=" + createDate + ", note=" + note + ", ProductName=" + ProductName + ", price=" + price + ", quantity=" + quantity + ", totalMoney=" + totalMoney + '}';
+        return "ListOrder{" + "accountId=" + accountId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + '}';
     }
     
     
-
 }
