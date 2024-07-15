@@ -43,8 +43,6 @@ public class Product {
         this.status = status;
     }
 
-    
-
     public int getProductId() {
         return productId;
     }

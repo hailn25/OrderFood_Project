@@ -82,7 +82,13 @@
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link " href="managerProductFlashSale">
+                                    <i class="far fa-clock"></i> Flash Sale
+                                </a>
+                            </li>
+                        </c:if>
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerVoucher">
@@ -90,6 +96,7 @@
                                 </a>
                             </li>
                         </c:if>
+
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -118,7 +125,7 @@
                             <h2>Quản lý <b>Blog</b></h2>
                         </div>
                         <div class="col-sm-6">
-                            <a href="managerAddBlog"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm bài viết mới</span></a>
+                            <a href="managerAddBlog"  class="btn btn-success" data-toggle="modal" id="btn-add"><i class="material-icons">&#xE147;</i> <span>Thêm bài viết mới</span></a>
                         </div>
                     </div>
                 </div>
@@ -209,3 +216,5 @@
         </script>
     </body>
 </html>
+
+

@@ -47,6 +47,7 @@
                                         <input id="accountId" name="accountId" type="hidden" value="${detail.accountId}" class="form-control validate" />
                                         <input id="OldImage" name="OldImage" type="hidden" value="${detail.imageAvatar}" class="form-control validate" />
                                         <input id="oldRoleId" name="oldRoleId" type="hidden" value="${roleId}" class="form-control validate" />
+                                        <input id="oldStatus" name="oldStatus" type="hidden" value="${status}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="email">Email</label>

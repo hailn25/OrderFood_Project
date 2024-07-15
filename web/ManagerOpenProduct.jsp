@@ -52,7 +52,7 @@
     <body id="reportsPage" style="background-color: #F6F6F6">
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="revenueRestaurant">
+                <a class="navbar-brand" href="HomeOfRestaurant.jsp">
                     <c:if test="${not empty sessionScope.account.name}">
                         <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
                         </c:if>
@@ -67,10 +67,18 @@
                     aria-label="Toggle navigation"
                     >
                     <i class="fas fa-bars tm-nav-icon"></i>
-</button>
+                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
+                        <c:if test="${sessionScope.account.roleId == 4}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="HomeOfRestaurant.jsp">
+                                    <i class="fas fa-home"></i> Trang chủ
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item">
                                 <a class="nav-link" href="revenueRestaurant">
@@ -79,7 +87,7 @@
                                 </a>
                             </li>
                         </c:if>
-                        <c:if test="${sessionScope.account.roleId == 1}">
+                        <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
                                 <a class="nav-link" href="managerCategory">
                                     <i class="far fa-file-alt"></i> Loại sản phẩm
@@ -88,35 +96,35 @@
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">                          
                             <li class="nav-item">
-                                <a class="nav-link active" href="managerOpenProduct">
+                                <a class="nav-link active" href="managerOpenProduct" id="btn-viewListProduct">
                                     <i class="fas fa-shopping-cart"></i> Sản phẩm đang bán
                                 </a>
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerCloseProduct">
-                                    <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
-                                </a>
-                            </li>
+                            <!--                            <li class="nav-item">
+                                                            <a class="nav-link" href="managerCloseProduct">
+                                                                <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
+                                                            </a>
+                                                        </li>-->
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                        <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
-                                        <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
-                                    </a>
-                                    <div class="dropdown-menu" id="dropdownMenu">
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
-                                    </div>
-                                </li>
+                                <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
+                                    <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
+                                    <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                                </a>
+                                <div class="dropdown-menu" id="dropdownMenu">
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
+                                    <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
+                                </div>
+                            </li>
                         </c:if>
 
                         <c:if test="${sessionScope.account.roleId == 4}">                          
@@ -152,7 +160,7 @@
                             <h2>Quản lý sản phẩm<b> đang bán</b></h2>
                         </div>
                         <div class="col-sm-6">
-                            <a href="managerAddOpenProduct"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm mới</span></a>
+                            <a href="managerAddOpenProduct"  id="btn-addNewProduct" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm mới</span></a>
                         </div>
                     </div>
                 </div>
@@ -170,16 +178,26 @@
                     <tbody>
                         <c:forEach items="${listP}" var="o">
                             <tr>
-<td>${o.productId}</td>
+                                <td>${o.productId}</td>
                                 <td>${o.name}</td>
                                 <td>${o.quantity}</td>
-                                <td><fmt:formatNumber value="${o.price}" type="number" minFractionDigits="0" maxFractionDigits="0" /> đ</td>
+                                <td><fmt:formatNumber value="${o.price * 1000}" pattern="###,### VNĐ" /></td>
                                 <td>
                                     <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
                                 </td>
                                 <td>
-                                    <a href="loadOpenProduct?pid=${o.productId}&cid=${o.categoryId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
+                                    <a href="loadOpenProduct?pid=${o.productId}&cid=${o.categoryId}&isSale=${o.isSale}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>
                                     <a href="closeProduct?pid=${o.productId}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Ẩn sản phẩm" style="color: gray">&#xe8f5;</i></a>
+                                    <c:if test="${o.isSale == true}">
+                                        <a href="saleProduct?pid=${o.productId}&isSale=${o.isSale ? "1" : "0"}" onclick="confirmTurnOffSale(event)" class="delete" data-toggle="modal">
+                                            <i class="material-icons fas fa-toggle-on" style="color: green" data-toggle="tooltip" title="Tắt sale sản phẩm"></i>
+                                        </a>
+                                    </c:if>
+                                    <c:if test="${o.isSale == false}">
+                                        <a href="saleProduct?pid=${o.productId}&isSale=${o.isSale ? "1" : "0"}" onclick="confirmTurnOnSale(event)" class="delete" data-toggle="modal">
+                                            <i class="material-icons fas fa-toggle-off" style="color: green" data-toggle="tooltip" title="Bật sale sản phẩm">&#xE872;</i>
+                                        </a>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -197,7 +215,7 @@
 
 
         <script>
-                                        new DataTable('#example');
+                                            new DataTable('#example');
         </script>
         <script>
             function formatPrice(price) {
@@ -226,7 +244,7 @@
                     for (var i = 0; i < dropdowns.length; i++) {
                         var openDropdown = dropdowns[i];
                         if (openDropdown.classList.contains('show')) {
-openDropdown.classList.remove('show');
+                            openDropdown.classList.remove('show');
                         }
                     }
                 }
@@ -237,6 +255,41 @@ openDropdown.classList.remove('show');
                 var dropdownMenu = document.getElementById("dropdownMenu");
                 dropdownMenu.classList.toggle("show");
             }
+        </script>
+        <script>
+            function confirmTurnOffSale(event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+                var confirmAction = confirm("Bạn có chắc chắn muốn tắt sale sản phẩm này không?");
+
+                if (confirmAction) {
+                    window.location.href = event.target.closest('a').href;
+                }
+            }
+
+            function confirmTurnOnSale(event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+                var userConfirmed = confirm("Bạn có chắc muốn sale sản phẩm này không?");
+
+                if (userConfirmed) {
+                    window.location.href = event.currentTarget.href;
+                }
+            }
+
+// Gắn hàm confirmDelete vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Khoá tài khoản"
+            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Tắt sale sản phẩm"]').forEach(function (element) {
+                element.onclick = function (event) {
+                    confirmDelete(event);
+                };
+            });
+
+// Gắn hàm confirmOpen vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Mở khoá tài khoản"
+            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Bật sale sản phẩm"]').forEach(function (element) {
+                element.onclick = function (event) {
+                    confirmOpen(event);
+                };
+            });
         </script>
 
 

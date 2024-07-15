@@ -8,6 +8,9 @@ import dal.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +22,7 @@ public class RevenueDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public long getTotalMoneyByMonth(int restaurantId, int month, int year) {
+    public double getTotalMoneyByMonth(int restaurantId, int month, int year) {
         String sql = "SELECT \n"
                 + "    MONTH(o.FinishDate) AS Month,\n"
                 + "    YEAR(o.FinishDate) AS Year,\n"
@@ -46,7 +49,7 @@ public class RevenueDAO {
             ps.setInt(3, year);
             rs = ps.executeQuery();
             if (rs.next()) {
-                long totalMoney = rs.getLong("TotalMoney");
+                double totalMoney = rs.getDouble("TotalMoney");
                 return totalMoney;
             }
         } catch (Exception e) {
@@ -55,20 +58,26 @@ public class RevenueDAO {
         return 0;
     }
 
-    public long getRevenueOfWeb(int month) {
+//    public static void main(String[] args) {
+//        RevenueDAO dao = new RevenueDAO();
+//        System.out.println(dao.getRevenueSliderOfWeb());
+//    }
+
+    public double getRevenueOfWeb(int month, int year) {
         String sql = "SELECT \n"
-                + "    MONTH(O.FinishDate) AS month,\n"
-                + "    YEAR(O.FinishDate) AS year,\n"
-                + "    SUM(O.TotalMoney) AS total_revenue\n"
-                + "FROM \n"
-                + "    [Order] O\n"
-                + "WHERE \n"
-                + "    O.OrderStatusId = 3\n"
-                + "    AND MONTH(O.FinishDate) = ?\n"
-                + "GROUP BY \n"
-                + "    YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
-                + "ORDER BY \n"
-                + "    YEAR(O.FinishDate), MONTH(O.FinishDate);";
+                + "               MONTH(O.FinishDate) AS month,\n"
+                + "            YEAR(O.FinishDate) AS year,\n"
+                + "            SUM(O.TotalMoney) AS total_revenue\n"
+                + "        FROM \n"
+                + "        [Order] O\n"
+                + "          WHERE \n"
+                + "            O.OrderStatusId = 3\n"
+                + "                 AND MONTH(O.FinishDate) = ?\n"
+                + "				 AND YEAR(O.FinishDate) = ?\n"
+                + "              GROUP BY \n"
+                + "                YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
+                + "             ORDER BY \n"
+                + "                 YEAR(O.FinishDate), MONTH(O.FinishDate)";
 
         // Initialize resources
         Connection conn = null;
@@ -80,12 +89,13 @@ public class RevenueDAO {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, month);
+            ps.setInt(2, year);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                double totalRevenue = rs.getDouble("total_revenue");
+                double totalRevenue = rs.getDouble("total_revenue") * 1000;
                 double finalRevenue = totalRevenue * 0.05;
-                return (long) finalRevenue;
+                return Math.ceil(finalRevenue);
             }
         } catch (Exception e) {
             // Handle exceptions and possibly log them
@@ -109,22 +119,47 @@ public class RevenueDAO {
         return 0;
     }
 
+    public double getRevenueSliderOfWeb() {
+        try {
+            String sql = """
+                                     select count(SliderId)
+                                     from Slider
+                                     where SliderStatusId = 3""";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1) * 500000;
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RevenueDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RevenueDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     public int AccountValid1(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?) \n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 1""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -142,23 +177,27 @@ public class RevenueDAO {
     }
 
     public int AccountValid2(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 2""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -178,25 +217,29 @@ public class RevenueDAO {
     }
 
     public int AccountValid3(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "    );";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 3;""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -218,27 +261,31 @@ public class RevenueDAO {
     }
 
     public int AccountValid4(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                         COUNT(AccountId) AS number_of_accounts
+                     FROM 
+                         Account
+                     WHERE 
+                         Account.RoleId = 4
+                         AND (
+                             (Account.Status = 1 AND (
+                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                             ))
+                             OR 
+                             (
+                                 Account.Status = 0 AND (
+                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                                 )
+                             )
+                         )
+                         AND MONTH(LastDateLogin) >= 4""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -263,29 +310,33 @@ public class RevenueDAO {
     }
 
     public int AccountValid5(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 5""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -312,31 +363,35 @@ public class RevenueDAO {
     }
 
     public int AccountValid6(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 6""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -365,33 +420,37 @@ public class RevenueDAO {
     }
 
     public int AccountValid7(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                         COUNT(AccountId) AS number_of_accounts
+                     FROM 
+                         Account
+                     WHERE 
+                         Account.RoleId = 4
+                         AND (
+                             (Account.Status = 1 AND (
+                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                             ))
+                             OR 
+                             (
+                                 Account.Status = 0 AND (
+                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                                 )
+                             )
+                         )
+                         AND MONTH(LastDateLogin) >= 7""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -422,35 +481,39 @@ public class RevenueDAO {
     }
 
     public int AccountValid8(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 8""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -483,37 +546,41 @@ public class RevenueDAO {
     }
 
     public int AccountValid9(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(CreateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 9""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -548,39 +615,43 @@ public class RevenueDAO {
     }
 
     public int AccountValid10(int year) {
-        String sql = "SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                             COUNT(AccountId) AS number_of_accounts
+                         FROM 
+                             Account
+                         WHERE 
+                             Account.RoleId = 4
+                             AND (
+                                 (Account.Status = 1 AND (
+                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
+                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                         			OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                                 ))
+                                 OR 
+                                 (
+                                     Account.Status = 0 AND (
+                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
+                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                                     )
+                                 )
+                             )
+                             AND MONTH(LastDateLogin) >= 10""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -617,41 +688,45 @@ public class RevenueDAO {
     }
 
     public int AccountValid11(int year) {
-        String sql = "	SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 9 AND YEAR(CreateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                         COUNT(AccountId) AS number_of_accounts
+                     FROM 
+                         Account
+                     WHERE 
+                         Account.RoleId = 4
+                         AND (
+                             (Account.Status = 1 AND (
+                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
+                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
+                             ))
+                             OR 
+                             (
+                                 Account.Status = 0 AND (
+                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
+                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
+                                 )
+                             )
+                         )
+                         AND MONTH(LastDateLogin) >= 11""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -690,43 +765,47 @@ public class RevenueDAO {
     }
 
     public int AccountValid12(int year) {
-        String sql = "	SELECT \n"
-                + "    COUNT(AccountId) AS number_of_accounts,\n"
-                + "    COUNT(CASE \n"
-                + "              WHEN (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
-                + "                   OR (MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
-                + "              THEN 1 \n"
-                + "              ELSE NULL \n"
-                + "          END) AS accounts_to_charge_fee\n"
-                + "FROM \n"
-                + "    Account\n"
-                + "WHERE \n"
-                + "    Account.RoleId = 4\n"
-                + "    AND Account.Status = 1\n"
-                + "    AND (\n"
-                + "        (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)\n"
-                + "        OR (MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)\n"
-                + "    )";
+        String sql = """
+                     SELECT 
+                         COUNT(AccountId) AS number_of_accounts
+                     FROM 
+                         Account
+                     WHERE 
+                         Account.RoleId = 4
+                         AND (
+                             (Account.Status = 1 AND (
+                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)
+                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
+                     			OR (MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
+                             ))
+                             OR 
+                             (
+                                 Account.Status = 0 AND (
+                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)
+                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
+                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
+                                 )
+                             )
+                         )
+                         AND MONTH(LastDateLogin) >= 12""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -766,8 +845,4 @@ public class RevenueDAO {
         return 0;
     }
 
-    public static void main(String[] args) {
-        RevenueDAO dao = new RevenueDAO();
-        System.out.println(dao.AccountValid3(2024));
-    }
 }

@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.OrderDTO;
 import model.OrderDetailDTO;
 import  model.ViewDetail;
@@ -33,19 +35,19 @@ public class ViewOrderByShipper extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    throws ServletException, IOException, Exception {
         OrderDAO orderDAO = new OrderDAO();
     String action = request.getParameter("action");
     int orderId = Integer.parseInt(request.getParameter("oid"));
 
     if ("view".equals(action)) {     
-        orderDAO.getOrderDetailByoid(orderId);
+        orderDAO.getOrderDetailByOidD(orderId);
     }
     
     ViewDetail listView = orderDAO.getViewDetailslByoid(orderId);
     request.setAttribute("listV", listView);
     
-    ArrayList<OrderDetailDTO> listOrderDetail = orderDAO.getOrderDetailByOid(orderId);
+    ArrayList<OrderDetailDTO> listOrderDetail = orderDAO.getOrderDetailByOidD(orderId);
     request.setAttribute("listOrderDetail", listOrderDetail);
     
     // Chuyển tiếp đến JSP hiển thị chi tiết đơn hàng
@@ -63,7 +65,11 @@ public class ViewOrderByShipper extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ViewOrderByShipper.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } 
 
     /** 
@@ -76,7 +82,11 @@ public class ViewOrderByShipper extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ViewOrderByShipper.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** 

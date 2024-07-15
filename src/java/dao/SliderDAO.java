@@ -129,10 +129,8 @@ public class SliderDAO {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         SliderDAO dao = new SliderDAO();
-        for (SliderDTO s : dao.getAllSliderDTO()) {
-            System.out.println(s.toString());
-        }
+        dao.insertSlider("adsads", "asđ.img", 1, 1, 1, "2024-07-15", "2024-07-15", "adasdad");
     }
 }

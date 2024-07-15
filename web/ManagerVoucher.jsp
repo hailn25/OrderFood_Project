@@ -72,7 +72,13 @@
                                     </a>
                                 </li>
                             </c:if>
-
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link " href="managerProductFlashSale">
+                                        <i class="far fa-clock"></i> Flash Sale
+                                    </a>
+                                </li>
+                            </c:if>
                             <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
                                     <a class="nav-link active" href="managerVoucher">
@@ -144,7 +150,7 @@
 
                                 <td>
                                     <a href="editVoucher?vid=${v.voucherId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
-                                    
+
                                     <a href="deleteVoucher?vid=${v.voucherId}" class="delete" data-toggle="modal" onclick="confirmDelete(event)"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
 

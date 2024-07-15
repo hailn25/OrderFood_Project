@@ -78,16 +78,18 @@ public class InsertFeedbackControll extends HttpServlet {
         String rateStar = request.getParameter("rateStar");
         String feedbackText = request.getParameter("feedback");
         Part filePart = request.getPart("imageURL");
-        String accountId = request.getParameter("accountName");
+        String accountId = request.getParameter("accountId");
         String productId = request.getParameter("productId");
         String date = request.getParameter("date");
+        
+        
 
         String fileName = extractFileName(filePart);
         String savePath = fileName;
         File fileSaveDir = new File(savePath);
         filePart.write(savePath);
 
-        String imageURL =fileName; // Update this based on your setup
+        String imageURL = fileName; // Update this based on your setup
 
         try {
             FeedbackDAO dao = new FeedbackDAO();

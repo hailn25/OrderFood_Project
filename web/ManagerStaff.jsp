@@ -75,11 +75,17 @@
                                     </a>
                                 </li>
                             </c:if>
-                                
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link " href="managerProductFlashSale">
+                                        <i class="far fa-clock"></i> Flash Sale
+                                    </a>
+                                </li>
+                            </c:if>
                             <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerVoucher">
-                                       <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
+                                        <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
                                     </a>
                                 </li>
                             </c:if>
@@ -414,3 +420,5 @@
     </body>
 
 </html>
+
+

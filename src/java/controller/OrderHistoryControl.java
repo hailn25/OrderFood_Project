@@ -34,7 +34,6 @@ public class OrderHistoryControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         int accountId = 0;
         int orderStatusId = 0;
 
@@ -49,12 +48,12 @@ public class OrderHistoryControl extends HttpServlet {
         ListOrderDAO listOrderDAO = new ListOrderDAO();
         List<ListOrder> listOrders = listOrderDAO.getListOrderById(orderStatusId, accountId);
         request.setAttribute("listOrders", listOrders);
-        
+
         List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusId, accountId);
         request.setAttribute("listOrderById_V1", listOrderById_V1);
 
         // Forward to profile page where order history will be displayed
-        request.getRequestDispatcher("Order.jsp").forward(request, response);
+        request.getRequestDispatcher("ShowOrder.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

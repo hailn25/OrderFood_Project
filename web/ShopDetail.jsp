@@ -153,48 +153,15 @@
                                                         </div>
                                                     </div>
                                                     <p>${review.feedback}</p>
+                                                    <c:if test="${not empty review.imageURL}">
+                                                        <img src="img/${review.imageURL}" style="width: 100px; height: 100px;">
+                                                    </c:if>
                                                 </div>
                                             </div>
                                         </c:forEach>
                                     </div>
-
                                 </div>
-                            </div>
-                            <form action="#">
-                                <h4 class="mb-5 fw-bold">Leave a Reply</h4>
-                                <div class="row g-4">
-                                    <div class="col-lg-6">
-                                        <div class="border-bottom rounded">
-                                            <input type="text" class="form-control border-0 me-4" placeholder="Yur Name *">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="border-bottom rounded">
-                                            <input type="email" class="form-control border-0" placeholder="Your Email *">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="border-bottom rounded my-4">
-                                            <textarea name="" id="" class="form-control border-0" cols="30" rows="8" placeholder="Your Review *" spellcheck="false"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="d-flex justify-content-between py-3 mb-5">
-                                            <div class="d-flex align-items-center">
-                                                <p class="mb-0 me-3">Please rate:</p>
-                                                <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                    <i class="fa fa-star text-muted"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <a href="#" class="btn border border-secondary text-primary rounded-pill px-4 py-3"> Post Comment</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>                           
                         </div>
                     </div>
                     <div class="col-lg-4 col-xl-3">
@@ -218,19 +185,7 @@
                                             </div>
                                         </div>
                                     </c:forEach>
-                                </div>
-                                <div class="col-lg-12 text-center">
-                                    <button class="btn btn-primary px-4 py-2" id="load-more-btn" onclick="toggleProducts()">Xem thêm</button>
-                                    <button class="btn btn-secondary px-4 py-2 d-none" id="show-less-btn" onclick="toggleProducts()">Thu gọn</button>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="position-relative">
-                                        <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
-                                        <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
-                                            <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                              
                             </div>
                         </div>
                     </div>
@@ -280,24 +235,24 @@
                 <!-- Template Javascript -->
                 <script src="js/main.js"></script>
                 <script>
-                                        // Lấy giá trị sao từ thuộc tính JSP
-                                        var rating = ${detail.rateStar};
-                                        var starContainer = document.getElementById('star-rating');
+                    // Lấy giá trị sao từ thuộc tính JSP
+                    var rating = ${detail.rateStar};
+                    var starContainer = document.getElementById('star-rating');
 
-                                        for (var i = 1; i <= 5; i++) {
-                                            var star = document.createElement('i');
-                                            star.className = 'fa fa-star';
-                                            if (i <= Math.floor(rating)) {
-                                                star.classList.add('text-primary'); // Đổi màu sao được đánh giá
-                                            } else {
-                                                star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
-                                            }
-                                            if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                                                star.className = 'fa fa-star-half'; // Nửa sao
-                                                star.classList.add('text-primary');
-                                            }
-                                            starContainer.appendChild(star);
-                                        }
+                    for (var i = 1; i <= 5; i++) {
+                        var star = document.createElement('i');
+                        star.className = 'fa fa-star';
+                        if (i <= Math.floor(rating)) {
+                            star.classList.add('text-primary'); // Đổi màu sao được đánh giá
+                        } else {
+                            star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
+                        }
+                        if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                            star.className = 'fa fa-star-half'; // Nửa sao
+                            star.classList.add('text-primary');
+                        }
+                        starContainer.appendChild(star);
+                    }
             </script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {

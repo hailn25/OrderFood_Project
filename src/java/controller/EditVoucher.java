@@ -84,7 +84,7 @@ public class EditVoucher extends HttpServlet {
         } catch (ParseException ex) {
             Logger.getLogger(EditVoucher.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("error", "Ngày phát hành hoặc ngày kết thúc không hợp lệ");
-            request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status"))));
+
             request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
             return;
         }
@@ -94,7 +94,7 @@ public class EditVoucher extends HttpServlet {
         int lengthDescription = Validation.removeAllBlank(description).length();
         if (lengthVoucherName == 0 || lengthDescription == 0 || request.getParameter("status") == null) {
             request.setAttribute("error", error);
-            request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status"))));
+
             request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
         } else {
             int status = Integer.parseInt(request.getParameter("status"));
