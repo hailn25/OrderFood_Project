@@ -18,11 +18,13 @@ public class Voucher {
     private Date releaseDate;
     private Date finishDate;
     private int status;
+    private float discount;
+    private int voucherCategoryId;
 
     public Voucher() {
     }
 
-    public Voucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status) {
+    public Voucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId) {
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.description = description;
@@ -30,6 +32,8 @@ public class Voucher {
         this.releaseDate = releaseDate;
         this.finishDate = finishDate;
         this.status = status;
+        this.discount = discount;
+        this.voucherCategoryId = voucherCategoryId;
     }
 
     public int getVoucherId() {
@@ -88,9 +92,26 @@ public class Voucher {
         this.status = status;
     }
 
+    public float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
+    }
+
+    public int getVoucherCategoryId() {
+        return voucherCategoryId;
+    }
+
+    public void setVoucherCategoryId(int voucherCategoryId) {
+        this.voucherCategoryId = voucherCategoryId;
+    }
+
     @Override
     public String toString() {
-        return "Voucher{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + '}';
+        return "Voucher{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + '}';
     }
+
     
 }

@@ -67,41 +67,46 @@ public class EditVoucher extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+ protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
         VoucherDAO voucherDAO = new VoucherDAO();
         int voucherId = Integer.parseInt(request.getParameter("id"));
         String voucherName = request.getParameter("voucherName");
         String description = request.getParameter("description");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        int voucherCategoryId = Integer.parseInt(request.getParameter("voucherCategoryId"));
         Date releaseDate = null;
         Date finishDate = null;
-
-        try {
-            releaseDate = dateFormat.parse(request.getParameter("releaseDate"));
-            finishDate = dateFormat.parse(request.getParameter("finishDate"));
-        } catch (ParseException ex) {
-            Logger.getLogger(EditVoucher.class.getName()).log(Level.SEVERE, null, ex);
-            request.setAttribute("error", "Ngày phát hành hoặc ngày kết thúc không hợp lệ");
-            request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status"))));
-            request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
-            return;
-        }
-
+        float discount = Float.parseFloat(request.getParameter("discount"));
+        releaseDate = dateFormat.parse(request.getParameter("releaseDate"));
+        finishDate = dateFormat.parse(request.getParameter("finishDate"));
         String error = "Thông tin không hợp lệ";
         int lengthVoucherName = Validation.removeAllBlank(voucherName).length();
         int lengthDescription = Validation.removeAllBlank(description).length();
+        
         if (lengthVoucherName == 0 || lengthDescription == 0 || request.getParameter("status") == null) {
             request.setAttribute("error", error);
-            request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status"))));
+            request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, Integer.parseInt(request.getParameter("status")), discount, voucherCategoryId));
             request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
         } else {
             int status = Integer.parseInt(request.getParameter("status"));
-            voucherDAO.editVoucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status);
+            voucherDAO.editVoucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, voucherCategoryId);
             response.sendRedirect("managerVoucher");
         }
+    } catch (ParseException ex) {
+        Logger.getLogger(EditVoucher.class.getName()).log(Level.SEVERE, null, ex);
+        request.setAttribute("error", "Invalid date format");
+        request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
+    } catch (NumberFormatException ex) {
+        Logger.getLogger(EditVoucher.class.getName()).log(Level.SEVERE, null, ex);
+        request.setAttribute("error", "Invalid input format");
+        request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
     }
+}
+
 
     /**
      * Returns a short description of the servlet.

@@ -41,7 +41,10 @@ public class VoucherDAO {
                         rs.getInt(4),
                         rs.getDate(5),
                         rs.getDate(6),
-                        rs.getInt(7)));
+                        rs.getInt(7),
+                        rs.getFloat(8),
+                        rs.getInt(9)
+                ));
             }
         } catch (SQLException ex) {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,11 +54,11 @@ public class VoucherDAO {
         return listVoucher;
     }
 
-    public void addVoucher(String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status) {
+    public void addVoucher(String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId) {
         try {
             String sql = "INSERT INTO [dbo].[Voucher] (\n"
-                    + "    [VoucherName], [Description], [Quantity], [ReleaseDate], [FinishDate], [Status]\n"
-                    + ") VALUES (?, ?, ?, ?, ?, ?);";
+                    + "    [VoucherName], [Description], [Quantity], [ReleaseDate], [FinishDate], [Status],[Discount],[VoucherCategoryId]\n"
+                    + ") VALUES (?, ?, ?, ?, ?, ?,?,?);";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, voucherName);
@@ -64,6 +67,8 @@ public class VoucherDAO {
             ps.setDate(4, new java.sql.Date(releaseDate.getTime()));
             ps.setDate(5, new java.sql.Date(finishDate.getTime()));
             ps.setInt(6, status);
+            ps.setFloat(7, discount);
+            ps.setInt(8, voucherCategoryId);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,51 +77,55 @@ public class VoucherDAO {
         }
     }
 
-    public void editVoucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            String sql = "UPDATE [dbo].[Voucher]\n"
-                    + "SET [VoucherName] = ?, \n"
-                    + "    [Description] = ?, \n"
-                    + "    [Quantity] = ?, \n"
-                    + "    [ReleaseDate] = ?, \n"
-                    + "    [FinishDate] = ?, \n"
-                    + "    [Status] = ?\n"
-                    + "WHERE [VoucherId] = ?;";
-            con = new DBContext().getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, voucherName);
-            ps.setString(2, description);
-            ps.setInt(3, quantity);
-            ps.setDate(4, new java.sql.Date(releaseDate.getTime()));
-            ps.setDate(5, new java.sql.Date(finishDate.getTime()));
-            ps.setInt(6, status);
-            ps.setInt(7, voucherId);
-
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // Đảm bảo đóng PreparedStatement và Connection
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, e);
-                }
+  public void editVoucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId) {
+    Connection con = null;
+    PreparedStatement ps = null;
+    try {
+        String sql = "UPDATE [dbo].[Voucher]\n"
+                + "SET [VoucherName] = ?, \n"
+                + "    [Description] = ?, \n"
+                + "    [Quantity] = ?, \n"
+                + "    [ReleaseDate] = ?, \n"
+                + "    [FinishDate] = ?, \n"
+                + "    [Status] = ?, \n"
+                + "    [Discount] = ?, \n"
+                + "    [VoucherCategoryId] = ? \n"
+                + "WHERE [VoucherId] = ?;";
+        con = new DBContext().getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, voucherName);
+        ps.setString(2, description);
+        ps.setInt(3, quantity);
+        ps.setDate(4, new java.sql.Date(releaseDate.getTime()));
+        ps.setDate(5, new java.sql.Date(finishDate.getTime()));
+        ps.setInt(6, status);
+        ps.setFloat(7, discount);
+        ps.setInt(8, voucherCategoryId);
+        ps.setInt(9, voucherId);
+        ps.executeUpdate();
+    } catch (SQLException ex) {
+        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ClassNotFoundException ex) {
+        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+     
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, e);
             }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, e);
-                }
+        }
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }
+}
+
 
     public void deleteVoucher(int voucherId) {
         try {
@@ -150,7 +159,9 @@ public class VoucherDAO {
                         rs.getInt(4),
                         rs.getDate(5),
                         rs.getDate(6),
-                        rs.getInt(7));
+                        rs.getInt(7),
+                        rs.getFloat(8),
+                        rs.getInt(9));
             }
         } catch (SQLException ex) {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,13 +191,9 @@ public class VoucherDAO {
             ps1.setString(5, finishDate);
             ps1.setString(6, status);
             ps1.executeUpdate();
-
-            // Retrieve the generated VoucherId
             rs = ps1.getGeneratedKeys();
             if (rs.next()) {
                 String voucherId = rs.getString(1);
-
-                // Insert into AccountVoucher table
                 String sql2 = "INSERT INTO AccountVoucher ([AccountId], [VoucherId]) "
                         + "VALUES (?, ?)";
                 ps2 = conn.prepareStatement(sql2);
@@ -195,10 +202,10 @@ public class VoucherDAO {
                 ps2.executeUpdate();
             }
 
-            conn.commit();  // Commit transaction
+            conn.commit();
         } catch (Exception ex) {
             if (conn != null) {
-                conn.rollback();  // Rollback transaction in case of error
+                conn.rollback();
             }
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -215,5 +222,9 @@ public class VoucherDAO {
                 conn.close();
             }
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 }

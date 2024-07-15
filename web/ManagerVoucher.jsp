@@ -126,9 +126,11 @@
                             <th>Mã giảm giá</th>
                             <th>Nội dung</th>
                             <th>Số lượng</th>
+                            <th>Giảm giá </th>
                             <th>Ngày phát hành</th>
                             <th>Ngày  kết thúc</th>
                             <th>Trạng thái  </th>
+                             <th>Loại voucher  </th>
                             <th>Tác vụ </th>
 
                         </tr>
@@ -141,10 +143,14 @@
                                 <td>${v.voucherName}</td>
                                 <td>${v.description}</td>
                                 <td>${v.quantity}</td>
+                                 <td>${v.discount}</td>
                                 <td>${v.releaseDate}</td>
                                 <td>${v.finishDate}</td>
                                 <td style="color: ${v.status == 1 ? 'green' : 'red'};">
                                     ${v.status == 1 ? "Đang hiển thị" : "Đang ẩn"}
+                                </td>
+                                  <td style="color: ${v.voucherCategoryId == 1 ? 'green' : 'blue'};">
+                                    ${v.voucherCategoryId== 1 ? "FreeShip" : "Voucher Nhà Hàng"}
                                 </td>
 
 

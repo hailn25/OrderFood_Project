@@ -112,7 +112,7 @@
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="${i.quantity}" data-product-id="${i.product.productId}" data-price="${i.price}" data-max-quantity="10">
+                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="${i.quantity}" data-product-id="${i.product.productId}" data-price="${i.price}" data-max-quantity=${maxquantity}>
                                             <div class="input-group-btn">
                                                 <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                     <i class="fa fa-plus"></i>
@@ -143,26 +143,26 @@
                         <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
                         <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Chọn Voucher</button>
                     </div>
-                         
-                        <th scope="row"></th>
-                        <td class="py-5">
-                            <p class="mb-0 text-dark py-4">Shipping</p>
-                        </td>
-                        <td colspan="3" class="py-5">
-                            <div class="form-check text-start">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
-                                <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                            </div>
-                            <div class="form-check text-start">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
-                                <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                            </div>
-                            <div class="form-check text-start">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
-                                <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
-                            </div>
-                        
-                    </tr>
+
+                    <th scope="row"></th>
+                    <td class="py-5">
+                        <p class="mb-0 text-dark py-4">Shipping</p>
+                    </td>
+                    <td colspan="3" class="py-5">
+                        <div class="form-check text-start">
+                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                            <label class="form-check-label" for="Shipping-1">Free Shipping</label>
+                        </div>
+                        <div class="form-check text-start">
+                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
+                            <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                        </div>
+                        <div class="form-check text-start">
+                            <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
+                            <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                        </div>
+
+                        </tr>
                 </div>
 
                 <div class="row g-4 justify-content-end">
@@ -210,7 +210,7 @@
 
                 function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
                     if (newQuantity < 1) {
-                        alert('Số lượng không hợp lệ');
+                        confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId); // Gọi hàm xóa sản phẩm khi số lượng < 1
                         return;
                     }
                     if (newQuantity > maxQuantity) {
