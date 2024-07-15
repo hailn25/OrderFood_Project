@@ -98,7 +98,6 @@
                             <div class="form-group mb-3">
                                 <label for="finishDate">Ngày kết thúc</label>
                                 <input id="finishDate" name="finishDate" type="date" required class="form-control validate" />
-                                
                             </div>
                             <div class="form-group mb-3">
                                 <label for="status">Trạng thái</label><br>
