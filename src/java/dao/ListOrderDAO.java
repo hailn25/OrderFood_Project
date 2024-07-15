@@ -45,11 +45,11 @@ public class ListOrderDAO {
                     + "    od.TotalMoney,\n"
                     + "	os.OrderStatusId,\n"
                     + "	os.Status\n"
-                    + "FROM [Order_Food_V8].[dbo].[Order] o\n"
-                    + "JOIN [Order_Food_V8].[dbo].[OrderDetail] od ON o.OrderId = od.OrderId\n"
-                    + "JOIN [Order_Food_V8].[dbo].[Product] p ON od.ProductId = p.ProductId\n"
-                    + "JOIN [Order_Food_V8].[dbo].[OrderStatus] os ON o.OrderStatusId = os.OrderStatusId\n"
-                    + "JOIN [Order_Food_V8].[dbo].[Restaurant] r ON p.RestaurantId = r.RestaurantId\n"
+                    + "FROM [dbo].[Order] o\n"
+                    + "JOIN [dbo].[OrderDetail] od ON o.OrderId = od.OrderId\n"
+                    + "JOIN [dbo].[Product] p ON od.ProductId = p.ProductId\n"
+                    + "JOIN [dbo].[OrderStatus] os ON o.OrderStatusId = os.OrderStatusId\n"
+                    + "JOIN [dbo].[Restaurant] r ON p.RestaurantId = r.RestaurantId\n"
                     + "WHERE o.OrderStatusId = ? AND o.AccountId = ?";
 
             conn = new DBContext().getConnection();
@@ -116,6 +116,6 @@ public class ListOrderDAO {
 
     public static void main(String[] args) {
         ListOrderDAO dao = new ListOrderDAO();
-        System.out.println(dao.getListOrderById_V1(3, 6));
+        System.out.println(dao.getListOrderById(1, 6));
     }
 }

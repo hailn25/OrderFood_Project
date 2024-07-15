@@ -11,6 +11,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+        <!-- https://fonts.google.com/specimen/Roboto -->
+        <link rel="stylesheet" href="css/fontawesome.min.css">
+        <!-- https://fontawesome.com/ -->
         <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
         <script type="text/javascript">
             window.tailwind.config = {
@@ -110,7 +114,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-bold text-foreground">Đoạn chat</h2>
                 </div>
-                <input type="text" placeholder="Tìm kiếm trên Messenger" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                <input type="text" placeholder="Tìm kiếm trên Message" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
                 <div class="mb-4">
                     <h3 class="text-sm font-semibold text-foreground">Hộp thư</h3>
                     <h3 class="text-sm font-semibold text-foreground">Cộng đồng</h3>
@@ -150,8 +154,10 @@
                     </div>
                 </div>
                 <div class="p-4 border-t border-border bg-card">
-                    <input type="text" placeholder="Nhập tin nhắn..." class="w-full p-2 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                    <input type="text" placeholder="Nhập tin nhắn..." style="width:95%"  class="w-full p-2 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                    <button style="margin-left: 10px">
                     <i class="far fa-paper-plane"></i>
+                    </button>
                 </div>
 
             </div>

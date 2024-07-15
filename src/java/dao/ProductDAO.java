@@ -169,15 +169,14 @@ public class ProductDAO {
         }
     }
 
+    
     public void editProduct(String name, String price, String description,
-
             String img, String categoryId, String isSale, String quantity, String status,
             Date updateDate, String productId) throws SQLException {
 
         try {
             String sql = "update [dbo].[Product]\n"
                     + "set [Name] = ?, [Price] = ?, [Description] = ?, [ImageURL] = ?, [CategoryId] = ?, [IsSale] = ?, [Quantity] = ?, [Status] = ?, [UpdateDate] = ?\n"
-
                     + "where [ProductId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -186,10 +185,16 @@ public class ProductDAO {
             ps.setString(3, description);
             ps.setString(4, img);
             ps.setString(5, categoryId);
+            ps.setString(6, isSale);
+            ps.setString(7, quantity);
+            ps.setString(8, status);
+            ps.setDate(9, updateDate);
+            ps.setString(10, productId);
             ps.executeUpdate();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
          public void updatePriceSale_on(String productId) {
         try {

@@ -54,7 +54,7 @@ public class OrderHistoryControl extends HttpServlet {
         request.setAttribute("listOrderById_V1", listOrderById_V1);
 
         // Forward to profile page where order history will be displayed
-        request.getRequestDispatcher("Order.jsp").forward(request, response);
+        request.getRequestDispatcher("ShowOrder.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
