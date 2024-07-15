@@ -1,0 +1,39 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 21, 2024, 1:17:02 AM
+    Author     : hailt
+*/
+
+.input-group-btn {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px; /* Adjust spacing between buttons if needed */
+}
+
+.quantity-btn {
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Text color */
+    border: none;
+    padding: 5px 10px; /* Adjust padding as needed */
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px; /* Rounded corners */
+}
+
+.quantity-btn a {
+    color: #fff; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.quantity-input {
+    width: 40px;
+    text-align: center; /* Center text within input */
+    vertical-align: middle;
+    border: 1px solid #ccc; /* Input border */
+    padding: 5px; /* Adjust padding as needed */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
