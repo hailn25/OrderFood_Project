@@ -6,12 +6,15 @@ package controller;
 
 import dao.ListOrderDAO;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import model.Account;
 import model.ListOrder;
 import model.OrderDTO;
 
@@ -34,26 +37,50 @@ public class OrderHistoryControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         int accountId = 0;
         int orderStatusId = 0;
+        int orderId = 0;
 
-        if (request.getParameter("accountId") != null) {
-            accountId = Integer.parseInt(request.getParameter("accountId"));
+        // Lấy accountId từ session
+        Account account = (Account) request.getSession().getAttribute("account");
+        if (account != null) {
+            accountId = account.getAccountId();
         }
 
         if (request.getParameter("orderStatusId") != null) {
             orderStatusId = Integer.parseInt(request.getParameter("orderStatusId"));
         }
 
+        if (request.getParameter("cancelOrder") != null && request.getParameter("orderId") != null) {
+            orderId = Integer.parseInt(request.getParameter("orderId"));
+            ListOrderDAO listOrderDAO = new ListOrderDAO();
+
+           
+            boolean isUpdated = false;
+            try {
+                isUpdated = listOrderDAO.updateOrderStatus(accountId, orderId);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(OrderHistoryControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (isUpdated) {
+                // Thông báo cập nhật thành công
+                request.setAttribute("message", "Order has been canceled successfully.");
+            } else {
+                // Thông báo cập nhật thất bại
+                request.setAttribute("message", "Failed to cancel the order.");
+            }
+        }
+
+        // Lấy danh sách đơn hàng
         ListOrderDAO listOrderDAO = new ListOrderDAO();
         List<ListOrder> listOrders = listOrderDAO.getListOrderById(orderStatusId, accountId);
         request.setAttribute("listOrders", listOrders);
-        
+
         List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusId, accountId);
         request.setAttribute("listOrderById_V1", listOrderById_V1);
 
-        // Forward to profile page where order history will be displayed
+        // Chuyển tiếp tới trang hiển thị đơn hàng
         request.getRequestDispatcher("ShowOrder.jsp").forward(request, response);
     }
 
@@ -97,3 +124,5 @@ public class OrderHistoryControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

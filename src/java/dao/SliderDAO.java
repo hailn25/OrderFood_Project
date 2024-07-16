@@ -129,10 +129,66 @@ public class SliderDAO {
         }
     }
 
+    public SliderDTO getSliderBySliderId(int sliderId) {
+        SliderDTO slider = new SliderDTO();
+        try {
+            String sql = "SELECT Slider.SliderId, Slider.SliderTitle, Slider.ImageURL, Slider.Arrange, SliderStatus.StatusName, Slider.UpdateBy, Slider.CreateDate, Slider.UpdateDate, Slider.Backlink\n"
+                    + "FROM     Slider INNER JOIN\n"
+                    + "SliderStatus ON Slider.SliderStatusId = SliderStatus.SliderStatusId\n"
+                    + "WHERE Slider.SliderId = ?";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, sliderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                slider = new SliderDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getDate(7),
+                        rs.getDate(8),
+                        rs.getString(9));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return slider;
+    }
+
+    public String getRestaurantNameBySliderId(int sliderId) {
+        String restaurantName = "";
+        try {
+            String sql = "SELECT Restaurant.Name\n"
+                    + "FROM  Restaurant\n"
+                    + "WHERE Restaurant.RestaurantId = ?";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, sliderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                restaurantName = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return restaurantName;
+    }
+
     public static void main(String[] args) {
         SliderDAO dao = new SliderDAO();
         for (SliderDTO s : dao.getAllSliderDTO()) {
             System.out.println(s.toString());
         }
+        System.out.println(dao.getRestaurantNameBySliderId(1));
     }
 }
+
+

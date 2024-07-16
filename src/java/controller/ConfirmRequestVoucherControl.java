@@ -5,22 +5,21 @@
 
 package controller;
 
-import dao.RestaurantDAO;
+import dao.VoucherDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.RestaurantReportedDTO;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name="ManagerReportOfStaffControl", urlPatterns={"/managerReportOfStaff"})
-public class ManagerReportOfStaffControl extends HttpServlet {
+@WebServlet(name="ConfirmRequestVoucherControl", urlPatterns={"/confirmRequestVoucher"})
+public class ConfirmRequestVoucherControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,13 +30,8 @@ public class ManagerReportOfStaffControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-                response.setContentType("text/html;charset=UTF-8");
-        RestaurantDAO dao = new RestaurantDAO();
-        ArrayList<RestaurantReportedDTO> list = dao.getListRestaurantReported();
-        request.setAttribute("list", list);
         
-        request.getRequestDispatcher("ManagerReportOfStaff.jsp").forward(request, response);
-
+        
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -51,7 +45,10 @@ public class ManagerReportOfStaffControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        int voucherId = Integer.parseInt(request.getParameter("vid"));
+        VoucherDAO dao = new VoucherDAO();
+        dao.acceptRequestVoucher(voucherId);
+        response.sendRedirect("loadListRequestVoucher");
     } 
 
     /** 
@@ -77,5 +74,3 @@ public class ManagerReportOfStaffControl extends HttpServlet {
     }// </editor-fold>
 
 }
-
-

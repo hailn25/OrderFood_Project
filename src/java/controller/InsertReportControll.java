@@ -1,5 +1,6 @@
-
+package controller;
 import dao.FeedbackDAO;
+import dao.RestaurantDAO;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,6 +40,12 @@ public class InsertReportControll extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("Report.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String description = request.getParameter("description");
@@ -46,7 +53,15 @@ public class InsertReportControll extends HttpServlet {
         String restaurantId = request.getParameter("restaurantId");
         String status = request.getParameter("status");
         String createDate = request.getParameter("createDate");
-
+        int restaurantId_1 = 0;
+        if (request.getParameter("restaurantId") != null) {
+             restaurantId_1 = Integer.parseInt(request.getParameter("restaurantId"));
+        }
+        
+        
+        RestaurantDAO dao1 = new RestaurantDAO();
+        String restaurantName = dao1.getRestaurantNameByRestaurantId(restaurantId_1);
+        request.setAttribute("restaurantName", restaurantName);
         // Get the file part from the request
         Part filePart = request.getPart("imageURL");
         String fileName = extractFileName(filePart);
@@ -64,7 +79,7 @@ public class InsertReportControll extends HttpServlet {
 
         try {
             FeedbackDAO dao = new FeedbackDAO();
-            dao.insertReport(description, imageURL, accountId, restaurantId, status, createDate);
+            dao.insertReport(description, imageURL, accountId, String.valueOf(restaurantId), status, createDate);
 
             request.setAttribute("successMessage", "Phản hồi thành công!");
             request.getRequestDispatcher("Report.jsp").forward(request, response);
@@ -91,3 +106,5 @@ public class InsertReportControll extends HttpServlet {
         return "Short description";
     }
 }
+
+

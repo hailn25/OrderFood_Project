@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.CustomerName;
 import model.MessageRestaurant1;
+import model.MessageUser;
+import model.RestaurantName;
 
 /**
  *
@@ -182,6 +184,196 @@ public class MessageDAO {
         }
         return null;
     }
+    public ArrayList<RestaurantName> getListRestaurantName(int userId) {
+        ArrayList<RestaurantName> listRestaurant = new ArrayList<>();
+        try {
+
+            String sql = "SELECT r.Name, a.ImageAvatar AS RestaurantImage, a.AccountId\n"
+                    + "FROM Restaurant r\n"
+                    + "INNER JOIN Conversation c ON r.AccountId = c.RestaurantId\n"
+                    + "INNER JOIN Account a ON r.AccountId = a.AccountId\n"
+                    + "WHERE c.UserId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listRestaurant.add(new RestaurantName(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRestaurant;
+    }
+
+    public int getAccountIdByRestaurantId(int restaurantId) {
+        int accountId = 0;
+        try {
+            String sql = "SELECT AccountId\n"
+                    + "FROM Restaurant\n"
+                    + "WHERE RestaurantId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                accountId = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return accountId;
+    }
+
+    public ArrayList<MessageUser> getMessageUser(int senderId, int receiverId) {
+        ArrayList<MessageUser> listMessage = new ArrayList<>();
+        try {
+
+            String sql = "	SELECT \n"
+                    + "    m.MessageContent,\n"
+                    + "    m.Timestamp,\n"
+                    + "    sender.ImageAvatar AS SenderImageAvatar,\n"
+                    + "    receiver.ImageAvatar AS ReceiverImageAvatar,\n"
+                    + "    m.SenderId,\n"
+                    + "    m.ReceiverId\n"
+                    + "FROM \n"
+                    + "    Message m\n"
+                    + "INNER JOIN \n"
+                    + "    Conversation c ON m.ConversationId = c.ConversationId \n"
+                    + "INNER JOIN \n"
+                    + "    Account sender ON m.SenderId = sender.AccountId \n"
+                    + "INNER JOIN \n"
+                    + "    Account receiver ON m.ReceiverId = receiver.AccountId \n"
+                    + "WHERE \n"
+                    + "    (m.SenderId = ? AND m.ReceiverId = ?) OR (m.SenderId = ? AND m.ReceiverId = ?)\n"
+                    + "ORDER BY \n"
+                    + "    m.Timestamp ASC;";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, senderId);
+            ps.setInt(2, receiverId);
+            ps.setInt(3, receiverId);
+            ps.setInt(4, senderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listMessage.add(new MessageUser(rs.getString(1),
+                        rs.getTimestamp(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getInt(6)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listMessage;
+    }
+
+    public void insertMessageUser(int senderId, int receiverId, String messageContent) {
+        try {
+            int conversationId = 0;
+            String sql = "SELECT [ConversationId]\n"
+                    + "FROM [dbo].[Conversation]\n"
+                    + "WHERE  [UserId] = ? and [RestaurantId] = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, senderId);
+            ps.setInt(2, receiverId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                conversationId = rs.getInt(1);
+            }
+            if (conversationId != 0) {
+                String sql1 = "INSERT INTO Message (ConversationId, SenderId, ReceiverId, MessageContent)\n"
+                        + "VALUES (?, ?, ?, ?);";
+                Connection con1 = new DBContext().getConnection();
+                PreparedStatement ps1 = con1.prepareStatement(sql1);
+                ps1.setInt(1, conversationId);
+                ps1.setInt(2, senderId);
+                ps1.setInt(3, receiverId);
+                ps1.setString(4, messageContent);
+
+                ps1.executeUpdate();
+            } else {
+                String sql2 = "INSERT INTO Conversation (UserId, RestaurantId, StatusMessage)\n"
+                        + "VALUES (?, ?, 0);";
+                Connection con2 = new DBContext().getConnection();
+                PreparedStatement ps2 = con2.prepareStatement(sql2);
+                ps2.setInt(1, senderId);
+                ps2.setInt(2, receiverId);
+
+                ps2.executeUpdate();
+
+//                int conversationId1 = 0;
+//                String sql3 = "SELECT [ConversationId]\n"
+//                        + "FROM [dbo].[Conversation]\n"
+//                        + "WHERE  [UserId] = ? and [RestaurantId] = ?";
+//                Connection con3 = new DBContext().getConnection();
+//                PreparedStatement ps3 = con3.prepareStatement(sql3);
+//                ps3.setInt(1, senderId);
+//                ps3.setInt(2, receiverId);
+//                ResultSet rs3 = ps3.executeQuery();
+//                while (rs3.next()) {
+//                    conversationId1 = rs3.getInt(1);
+//                }
+//                String sql4 = "INSERT INTO Message (ConversationId, SenderId, ReceiverId, MessageContent)\n"
+//                        + "VALUES (?, ?, ?, ?);";
+//                Connection con4 = new DBContext().getConnection();
+//                PreparedStatement ps4 = con4.prepareStatement(sql4);
+//                ps4.setInt(1, conversationId);
+//                ps4.setInt(2, senderId);
+//                ps4.setInt(3, receiverId);
+//                ps4.setString(4, messageContent);
+//
+//                ps4.executeUpdate();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public ArrayList<RestaurantName> searchMessageUser(String restaurantName) {
+        ArrayList<RestaurantName> listRestaurant = new ArrayList<>();
+        try {
+
+            String sql = "SELECT DISTINCT \n"
+                    + "r.Name, a.ImageAvatar AS RestaurantImage, a.AccountId\n"
+                    + "FROM Restaurant r\n"
+                    + "INNER JOIN Conversation c ON r.AccountId = c.RestaurantId\n"
+                    + "INNER JOIN Account a ON r.AccountId = a.AccountId\n"
+                    + "WHERE r.Name like '%" + restaurantName + "%'";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listRestaurant.add(new RestaurantName(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listRestaurant;
+    }
+
+
+
 
     public static void main(String[] args) throws SQLException {
         MessageDAO m = new MessageDAO();

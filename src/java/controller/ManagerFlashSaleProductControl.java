@@ -4,28 +4,28 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
-import dao.SliderDAO;
+import dao.ProductSaleDAO;
+import dao.RestaurantDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
-import model.SliderDTO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Account;
+import model.ProductFlashSaleDTO;
 
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
-public class CategoryServlet extends HttpServlet {
+@WebServlet(name = "ManagerFlashSaleProductControl", urlPatterns = {"/managerFlashSaleProduct"})
+public class ManagerFlashSaleProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,34 +37,20 @@ public class CategoryServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
-        String cateID = request.getParameter("cid");
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
-        SliderDAO sliderDAO = new SliderDAO();
-        List<ProductHome> list = dao.getProductByCID(cateID);
-        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
-        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
+        int accountId = a.getAccountId();
+        RestaurantDAO dao2 = new RestaurantDAO();
+        int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
 
-        for (SliderDTO s : listSlider) {
-            if (s.getStatusName().equals("Xác nhận")) {
-                listSliderDot.add(s);
-            }
-        }
+        ProductSaleDAO dao = new ProductSaleDAO();
 
-        request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
-        request.setAttribute("listB", listBestSellerProduct);
-        request.setAttribute("listSlider", listSlider);
-        request.setAttribute("listSliderDot", listSliderDot);
+        ArrayList<ProductFlashSaleDTO> listP = dao.getFlashSaleProductByRestaurantId(restaurantId);
 
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
-
+        request.setAttribute("listP", listP);
+        request.getRequestDispatcher("ManagerFlashSaleProduct.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,7 +65,11 @@ public class CategoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ManagerFlashSaleProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -93,7 +83,11 @@ public class CategoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ManagerFlashSaleProductControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

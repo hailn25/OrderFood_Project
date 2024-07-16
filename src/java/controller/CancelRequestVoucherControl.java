@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.ProductDAO;
+import dao.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,20 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import model.Cart;
-import model.Item;
-import model.Product;
 
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
-@WebServlet(name = "AddToCartServlet", urlPatterns = {"/addtocart"})
-public class AddToCartServlet extends HttpServlet {
+@WebServlet(name = "CancelRequestVoucherControl", urlPatterns = {"/cancelRequestVoucher"})
+public class CancelRequestVoucherControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +37,10 @@ public class AddToCartServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddToCartServlet</title>");
+            out.println("<title>Servlet CancelRequestVoucherControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddToCartServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CancelRequestVoucherControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,7 +58,10 @@ public class AddToCartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int voucherId = Integer.parseInt(request.getParameter("vid"));
+        VoucherDAO dao = new VoucherDAO();
+        dao.cancelRequestVoucher(voucherId);
+        response.sendRedirect("loadListRequestVoucher");
     }
 
     /**
@@ -76,44 +72,10 @@ public class AddToCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(180);
-        Cart cart = null;
-        Object o = session.getAttribute("cart");
-        if (o != null) {
-            cart = (Cart) o;
-        } else {
-            cart = new Cart();
-        }
-
-        String productId = request.getParameter("productId");
-        String quantityStr = request.getParameter("quantity"); // Lấy giá trị quantity từ request
-        int quantity = 1; // Giá trị mặc định
-
-        if (quantityStr != null && !quantityStr.isEmpty()) {
-            quantity = Integer.parseInt(quantityStr);
-        }
-
-        try {
-            if (productId != null) {
-                int id = Integer.parseInt(productId);
-                ProductDAO dao = new ProductDAO();
-                Product p = dao.getProductByID(id);
-                double price = p.getPrice();
-                int maxquantity = dao.getQuantityProduct(id);
-                session.setAttribute("maxquantity", maxquantity);
-                Item t = new Item(p, quantity, price); // Sử dụng giá trị quantity lấy từ request
-                cart.addItem(t);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        List<Item> list = cart.getItems();
-        session.setAttribute("cart", cart);
-        session.setAttribute("size", list.size());
-        request.getRequestDispatcher("Cart.jsp").forward(request, response);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
@@ -127,5 +89,3 @@ public class AddToCartServlet extends HttpServlet {
     }// </editor-fold>
 
 }
-
-

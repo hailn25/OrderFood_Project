@@ -105,11 +105,13 @@ public class RestaurantDAO {
     public ArrayList<RestaurantReportedDTO> getListRestaurantReported() {
         ArrayList<RestaurantReportedDTO> list = new ArrayList<>();
         String sql = """
-                     SELECT Restaurant.RestaurantId, Restaurant.Name, Account.ImageAvatar, Restaurant.RateStar, Account.Status
-                     FROM Account INNER JOIN
-                     Report ON Account.AccountId = Report.AccountId INNER JOIN
-                     Restaurant ON Account.AccountId = Restaurant.AccountId AND Report.RestaurantId = Restaurant.RestaurantId
-                     WHERE dbo.Report.ReportStatusId = 3 and Account.Status = 1""";
+                     SELECT    Restaurant.RestaurantId, Restaurant.Name, Account.ImageAvatar, Restaurant.RateStar, Account.Status
+                                                               FROM        Report 
+                                                               inner join Restaurant on Restaurant.RestaurantId = Report.RestaurantId
+                                                               inner join Account on Account.AccountId = Restaurant.AccountId 
+                                                               WHERE Report.ReportStatusId = 3 and Account.Status = 1
+                     
+                     """;
         try {
 
             conn = new DBContext().getConnection();
@@ -174,6 +176,28 @@ public class RestaurantDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String getRestaurantNameByRestaurantId(int restaurantId) {
+        String restaurantName = "";
+        try {
+            String sql = "SELECT [Name]\n"
+                    + "FROM Restaurant\n"
+                    + "where RestaurantId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                restaurantName = rs.getString(1);
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return restaurantName;
     }
 
     public static void main(String[] args) {

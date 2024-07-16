@@ -4,28 +4,24 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
-import dao.SliderDAO;
+import dao.MessageDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
-import model.SliderDTO;
+import model.MessageUser;
+import model.RestaurantName;
 
 /**
  *
- * @author ADMIN
+ * @author quoch
  */
-public class CategoryServlet extends HttpServlet {
+@WebServlet(name = "MessageUserControl", urlPatterns = {"/messageUser"})
+public class MessageUserControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,32 +35,24 @@ public class CategoryServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String cateID = request.getParameter("cid");
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
-        SliderDAO sliderDAO = new SliderDAO();
-        List<ProductHome> list = dao.getProductByCID(cateID);
-        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
-        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
-
-        for (SliderDTO s : listSlider) {
-            if (s.getStatusName().equals("Xác nhận")) {
-                listSliderDot.add(s);
-            }
+        MessageDAO messsageDAO = new MessageDAO();
+        int userId = 0;
+        int restaurantStr = 0;
+        if(request.getParameter("userId") != null && request.getParameter("restaurantId") != null){
+             userId = Integer.parseInt(request.getParameter("userId"));
+             restaurantStr = Integer.parseInt(request.getParameter("restaurantId"));
         }
+        
+        request.setAttribute("userId", userId);
+        int restaurantId = messsageDAO.getAccountIdByRestaurantId(restaurantStr);
+        request.setAttribute("restaurantId", restaurantId);
 
-        request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
-        request.setAttribute("listB", listBestSellerProduct);
-        request.setAttribute("listSlider", listSlider);
-        request.setAttribute("listSliderDot", listSliderDot);
+        ArrayList<RestaurantName> listRestaurantName = messsageDAO.getListRestaurantName(userId);
+        request.setAttribute("listRestaurantName", listRestaurantName);
+        ArrayList<MessageUser> listMessageUser = messsageDAO.getMessageUser(userId, restaurantId);
+        request.setAttribute("listMessageUser", listMessageUser);
 
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
-
+        request.getRequestDispatcher("MessageUser.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

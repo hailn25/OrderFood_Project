@@ -11,6 +11,8 @@ package model;
  */
 public class ListOrder {
     private int accountId;
+    private int orderId;
+    private int productId;
     private String productName;
     private double price;
     private String imageURL;
@@ -27,8 +29,10 @@ public class ListOrder {
     public ListOrder() {
     }
 
-    public ListOrder(int accountId, String productName, double price, String imageURL, String restaurant, String accountName, String phone, String address, String note, int quantity, double totalMoney, int orderStatusId, String status) {
+    public ListOrder(int accountId, int orderId, int productId, String productName, double price, String imageURL, String restaurant, String accountName, String phone, String address, String note, int quantity, double totalMoney, int orderStatusId, String status) {
         this.accountId = accountId;
+        this.orderId = orderId;
+        this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.imageURL = imageURL;
@@ -49,6 +53,22 @@ public class ListOrder {
 
     public void setAccountId(int accountId) {
         this.accountId = accountId;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -149,8 +169,9 @@ public class ListOrder {
 
     @Override
     public String toString() {
-        return "ListOrder{" + "accountId=" + accountId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + '}';
+        return "ListOrder{" + "accountId=" + accountId + ", orderId=" + orderId + ", productId=" + productId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + '}';
     }
     
-    
 }
+
+

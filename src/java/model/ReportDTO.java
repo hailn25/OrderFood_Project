@@ -18,8 +18,20 @@ public class ReportDTO {
     private int accountId;
     private int restaurantId;
     private String statusName;
-
+    private String accountName;
+    private String restaurantName;
+    
     public ReportDTO() {
+    }
+    
+    public ReportDTO(int reportId, String description, String imageURL, Date createDate, String accountName, String restaurantName, String statusName){
+        this.reportId = reportId;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.createDate = createDate;
+        this.accountName = accountName;
+        this.restaurantName = restaurantName;
+        this.statusName = statusName;
     }
 
     public ReportDTO(int reportId, String description, String imageURL, Date createDate, int accountId, int restaurantId, String statusName) {
@@ -88,6 +100,22 @@ public class ReportDTO {
         this.statusName = statusName;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
     @Override
     public String toString() {
         return "ReportDTO{" + "reportId=" + reportId + ", description=" + description + ", imageURL=" + imageURL + ", createDate=" + createDate + ", accountId=" + accountId + ", restaurantId=" + restaurantId + ", statusName=" + statusName + '}';
@@ -95,3 +123,5 @@ public class ReportDTO {
     
     
 }
+
+

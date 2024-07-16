@@ -2,75 +2,53 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
-import dao.SliderDAO;
+import dao.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
-import model.SliderDTO;
+import model.Account;
+import model.VoucherOfUser;
 
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
-public class CategoryServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+@WebServlet(name="LoadVoucherRestaurantControl", urlPatterns={"/loadVoucherRestaurant"})
+public class LoadVoucherRestaurantControl extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String cateID = request.getParameter("cid");
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
-        SliderDAO sliderDAO = new SliderDAO();
-        List<ProductHome> list = dao.getProductByCID(cateID);
-        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
-        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
+        int accountId = a.getAccountId();
 
-        for (SliderDTO s : listSlider) {
-            if (s.getStatusName().equals("Xác nhận")) {
-                listSliderDot.add(s);
-            }
-        }
+        VoucherDAO dao = new VoucherDAO();
+        ArrayList<VoucherOfUser> listVoucherFreeship = dao.getAllVoucherRestaurantOfUser(accountId);
+        request.setAttribute("listVR", listVoucherFreeship);
 
-        request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
-        request.setAttribute("listB", listBestSellerProduct);
-        request.setAttribute("listSlider", listSlider);
-        request.setAttribute("listSliderDot", listSliderDot);
-
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
-
-    }
+        request.getRequestDispatcher("VoucherRestaurantPage.jsp").forward(request, response);
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -78,13 +56,12 @@ public class CategoryServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
-    }
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -92,13 +69,12 @@ public class CategoryServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

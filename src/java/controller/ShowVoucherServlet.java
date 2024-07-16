@@ -4,28 +4,29 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
-import dao.SliderDAO;
+import dao.ProductDAO;
+import dao.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
-import model.SliderDTO;
+import model.Account;
+import model.Cart;
+import model.Product;
+import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-public class CategoryServlet extends HttpServlet {
+@WebServlet(name = "ShowVoucherServlet", urlPatterns = {"/showVoucher"})
+public class ShowVoucherServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,36 +37,43 @@ public class CategoryServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String cateID = request.getParameter("cid");
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
-        SliderDAO sliderDAO = new SliderDAO();
-        List<ProductHome> list = dao.getProductByCID(cateID);
-        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
-        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    Account account = (Account) session.getAttribute("account");
+    session.setMaxInactiveInterval(180);
 
-        for (SliderDTO s : listSlider) {
-            if (s.getStatusName().equals("Xác nhận")) {
-                listSliderDot.add(s);
-            }
-        }
-
-        request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
-        request.setAttribute("listB", listBestSellerProduct);
-        request.setAttribute("listSlider", listSlider);
-        request.setAttribute("listSliderDot", listSliderDot);
-
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
-
+    if (account == null) {
+        response.sendRedirect("Login.jsp");
+        return;
     }
+
+    Cart cart = (Cart) session.getAttribute("cart");
+    if (cart == null) {
+        cart = new Cart();
+    }
+
+    int productId = 0;
+    if (request.getParameter("productId") != null) {
+        productId = Integer.parseInt(request.getParameter("productId"));
+    }
+
+    int aid = account.getAccountId();
+    ProductDAO dao = new ProductDAO();
+    List<Integer> listProductId = cart.getAllProductIdOfCart();
+    List<Integer> listRestaurantId = dao.getRestaurantId(listProductId);
+    VoucherDAO voucherDAO = new VoucherDAO();
+    ArrayList<Voucher> listFree = voucherDAO.getAllVoucherWithQuantityByAccountIdFree(aid);
+    ArrayList<Voucher> listR = voucherDAO.getAllVoucherWithQuantityByAccountIdR(aid, listRestaurantId);
+
+    request.setAttribute("productId", productId);
+    request.setAttribute("listF", listFree);
+    request.setAttribute("listR", listR);
+    request.getRequestDispatcher("UseVoucher.jsp").forward(request, response);
+}
+
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

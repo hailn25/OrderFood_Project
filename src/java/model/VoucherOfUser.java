@@ -8,9 +8,10 @@ import java.util.Date;
 
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
-public class Voucher {
+public class VoucherOfUser {
+
     private int voucherId;
     private String voucherName;
     private String description;
@@ -20,12 +21,15 @@ public class Voucher {
     private int status;
     private float discount;
     private int voucherCategoryId;
+    private boolean hasVoucher;
     private int restaurantId;
+    private String imageURL;
+    private String restaurantName;
 
-    public Voucher() {
+    public VoucherOfUser() {
     }
 
-    public Voucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId, int restaurantId) {
+    public VoucherOfUser(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId, boolean hasVoucher, int restaurantId, String imageURL, String restaurantName) {
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.description = description;
@@ -35,7 +39,50 @@ public class Voucher {
         this.status = status;
         this.discount = discount;
         this.voucherCategoryId = voucherCategoryId;
+        this.hasVoucher = hasVoucher;
         this.restaurantId = restaurantId;
+        this.imageURL = imageURL;
+        this.restaurantName = restaurantName;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public int getVoucherCategoryId() {
+        return voucherCategoryId;
+    }
+
+    public void setVoucherCategoryId(int voucherCategoryId) {
+        this.voucherCategoryId = voucherCategoryId;
+    }
+
+    public boolean isHasVoucher() {
+        return hasVoucher;
+    }
+
+    public void setHasVoucher(boolean hasVoucher) {
+        this.hasVoucher = hasVoucher;
     }
 
     public int getVoucherId() {
@@ -102,27 +149,9 @@ public class Voucher {
         this.discount = discount;
     }
 
-    public int getVoucherCategoryId() {
-        return voucherCategoryId;
-    }
-
-    public void setVoucherCategoryId(int voucherCategoryId) {
-        this.voucherCategoryId = voucherCategoryId;
-    }
-
-    public int getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(int restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
     @Override
     public String toString() {
-        return "Voucher{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + ", restaurantId=" + restaurantId + '}';
+        return "VoucherOfUser{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + ", hasVoucher=" + hasVoucher + ", restaurantId=" + restaurantId + ", imageURL=" + imageURL + ", restaurantName=" + restaurantName + '}';
     }
 
 }
-
-

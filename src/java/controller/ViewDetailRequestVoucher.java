@@ -4,28 +4,25 @@
  */
 package controller;
 
-import dao.FeedbackDAO;
-import dao.ProductHomeDAO;
-import dao.SliderDAO;
+import dao.ReportDAO;
+import dao.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import model.CategoryListDetail;
-import model.Feedback;
-import model.ListProduct;
-import model.ProductHome;
-import model.SliderDTO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author ADMIN
+ * @author Vu Huy
  */
-public class CategoryServlet extends HttpServlet {
+@WebServlet(name = "ViewDetailRequestVoucher", urlPatterns = {"/viewDetailRequestVoucher"})
+public class ViewDetailRequestVoucher extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,32 +35,6 @@ public class CategoryServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String cateID = request.getParameter("cid");
-        ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
-        SliderDAO sliderDAO = new SliderDAO();
-        List<ProductHome> list = dao.getProductByCID(cateID);
-        List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
-        ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
-        ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
-
-        for (SliderDTO s : listSlider) {
-            if (s.getStatusName().equals("Xác nhận")) {
-                listSliderDot.add(s);
-            }
-        }
-
-        request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
-        request.setAttribute("listB", listBestSellerProduct);
-        request.setAttribute("listSlider", listSlider);
-        request.setAttribute("listSliderDot", listSliderDot);
-
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
 
     }
 
@@ -79,7 +50,17 @@ public class CategoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            VoucherDAO dao = new VoucherDAO();
+            int vid = Integer.parseInt(request.getParameter("vid"));
+            request.setAttribute("detail", dao.getVoucherRequestDetail(vid));
+            request.getRequestDispatcher("ViewDetailRequestVoucher.jsp").forward(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ViewDetailRequestVoucher.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewDetailRequestVoucher.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

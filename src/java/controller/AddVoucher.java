@@ -25,19 +25,20 @@ public class AddVoucher extends HttpServlet {
         String finishDate = request.getParameter("finishDate");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         int status = Integer.parseInt(request.getParameter("status"));
-
+        float discount = Float.parseFloat(request.getParameter("discount"));
+        int voucherCategoryId = Integer.parseInt(request.getParameter("voucherCategoryId"));
         Date createDate = new Date();
         Date updateDate = new Date();
         String error = "Thông tin không hợp lệ";
 
         int lengthVoucherName = Validation.removeAllBlank(voucherName).length();
         int lengthDescription = Validation.removeAllBlank(description).length();
-        
+
         if (lengthVoucherName == 0 || lengthDescription == 0 || request.getParameter("status") == null) {
             request.setAttribute("error", error);
             request.getRequestDispatcher("AddVoucher.jsp").forward(request, response);
         } else {
-            voucherDAO.addVoucher(voucherName, description, quantity, createDate, updateDate, status);
+            voucherDAO.addVoucher(voucherName, description, quantity, createDate, updateDate, status, discount, voucherCategoryId);
             response.sendRedirect("managerVoucher");
         }
     }
@@ -60,3 +61,5 @@ public class AddVoucher extends HttpServlet {
     }
 
 }
+
+

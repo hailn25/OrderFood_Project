@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.OrderDetailDTO_Huyvq;
@@ -169,7 +170,6 @@ public class ProductDAO {
         }
     }
 
-    
     public void editProduct(String name, String price, String description,
             String img, String categoryId, String isSale, String quantity, String status,
             Date updateDate, String productId) throws SQLException {
@@ -196,7 +196,8 @@ public class ProductDAO {
         }
 
     }
-         public void updatePriceSale_on(String productId) {
+
+    public void updatePriceSale_on(String productId) {
         try {
             String sql = "update [dbo].[Product]\n"
                     + "set  [Price] = [Price] * 0.9, [IsSale] = 1\n"
@@ -212,13 +213,7 @@ public class ProductDAO {
         }
     }
 
-
-
-       
-   
-    
-
-  public void updatePriceSale_off(String productId) {
+    public void updatePriceSale_off(String productId) {
         try {
             String sql = "update [dbo].[Product]\n"
                     + "set  [Price] = [Price] * (1/0.9), [IsSale] = 0\n"
@@ -247,7 +242,8 @@ public class ProductDAO {
         }
         return null;
     }
-     public Product getProductByID(int id) {
+
+    public Product getProductByID(int id) {
         try {
             String query = "select * from Product where ProductId = ?";
             conn = new DBContext().getConnection();
@@ -284,8 +280,7 @@ public class ProductDAO {
 //        
 //
 //    }
-
-   public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String isSale, String quantity, Date createDate, Date updateDate, String status) throws SQLException {
+    public void insertProduct(String name, String price, String description, String img, String category, int RestaurantId, String isSale, String quantity, Date createDate, Date updateDate, String status) throws SQLException {
         try {
             String sql = "insert into [dbo].[Product] ([Name], [Price], [Description], [ImageURL], [CategoryId], [RestaurantId], [IsSale], [Quantity], [CreateDate], [UpdateDate],[Status])\n"
                     + "values (?,?,?,?,?,?,?,?,?,?,?)";
@@ -308,6 +303,7 @@ public class ProductDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public int getQuantityProduct(int pid) {
         try {
 
@@ -328,4 +324,80 @@ public class ProductDAO {
         }
         return 0;
     }
+
+    public List<Integer> getRestaurantId(List<Integer> list) {
+        List<Integer> listR = new ArrayList<>();
+        if (list == null || list.isEmpty()) {
+            return listR; // Return empty list if input list is null or empty
+        }
+
+        StringBuilder listStr = new StringBuilder("( ");
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) {
+                listStr.append(", ");
+            }
+            listStr.append(list.get(i));
+        }
+        listStr.append(" )");
+
+        String query = "SELECT [RestaurantId] FROM Product WHERE ProductId IN " + listStr.toString();
+
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                listR.add(rs.getInt("RestaurantId"));
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return listR;
     }
+
+    public String getProductNameByProductId(int productId) {
+        String restaurantId = "";
+        try {
+            String sql = "select [Name]\n"
+                    + "from Product\n"
+                    + "where ProductId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                restaurantId = rs.getString(1);
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return restaurantId;
+    }
+
+    public double getPriceByProductId(int productId) {
+        try {
+            String sql = "select Price\n"
+                    + "From Product\n"
+                    + "where Product.ProductId = ?";
+            conn = new DBContext().getConnection();
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+}

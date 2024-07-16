@@ -10,7 +10,8 @@ import java.util.Date;
  *
  * @author ADMIN
  */
-public class Voucher {
+public class ListVoucher {
+    private int accountId;
     private int voucherId;
     private String voucherName;
     private String description;
@@ -20,12 +21,13 @@ public class Voucher {
     private int status;
     private float discount;
     private int voucherCategoryId;
-    private int restaurantId;
+    private int restauranId;
 
-    public Voucher() {
+    public ListVoucher() {
     }
 
-    public Voucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId, int restaurantId) {
+    public ListVoucher(int accountId, int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId, int restauranId) {
+        this.accountId = accountId;
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.description = description;
@@ -35,7 +37,15 @@ public class Voucher {
         this.status = status;
         this.discount = discount;
         this.voucherCategoryId = voucherCategoryId;
-        this.restaurantId = restaurantId;
+        this.restauranId = restauranId;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public int getVoucherId() {
@@ -110,19 +120,17 @@ public class Voucher {
         this.voucherCategoryId = voucherCategoryId;
     }
 
-    public int getRestaurantId() {
-        return restaurantId;
+    public int getRestauranId() {
+        return restauranId;
     }
 
-    public void setRestaurantId(int restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setRestauranId(int restauranId) {
+        this.restauranId = restauranId;
     }
 
     @Override
     public String toString() {
-        return "Voucher{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + ", restaurantId=" + restaurantId + '}';
+        return "ListVoucher{" + "accountId=" + accountId + ", voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + ", restauranId=" + restauranId + '}';
     }
-
+    
 }
-
-
