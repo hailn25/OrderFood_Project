@@ -5,8 +5,7 @@
 package controller;
 
 import dao.OrderDAO;
-import dao.VoucherDAO;
-
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,13 +24,14 @@ import model.Account;
 import model.Cart;
 import model.EmailHandler;
 import model.Item;
+import model.Product;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
-public class CheckoutServlet extends HttpServlet {
+@WebServlet(name = "Checkout2Servlet", urlPatterns = {"/checkout2"})
+public class Checkout2Servlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,10 +50,10 @@ public class CheckoutServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckoutServlet</title>");
+            out.println("<title>Servlet Checkout2Servlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Checkout2Servlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -78,9 +79,43 @@ public class CheckoutServlet extends HttpServlet {
             response.sendRedirect("Login.jsp");
             return;
         }
-        String currentURL = request.getRequestURI();
-        session.setAttribute("redirectURL", currentURL);
-        response.sendRedirect("Checkout.jsp");
+        Cart cart = null;
+        Object o = session.getAttribute("cart");
+        if (o != null) {
+            cart = (Cart) o;
+        } else {
+            cart = new Cart();
+        }
+        String productId = request.getParameter("productId");
+        String quantityStr = request.getParameter("quantityCart");
+        int quantity = 1;
+
+        if (quantityStr != null && !quantityStr.isEmpty()) {
+            try {
+                quantity = Integer.parseInt(quantityStr);
+            } catch (NumberFormatException e) {
+                quantity = 1;
+            }
+        }
+
+        try {
+            if (productId != null) {
+                int id = Integer.parseInt(productId);
+                ProductDAO dao = new ProductDAO();
+                Product p = dao.getProductByID(id);
+                double price = p.getPrice();
+                int maxquantity = dao.getQuantityProduct(id);
+                session.setAttribute("maxquantity", maxquantity);
+                Item t = new Item(p, quantity, price);
+                cart.addItem(t);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        List<Item> list = cart.getItems();
+        session.setAttribute("cart", cart);
+        response.sendRedirect("Checkout_2.jsp");
     }
 
     /**
@@ -94,20 +129,14 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+       
         HttpSession session = request.getSession(true);
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
-            response.sendRedirect("Login.jsp");
-            return;
-        }
-
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null || cart.getItems().isEmpty()) {
             response.sendRedirect("home");
             return;
         }
-
+        Account account = (Account) session.getAttribute("account");
         String email = request.getParameter("email");
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
@@ -119,8 +148,6 @@ public class CheckoutServlet extends HttpServlet {
         OrderDAO dao = new OrderDAO();
         int accountId = account.getAccountId();
         dao.insertNewOrder(1, accountId, Double.parseDouble(total), name, email, phone, address, note);
-        VoucherDAO voucher = new VoucherDAO();
-        
         int orderId = dao.getOrderID();
 
         String paymentStatus = payment.equals("cod") ? "Thanh toán khi nhận hàng" : "Thanh toán thành công";
@@ -232,9 +259,14 @@ public class CheckoutServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
+    }// </editor-fold>
 
 }

@@ -93,27 +93,40 @@
                                 </div>
                                 <p class="mb-4">${detail.decription}</p>
                                 <p class="mb-4">Quantity: ${detail.quantity}</p>
-                                <div class="input-group quantity mt-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                                <div style="margin-bottom: 30px">
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <form id="addToCartForm" action="addtocart" method="post">
-                                    <input type="hidden" name="productId" value="${detail.id}">
-                                    <input type="hidden" name="quantity" id="addToCartQuantity" value="1">
-                                    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                    </button>
-                                </form>
 
+                                <div style="display: flex; margin: 0 30; ">
+                                    <form id="addToCartForm" action="addtocart" method="post" style="margin-right: 30px">
+                                        <input type="hidden" name="productId" value="${detail.id}">
+                                        <input type="hidden" name="quantity" id="addToCartQuantity" value="1">
+                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                        </button>
+                                    </form>
+                                    <form id="addToCheckout" action="checkout2" method="get">
+                                        <input type="hidden" name="productId" value="${detail.id}">
+                                        <input type="hidden" name="quantityCart" id="checkoutQuantity" value="1">
+                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                       
+                                            <i class="fas fa-cart-arrow-down me-2 text-primary"></i>Mua ngay
+                                            
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -234,86 +247,104 @@
                 <script src="lib/lightbox/js/lightbox.min.js"></script>
                 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-                <!-- Template Javascript -->
+ <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const quantityInput = document.querySelector('.quantity-input');
+                                            const addToCheckoutForm = document.getElementById('addToCheckout');
+                                            const checkoutQuantityInput = document.getElementById('checkoutQuantity');
 
+                                            quantityInput.addEventListener('input', function () {
+                                                let newValue = parseInt(quantityInput.value);
+                                                if (isNaN(newValue) || newValue < 1) {
+                                                    newValue = 1;
+                                                }
+                                                quantityInput.value = newValue;
+                                                checkoutQuantityInput.value = newValue;
+                                            });
+
+                                            addToCheckoutForm.addEventListener('submit', function () {
+                                                checkoutQuantityInput.value = quantityInput.value;
+                                            });
+                                        });
+                                    </script>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const quantityInputs = document.querySelectorAll('.quantity-input');
-                        const addToCartForm = document.getElementById('addToCartForm');
-                        const addToCartQuantityInput = document.getElementById('addToCartQuantity');
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const addToCartForm = document.getElementById('addToCartForm');
+        const addToCartQuantityInput = document.getElementById('addToCartQuantity');
 
-                        quantityInputs.forEach(function (quantityInput) {
-                            const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
-                            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
-                            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+        quantityInputs.forEach(function (quantityInput) {
+            const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
 
-                            btnPlus.addEventListener('click', function () {
-                                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
-                            });
+            btnPlus.addEventListener('click', function () {
+                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+            });
 
-                            btnMinus.addEventListener('click', function () {
-                                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
-                            });
+            btnMinus.addEventListener('click', function () {
+                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+            });
 
-                            quantityInput.addEventListener('input', function () {
-                                let newValue = parseInt(quantityInput.value);
-                                if (isNaN(newValue) || newValue < 1) {
-                                    newValue = 1;
-                                }
-                                updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
-                            });
+            quantityInput.addEventListener('input', function () {
+                let newValue = parseInt(quantityInput.value);
+                if (isNaN(newValue) || newValue < 1) {
+                    newValue = 1;
+                }
+                updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+            });
 
-                            // Function to update quantity and price
-                            function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
-                                if (newQuantity < 1) {
-                                    confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
-                                    return;
-                                }
-                                if (newQuantity > maxQuantity) {
-                                    alert('Số lượng vượt quá số lượng tối đa có sẵn');
-                                    return;
-                                }
+            // Function to update quantity and price
+            function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
+                if (newQuantity < 1) {
+                    confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
+                    return;
+                }
+                if (newQuantity > maxQuantity) {
+                    alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                    return;
+                }
 
-                                quantityInput.value = newQuantity;
-                                addToCartQuantityInput.value = newQuantity; // Update quantity hidden input for addToCartForm
-                                updatePrice(quantityInput, newQuantity);
-                            }
+                quantityInput.value = newQuantity;
+                addToCartQuantityInput.value = newQuantity;
+                updatePrice(quantityInput, newQuantity);
+            }
 
-                            function updatePrice(quantityInput, quantity) {
-                                const pricePerItem = parseFloat(quantityInput.dataset.price);
-                                // Example of updating total price display based on quantity
-                                const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
-                                const totalPrice = quantity * pricePerItem * 1000;
-                                totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
-                            }
+            function updatePrice(quantityInput, quantity) {
+                const pricePerItem = parseFloat(quantityInput.dataset.price);
+                // Example of updating total price display based on quantity
+                const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
+                const totalPrice = quantity * pricePerItem * 1000;
+                totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+            }
 
-                            updatePrice(quantityInput, parseInt(quantityInput.value));
-                        });
+            updatePrice(quantityInput, parseInt(quantityInput.value));
+        });
 
-                        // Example of submitting form
-                        addToCartForm.addEventListener('submit', function (event) {
-                            // You can add additional validation or actions before submitting the form
-                            // event.preventDefault(); // Uncomment to prevent default form submission for testing
-                            // Example of fetching data if needed
-                            const formData = new FormData(addToCartForm);
-                            fetch(addToCartForm.action, {
-                                method: 'POST',
-                                body: formData
-                            })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Network response was not ok');
-                                        }
-                                        return response.text();
-                                    })
-                                    .then(data => {
-                                        // Handle response data if necessary
-                                    })
-                                    .catch(error => {
-                                        console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
-                                    });
-                        });
+        // Example of submitting form
+        addToCartForm.addEventListener('submit', function (event) {
+            // You can add additional validation or actions before submitting the form
+            // event.preventDefault(); // Uncomment to prevent default form submission for testing
+            // Example of fetching data if needed
+            const formData = new FormData(addToCartForm);
+            fetch(addToCartForm.action, {
+                method: 'POST',
+                body: formData
+            })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        // Handle response data if necessary
+                    })
+                    .catch(error => {
+                        console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
                     });
+        });
+    });
                 </script>
 
                 <script>

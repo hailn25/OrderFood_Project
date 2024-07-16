@@ -63,33 +63,30 @@ public class VoucherDAO {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, Voucher.VoucherCategoryId, Voucher.RestaurantId, COUNT(AccountVoucher.VoucherId) AS VoucherCount\n"
-                    + "FROM Voucher\n"
-                    + "LEFT JOIN AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId AND AccountVoucher.AccountId =?\n"
-                    + "WHERE Voucher.VoucherCategoryId = 1\n"
-                    + "GROUP BY Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, Voucher.VoucherCategoryId, Voucher.RestaurantId\n"
-                    + "HAVING COUNT(AccountVoucher.VoucherId) = 1;";
+            String sql = """
+                         SELECT Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, Voucher.VoucherCategoryId, Voucher.RestaurantId
+                         FROM Voucher
+                         LEFT JOIN AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId 
+                         WHERE Voucher.VoucherCategoryId = 1 AND AccountVoucher.AccountId =?
+                         GROUP BY Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, Voucher.VoucherCategoryId, Voucher.RestaurantId""";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, accountId);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int voucherId = rs.getInt("VoucherId");
-                String voucherName = rs.getString("VoucherName");
-                String description = rs.getString("Description");
-                int quantity = rs.getInt("Quantity");
-                Date releaseDate = rs.getDate("ReleaseDate");
-                Date finishDate = rs.getDate("FinishDate");
-                int status = rs.getInt("Status");
-                float discount = rs.getFloat("Discount");
-                int voucherCategoryId = rs.getInt("VoucherCategoryId");
-                int voucherCount = rs.getInt("VoucherCount");
-                int restaurantId = rs.getInt("RestaurantId");
-                Voucher voucher = new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, voucherCategoryId, restaurantId);
-                voucher.setQuantity(voucherCount);
-
-                // Thêm Voucher vào danh sách
+                Voucher voucher = new Voucher(
+                        rs.getInt("VoucherId"),
+                        rs.getString("VoucherName"),
+                        rs.getString("Description"),
+                        rs.getInt("Quantity"),
+                        rs.getDate("ReleaseDate"),
+                        rs.getDate("FinishDate"),
+                        rs.getInt("Status"),
+                        rs.getFloat("Discount"),
+                        rs.getInt("VoucherCategoryId"),
+                        rs.getInt("RestaurantId")
+                );
                 listVoucher.add(voucher);
             }
         } catch (SQLException ex) {
@@ -115,65 +112,69 @@ public class VoucherDAO {
         return listVoucher;
     }
 
-    public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, List<Integer> list) {
-        ArrayList<Voucher> listVoucher = new ArrayList<>();
-        if (list == null || list.isEmpty()) {
-            return listVoucher; // Return empty list if input list is null or empty
-        }
-
-        StringBuilder listStr = new StringBuilder("( ");
-        for (int i = 0; i < list.size(); i++) {
-            if (i > 0) {
-                listStr.append(", ");
-            }
-            listStr.append(list.get(i));
-        }
-        listStr.append(" )");
-
-        String query = "SELECT Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, "
-                + "Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, "
-                + "Voucher.VoucherCategoryId, Voucher.RestaurantId, "
-                + "COUNT(AccountVoucher.VoucherId) AS VoucherCount "
-                + "FROM Voucher "
-                + "LEFT JOIN AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId "
-                + "AND AccountVoucher.AccountId = ? AND Voucher.RestaurantId IN " + listStr.toString() + " "
-                + "WHERE Voucher.VoucherCategoryId = 2 "
-                + "GROUP BY Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, "
-                + "Voucher.Quantity, Voucher.ReleaseDate, Voucher.FinishDate, "
-                + "Voucher.Status, Voucher.Discount, Voucher.VoucherCategoryId, Voucher.RestaurantId "
-                + "HAVING COUNT(AccountVoucher.VoucherId) = 1";
-
-        try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-
-            ps.setInt(1, accountId);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    int voucherId = rs.getInt("VoucherId");
-                    String voucherName = rs.getString("VoucherName");
-                    String description = rs.getString("Description");
-                    int quantity = rs.getInt("Quantity");
-                    Date releaseDate = rs.getDate("ReleaseDate");
-                    Date finishDate = rs.getDate("FinishDate");
-                    int status = rs.getInt("Status");
-                    float discount = rs.getFloat("Discount");
-                    int voucherCategoryId = rs.getInt("VoucherCategoryId");
-                    int rId = rs.getInt("RestaurantId");
-                    int voucherCount = rs.getInt("VoucherCount");
-
-                    Voucher voucher = new Voucher(voucherId, voucherName, description, quantity, releaseDate,
-                            finishDate, status, discount, voucherCategoryId, rId);
-                    voucher.setQuantity(voucherCount);
-                    listVoucher.add(voucher);
-                }
-            }
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, "Error fetching vouchers", ex);
-        }
-
+public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, List<Integer> list) {
+    ArrayList<Voucher> listVoucher = new ArrayList<>();
+    if (list == null || list.isEmpty()) {
         return listVoucher;
     }
+
+    StringBuilder listStr = new StringBuilder("( ");
+    for (int i = 0; i < list.size(); i++) {
+        if (i > 0) {
+            listStr.append(", ");
+        }
+        listStr.append(list.get(i));
+    }
+    listStr.append(" )");
+
+    String query = "SELECT \n"
+            + "    Voucher.VoucherId, \n"
+            + "    Voucher.VoucherName, \n"
+            + "    Voucher.Description, \n"
+            + "    Voucher.Quantity, \n"
+            + "    Voucher.ReleaseDate, \n"
+            + "    Voucher.FinishDate, \n"
+            + "    Voucher.Status, \n"
+            + "    Voucher.Discount, \n"
+            + "    Voucher.VoucherCategoryId, \n"
+            + "    Voucher.RestaurantId\n"
+            + "FROM \n"
+            + "    Voucher\n"
+            + "LEFT JOIN \n"
+            + "    AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId AND AccountVoucher.AccountId = ?\n"
+            + "WHERE \n"
+            + "    Voucher.VoucherCategoryId = 2\n"
+            + "    AND Voucher.RestaurantId IN " + listStr.toString();
+
+    try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+        ps.setInt(1, accountId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int voucherId = rs.getInt("VoucherId");
+                String voucherName = rs.getString("VoucherName");
+                String description = rs.getString("Description");
+                int quantity = rs.getInt("Quantity");
+                Date releaseDate = rs.getDate("ReleaseDate");
+                Date finishDate = rs.getDate("FinishDate");
+                int status = rs.getInt("Status");
+                float discount = rs.getFloat("Discount");
+                int voucherCategoryId = rs.getInt("VoucherCategoryId");
+                int rId = rs.getInt("RestaurantId");
+
+                Voucher voucher = new Voucher(voucherId, voucherName, description, quantity, releaseDate,
+                        finishDate, status, discount, voucherCategoryId, rId);
+                // Không cần setQuantity(voucherCount) vì không có VoucherCount trong câu truy vấn
+                listVoucher.add(voucher);
+            }
+        }
+
+    } catch (SQLException | ClassNotFoundException ex) {
+        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, "Error fetching vouchers", ex);
+    }
+
+    return listVoucher;
+}
 
     public void addVoucher(String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId) {
         try {
@@ -399,7 +400,20 @@ public class VoucherDAO {
                 e.printStackTrace();
             }
         }
-        return 0; // Trả về 0 nếu không có kết quả hoặc có lỗi xảy ra
+        return 0;
+    }
+
+    public void updateQuantity(int accountId, int voucherId) {
+        String sql = "";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId);
+            ps.setInt(2, voucherId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+
+        }
     }
 
     public static void main(String[] args) {

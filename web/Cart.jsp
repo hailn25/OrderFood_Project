@@ -146,40 +146,40 @@
 
 
                 </div>
-<div class="row g-4 justify-content-between">
-    <!-- Voucher Section -->
-    <div class="col-md-5">
-        <form action="showVoucher" method="get">
-            <div class="mt-5">
-                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Apply Voucher</button>
-            </div>
-        </form>
-    </div>
-    <!-- Cart Total Section -->
-    <div class="col-md-5">
-        <div class="bg-light rounded">
-            <div class="p-4">
-                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
-                <c:set var="subtotal" value="0"/>
-                <c:forEach var="i" items="${o.items}">
-                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price * 1000)}"/>
-                </c:forEach>
-                <div class="d-flex justify-content-between mb-4">
-                    <h5 class="mb-0 me-4">Subtotal:</h5>
-                    <span class="subtotal"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0"/></span>
+                <div class="row g-4 justify-content-between">
+                    <!-- Voucher Section -->
+                    <div class="col-md-5">
+                        <form action="showVoucher" method="get">
+                            <div class="mt-5">
+                                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+                                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Sử dụng Voucher</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Cart Total Section -->
+                    <div class="col-md-5">
+                        <div class="bg-light rounded">
+                            <div class="p-4">
+                                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                                <c:set var="subtotal" value="0"/>
+                                <c:forEach var="i" items="${o.items}">
+                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price * 1000)}"/>
+                                </c:forEach>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="mb-0 me-4">Subtotal:</h5>
+                                    <span class="subtotal"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0"/></span>
+                                </div>
+                                <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                    <h5 class="mb-0 ps-4 me-4">Total</h5>
+                                    <span class="cart-total"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0"/></span>
+                                </div>
+                                <form action="checkout" method="get">
+                                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                    <h5 class="mb-0 ps-4 me-4">Total</h5>
-                    <span class="cart-total"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0"/></span>
-                </div>
-                <form action="checkout" method="get">
-                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
             </div>
         </div>
@@ -200,7 +200,7 @@
 
                 function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
                     if (newQuantity < 1) {
-                        confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId); 
+                        confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
                         return;
                     }
                     if (newQuantity > maxQuantity) {

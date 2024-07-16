@@ -107,6 +107,14 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!--                            <form action="showVoucher" method="get">
+                                                        <div class="mt-5">
+                                                            <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+                                                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Sử dụng Voucher</button>
+                                                        </div>
+                                                    </form>
+                        -->
                         <c:set var="subtotal" value="0" />
                         <c:forEach var="item" items="${sessionScope.cart.items}">
                             <c:set var="subtotal" value="${subtotal + (item.quantity * item.product.price * 1000)}" />
@@ -121,7 +129,7 @@
 
                         <c:set var="total" value="${subtotal + shippingFee - shippingDiscount - voucherDiscount}" />
 
-                        <div class="border p-4 mt-4">
+                        <div class="border p-4 mt-4" style="margin-bottom: 50px">
                             <h2 class="mb-4">Tổng thanh toán</h2>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Tổng tiền hàng</span>
@@ -131,6 +139,10 @@
                                 <span class="text-muted-foreground">Phí vận chuyển</span>
                                 <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" currencySymbol="VND" maxFractionDigits="0" /></span>
                             </div>
+                            <c:set var="shippingDiscount" value="${shippingDiscountRate * shippingFee}" />
+                            <c:set var="voucherDiscountRate" value="${listVoucherR / 100}" />
+
+
                             <c:if test="${shippingDiscount != 0}">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted-foreground">Giảm giá phí vận chuyển</span>
@@ -145,6 +157,7 @@
                                     <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" currencySymbol="VND" maxFractionDigits="0" /></span>
                                 </div>
                             </c:if>
+
                             <hr>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Tổng đơn hàng</span>
@@ -178,6 +191,8 @@
 
 
                         </div>
+
+
                         </form>
                     </div>
                 </div>
@@ -192,33 +207,33 @@
         <script src="js/script.js"></script>
         <!-- Custom JavaScripts -->
         <script>
-                                function cancelOrder() {
-                                    if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
-                                        // Reset the cart (optional)
-                                        resetCart();
-                                        // Redirect to home page
-                                        window.location.href = "home";
-                                    }
-                                }
+                                       function cancelOrder() {
+                                           if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
+                                               // Reset the cart (optional)
+                                               resetCart();
+                                               // Redirect to home page
+                                               window.location.href = "home";
+                                           }
+                                       }
 
-                                function resetCart() {
-                                    // AJAX request to reset the cart if needed
-                                    // Example: Clear session or reset cart variables
-                                    // Here, we assume a session attribute 'cart' exists and can be cleared
-                                    fetch('resetCart', {
-                                        method: 'POST'
-                                    }).then(response => {
-                                        if (response.ok) {
-                                            console.log('Cart reset successfully.');
-                                        } else {
-                                            console.error('Failed to reset cart.');
-                                        }
-                                    }).catch(error => {
-                                        console.error('Error resetting cart:', error);
-                                    });
-                                }
+                                       function resetCart() {
+                                           // AJAX request to reset the cart if needed
+                                           // Example: Clear session or reset cart variables
+                                           // Here, we assume a session attribute 'cart' exists and can be cleared
+                                           fetch('resetCart', {
+                                               method: 'POST'
+                                           }).then(response => {
+                                               if (response.ok) {
+                                                   console.log('Cart reset successfully.');
+                                               } else {
+                                                   console.error('Failed to reset cart.');
+                                               }
+                                           }).catch(error => {
+                                               console.error('Error resetting cart:', error);
+                                           });
+                                       }
         </script>
- <script>
+         <script>
         function redirectToCheckout() {
             var checkbox = document.getElementById("Address");
             if (checkbox.checked) {
@@ -232,5 +247,6 @@
            window.location.href = "home";
         }
     </script>
+
     </body>
 </html>
