@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.FeedbackDAO;
 import dao.ProductDAO;
 import dao.ProductSaleDAO;
 import java.io.IOException;
@@ -16,9 +17,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Feedback;
 import model.Product;
+import model.ProductSaleDTO;
 import model.ProductSaleDetailDTO;
 
 /**
@@ -45,6 +50,8 @@ public class ProductSaleDetailServlet extends HttpServlet {
         int timeFrame = Integer.parseInt(time);
         int id = Integer.parseInt(pid);
         LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now();
+        String date = today.toString();
         LocalTime timeFrame1 = LocalTime.of(10, 00);
         LocalTime timeFrame2 = LocalTime.of(13, 00);
         LocalTime timeFrame3 = LocalTime.of(13, 00);
@@ -55,6 +62,21 @@ public class ProductSaleDetailServlet extends HttpServlet {
         LocalTime timeFrame8 = LocalTime.of(22, 00);
         ProductSaleDAO dao = new ProductSaleDAO();
         ProductDAO da = new ProductDAO();
+        FeedbackDAO fb = new FeedbackDAO();
+        List<Feedback> listFeedback = fb.getFeedbackByProductId(Integer.parseInt(pid));
+
+        List<ProductSaleDTO> listRelate = new ArrayList<>();
+        if (now.isAfter(timeFrame1) && now.isBefore(timeFrame2)) {
+            listRelate = dao.getProductIsFlashSale(date, 1);
+        } else if (now.isAfter(timeFrame3) && now.isBefore(timeFrame4)) {
+            listRelate = dao.getProductIsFlashSale(date, 2);
+        } else if (now.isAfter(timeFrame5) && now.isBefore(timeFrame6)) {
+            listRelate = dao.getProductIsFlashSale(date, 3);
+        } else if (now.isAfter(timeFrame7) && now.isBefore(timeFrame8)) {
+            listRelate = dao.getProductIsFlashSale(date, 4);
+        }
+        request.setAttribute("listRelate", listRelate);
+        request.setAttribute("reviews", listFeedback);
         if ((now.isAfter(timeFrame1) && now.isBefore(timeFrame2)) && timeFrame == 1) {
             ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
             request.setAttribute("fsdetail", ps);
@@ -63,7 +85,7 @@ public class ProductSaleDetailServlet extends HttpServlet {
             ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
             request.setAttribute("fsdetail", ps);
             request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
-        }else if ((now.isAfter(timeFrame5) && now.isBefore(timeFrame6)) && timeFrame == 3) {
+        } else if ((now.isAfter(timeFrame5) && now.isBefore(timeFrame6)) && timeFrame == 3) {
             ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
             request.setAttribute("fsdetail", ps);
             request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
@@ -71,7 +93,7 @@ public class ProductSaleDetailServlet extends HttpServlet {
             ProductSaleDetailDTO ps = dao.getProductSaleDetailById(id);
             request.setAttribute("fsdetail", ps);
             request.getRequestDispatcher("ProductSaleDetail.jsp").forward(request, response);
-        }else {
+        } else {
             Product p = da.getProductByID(id);
             request.setAttribute("fsdetail", p);
             request.getRequestDispatcher("ProductSaleDetail1.jsp").forward(request, response);

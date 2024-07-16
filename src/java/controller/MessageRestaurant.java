@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.ProductSaleDAO;
+import dao.MessageDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,21 +12,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.ProductSaleDTO;
+import model.Account;
+import model.CustomerName;
+import model.MessageRestaurant1;
 
 /**
  *
  * @author hailt
  */
-@WebServlet(name = "FlashSaleServlet", urlPatterns = {"/flsale"})
-public class FlashSaleServlet extends HttpServlet {
+@WebServlet(name = "MessageRestaurant", urlPatterns = {"/messageRestaurant"})
+public class MessageRestaurant extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,52 +40,31 @@ public class FlashSaleServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String timeFrame = request.getParameter("timeFrame");
-        LocalTime now = LocalTime.now();
-        LocalDate today = LocalDate.now();
-        String date = today.toString();
-        LocalTime timeFrame1 = LocalTime.of(13, 00);
-        LocalTime timeFrame2 = LocalTime.of(16, 00);
-        LocalTime timeFrame3 = LocalTime.of(19, 00);
-        LocalTime timeFrame4 = LocalTime.of(22, 00);
-        ProductSaleDAO psdao = new ProductSaleDAO();
-        List<ProductSaleDTO> list = new ArrayList<>();
-        if (timeFrame == null) {
-            if (now.isBefore(timeFrame1)) {
-                list = psdao.getProductIsFlashSale(date, 1);
-            }
-            if (now.isBefore(timeFrame2) && now.isAfter(timeFrame1)) {
-                list = psdao.getProductIsFlashSale(date, 2);
-            }
-            if (now.isBefore(timeFrame3) && now.isAfter(timeFrame2)) {
-                list = psdao.getProductIsFlashSale(date, 3);
-            }
-            if (now.isBefore(timeFrame4) && now.isAfter(timeFrame3)) {
-                list = psdao.getProductIsFlashSale(date, 4);
-            }
+        MessageDAO dao = new MessageDAO();
+        int aid = 0;
+        int accountId = 0;
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
+        int accountId1 = a.getAccountId();
+        String id = request.getParameter("aid");
+        if (request.getParameter("aid") != null) {
+            aid = Integer.parseInt(id);
         }
-        if (timeFrame != null) {
-            if (timeFrame.equals("1")) {
-                list = psdao.getProductIsFlashSale(date, 1);
-            }
-            if (timeFrame.equals("2")) {
-                list = psdao.getProductIsFlashSale(date, 2);
-            }
-            if (timeFrame.equals("3")) {
-                list = psdao.getProductIsFlashSale(date, 3);
-            }
-            if (timeFrame.equals("4")) {
-                list = psdao.getProductIsFlashSale(date, 4);
-            }
+        request.setAttribute("aid", aid);
+        
+        String rid = request.getParameter("rid");
+        if (request.getParameter("rid") != null) {
+            accountId = Integer.parseInt(rid);
         }
-        request.setAttribute("listPS", list);
-        request.getRequestDispatcher("FlashSale.jsp").forward(request, response);
+        request.setAttribute("accountId", accountId);
+
+        List<MessageRestaurant1> list1 = dao.getListMessageOfRestaurant(accountId, aid);
+        List<CustomerName> list = dao.getListCustomerName(accountId1);
+        request.setAttribute("listCusName", list);
+        request.setAttribute("listMessage", list1);
+        request.getRequestDispatcher("Message.jsp").forward(request, response);
 
     }
-   
-  
-   
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -102,7 +81,7 @@ public class FlashSaleServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(FlashSaleServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MessageRestaurant.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -120,7 +99,7 @@ public class FlashSaleServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(FlashSaleServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MessageRestaurant.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
