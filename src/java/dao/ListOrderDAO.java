@@ -27,11 +27,13 @@ public class ListOrderDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public List<ListOrder> getListOrderById(int orderStatusId, int accountId) {
+    public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
         List<ListOrder> listOrderById = new ArrayList<>();
+        if (orderStatusIds == null || orderStatusIds.isEmpty()) {
+            return listOrderById;
+        }
         try {
-
-            String query = "SELECT\n"
+            StringBuilder query = new StringBuilder("SELECT\n"
                     + "    o.AccountId,\n"
                     + "    o.OrderId,\n"
                     + "    p.ProductId,\n"
@@ -45,19 +47,28 @@ public class ListOrderDAO {
                     + "    o.Note,\n"
                     + "    od.Quantity,\n"
                     + "    od.TotalMoney,\n"
-                    + "	os.OrderStatusId,\n"
-                    + "	os.Status\n"
+                    + "    os.OrderStatusId,\n"
+                    + "    os.Status\n"
                     + "FROM [dbo].[Order] o\n"
                     + "JOIN [dbo].[OrderDetail] od ON o.OrderId = od.OrderId\n"
                     + "JOIN [dbo].[Product] p ON od.ProductId = p.ProductId\n"
                     + "JOIN [dbo].[OrderStatus] os ON o.OrderStatusId = os.OrderStatusId\n"
                     + "JOIN [dbo].[Restaurant] r ON p.RestaurantId = r.RestaurantId\n"
-                    + "WHERE o.OrderStatusId = ? AND o.AccountId = ?";
+                    + "WHERE o.OrderStatusId IN (");
+            for (int i = 0; i < orderStatusIds.size(); i++) {
+                query.append("?");
+                if (i < orderStatusIds.size() - 1) {
+                    query.append(",");
+                }
+            }
+            query.append(") AND o.AccountId = ?");
 
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, orderStatusId);
-            ps.setInt(2, accountId);
+            ps = conn.prepareStatement(query.toString());
+            for (int i = 0; i < orderStatusIds.size(); i++) {
+                ps.setInt(i + 1, orderStatusIds.get(i));
+            }
+            ps.setInt(orderStatusIds.size() + 1, accountId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listOrderById.add(new ListOrder(rs.getInt(1),
@@ -159,6 +170,6 @@ public class ListOrderDAO {
 
     public static void main(String[] args) throws ClassNotFoundException {
         ListOrderDAO dao = new ListOrderDAO();
-        System.out.println(dao.getListOrderById(4, 6));
+        System.out.println(dao);
     }
 }

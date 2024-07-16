@@ -55,7 +55,7 @@
                         <c:if test="${sessionScope.account.roleId == 2}">                          
                             <div class="header-left-detail-report">
                                 <i class="far fa-flag"></i>
-                                <a href="insertReport?restaurantId=${r.restaurantId}&page=${1}">Báo cáo</a>
+                                <a href="insertReport?accountId=${sessionScope.account.accountId}&restaurantId=${r.restaurantId}">Báo cáo</a>
                             </div>
                         </c:if>
                     </div>

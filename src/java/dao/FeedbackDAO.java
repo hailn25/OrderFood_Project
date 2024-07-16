@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,24 +90,23 @@ public class FeedbackDAO {
         }
     }
 
-    public void insertReport(String description, String imageURL, String accountId, String restaurantId, String status, String createDate) throws SQLException, ClassNotFoundException {
+    public void insertReport(String description, String imageURL, String createDate, String accountId, String restaurantId, String status) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Report ([Description], [ImageURL], [AccountId], [RestaurantId], [Status], [CreateDate])\n"
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Report (Description, ImageURL, CreateDate, AccountId, RestaurantId, ReportStatusId) VALUES (?, ?, ?, ?, ?, ?)";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, description);
             ps.setString(2, imageURL);
-            ps.setString(3, accountId);
-            ps.setString(4, restaurantId);
-            ps.setString(5, status);
-            ps.setString(6, createDate);
+            ps.setString(3, createDate);
+            ps.setString(4, accountId);
+            ps.setString(5, restaurantId);
+            ps.setString(6, status);
             ps.executeUpdate();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex; // Re-throw the exception to handle it elsewhere if needed
+            throw ex;
         } finally {
             try {
                 if (ps != null) {
@@ -121,11 +121,10 @@ public class FeedbackDAO {
         }
     }
 
-    
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         FeedbackDAO dao = new FeedbackDAO();
         //dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
-       
+        //dao.insertReport("huhuhu", "hihi", "2023-04-01", "6", "1", "1");
+        
     }
 }
