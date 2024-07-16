@@ -6,7 +6,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Edit Product - Dashboard Admin Template</title>
+        <title>4FOODHD</title>
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:400,700"
@@ -38,28 +38,32 @@
                         <form enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
-                                    
                                     <div class="form-group mb-3">
-                                        <label for="name">Tên nhà hàng</label>
-                                        <input id="name" name="name" type="text" required value="${detail.restaurantName}" class="form-control read-only" readonly/>
+                                        <label for="name">Tên người tố cáo</label>
+                                        <input id="name" name="accountName" type="text" required value="${report.accountName}" class="form-control read-only" readonly/>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="name">Tên nhà hàng bị tố cáo</label>
+                                        <input id="name" name="restaurantName" type="text" required value="${report.restaurantName}" class="form-control read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="description">Lý do</label>
-                                        <textarea readonly="" class="form-control validate tm-small read-only" rows="5" name="description" required>${detail.description}</textarea>
+                                        <textarea readonly class="form-control validate tm-small read-only" rows="5" name="description" required>${report.description}</textarea>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Ngày gửi đơn tố cáo</label>
-                                        <input readonly="" id="date" name="date" type="text" required value="${detail.createDate}" class="form-control validate read-only" />
+                                        <input readonly id="date" name="date" type="text" required value="${report.createDate}" class="form-control validate read-only" />
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
+                                        <label style="color: white;">Hình ảnh minh hoạ</label>
+                                        <img src="img/${report.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white; border: 2px solid black;">
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <a href="managerReportOfStaff" class="btn btn-primary btn-block text-uppercase">Trở lại</a>
+                                    <a onclick="window.history.back()" class="btn btn-primary btn-block text-uppercase">Trở lại</a>
                                 </div>
                             </div>
                         </form>
@@ -76,6 +80,3 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
-
-
-

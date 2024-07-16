@@ -211,7 +211,7 @@
                                                         <h4>
                                                             <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
                                                         </h4>
-                                                        <p>${p.restaurantName}</p>
+                                                        
                                                         <div class="d-flex justify-content-between align-items-center mt-auto">
                                                             <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6> 
                                                             <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
@@ -289,17 +289,7 @@
                                     </div>
                                     <div class="col-6">
                                         <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
-                                        <div class="d-flex my-3">
-                                            <c:forEach begin="1" end="${Math.floor(b.rateStar)}" var="star">
-                                                <i class="fas fa-star text-primary"></i>
-                                            </c:forEach>
-                                            <c:if test="${b.rateStar % 1 != 0}">
-                                                <i class="fas fa-star-half-alt text-primary"></i>
-                                            </c:if>
-                                            <c:forEach begin="1" end="${Math.floor(5 - b.rateStar)}" var="star">
-                                                <i class="fas fa-star"></i>
-                                            </c:forEach>
-                                        </div>
+                                        <p>${b.restaurantName}</p>
                                         <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${b.id}">${b.price}</h6>
                                         <form id="${b.id}" onsubmit="addToCart(${b.id});return false;">
                                             <form action="addtocart" method="post" >
@@ -487,3 +477,4 @@
     </body>
 
 </html>
+

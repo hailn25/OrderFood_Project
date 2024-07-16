@@ -87,9 +87,20 @@
                                         <label for="quantity">Số lượng</label>
                                         <input id="quantity" name="quantity" type="text" required class="form-control validate" value="${voucher.quantity}" />
                                     </div>
+                                       <div class="form-group mb-3">
+                                        <label for="discount">Giảm giá</label>
+                                        <input id="discount" name="discount" type="text" required class="form-control validate" value="${voucher.quantity}" />
+                                    </div>
                                 </div>
 
                                 <div class="col-xl-6 col-lg-6 col-md-12">
+                                     <div class="form-group mb-3">
+                                        <label for="status">Loại Voucher</label><br>
+                                        <input type="radio" id="status1" name="voucherCategoryId" value="1">
+                                        <label for="status1">FreeShip</label><br>
+                                        <input type="radio" id="status0" name="voucherCategoryId" value="0">
+                                        <label for="status0">Voucher Nhà Hàng </label>
+                                    </div>
                                     <div class="form-group mb-3">
                                         <label for="releaseDate">Ngày phát hành</label>
                                         <input id="releaseDate" name="releaseDate" type="date" required class="form-control validate" value="${voucher.releaseDate}" />
@@ -125,3 +136,5 @@
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
+
+

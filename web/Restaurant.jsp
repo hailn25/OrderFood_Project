@@ -1,5 +1,3 @@
-
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!DOCTYPE html>
@@ -47,10 +45,13 @@
                             <img src="img/${r.imageAvatar}" alt="Không thể tải ảnh"/>
                             <h5>${r.name}</h5>
                         </div>
-                        <div class="header-left-detail-chat">
-                            <i class="far fa-comments"></i>
-                            <a href="">Nhắn tin</a>
-                        </div>
+
+                        <c:if test="${sessionScope.account.roleId == 2}">
+                            <div class="header-left-detail-chat">
+                                <i class="far fa-comments"></i>
+                                <a href="messageUser?userId=${sessionScope.account.accountId}&restaurantId=${r.restaurantId}">Nhắn tin</a>
+                            </div>
+                        </c:if>
 
                         <c:if test="${sessionScope.account.roleId == 2}">                          
                             <div class="header-left-detail-report">
@@ -186,3 +187,4 @@
     </body>
 
 </html>
+

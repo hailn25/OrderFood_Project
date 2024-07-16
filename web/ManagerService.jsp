@@ -58,6 +58,47 @@
                 color: white;
             }
 
+            .btn-blue {
+                background-color: #74C0FC;
+                color: white;
+            }
+
+            .btn-blue:hover {
+                background-color: #58A6FF;
+                color: white;
+            }
+
+            .status-confirmed {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 80px;
+                border-radius: 8px;
+                background-color: #ADFF2F;
+                color: white;
+            }
+            .status-rejected {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 80px;
+                border-radius: 8px;
+                background-color: #FF5557;
+                color: white;
+            }
+            .status-other {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 150px;
+                border-radius: 8px;
+                background-color: #F6DB67;
+                color: white;
+            }
+
         </style>
     </head>
 
@@ -65,24 +106,7 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
 
-
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
@@ -133,6 +157,13 @@
                                 </a>
                             </li>
                         </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="loadListRequestVoucher">
+                                    <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
+                                </a>
+                            </li>
+                        </c:if>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -158,7 +189,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Yêu cầu quảng cáo từ <b>Nhà hàng</b></h2>
+                            <h2>Yêu cầu quảng cáo từ <b>Nhà Hàng</b></h2>
                         </div>
                     </div>
                 </div>
@@ -174,20 +205,26 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listSlider}" var="s">
-                            <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
-                                <tr>
-                                    <td>${s.sliderId}</td>
-                                    <td class="title" data-title>${s.sliderTitle}</td>
-                                    <td>
-                                        <img src="img/${s.imageURL}" alt="Không thể tải ảnh">
-                                    </td>
-                                    <td>${s.statusName}</td>
-                                    <td>
+                            <tr>
+                                <td>${s.sliderId}</td>
+                                <td class="title" data-title>${s.sliderTitle}</td>
+                                <td>
+                                    <img src="img/${s.imageURL}" style="object-fit: cover;" alt="Không thể tải ảnh">
+                                </td>
+                                <td>
+                                    <p class="${s.statusName == 'Xác nhận' ? 'status-confirmed' : s.statusName == 'Từ chối' ? 'status-rejected' : 'status-other'}">
+                                        ${s.statusName}
+                                    </p>
+                                </td>
+                                <td>
+                                    <a href="loadSlider?sliderId=${s.sliderId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                        <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
                                         <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
                                         <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
-                                    </td>
-                                </tr>
-                            </c:if>
+                                        </c:if>
+                                </td>
+                            </tr>
+
                         </c:forEach>
                     </tbody>
                 </table>
@@ -214,5 +251,6 @@
         </script>
     </body>
 </html>
+
 
 

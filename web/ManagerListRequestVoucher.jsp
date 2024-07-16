@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -74,8 +77,8 @@
                 color: white;
             }
             .custom-star {
-            color: #FFB524 !important;
-        }
+                color: #FFB524 !important;
+            }
 
         </style>
     </head>
@@ -84,75 +87,62 @@
         <div class="" id="home">
             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
-                    <a class="navbar-brand" href="HomeOfAdmin.jsp">
-                        <h1 class="tm-site-title mb-0">Admin</h1>
-                    </a>
-                    <button
-                        class="navbar-toggler ml-auto mr-0"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                        >
-                        <i class="fas fa-bars tm-nav-icon"></i>
-                    </button>
+
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
 
-                            <c:if test="${sessionScope.account.roleId == 1}">
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="HomeOfAdmin.jsp">
+                                    <a class="nav-link" href="ManagerStaff.jsp">
                                         <i class="fas fa-home"></i> Trang chủ
                                         <span class="sr-only">(current)</span>
                                     </a>
                                 </li>
                             </c:if>
-                            <c:if test="${sessionScope.account.roleId == 1}">
+
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="revenueAdmin">
-                                        <i class="fas fa-tachometer-alt"></i> Thống kê
-                                        <span class="sr-only">(current)</span>
+                                    <a class="nav-link" href="managerBlog">
+                                        <i class="far fa-file-alt"></i> Quản lý blog
                                     </a>
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 5}">
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerCategory">
-                                        <i class="far fa-file-alt"></i> Loại sản phẩm
+                                    <a class="nav-link" href="managerService">
+                                        <i class="fas fa-sliders-h"></i> Dịch vụ 
                                     </a>
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 4}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerProduct">
-                                        <i class="fas fa-shopping-cart"></i> Sản phẩm
+                                    <a class="nav-link" href="managerReport">
+                                        <i class="far fa-comment-dots"></i> Quản lý báo cáo
                                     </a>
                                 </li>
                             </c:if>
-                            <c:if test="${sessionScope.account.roleId == 4}">
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerOrderOfCustomer">
-                                        <i class="far fa-file-alt"></i> Quản lý đơn hàng
+                                    <a class="nav-link " href="managerProductFlashSale">
+                                        <i class="far fa-clock"></i> Flash Sale
                                     </a>
                                 </li>
                             </c:if>
-                            <c:if test="${sessionScope.account.roleId == 1}">
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link" href="managerAccount">
-                                        <i class="far fa-user"></i> Quản lý tài khoản
+                                    <a class="nav-link" href="managerVoucher">
+                                        <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
                                     </a>
                                 </li>
                             </c:if>
 
-                            <c:if test="${sessionScope.account.roleId == 1}">
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="managerReportOfStaff">
-                                        <i class="far fa-comment-dots"></i> Quản lý báo cáo của nhân viên
+                                    <a class="nav-link active" href="loadListRequestVoucher">
+                                        <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
                                     </a>
                                 </li>
                             </c:if>
@@ -183,7 +173,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Quản lý <b>lệnh cấm nhà hàng của nhân viên</b></h2>
+                            <h2>Quản lý <b>yêu cầu thêm voucher của nhà hàng</b></h2>
                         </div>
 
                     </div>
@@ -191,44 +181,31 @@
                 <table id="example" class="display" style="width:100%">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Tên nhà hàng</th>
-                            <th>Ảnh đại diện</th>
-                            <th>Đánh giá</th>
-                            <th>Trạng thái</th>
+                            <th>Nhà hàng</th>
+                            <th>Voucher</th>
+                            <th>Mô tả</th>
+                            <th>Số lượng</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
                             <th>Tác vụ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach items="${list}" var="o">
                             <tr>
-                                <td>${o.restaurantId}</td>
                                 <td>${o.restaurantName}</td>
-                                <td><img src="img/${o.imageAvatar}" alt="Không thể tải ảnh"></td>
-                                <td>
-                                    <c:forEach begin="1" end="5" var="i">
-                                        <c:choose>
-                                            <c:when test="${i <= o.rateStar}">
-                                                <i class="fa fa-star text-secondary custom-star"></i>
-                                            </c:when>
-                                            <c:when test="${i - 0.5 == o.rateStar}">
-                                                <i class="fa fa-star-half-alt text-secondary custom-star"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="far fa-star custom-star"></i>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                </td>
-
-                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Hoạt động" : "Bị cấm"}</td>
-                                <td>
-                                    <a href="loadReportedOfStaff?rid=${o.restaurantId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
-                                    <a href="confirmBanRestaurant?rid=${o.restaurantId}" onclick="confirmAccecpt(event)" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                    <!--<a href="cancelBanRestaurant?rid=${o.restaurantId}" onclick="confirmCancel(event)" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>-->
-                                </td>
-                            </tr>
-                        </c:forEach>
+                                <td>${o.voucherName}</td>
+                                <td>${o.description}</td>
+                                <td>${o.quantity}</td>
+                                <td><fmt:formatDate value="${o.releaseDate}" pattern="dd/MM/yyyy" /></td>
+                                <td><fmt:formatDate value="${o.finishDate}" pattern="dd/MM/yyyy" /></td>
+                        <td>
+                            <a href="viewDetailRequestVoucher?vid=${o.voucherId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                            <a href="confirmRequestVoucher?vid=${o.voucherId}" onclick="confirmAccecpt(event)" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                            <a href="cancelRequestVoucher?vid=${o.voucherId}" onclick="confirmCancel(event)" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
+                        </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
@@ -240,19 +217,19 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                        new DataTable('#example');
+                                new DataTable('#example');
         </script>
         <script>
             function confirmCancel(event) {
                 event.preventDefault();
-                var confirmAction = confirm("Bạn có chắc chắn muốn bỏ qua báo cáo?");
+                var confirmAction = confirm("Bạn có chắc chắn từ chối yêu cầu này không?");
                 if (confirmAction) {
                     window.location.href = event.target.closest('a').href;
                 }
             }
             function confirmAccecpt(event) {
                 event.preventDefault();
-                var confirmAction = confirm("Bạn có chắc chắn muốn cấm nhà hàng này không?");
+                var confirmAction = confirm("Bạn có chắc chắn chấp nhận yêu cầu này không?");
                 if (confirmAction) {
                     window.location.href = event.target.closest('a').href;
                 }
@@ -262,6 +239,3 @@
 
     </body>
 </html>
-
-
-
