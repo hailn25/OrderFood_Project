@@ -33,6 +33,8 @@ public class ListOrderDAO {
 
             String query = "SELECT\n"
                     + "    o.AccountId,\n"
+                    + "    o.OrderId,\n"
+                    + "    p.ProductId,\n"
                     + "    p.Name,\n"
                     + "    p.Price,\n"
                     + "    p.ImageURL,\n"
@@ -59,18 +61,20 @@ public class ListOrderDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 listOrderById.add(new ListOrder(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
+                        rs.getInt(2),
+                        rs.getInt(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getDouble(5),
                         rs.getString(6),
                         rs.getString(7),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getInt(10),
-                        rs.getDouble(11),
+                        rs.getString(10),
+                        rs.getString(11),
                         rs.getInt(12),
-                        rs.getString(13)));
+                        rs.getDouble(13),
+                        rs.getInt(14),
+                        rs.getString(15)));
             }
 
         } catch (SQLException ex) {
@@ -114,8 +118,47 @@ public class ListOrderDAO {
         return listOrderById_V1;
     }
 
-    public static void main(String[] args) {
+    public boolean updateOrderStatus(int accountId, int orderId) throws ClassNotFoundException {
+        try {
+            // Câu lệnh SQL cập nhật
+            String query = "update [Order]\n"
+                    + "set OrderStatusId = 8\n"
+                    + "where AccountId = ? and OrderId = ?";
+
+            // Kết nối tới cơ sở dữ liệu
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+
+            // Thiết lập các tham số cho câu lệnh
+            ps.setInt(1, accountId);
+            ps.setInt(2, orderId);
+
+            // Thực thi câu lệnh cập nhật
+            int rowsUpdated = ps.executeUpdate();
+
+            // Kiểm tra xem có bản ghi nào được cập nhật không
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Đóng các tài nguyên
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException {
         ListOrderDAO dao = new ListOrderDAO();
-        System.out.println(dao.getListOrderById(1, 6));
+        System.out.println(dao.getListOrderById(4, 6));
     }
 }

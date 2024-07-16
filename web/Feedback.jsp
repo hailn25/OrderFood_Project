@@ -120,6 +120,38 @@
                 border-radius: 10px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
+
+            .rating {
+                display: inline-block;
+                unicode-bidi: bidi-override;
+                direction: rtl;
+            }
+
+            .rating input {
+                display: none;
+            }
+
+            .rating label {
+                display: inline-block;
+                padding: 5px;
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .rating label:before {
+                content: "\2605";
+                color: #ccc;
+            }
+
+            .rating input:checked ~ label:before {
+                color: #ffcc00;
+            }
+
+            /* Styling for the stars */
+            .rating label:hover:before,
+            .rating label:hover ~ label:before {
+                color: #ffcc00;
+            }
         </style>
     </head>
     <body>
@@ -243,34 +275,23 @@
                     <div class="row">
                         <div class="col mb-3">
                             <div class="card">
-                                <div class="card-body">
-                                    <%-- Kiểm tra và hiển thị thông báo thành công nếu có --%>
-                                    <% if (request.getAttribute("successMessage") != null) { %>
-                                    <div class="alert alert-success" role="alert">
-                                        <%= request.getAttribute("successMessage") %>
-                                    </div>
-                                    <% } %>
-
-                                    <%-- Kiểm tra và hiển thị thông báo lỗi nếu có --%>
-                                    <% if (request.getAttribute("errorMessage") != null) { %>
-                                    <div class="alert alert-danger" role="alert">
-                                        <%= request.getAttribute("errorMessage") %>
-                                    </div>
-                                    <% } %>
-
-                                    <form action="insertFeedback" method="post" enctype="multipart/form-data">
+                                <div class="card-body">                                    
+                                    <form action="insertFeedback" method="post" enctype="multipart/form-data">                                      
                                         <div class="form-group">
-                                            <label for="rateStar">Rate Star:</label>
-                                            <div class="star-rating">
-                                                <span class="fa fa-star" data-rating="1"></span>
-                                                <span class="fa fa-star" data-rating="2"></span>
-                                                <span class="fa fa-star" data-rating="3"></span>
-                                                <span class="fa fa-star" data-rating="4"></span>
-                                                <span class="fa fa-star" data-rating="5"></span>
+                                            <label for="rateStar">Rate Star:</label><br>
+                                            <div class="rating">
+                                                <input type="radio" id="star5" name="rateStar" value="5" />
+                                                <label for="star5"></label>
+                                                <input type="radio" id="star4" name="rateStar" value="4" />
+                                                <label for="star4"></label>
+                                                <input type="radio" id="star3" name="rateStar" value="3" />
+                                                <label for="star3"></label>
+                                                <input type="radio" id="star2" name="rateStar" value="2" />
+                                                <label for="star2"></label>
+                                                <input type="radio" id="star1" name="rateStar" value="1" />
+                                                <label for="star1"></label>
                                             </div>
-                                            <input type="hidden" id="rateStar" name="rateStar">
                                         </div>
-                                       
                                         <div class="form-group">
                                             <label for="feedback">Feedback:</label>
                                             <input type="text" class="form-control" id="feedback" name="feedback">
@@ -282,8 +303,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="productId">Product ID:</label>
-                                            <input type="text" class="form-control" id="productId" name="productId">
+                                            <label for="productId">Product Name</label>
+                                            <input type="text" class="form-control" id="productId" name="productId" value="${productName}">
                                         </div>
 
                                         <div class="form-group">
@@ -301,7 +322,7 @@
                                             <img id="imagePreview" src="#" style="display: none; max-height: 300px;">
                                         </div>
 
-                                        <a href="orderHistory?orderStatusId=1&accountId=${accountId}" class="btn btn-secondary mr-2">Quay lại</a>
+                                        <a href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}" class="btn btn-secondary mr-2">Quay lại</a>
                                         <button type="submit" class="btn btn-primary">Submit Feedback</button>
                                     </form>
                                 </div>
@@ -314,42 +335,31 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
-                                                    function previewImage(event) {
-                                                        var input = event.target;
-                                                        var reader = new FileReader();
-                                                        reader.onload = function () {
-                                                            var dataURL = reader.result;
-                                                            var output = document.getElementById('imagePreview');
-                                                            output.src = dataURL;
-                                                            output.style.display = 'block'; // Hiển thị ảnh mới
-                                                        };
-                                                        if (input.files && input.files[0]) {
-                                                            reader.readAsDataURL(input.files[0]);
-                                                        }
+                                                function previewImage(event) {
+                                                    var input = event.target;
+                                                    var reader = new FileReader();
+                                                    reader.onload = function () {
+                                                        var dataURL = reader.result;
+                                                        var output = document.getElementById('imagePreview');
+                                                        output.src = dataURL;
+                                                        output.style.display = 'block'; // Hiển thị ảnh mới
+                                                    };
+                                                    if (input.files && input.files[0]) {
+                                                        reader.readAsDataURL(input.files[0]);
                                                     }
+                                                }
 
-                                                    // Set the current date in the hidden date input field
-                                                    window.onload = function () {
-                                                        var dateInput = document.getElementById('date');
-                                                        var displayDateInput = document.getElementById('displayDate');
-                                                        var currentDate = new Date().toISOString().split('T')[0];
-                                                        dateInput.value = currentDate;
-                                                        displayDateInput.value = currentDate;
-                                                    }
+                                                // Set the current date in the hidden date input field
+                                                window.onload = function () {
+                                                    var dateInput = document.getElementById('date');
+                                                    var displayDateInput = document.getElementById('displayDate');
+                                                    var currentDate = new Date().toISOString().split('T')[0];
+                                                    dateInput.value = currentDate;
+                                                    displayDateInput.value = currentDate;
+                                                }
 
-                                                    $(document).ready(function () {
-                                                        var $stars = $('.star-rating .fa-star');
-                                                        var $rateStar = $('#rateStar');
 
-                                                        $stars.on('click', function () {
-                                                            var rating = $(this).data('rating');
-                                                            $rateStar.val(rating);
-                                                            $stars.removeClass('checked');
-                                                            for (var i = 0; i < rating; i++) {
-                                                                $stars.eq(i).addClass('checked');
-                                                            }
-                                                        });
-                                                    });
+
         </script>
     </body>
 </html>

@@ -178,7 +178,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="#">
+                                            <a class="nav-link px-3" href="voucherList?accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Voucher</span>
                                             </a>

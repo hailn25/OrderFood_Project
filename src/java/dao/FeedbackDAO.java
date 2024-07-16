@@ -121,8 +121,11 @@ public class FeedbackDAO {
         }
     }
 
+    
+
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         FeedbackDAO dao = new FeedbackDAO();
-        dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
+        //dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
+       
     }
 }

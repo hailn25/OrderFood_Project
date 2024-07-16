@@ -47,6 +47,28 @@ public class RestaurantDAO {
         return restaurantId;
     }
 
+    public String getRestaurantNameByRestaurantId(int restaurantId) {
+        String restaurantName = "";
+        try {
+            String sql = "SELECT [Name]\n"
+                    + "FROM Restaurant\n"
+                    + "where RestaurantId = ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                restaurantName = rs.getString(1);
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RestaurantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return restaurantName;
+    }
+
     public int getQuantityOfRestaurant() throws ClassNotFoundException {
         try {
             String sql = "select COUNT(RestaurantId)\n"
@@ -183,5 +205,6 @@ public class RestaurantDAO {
 //            System.out.println(r.toString());
 //        }
 //        System.out.println(dao.getRestaurantIdByAccountId(8));
+System.out.println(dao.getRestaurantNameByRestaurantId(1));
     }
 }

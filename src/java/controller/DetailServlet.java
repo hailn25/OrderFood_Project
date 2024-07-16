@@ -5,10 +5,8 @@
 package controller;
 
 import dao.FeedbackDAO;
-import dao.ProductDAO;
 import dao.ProductHomeDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.CategoryListDetail;
 import model.Feedback;
-import model.Product;
 import model.ProductHome;
 
 /**

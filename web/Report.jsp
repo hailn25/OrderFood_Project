@@ -42,12 +42,12 @@
 
                                 <div class="form-group">
                                     <label for="accountId">AccountId</label>
-                                    <input type="text" class="form-control" id="accountId" name="accountId" value="${account.accountId}" readonly required>
+                                    <input type="text" class="form-control" id="accountId" name="accountId" value="${sessionScope.account.accountId}" readonly required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="restaurantId">restaurantId</label>
-                                    <input type="text" class="form-control" id="restaurantId" name="restaurantId" required>
+                                    <label for="restaurantId">Restaurant Name</label>
+                                    <input type="text" class="form-control" id="restaurantId" name="restaurantId" value="${restaurantName}" required>
                                 </div>
 
                                 <div class="form-group">

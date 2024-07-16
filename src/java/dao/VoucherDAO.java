@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.ListVoucher;
 import model.Voucher;
 
 /**
@@ -21,11 +22,11 @@ import model.Voucher;
  * @author quoch
  */
 public class VoucherDAO {
-
+    
     Connection con = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-
+    
     public ArrayList<Voucher> getAllVoucher() {
         ArrayList<Voucher> listVoucher = new ArrayList<>();
         try {
@@ -33,7 +34,7 @@ public class VoucherDAO {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 listVoucher.add(new Voucher(
                         rs.getInt(1),
@@ -55,7 +56,7 @@ public class VoucherDAO {
         }
         return listVoucher;
     }
-
+    
     public void addVoucher(String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status) {
         try {
             String sql = "INSERT INTO [dbo].[Voucher] (\n"
@@ -76,7 +77,7 @@ public class VoucherDAO {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void editVoucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -98,7 +99,7 @@ public class VoucherDAO {
             ps.setDate(5, new java.sql.Date(finishDate.getTime()));
             ps.setInt(6, status);
             ps.setInt(7, voucherId);
-
+            
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,7 +123,7 @@ public class VoucherDAO {
             }
         }
     }
-
+    
     public void deleteVoucher(int voucherId) {
         try {
             String sql = "delete from [dbo].[Voucher] \n"
@@ -137,7 +138,7 @@ public class VoucherDAO {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public Voucher getVoucherById(int voucherId) {
         Voucher voucher = new Voucher();
         try {
@@ -146,7 +147,7 @@ public class VoucherDAO {
             ps = con.prepareStatement(sql);
             ps.setInt(1, voucherId);
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 voucher = new Voucher(
                         rs.getInt(1),
@@ -167,7 +168,7 @@ public class VoucherDAO {
         }
         return voucher;
     }
-
+    
     public void insertVoucherAccountDetails(String voucherName, String description, int quantity, String releaseDate, String finishDate, String status, String discount, String voucherCategoryId, String restauranId) throws SQLException, ClassNotFoundException {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -213,10 +214,42 @@ public class VoucherDAO {
             }
         }
     }
-
+    
+    public List<ListVoucher> getVoucherByAccountId(int accountId) {
+        List<ListVoucher> listVoucher = new ArrayList<>();
+        String query = "select av.AccountId ,v.VoucherId, v.VoucherName,v.Description, v.Discount, v.FinishDate, v.ReleaseDate, v.Quantity, v.RestaurantId, v.Status, v.VoucherCategoryId\n"
+                + "from Voucher v\n"
+                + "join AccountVoucher av\n"
+                + "on v.VoucherId = av.VoucherId\n"
+                + "where av.AccountId = ?";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listVoucher.add(new ListVoucher(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getDate(6),
+                        rs.getDate(7),
+                        rs.getInt(8),
+                        rs.getFloat(9),
+                        rs.getInt(10),
+                        rs.getInt(11)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listVoucher;
+    }
+    
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         VoucherDAO dao = new VoucherDAO();
-        dao.insertVoucherAccountDetails("hung", "hung", 3, "2024-07-15", "2024-07-15", "1", "12", "1", "1");
+        System.out.println(dao.getVoucherByAccountId(6));
+        //dao.insertVoucherAccountDetails("hung", "hung", 3, "2024-07-15", "2024-07-15", "1", "12", "1", "1");
     }
-
+    
 }
