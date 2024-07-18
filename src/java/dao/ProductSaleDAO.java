@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.AbstractList;
 import java.sql.Date;
 import java.util.List;
+import model.FlashSaleDTO;
 import model.ProductFlashSaleDTO;
 import model.ProductSaleDTO;
 import model.ProductSaleDTO1;
@@ -356,9 +357,31 @@ public class ProductSaleDAO {
 
     }
 
+    public FlashSaleDTO ViewProductFlashSaleDetail(int id) throws SQLException {
+        List<FlashSaleDTO> list = new ArrayList<>();
+        try {
+            String sql = "SELECT ps.ProductID,p.Name,ps.IsFlashSale,p.ImageURL,ps.Quantity,ps.Discount, ps.SalePrice,p.Price,ps.TimeFrame,ps.StartTime,p.Description\n"
+                    + "FROM Product p\n"
+                    + "\n"
+                    + "JOIN Product_Sale ps\n"
+                    + "ON ps.ProductID = p.ProductID\n"
+                    + "where ps.ProductId = ?";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new FlashSaleDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9), rs.getDate(10), rs.getString(11));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.getProductIsFlashSaleDiscount("2024-07-16", 1, 0.5));
+        System.out.println(dao.ListProductFlashSale());
 
     }
 

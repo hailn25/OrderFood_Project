@@ -119,6 +119,7 @@
                             <th>Ngày phát hành</th>
                             <th>Ngày  kết thúc</th>
                             <th>Trạng thái  </th>
+                            <th>Loại Voucher  </th>
                             <th>Tác vụ </th>
 
                         </tr>
@@ -137,7 +138,9 @@
                                     ${v.status == 1 ? "Đang hiển thị" : "Đang ẩn"}
                                 </td>
 
-
+                                <td style="color: ${v.voucherCategoryId == 1 ? 'green' : 'blue'};">
+                                    ${v.voucherCategoryId== 1 ? "FreeShip" : "Voucher Nhà Hàng"}
+                                </td>
                                 <td>
                                     <a href="editVoucher?vid=${v.voucherId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
 

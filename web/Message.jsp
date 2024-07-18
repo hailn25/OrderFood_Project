@@ -139,8 +139,8 @@
             <div class="flex-1 flex flex-col">
                 <div class="flex items-center justify-between p-4 border-b border-border bg-card">
                     <div class="flex items-center space-x-2">
-                        <img src="https://placehold.co/40x40" alt="Group avatar" class="w-10 h-10 rounded-full" />
-                        <h3 class="text-lg font-bold text-foreground">Bộ Tộc Cờ TFT</h3>
+<!--                        <img src="https://placehold.co/40x40" alt="Group avatar" class="w-10 h-10 rounded-full" />-->
+                        <h3 class="text-lg font-bold text-foreground">4FOODHD</h3>
                     </div>
                     <div class="flex space-x-2">
                         <button class="p-2 rounded-full bg-muted text-muted-foreground">

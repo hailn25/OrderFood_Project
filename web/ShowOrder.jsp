@@ -126,10 +126,10 @@
                    class="button-link <c:if test='${param.orderStatusId == "3"}'>active</c:if>'">
                        Đã giao
                    </a>
-                   <a href="orderHistory?orderStatusId=8&accountId=${sessionScope.account.accountId}" 
-                   class="button-link <c:if test='${param.orderStatusId == "8"}'>active</c:if>'">
+                   <a href="orderHistory?orderStatusId=4,8&accountId=${sessionScope.account.accountId}" 
+                   class="button-link <c:if test='${param.orderStatusId == "4,8"}'>active</c:if>'">
                        Đã huỷ
-                   </a>       
+                   </a>      
                 </div>
                 <nav>
                     <a href="home">Home</a>
@@ -206,4 +206,5 @@
         </script>
     </body>
 </html>
+
 

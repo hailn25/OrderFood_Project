@@ -14,19 +14,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.ProductSaleDTO1;
+import model.FlashSaleDTO;
 
 /**
  *
  * @author hailt
  */
-@WebServlet(name="ManagerProductFlashSale", urlPatterns={"/managerProductFlashSale"})
-public class ManagerProductFlashSale extends HttpServlet {
+@WebServlet(name="ViewDetailRequestFlashSale", urlPatterns={"/viewDetailRequestFlashSale"})
+public class ViewDetailRequestFlashSale extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,15 +35,14 @@ public class ManagerProductFlashSale extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
+        int pid = 0;
+        if(request.getParameter("vid") != null){
+        pid = Integer.parseInt(request.getParameter("vid"));
+        }
         ProductSaleDAO dao = new ProductSaleDAO();
-        List<ProductSaleDTO1> listF = dao.ListProductFlashSale();
-        request.setAttribute("listF", listF);
-        request.getRequestDispatcher("ManagerFlashSale.jsp").forward(request, response);
-        
-        
+        request.setAttribute("detail", dao.ViewProductFlashSaleDetail(pid));
+        request.getRequestDispatcher("ViewDetailRequestProductFlashSale.jsp").forward(request, response);
     } 
-   
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -62,7 +58,7 @@ public class ManagerProductFlashSale extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ManagerProductFlashSale.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ViewDetailRequestFlashSale.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
 
@@ -79,7 +75,7 @@ public class ManagerProductFlashSale extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ManagerProductFlashSale.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ViewDetailRequestFlashSale.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

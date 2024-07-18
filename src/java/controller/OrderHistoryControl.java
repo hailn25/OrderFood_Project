@@ -6,6 +6,7 @@ package controller;
 
 import dao.ListOrderDAO;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,6 @@ public class OrderHistoryControl extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int accountId = 0;
-        int orderStatusId = 0;
         int orderId = 0;
 
         // Lấy accountId từ session
@@ -47,15 +47,20 @@ public class OrderHistoryControl extends HttpServlet {
             accountId = account.getAccountId();
         }
 
+        // Xử lý orderStatusId để nhận nhiều giá trị
+        List<Integer> orderStatusIds = new ArrayList<>();
         if (request.getParameter("orderStatusId") != null) {
-            orderStatusId = Integer.parseInt(request.getParameter("orderStatusId"));
+            String orderStatusIdsParam = request.getParameter("orderStatusId");
+            String[] orderStatusIdsArray = orderStatusIdsParam.split(",");
+            for (String id : orderStatusIdsArray) {
+                orderStatusIds.add(Integer.parseInt(id.trim()));
+            }
         }
 
         if (request.getParameter("cancelOrder") != null && request.getParameter("orderId") != null) {
             orderId = Integer.parseInt(request.getParameter("orderId"));
             ListOrderDAO listOrderDAO = new ListOrderDAO();
 
-           
             boolean isUpdated = false;
             try {
                 isUpdated = listOrderDAO.updateOrderStatus(accountId, orderId);
@@ -74,10 +79,10 @@ public class OrderHistoryControl extends HttpServlet {
 
         // Lấy danh sách đơn hàng
         ListOrderDAO listOrderDAO = new ListOrderDAO();
-        List<ListOrder> listOrders = listOrderDAO.getListOrderById(orderStatusId, accountId);
+        List<ListOrder> listOrders = listOrderDAO.getListOrderByIds(orderStatusIds, accountId);
         request.setAttribute("listOrders", listOrders);
 
-        List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusId, accountId);
+        List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusIds.get(0), accountId); // Chỉ sử dụng giá trị đầu tiên cho phương thức cũ
         request.setAttribute("listOrderById_V1", listOrderById_V1);
 
         // Chuyển tiếp tới trang hiển thị đơn hàng
@@ -124,5 +129,3 @@ public class OrderHistoryControl extends HttpServlet {
     }// </editor-fold>
 
 }
-
-

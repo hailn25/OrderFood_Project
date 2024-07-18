@@ -1,4 +1,3 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -26,6 +25,7 @@ import java.util.logging.Logger;
  */
 @MultipartConfig
 public class InsertFeedbackControll extends HttpServlet {
+
     private static final Logger logger = Logger.getLogger(InsertFeedbackControll.class.getName());
 
     /**
@@ -106,13 +106,15 @@ public class InsertFeedbackControll extends HttpServlet {
 
             try {
                 feedbackDAO.insertFeedback(rateStar, feedbackText, imageURL, accountId, String.valueOf(productId), date);
-                request.setAttribute("successMessage", "Phản hồi thành công!");
+                // Insert thành công
+                request.setAttribute("successMessage", "Phản hồi đã được gửi thành công!");
             } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace();
+                // Insert thất bại
                 request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
             }
         } else {
-            request.setAttribute("errorMessage", "Product ID is missing.");
+            request.setAttribute("errorMessage", "Thiếu thông tin về sản phẩm.");
         }
 
         request.getRequestDispatcher("Feedback.jsp").forward(request, response);
@@ -140,3 +142,5 @@ public class InsertFeedbackControll extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

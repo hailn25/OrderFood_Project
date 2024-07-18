@@ -46,19 +46,24 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="restaurantId">Restaurant Name</label>
-                                    <input type="text" class="form-control" id="restaurantId" name="restaurantId" value="${restaurantName}" required>
+                                    <label for="restaurantId" style="display: none">RestaurantId</label>
+                                    <input type="hidden" class="form-control" id="restaurantId" name="restaurantId" value="${restaurantId}" readonly>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Restaurant Name</label>
+                                    <input type="text" class="form-control" value="${restaurantName}" readonly>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="status">Trạng thái</label>
-                                    <input type="text" class="form-control" id="status" name="status" required>
+                                    <input type="hinden" class="form-control" id="status" value="1" name="status" readonly>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="date">Date:</label>
+                                    <label for="createDate">Date:</label>
                                     <input type="text" class="form-control" id="displayDate" readonly>
-                                    <input type="hidden" id="date" name="date">
+                                    <input type="hidden" id="createDate" name="createDate">
                                 </div>
 
                                 <div class="custom-file mt-3 mb-3">
@@ -135,7 +140,7 @@
 
 
             window.onload = function () {
-                var dateInput = document.getElementById('date');
+                var dateInput = document.getElementById('createDate');
                 var displayDateInput = document.getElementById('displayDate');
                 var currentDate = new Date().toISOString().split('T')[0];
                 dateInput.value = currentDate;
@@ -144,5 +149,6 @@
         </script>
     </body>
 </html>
+
 
 

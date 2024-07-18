@@ -278,6 +278,19 @@
                                 <div class="card-body">                                    
                                     <form action="insertFeedback" method="post" enctype="multipart/form-data">                                      
                                         <div class="form-group">
+                                            <!-- Success message -->
+                                            <c:if test="${not empty successMessage}">
+                                                <div class="alert alert-success" role="alert">
+                                                    ${successMessage}
+                                                </div>
+                                            </c:if>
+
+                                            <!-- Error message -->
+                                            <c:if test="${not empty errorMessage}">
+                                                <div class="alert alert-danger" role="alert">
+                                                    ${errorMessage}
+                                                </div>
+                                            </c:if>
                                             <label for="rateStar">Rate Star:</label><br>
                                             <div class="rating">
                                                 <input type="radio" id="star5" name="rateStar" value="5" />
@@ -303,8 +316,12 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="productId">Product Name</label>
-                                            <input type="text" class="form-control" id="productId" name="productId" value="${productName}">
+                                            <label for="productId" style="display: none;">ProductID</label>
+                                            <input type="hidden" class="form-control" id="productId" name="productId" value="${productId}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productName">Product Name</label>
+                                            <input type="text" class="form-control" id="productName" name="productName" value="${productName}" readonly>
                                         </div>
 
                                         <div class="form-group">
@@ -363,5 +380,6 @@
         </script>
     </body>
 </html>
+
 
 

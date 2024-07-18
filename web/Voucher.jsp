@@ -264,7 +264,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="status" style="display: none;">Status:</label>
-                                                <input type="hidden" id="status" name="status" value="1" required>
+                                                <input type="hidden" id="status" name="status" value="0" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="discount">Discount:</label>
@@ -272,7 +272,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="voucherCategoryId" style="display: none;">VoucherCategoryId:</label>
-                                                <input type="hidden" id="voucherCategoryId" name="voucherCategoryId" value="1" class="form-control hidden" required>
+                                                <input type="hidden" id="voucherCategoryId" name="voucherCategoryId" value="2" class="form-control hidden" required>
                                             </div>
                                             
                                             <div class="form-group">

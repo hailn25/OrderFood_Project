@@ -160,7 +160,7 @@
                             <div class="col-lg-12">
                                 <h4 class="mb-4">Sản phẩm nổi bật</h4>
                                 <div id="productList">
-                                   
+                                    <h5>Đang chờ đến thời gian Flash Sale</h5>
                                 </div>                              
                             </div>
                         </div>

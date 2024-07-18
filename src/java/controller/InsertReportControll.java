@@ -1,4 +1,5 @@
 package controller;
+
 import dao.FeedbackDAO;
 import dao.RestaurantDAO;
 import java.io.File;
@@ -16,12 +17,11 @@ import jakarta.servlet.http.Part;
 import java.io.PrintWriter;
 
 @WebServlet(name = "InsertReportControll", urlPatterns = {"/insertReport"})
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50) // 50MB
+@MultipartConfig
 public class InsertReportControll extends HttpServlet {
 
     private static final String SAVE_DIR = "uploadFiles";
+    private static final Logger logger = Logger.getLogger(InsertReportControll.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,52 +42,58 @@ public class InsertReportControll extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String restaurantIdParam = request.getParameter("restaurantId");
+        if (restaurantIdParam != null && !restaurantIdParam.isEmpty()) {
+            int restaurantId = Integer.parseInt(restaurantIdParam);
+            RestaurantDAO dao = new RestaurantDAO();
+            String restaurantName = dao.getRestaurantNameByRestaurantId(restaurantId);
+            request.setAttribute("restaurantName", restaurantName);
+            request.setAttribute("restaurantId", restaurantId);
+        }
         request.getRequestDispatcher("Report.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        FeedbackDAO feedbackDAO = new FeedbackDAO();
+        RestaurantDAO restaurantDAO = new RestaurantDAO();
         String description = request.getParameter("description");
-        String accountId = request.getParameter("accountId");
-        String restaurantId = request.getParameter("restaurantId");
-        String status = request.getParameter("status");
         String createDate = request.getParameter("createDate");
-        int restaurantId_1 = 0;
-        if (request.getParameter("restaurantId") != null) {
-             restaurantId_1 = Integer.parseInt(request.getParameter("restaurantId"));
-        }
-        
-        
-        RestaurantDAO dao1 = new RestaurantDAO();
-        String restaurantName = dao1.getRestaurantNameByRestaurantId(restaurantId_1);
-        request.setAttribute("restaurantName", restaurantName);
-        // Get the file part from the request
+        String accountId = request.getParameter("accountId");
         Part filePart = request.getPart("imageURL");
-        String fileName = extractFileName(filePart);
-        String savePath = getServletContext().getRealPath("") + File.separator + SAVE_DIR;
+        String restaurantIdParam = request.getParameter("restaurantId");
+        String status = request.getParameter("status");
 
-        File fileSaveDir = new File(savePath);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs();
+        logger.log(Level.INFO, "POST - restaurantId: {0}", restaurantIdParam);
+        if (restaurantIdParam != null && !restaurantIdParam.isEmpty()) {
+            int restaurantId = Integer.parseInt(restaurantIdParam);
+            String restaurantName = restaurantDAO.getRestaurantNameByRestaurantId(restaurantId);
+            request.setAttribute("restaurantName", restaurantName);
+            
+            // Save file to the server
+            String fileName = extractFileName(filePart);
+            String applicationPath = request.getServletContext().getRealPath("");
+            String savePath = applicationPath + File.separator + SAVE_DIR;
+            File fileSaveDir = new File(savePath);
+            if (!fileSaveDir.exists()) {
+                fileSaveDir.mkdir();
+            }
+            String filePath = savePath + File.separator + fileName;
+            filePart.write(filePath);
+            String imageURL = fileName;
+
+            try {
+                feedbackDAO.insertReport(description, imageURL, createDate, accountId, String.valueOf(restaurantId), status);
+                request.setAttribute("successMessage", "Report has been submitted successfully!");
+            } catch (SQLException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+                request.setAttribute("errorMessage", "Error occurred: " + ex.getMessage());
+            }
+        } else {
+            request.setAttribute("errorMessage", "Restaurant information is missing.");
         }
-
-        String filePath = savePath + File.separator + fileName;
-        filePart.write(filePath);
-
-        String imageURL = fileName;
-
-        try {
-            FeedbackDAO dao = new FeedbackDAO();
-            dao.insertReport(description, imageURL, accountId, String.valueOf(restaurantId), status, createDate);
-
-            request.setAttribute("successMessage", "Phản hồi thành công!");
-            request.getRequestDispatcher("Report.jsp").forward(request, response);
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-            request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
-            request.getRequestDispatcher("Report.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("Report.jsp").forward(request, response);
     }
 
     private String extractFileName(Part part) {
@@ -100,6 +106,7 @@ public class InsertReportControll extends HttpServlet {
         }
         return "";
     }
+
 
     @Override
     public String getServletInfo() {
