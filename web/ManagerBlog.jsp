@@ -30,11 +30,6 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
-
-
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"

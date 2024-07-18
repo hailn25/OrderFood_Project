@@ -38,6 +38,16 @@
                 transition: background-color 0.3s ease;
             }
 
+            .btn-blue {
+                background-color: #74C0FC;
+                color: white;
+            }
+
+            .btn-blue:hover {
+                background-color: #58A6FF;
+                color: white;
+            }
+
             .btn-green {
                 background-color: #28a745;
                 color: white;
@@ -58,6 +68,36 @@
                 color: white;
             }
 
+            .status-confirmed {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 80px;
+                border-radius: 8px;
+                background-color: #ADFF2F;
+                color: white;
+            }
+            .status-rejected {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 80px;
+                border-radius: 8px;
+                background-color: #FF5557;
+                color: white;
+            }
+            .status-other {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 150px;
+                border-radius: 8px;
+                background-color: #F6DB67;
+                color: white;
+            }
         </style>
     </head>
 
@@ -66,11 +106,6 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
-
-
                 </a>
                 <button
                     class="navbar-toggler ml-auto mr-0"
@@ -158,7 +193,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Yêu cầu quảng cáo từ <b>Nhà hàng</b></h2>
+                            <h2>Đơn tố cáo nhà hàng từ <b>Khách Hàng</b></h2>
                         </div>
                     </div>
                 </div>
@@ -175,21 +210,26 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listReport}" var="r">
-                            <c:if test="${r.statusName == 'Đang chờ xác nhận'}">
-                                <tr>
-                                    <td>${r.reportId}</td>
-                                    <td>${r.description}</td>
-                                    <td>
-                                        <img src="img/${r.imageURL}" alt="Không thể tải ảnh">
-                                    </td>
-                                    <td>${r.createDate}</td>
-                                    <td>${r.statusName}</td>
-                                    <td>
-                                        <a href="changeStatusReport?changeStatus=${3}&reportId=${r.reportId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="changeStatusReport?changeStatus=${2}&reportId=${r.reportId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
-                                    </td>
-                                </tr>
-                            </c:if>
+                            <tr>
+                                <td>${r.reportId}</td>
+                                <td>${r.description}</td>
+                                <td>
+                                    <img src="img/${r.imageURL}" style="object-fit: cover;" alt="Không thể tải ảnh">
+                                </td>
+                                <td>${r.createDate}</td>
+                                <td>
+                                    <p class="${r.statusName == 'Xác nhận' ? 'status-confirmed' : r.statusName == 'Từ chối' ? 'status-rejected' : 'status-other'}">
+                                        ${r.statusName}
+                                    </p>
+                                </td>
+                                <td>
+                                    <a href="loadReport?reportId=${r.reportId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                        <c:if test="${r.statusName == 'Đang chờ xác nhận'}">
+                                        <a href="changeStatusReport?changeStatus=${3}&reportId=${r.reportId}" class="btn btn-green" title="Xác nhận"  onclick="confirmDelete(event)"><i class="fas fa-check"></i></a>
+                                        <a href="changeStatusReport?changeStatus=${2}&reportId=${r.reportId}" class="btn btn-red" title="Từ chối"><i class="fas fa-times"></i></a>
+                                        </c:if>
+                                </td>
+                            </tr>
                         </c:forEach>
                     </tbody>
                 </table>
@@ -204,15 +244,15 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                        new DataTable('#example');
+                                            new DataTable('#example');
 
-                                        function confirmDelete(event) {
-                                            event.preventDefault();
-                                            var confirmAction = confirm("Bạn có muốn gửi yêu cầu cấm tài khoản không?");
-                                            if (confirmAction) {
-                                                window.location.href = event.target.closest('a').href;
+                                            function confirmDelete(event) {
+                                                event.preventDefault();
+                                                var confirmAction = confirm("Bạn có muốn gửi yêu cầu cấm tài khoản không?");
+                                                if (confirmAction) {
+                                                    window.location.href = event.target.closest('a').href;
+                                                }
                                             }
-                                        }
         </script>
     </body>
 </html>

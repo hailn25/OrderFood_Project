@@ -105,7 +105,8 @@ public class ReportDAO {
         try {
             String sql = "SELECT Report.ReportId, Report.Description, Report.ImageURL, Report.CreateDate, Report.AccountId, Report.RestaurantId, ReportStatus.StatusName\n"
                     + "FROM     Report INNER JOIN\n"
-                    + "                  ReportStatus ON Report.ReportStatusId = ReportStatus.ReportStatusId";
+                    + "ReportStatus ON Report.ReportStatusId = ReportStatus.ReportStatusId\n"
+                    + "WHERE Report.ReportId = 1";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -127,6 +128,39 @@ public class ReportDAO {
         return listReport;
     }
 
+    public ReportDTO getReportByReportId(int reportId) {
+        ReportDTO report = new ReportDTO();
+        try {
+            String sql = "SELECT Report.ReportId, Report.Description, Report.ImageURL, Report.CreateDate, Account.Name, Restaurant.Name, ReportStatus.StatusName\n"
+                    + "FROM     Report INNER JOIN\n"
+                    + "ReportStatus ON Report.ReportStatusId = ReportStatus.ReportStatusId\n"
+                    + "INNER JOIN\n"
+                    + "Account ON Report.AccountId = Account.AccountId\n"
+                    + "INNER JOIN\n"
+                    + "Restaurant ON Report.RestaurantId = Restaurant.RestaurantId\n"
+                    + "WHERE Report.ReportId = ?";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, reportId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                report = new ReportDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDate(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return report;
+    }
+
     public static void main(String[] args) {
         ReportDAO dao = new ReportDAO();
 //        for (Report r : dao.getAllReport()) {
@@ -135,5 +169,6 @@ public class ReportDAO {
 //        for (ReportDTO r : dao.getAllReportDTO()) {
 //            System.out.println(r.toString());
 //        }
+        System.out.println(dao.getReportByReportId(1));
     }
 }
