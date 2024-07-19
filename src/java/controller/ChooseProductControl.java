@@ -39,11 +39,13 @@ public class ChooseProductControl extends HttpServlet {
         int productId = Integer.parseInt(request.getParameter("productId"));
         ProductDAO dao = new ProductDAO();
         int quantityProduct = dao.getQuantityProduct(productId);
-        request.setAttribute("productId", productId);
-        request.setAttribute("quantity", quantityProduct);
         Product p = dao.getProductByID(productId);
 
         request.setAttribute("detail", p);
+        request.setAttribute("productId", p.getProductId());
+        request.setAttribute("productName", p.getName());
+        request.setAttribute("stock", quantityProduct);
+        request.setAttribute("imageURL", p.getImageURL());
 
         request.getRequestDispatcher("AddFlashSaleProduct.jsp").forward(request, response);
     }
@@ -88,3 +90,6 @@ public class ChooseProductControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
+

@@ -18,10 +18,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.Product;
 
 /**
  *
@@ -44,6 +46,8 @@ public class AddFlashSaleProductControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+
+            // xử lý add FlashSale
             int productId = 0;
             if (request.getParameter("productId") != null) {
                 productId = Integer.parseInt(request.getParameter("productId"));
@@ -84,6 +88,24 @@ public class AddFlashSaleProductControl extends HttpServlet {
                 quantity = Integer.parseInt(request.getParameter("quantity"));
             }
 
+            // xử lý bắt ngoại lệ
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate selectedDate = LocalDate.parse(date, dateFormatter);
+
+            ProductDAO productDao = new ProductDAO();
+            Product product = productDao.getProductByID(productId);
+
+            if (!selectedDate.isAfter(today)) {
+                request.setAttribute("productId", product.getProductId());
+                request.setAttribute("productName", product.getName());
+                request.setAttribute("stock", product.getQuantity());
+                request.setAttribute("imageURL", product.getImageURL());
+                request.setAttribute("errorDate", "Ngày FlashSale phải là sau ngày hôm nay.");
+                request.getRequestDispatcher("AddFlashSaleProduct.jsp").forward(request, response);
+                return;
+            }
+
             HttpSession session = request.getSession();
             Account a = (Account) session.getAttribute("account");
             int accountId = a.getAccountId();
@@ -92,12 +114,12 @@ public class AddFlashSaleProductControl extends HttpServlet {
 
             ProductDAO dao = new ProductDAO();
             double price = dao.getPriceByProductId(productId);
-            double salePrice = price * (1-discount);
+            double salePrice = price * (1 - discount);
             LocalDate createDate = LocalDate.now();
             ProductSaleDAO dao1 = new ProductSaleDAO();
             dao1.insertFlashSaleProduct(productId, startTime, endTime, salePrice, discount, 0, quantity, timeFrame, restaurantId, java.sql.Date.valueOf(createDate));
             dao1.updateStockBeforeFlashSale(stock, quantity, productId);
-            
+
             request.getRequestDispatcher("managerFlashSaleProduct").forward(request, response);
 //            request.setAttribute("productId", productId);
 //            request.getRequestDispatcher("AddFlashSaleProduct.jsp").forward(request, response);
@@ -148,3 +170,5 @@ public class AddFlashSaleProductControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

@@ -9,7 +9,7 @@
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:400,700"
-        />
+            />
         <!-- https://fonts.google.com/specimen/Roboto -->
         <link rel="stylesheet" href="css/fontawesome.min.css" />
         <!-- https://fontawesome.com/ -->
@@ -37,21 +37,33 @@
                         <form action="addFlashSaleProduct" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
-                                    <c:if test="${not empty error}">
-                                        <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                                    <c:if test="${not empty errorDate}">
+                                        <div id="error-message" class="alert alert-danger mt-3">${errorDate}</div>
                                     </c:if>
                                     <div>
-                                        <input id="productId" name="productId" type="hidden" value="${detail.productId}" class="form-control validate" />
+                                        <input id="productId" name="productId" type="hidden" value="${productId}" class="form-control validate" />
                                         <input id="OldImage" name="OldImage" type="hidden" value="${detail.imageURL}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="productName">Tên sản phẩm</label>
-                                        <input id="productName" name="productName" type="text" required value="${detail.name}" class="form-control read-only" />
+                                        <label>Tên sản phẩm</label>
+                                        <input id="productName" name="productName" type="text" required value="${productName}" class="form-control read-only" />
                                     </div>
+
                                     <div class="form-group mb-3">
                                         <label for="date">Ngày</label>
-                                        <input id="date" name="date" type="date" required class="form-control validate" />
+                                        <input id="date" name="date" type="date" required class="form-control validate" min="" />
                                     </div>
+                                    <script>
+                                        // Lấy ngày hôm nay
+                                        var today = new Date();
+                                        // Tăng ngày hiện tại lên một ngày để có ngày mai
+                                        var tomorrow = new Date(today);
+                                        tomorrow.setDate(tomorrow.getDate() + 1);
+                                        // Chuyển ngày mai thành định dạng YYYY-MM-DD
+                                        var tomorrowStr = tomorrow.toISOString().split('T')[0];
+                                        // Thiết lập thuộc tính min của input với id là date
+                                        document.getElementById('date').setAttribute('min', tomorrowStr);
+                                    </script>
                                     <div class="form-group mb-3">
                                         <label for="timeFrame">Khung giờ</label>
                                         <select style="color: white" class="custom-select tm-select-accounts" name="timeFrame" required>
@@ -62,22 +74,30 @@
                                         </select>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="discount">Giảm giá</label>
-                                        <input id="discount" name="discount" type="text" required  class="form-control validate" />
+                                        <label for="discount">% Giảm giá</label>
+                                        <div class="input-group">
+                                            <input id="discount" name="discount" type="number" min="1" max="99" required class="form-control validate" title="Nhập giá trị từ 1 đến 99" />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
                                     </div>
+
+
                                     <div class="form-group mb-3">
-                                        <label for="stock">Số lượng trong kho</label>
-                                        <input id="stock" name="stock" type="text" required value="${detail.quantity}" class="form-control read-only" />
+                                        <label>Số lượng trong kho</label>
+                                        <input id="stock" name="stock" type="text" required value="${stock}" class="form-control read-only" />
                                     </div>
+
                                     <div class="form-group mb-3">
                                         <label for="quantity">Số lượng muốn FlashSale</label>
-                                        <input id="quantity" name="quantity" type="text" required class="form-control validate" />
+                                        <input id="quantity" name="quantity" type="number" min="1" max="${stock}" required class="form-control validate" title="Nhập giá trị từ 1 đến ${stock}" />
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img id="currentImage" src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
+                                        <img id="currentImage" src="img/${imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
                                     <!-- Khung chứa nút chọn ảnh -->
                                     <div class="custom-file mt-3 mb-3">
@@ -121,3 +141,6 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
+
+
+

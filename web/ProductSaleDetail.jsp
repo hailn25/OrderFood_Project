@@ -7,32 +7,39 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <meta charset="utf-8">
-    <title>4FOODHD</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <head>
+        <meta charset="utf-8">
+        <title>4FOODHD</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet"> 
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet"> 
 
-    <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Icon Font Stylesheet -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <!-- Libraries Stylesheet -->
+        <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/detail.css" rel="stylesheet">
+        <!-- Template Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/detail.css" rel="stylesheet">
+        <style>
+            .original-price-hidden {
+                display: none;
+            }
+        </style>
+    </head>
     <body>
         <jsp:include page="Header.jsp"></jsp:include>
             <!-- Modal Search Start -->
@@ -57,9 +64,9 @@
 
             <!-- Single Page Header start -->
 
-                <div class="container">
-                    <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
-                </div>
+            <div class="container">
+                <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
+            </div>
 
 
             <!-- Single Page Header End -->
@@ -81,19 +88,21 @@
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${fsdetail.name}</h4>
                                 <p id="countdown"  style="font-size: 20px; color: orange "></p>
-                                <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.productId}">${fsdetail.salePrice}</h5>
+                                <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${fsdetail.productId}">${fsdetail.salePrice}</h5>
+
+
                                 <div class="d-flex mb-4" id="star-rating">
                                     <!-- Các ngôi sao sẽ được thêm động bởi JavaScript -->
                                 </div>
                                 <p class="mb-4">${fsdetail.description}</p>
-                                <p class="mb-4">Quantity: ${fsdetail.quantity}</p>
+                                <p class="mb-4" >Quantity: ${fsdetail.quantity}</p>
                                 <div class="input-group quantity mb-5" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                    <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${fsdetail.productId}" data-price="${fsdetail.salePrice}" data-max-quantity="${fsdetail.quantity}">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                             <i class="fa fa-plus"></i>
@@ -198,81 +207,137 @@
             <!-- Footer Start -->
 
             <jsp:include page="Footer.jsp"></jsp:include>
-            <!-- Footer End -->
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+                <!-- Footer End -->
+                <!-- Back to Top -->
+                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-            <!-- JavaScript Libraries -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="lib/easing/easing.min.js"></script>
-            <script src="lib/waypoints/waypoints.min.js"></script>
-            <script src="lib/lightbox/js/lightbox.min.js"></script>
-            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+                <!-- JavaScript Libraries -->
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="lib/easing/easing.min.js"></script>
+                <script src="lib/waypoints/waypoints.min.js"></script>
+                <script src="lib/lightbox/js/lightbox.min.js"></script>
+                <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-            <!-- Template Javascript -->
-            <script src="js/main.js"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const prices = document.querySelectorAll('[id^="price-"]');
-                    prices.forEach(priceElement => {
-                        const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                        const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                <!-- Template Javascript -->
+                <script src="js/main.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const prices = document.querySelectorAll('[id^="price-"]');
+                        prices.forEach(priceElement => {
+                            const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                            const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                        // Định dạng giá thành VND
-                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
-                        // Cập nhật nội dung của thẻ h6
-                        priceElement.textContent = formattedPrice + " VNĐ";
+                            // Định dạng giá thành VND
+                            const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                            // Cập nhật nội dung của thẻ h6
+                            priceElement.textContent = formattedPrice + " VNĐ";
+                        });
                     });
-                });
-            </script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    function updateCountdown() {
-                        const now = new Date();
-                        const hours = now.getHours();
-                        const minutes = now.getMinutes();
-                        const seconds = now.getSeconds();
-                        let countdownTo;
-                        let displayCountdown = true;
+                </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        function updateCountdown() {
+                            const now = new Date();
+                            const hours = now.getHours();
+                            const minutes = now.getMinutes();
+                            const seconds = now.getSeconds();
+                            let countdownTo;
+                            let displayCountdown = true;
 
-                        if (hours >= 10 && hours < 13) {
-                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 13, 0, 0);
-                        } else if (hours >= 13 && hours < 16) {
-                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
-                        } else if (hours >= 16 && hours < 19) {
-                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
-                        } else if (hours >= 19 && hours < 22) {
-                            countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
-                        } else {
-                            displayCountdown = false; // Không hiển thị đếm ngược ngoài khung giờ
+                            if (hours >= 10 && hours < 13) {
+                                countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 13, 0, 0);
+                            } else if (hours >= 13 && hours < 16) {
+                                countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
+                            } else if (hours >= 16 && hours < 19) {
+                                countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
+                            } else if (hours >= 19 && hours < 22) {
+                                countdownTo = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 0, 0);
+                            } else {
+                                displayCountdown = false; // Không hiển thị đếm ngược ngoài khung giờ
+                            }
+
+                            const countdownElement = document.getElementById('countdown');
+
+                            if (displayCountdown) {
+                                const diff = countdownTo - now;
+                                const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                                const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+                                const hoursText = String(diffHours).padStart(2, '0');
+                                const minutesText = String(diffMinutes).padStart(2, '0');
+                                const secondsText = String(diffSeconds).padStart(2, '0');
+
+                                // Thêm chữ "Flash Sale" ở đầu và đặt thời gian ở cuối
+                                countdownElement.textContent = 'Flash Sale - ' + hoursText + ":" + minutesText + ":" + secondsText;
+
+                                setTimeout(updateCountdown, 1000);
+                            } else {
+                                countdownElement.textContent = "Chương trình giảm giá sẽ sớm bắt đầu"; // Hoặc nội dung bạn muốn hiển thị khi ngoài khung giờ bán hàng
+                            }
                         }
 
-                        const countdownElement = document.getElementById('countdown');
+                        updateCountdown();
+                    });
 
-                        if (displayCountdown) {
-                            const diff = countdownTo - now;
-                            const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                            const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
-                            const hoursText = String(diffHours).padStart(2, '0');
-                            const minutesText = String(diffMinutes).padStart(2, '0');
-                            const secondsText = String(diffSeconds).padStart(2, '0');
+                </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const quantityInputs = document.querySelectorAll('.quantity-input');
 
-                            // Thêm chữ "Flash Sale" ở đầu và đặt thời gian ở cuối
-                            countdownElement.textContent = 'Flash Sale - ' + hoursText + ":" + minutesText + ":" + secondsText;
+                        quantityInputs.forEach(function (quantityInput) {
+                            const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+                            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+                            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+                            const salePriceElement = document.getElementById(`salePrice-${quantityInput.dataset.productId}`);
+                            const originalPriceElement = document.getElementById(`originalPrice-${quantityInput.dataset.productId}`);
 
-                            setTimeout(updateCountdown, 1000);
-                        } else {
-                            countdownElement.textContent = "Chương trình giảm giá sẽ sớm bắt đầu"; // Hoặc nội dung bạn muốn hiển thị khi ngoài khung giờ bán hàng
-                        }
-                    }
+                            let alertShown = false; // Flag to track alert display
 
-                    updateCountdown();
-                });
+                            btnPlus.addEventListener('click', function () {
+                                updatePriceVisibility(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+                            });
+
+                            btnMinus.addEventListener('click', function () {
+                                updatePriceVisibility(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+                            });
+
+                            quantityInput.addEventListener('input', function () {
+                                let newValue = parseInt(quantityInput.value);
+                                if (isNaN(newValue) || newValue < 1) {
+                                    newValue = 1;
+                                }
+                                updatePriceVisibility(quantityInput, newValue, maxQuantity);
+                            });
+
+                            function updatePriceVisibility(quantityInput, newQuantity, maxQuantity) {
+                                if (newQuantity < 1) {
+                                    confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
+                                    return;
+                                }
+                                if (newQuantity > maxQuantity) {
+                                    alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                                    return;
+                                }
+                                if (newQuantity > 2) {
+                                    if (!alertShown) {
+                                        alert('Bạn sẽ không được mua với giá flash sale khi mua từ 2 sản phẩm trở lên');
+                                        alertShown = true; // Set flag to true after showing alert
+                                    }
+                                    salePriceElement.classList.add('original-price-hidden'); // Hide sale price
+                                    originalPriceElement.classList.remove('original-price-hidden'); // Show original price
+                                } else {
+                                    salePriceElement.classList.remove('original-price-hidden'); // Show sale price
+                                    originalPriceElement.classList.add('original-price-hidden'); // Hide original price
+                                    alertShown = false; // Reset flag if quantity is 1 or less
+                                }
+
+                                quantityInput.value = newQuantity;
+                            }
+                        });
+                    });
 
             </script>
-
     </body>
 </html>

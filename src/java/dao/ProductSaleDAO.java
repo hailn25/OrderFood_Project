@@ -130,7 +130,7 @@ public class ProductSaleDAO {
         return null;
     }
 
-    public List<ProductSaleDTO1> ListProductFlashSale() throws SQLException {
+    public List<ProductSaleDTO1> ListProductFlashSale(String date) throws SQLException {
         List<ProductSaleDTO1> list = new ArrayList<>();
         try {
             String sql = "SELECT ps.ProductID,\n"
@@ -146,9 +146,10 @@ public class ProductSaleDAO {
                     + "       ps.EndTime\n"
                     + "FROM Product p\n"
                     + "JOIN Product_Sale ps ON ps.ProductID = p.ProductID\n"
-                    + "WHERE CAST(ps.StartTime AS DATE) = CAST(GETDATE() AS DATE);";
+                    + "WHERE CAST(ps.StartTime AS DATE) = ?";
             conn = new DBContext().getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, date);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new ProductSaleDTO1(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getInt(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getInt(9)));
@@ -381,7 +382,7 @@ public class ProductSaleDAO {
 
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.ListProductFlashSale());
+        System.out.println(dao.ListProductFlashSale("2024-07-19"));
 
     }
 

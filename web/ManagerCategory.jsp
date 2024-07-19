@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
 
-
+        <title>4FOODHD</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -27,54 +27,68 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
-
-
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
 
                         <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
-<<<<<<< HEAD (2c6ac93) - code_haile
-                                <a class="nav-link" href="revenueAdmin">
-                                    <i class="fas fa-tachometer-alt"></i> Thống kê
-=======
-                                <a class="nav-link" href="ManagerStaff.jsp">
+                                <a class="nav-link " href="ManagerStaff.jsp">
                                     <i class="fas fa-home"></i> Trang chủ
->>>>>>> origin/HuyVu (051f092) - Merge origin/ma
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
                                 <a class="nav-link active" href="managerCategory">
-                                    <i class="far fa-file-alt"></i> Loại sản phẩm
+                                    <i class="fas fa-bookmark"></i> Loại sản phẩm
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerBlog">
+                                    <i class="far fa-file-alt"></i> Quản lý blog
                                 </a>
                             </li>
                         </c:if>
 
-<<<<<<< HEAD (2c6ac93) - code_haile
-                        <c:if test="${sessionScope.account.roleId == 1}">
-=======
-                        <c:if test="${sessionScope.account.roleId == 5}">
->>>>>>> origin/HuyVu (051f092) - Merge origin/ma
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerService">
+                                    <i class="fas fa-sliders-h"></i> Dịch vụ 
+                                </a>
+                            </li>
+                        </c:if>
+
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerReport">
+                                    <i class="far fa-comment-dots"></i> Quản lý báo cáo
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link " href="managerProductFlashSale">
+                                    <i class="far fa-clock"></i> Flash Sale
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerVoucher">
+                                    <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="loadListRequestVoucher">
+                                    <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
+                                </a>
+                            </li>
+                        </c:if>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -153,46 +167,6 @@
 </script>
 </body>
 </html>
-<<<<<<< HEAD (2c6ac93) - code_haile
-                        <c:if test="${sessionScope.account.roleId == 4}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerProduct">
-                                    <i class="fas fa-shopping-cart"></i> Sản phẩm
-                                </a>
-                            </li>
-                        </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 1}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerAccount">
-                                    <i class="far fa-user"></i> Tài khoản
-                                </a>
-                            </li>
-                        </c:if>
 
-=======
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerBlog">
-                                    <i class="far fa-file-alt"></i> Quản lý blog
-                                </a>
-                            </li>
-                        </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerService">
-                                    <i class="fas fa-sliders-h"></i> Dịch vụ 
-                                </a>
-                            </li>
-                        </c:if>
-
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerReport">
-                                    <i class="far fa-comment-dots"></i> Quản lý báo cáo
-                                </a>
-                            </li>
-                        </c:if>
-                            
->>>>>>> origin/HuyVu (051f092) - Merge origin/ma

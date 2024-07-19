@@ -178,8 +178,9 @@
             </div>
 
         </div>
-
-        <div class="bg-background text-primary-foreground min-h-screen flex items-center justify-center">
+       
+                            
+        <div class="bg-background text-primary-foreground min-h-screen flex items-center justify-center" style="margin-top: 100px;">
             <div class="max-w-lg w-full">
                 <div class="bg-card shadow-lg rounded-lg p-4 space-y-4">
 
@@ -190,7 +191,7 @@
                         </div>
                         <div class="text-center" data-href="loadVoucherRestaurant">
                             <img src="img/IconVoucher.png" alt="Voucher Shop" class="mx-auto mb-2 w-32 h-32 object-cover" />
-                            <span class="text-sm text-muted-foreground">VOUCHER SHOP</span>
+                            <span class="text-sm text-muted-foreground">VOUCHER RESTAURANT</span>
                         </div>
                     </div>
 
@@ -264,3 +265,6 @@
         <script src="js/main.js"></script>
     </body>
 </html>
+
+
+

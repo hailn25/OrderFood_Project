@@ -149,48 +149,106 @@
         </style>
     </head>
     <body>
-        <jsp:include page="Header.jsp"></jsp:include>
-
-            <div class="container">
-                <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
-            </div>
-
-            <header>
-                <div class="container">
-                    <div class="row " style="background: #6A737A">
-                        <!-- Khung thời gian 1 -->
-                        <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
-                            <span style="color: white;font-size: 30px" >10:00-13:00</span><br>
-                            <span class="status" id="status1"></span>
-                        </div>
-                        <!-- Khung thời gian 2 -->
-                        <div class="col" id="timeSlot2" onclick="window.location = 'flsale?timeFrame=2'" >
-                            <span style="color: white;font-size: 30px" >13:00-16:00</span><br>
-                            <span class="status"  id="status2"></span>
-                        </div>
-                        <!-- Khung thời gian 3 -->
-                        <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'" >
-                            <span style="color: white;font-size: 30px" >16:00-19:00</span><br>
-                            <span class="status"  id="status3"></span>
-                        </div>
-                        <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
-                            <span style="color: white;font-size: 30px" >19:00-22:00</span><br>
-                            <span class="status"  id="status4"></span>
-                        </div>
-                        <div class="col-md-3">
-                            <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
-                            <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
-                        </div>
+        <div class="container-fluid fixed-top">
+            <div class="container topbar bg-primary d-none d-lg-block">
+                <div class="d-flex justify-content-between">
+                    <div class="top-info ps-2">
+                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
+                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
+                    </div>
+                    <div class="top-link pe-2">
+                        <c:if test = "${sessionScope.account == null}"> 
+                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
+                        </c:if> 
+                        <c:if test="${sessionScope.account != null}">
+                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
+                            <small class="text-white ms-2">Hello, ${account.name}</small>
+                            <span class="text-white ms-2">|</span>
+                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
+                        </c:if> 
                     </div>
                 </div>
-            </header>
-            <div class="container-fluid fruite py-5">
-                <div class="container py-5">                  
-                    <div class="tab-content">
-                        <div id="tab-1" class="tab-pane fade show p-0 active">
-                            <div class="row g-4">
-                                <div class="col-lg-12">
-                                    <div class="row g-4" id="product-container">
+            </div>
+            <div class="container px-0">
+                <nav class="navbar navbar-light bg-white navbar-expand-xl">
+                    <a href="home" class="navbar-brand"><h1 class="text-primary display-6">4FOODHD</h1></a>
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                        <div class="navbar-nav mx-auto">
+                            <a href="shop" class="nav-item nav-link">Lọc sản phẩm</a>
+                            <a href="flsale" class="nav-item nav-link active">Flash Sale</a>
+                            <a href="blog" class="nav-item nav-link">Blog</a>
+                            <c:if test="${sessionScope.account != null}">
+                                <a href="loadVoucherFreeship" class="nav-item nav-link">Voucher</a>
+                            </c:if> 
+
+                            <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
+                        </div>
+                        <div class="d-flex m-3 me-0">
+                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                <i class="fas fa-search text-primary"></i>
+                            </button>
+
+                            <c:set value="${sessionScope.size}" var="size"></c:set>
+                                <a href="Cart.jsp" class="position-relative me-4 my-auto">
+                                    <i class="fa fa-shopping-bag fa-2x"></i>
+                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
+                            </a>
+
+                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
+                            <c:if test="${not empty sessionScope.account}">
+                                <a href="profile" class="my-auto">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </a>
+                            </c:if>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="container">
+            <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
+        </div>
+
+        <header>
+            <div class="container">
+                <div class="row " style="background: #81C408">
+                    <!-- Khung thời gian 1 -->
+                    <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
+                        <span style="color: white;font-size: 30px" >10:00-13:00</span><br>
+                        <span class="status" id="status1"></span>
+                    </div>
+                    <!-- Khung thời gian 2 -->
+                    <div class="col" id="timeSlot2" onclick="window.location = 'flsale?timeFrame=2'" >
+                        <span style="color: white;font-size: 30px" >13:00-16:00</span><br>
+                        <span class="status"  id="status2"></span>
+                    </div>
+                    <!-- Khung thời gian 3 -->
+                    <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'" >
+                        <span style="color: white;font-size: 30px" >16:00-19:00</span><br>
+                        <span class="status"  id="status3"></span>
+                    </div>
+                    <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
+                        <span style="color: white;font-size: 30px" >19:00-22:00</span><br>
+                        <span class="status"  id="status4"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
+                        <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container-fluid fruite py-5">
+            <div class="container py-5">                  
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane fade show p-0 active">
+                        <div class="row g-4">
+                            <div class="col-lg-12">
+                                <div class="row g-4" id="product-container">
                                     <c:forEach items="${listPS}" var="p">
                                         <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
                                             <div class="rounded position-relative fruite-item">
@@ -254,7 +312,6 @@
             }
             selectedTimeSlot = getParamFromURL("timeFrame");
 
-
             // Hàm để cập nhật trạng thái và đếm ngược
             function updateStatusAndCountdown() {
                 var now = new Date();
@@ -278,6 +335,7 @@
                     document.getElementById("status3").innerHTML = 'Sắp diễn ra';
                     document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                    countdown.setHours(10, 0, 0, 0); // Set the countdown time to 10:00
                 } else if (hour < 13) {
                     timeSlot = document.getElementById('timeSlot1');
                     document.getElementById("status1").innerHTML = 'Đang diễn ra';
@@ -286,6 +344,7 @@
                     document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Kết thúc trong';
                     status = 'Đang diễn ra';
+                    countdown.setHours(13, 0, 0, 0); // Set the countdown time to 13:00
                 } else if (hour < 16) {
                     timeSlot = document.getElementById('timeSlot2');
                     status = 'Sắp diễn ra';
@@ -295,6 +354,7 @@
                     document.getElementById("status4").innerHTML = 'Sắp diễn ra';
                     document.getElementById("mess").innerHTML = 'Kết thúc trong';
                     document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    countdown.setHours(16, 0, 0, 0); // Set the countdown time to 16:00
                 } else if (hour < 19) {
                     timeSlot = document.getElementById('timeSlot3');
                     document.getElementById("status1").innerHTML = 'Đã kết thúc';
@@ -305,6 +365,7 @@
                     document.getElementById('timeSlot1').style.pointerEvents = 'none';
                     document.getElementById('timeSlot2').style.pointerEvents = 'none';
                     status = 'Đang diễn ra';
+                    countdown.setHours(19, 0, 0, 0); // Set the countdown time to 19:00
                 } else if (hour < 22) {
                     timeSlot = document.getElementById('timeSlot4');
                     document.getElementById("status1").innerHTML = 'Đã kết thúc';
@@ -316,6 +377,7 @@
                     document.getElementById('timeSlot2').style.pointerEvents = 'none';
                     document.getElementById('timeSlot3').style.pointerEvents = 'none';
                     status = 'Đang diễn ra';
+                    countdown.setHours(22, 0, 0, 0); // Set the countdown time to 22:00
                 } else {
                     timeSlot = document.getElementById('timeSlot1');
                     status = 'Sắp diễn ra';
@@ -328,6 +390,8 @@
                     document.getElementById('timeSlot2').style.pointerEvents = 'none';
                     document.getElementById('timeSlot3').style.pointerEvents = 'none';
                     document.getElementById('timeSlot4').style.pointerEvents = 'none';
+                    countdown.setHours(10, 0, 0, 0); // Set the countdown time to 10:00 next day
+                    countdown.setDate(countdown.getDate() + 1);
                 }
 
                 if (selectedTimeSlot !== null) {
@@ -384,6 +448,26 @@
 
             setInterval(updateStatusAndCountdown, 1000);
 
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Extract the productId from the element's id
+                    const discount50Button = document.getElementById('discount-50-' + priceId);
+                    const discount25Button = document.getElementById('discount-25-' + priceId);
+                    const originalPrice = parseFloat(priceElement.dataset.originalPrice);
+
+                    discount50Button.addEventListener('click', function () {
+                        const discountedPrice = originalPrice * 0.5;
+                        priceElement.innerText = discountedPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                    });
+
+                    discount25Button.addEventListener('click', function () {
+                        const discountedPrice = originalPrice * 0.75;
+                        priceElement.innerText = discountedPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                    });
+                });
+            });
 
 
             document.addEventListener('DOMContentLoaded', function () {
@@ -400,6 +484,7 @@
                     priceElement.textContent = formattedPrice + " VNĐ";
                 });
             });
+
         </script>
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

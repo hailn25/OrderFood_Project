@@ -69,29 +69,51 @@
                 color: #FFB524 !important;
             }
         </style>
+        <style>
+            .flash-sale {
+                color: green; /* Màu xanh cho Đang FlashSale */
+            }
+
+            .rejected {
+                color: red; /* Màu đỏ cho Bị từ chối */
+            }
+
+            .ended {
+                color: gray; /* Màu xám cho Đã hết FlashSale */
+            }
+
+            .pending-1 {
+                color: orange; /* Màu cam cho Chờ xác nhận */
+            }
+
+        </style>
     </head>
 
     <body id="reportsPage" style="background-color: #F6F6F6">
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
 
                         <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
-                                <a class="nav-link" href="ManagerStaff.jsp">
+                                <a class="nav-link " href="ManagerStaff.jsp">
                                     <i class="fas fa-home"></i> Trang chủ
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerCategory">
+                                    <i class="fas fa-bookmark"></i> Loại sản phẩm
+                                </a>
+                            </li>
+                        </c:if>
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
-                                <a class="nav-link " href="managerBlog">
+                                <a class="nav-link" href="managerBlog">
                                     <i class="far fa-file-alt"></i> Quản lý blog
                                 </a>
                             </li>
@@ -104,6 +126,7 @@
                                 </a>
                             </li>
                         </c:if>
+
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerReport">
@@ -118,7 +141,6 @@
                                 </a>
                             </li>
                         </c:if>
-
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerVoucher">
@@ -153,6 +175,8 @@
             </div>
         </nav>
 
+
+
         <div class="container">
             <div class="table-wrapper">
                 <div class="table-title">
@@ -160,8 +184,8 @@
                         <div class="col-sm-6">
                             <h2>Quản lý <b>Flash Sale</b></h2>
                         </div>
-                        <div class="col-sm-6">
-                            <a href="managerAddBlog"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm bài viết mới</span></a>
+                        <div class="col-sm-3 ml-auto" style="max-width: 250px; margin-right: 10px">
+                            <input id="date" name="date" type="date" required class="form-control validate" />
                         </div>
                     </div>
                 </div>
@@ -179,20 +203,34 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listF}" var="f">
-                            <c:if test="${f.isFlashSale == 0}">
-                                <tr>
 
-                                    <td>${f.productId}</td>
-                                    <td> ${f.name}</td>
-                                    <td>
-                                        <img src="img/${f.imageURL}" alt="Không thể tải ảnh">
-                                    </td>
-                                    <td style="color: red;">
-                                        Đang chờ xác nhận
-                                    </td>
-                                    <td><fmt:formatNumber value="${f.salePrice * 1000}" type="number" maxFractionDigits="0"/> VNĐ</td>
- 
-                                     <td>
+                            <tr>
+
+                                <td>${f.productId}</td>
+                                <td> ${f.name}</td>
+                                <td>
+                                    <img src="img/${f.imageURL}" alt="Không thể tải ảnh">
+                                </td>
+                                <td style="color: red;">
+                                    <c:choose>
+                                        <c:when test="${f.isFlashSale == 0}">
+                                            <span class="pending-1">Chờ xác nhận</span>
+                                        </c:when>
+                                        <c:when test="${f.isFlashSale == 1}">
+                                            <span class="flash-sale">Đang Flash Sale</span>
+                                        </c:when>
+                                        <c:when test="${f.isFlashSale == 2}">
+                                            <span class="rejected">Bị từ chối</span>
+                                        </c:when>
+                                        <c:when test="${f.isFlashSale == 3}">
+                                            <span class="ended">Đã hết FlashSale</span>
+                                        </c:when>
+
+                                    </c:choose>
+                                </td>
+                                <td><fmt:formatNumber value="${f.salePrice * 1000}" type="number" maxFractionDigits="0"/> VNĐ</td>
+
+                                <td>
                                     <c:choose>
                                         <c:when test="${f.timeFrame == 1}">
                                             10h --> 13h
@@ -208,15 +246,15 @@
                                         </c:when>
                                     </c:choose>
                                 </td>
-                                    <td>
-                                        <a href="viewDetailRequestFlashSale?vid=${f.productId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
-                                        <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                <td>
+                                    <a href="viewDetailRequestFlashSale?vid=${f.productId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                    <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                    <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
 
-                                    </td>
+                                </td>
 
-                                </tr>
-                            </c:if>
+                            </tr>
+
                         </c:forEach>
                     </tbody>
                 </table>
@@ -231,15 +269,15 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                            new DataTable('#example');
+                                        new DataTable('#example');
 
-                                            function confirmDelete(event) {
-                                                event.preventDefault();
-                                                var confirmAction = confirm("Bạn có muốn từ chối yêu cầu này không?");
-                                                if (confirmAction) {
-                                                    window.location.href = event.target.closest('a').href;
-                                                }
+                                        function confirmDelete(event) {
+                                            event.preventDefault();
+                                            var confirmAction = confirm("Bạn có muốn từ chối yêu cầu này không?");
+                                            if (confirmAction) {
+                                                window.location.href = event.target.closest('a').href;
                                             }
+                                        }
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -253,6 +291,25 @@
                             // Cập nhật nội dung của thẻ h6
                             priceElement.textContent = formattedPrice + " VNĐ";
                     });
+        </script>
+        <script>
+                    $(document).ready(function(){
+            $('#date').on('change', function(){
+            var dateValue = $(this).val();
+                    $.ajax({
+                    url: 'managerProductFlashSale',
+                            type: 'POST',
+                            data: { date: dateValue },
+                            success: function(response) {
+                            console.log('Date sent successfully');
+                                    $('#example tbody').html($(response).find('#example tbody').html());
+                            },
+                            error: function(xhr, status, error) {
+                            console.error('Error: ' + error);
+                            }
+                    });
+            });
+            });
         </script>
     </body>
 </html>

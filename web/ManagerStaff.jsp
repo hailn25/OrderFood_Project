@@ -38,6 +38,13 @@
                                     </a>
                                 </li>
                             </c:if>
+                            <c:if test="${sessionScope.account.roleId == 5}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerCategory">
+                                        <i class="fas fa-bookmark"></i> Loại sản phẩm
+                                    </a>
+                                </li>
+                            </c:if>
 
                             <c:if test="${sessionScope.account.roleId == 5}">                          
                                 <li class="nav-item">
@@ -151,5 +158,6 @@
     </body>
 
 </html>
+
 
 

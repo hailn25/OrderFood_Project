@@ -103,34 +103,26 @@
 
     <body id="reportsPage" style="background-color: #F6F6F6">
 
-        <nav class="navbar navbar-expand-xl">
+          <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerStaff.jsp">
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
 
                         <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
-                                <a class="nav-link" href="ManagerStaff.jsp">
+                                <a class="nav-link " href="ManagerStaff.jsp">
                                     <i class="fas fa-home"></i> Trang chủ
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerCategory">
+                                    <i class="fas fa-bookmark"></i> Loại sản phẩm
+                                </a>
+                            </li>
+                        </c:if>
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerBlog">
@@ -165,6 +157,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="managerVoucher">
                                     <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="loadListRequestVoucher">
+                                    <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
                                 </a>
                             </li>
                         </c:if>
@@ -256,5 +255,7 @@
         </script>
     </body>
 </html>
+
+
 
 
