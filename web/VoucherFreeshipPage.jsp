@@ -1,12 +1,8 @@
-<%-- 
-    Document   : Header
-    Created on : May 23, 2024, 7:54:31 AM
-    Author     : ADMIN
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
     <head>
         <meta charset="utf-8">
@@ -152,7 +148,9 @@
                 border-radius: 5px; /* Bo góc */
                 margin-bottom: 8px; /* Khoảng cách phía dưới */
             }
-
+            .voucher-name {
+                text-transform: uppercase;
+            }
 
         </style>
     </head>
@@ -184,98 +182,61 @@
         <div class="bg-background text-primary-foreground min-h-screen flex items-center justify-center">
             <div class="max-w-lg w-full">
                 <div class="bg-card shadow-lg rounded-lg p-4 space-y-4">
+
                     <div class="flex justify-around">
-                        <div class="text-center active_logo" data-href="VoucherFreeshipPage.jsp">
+                        <div class="text-center active_logo" data-href="loadVoucherFreeship">
                             <img src="img/IconFreeship.png" alt="Voucher Freeship" class="mx-auto mb-2 w-32 h-32 object-cover" />
                             <span class="text-sm text-muted-foreground">VOUCHER FREESHIP</span>
                         </div>
-                        <div class="text-center" data-href="VoucherRestaurantPage.jsp">
+                        <div class="text-center" data-href="loadVoucherRestaurant">
                             <img src="img/IconVoucher.png" alt="Voucher Shop" class="mx-auto mb-2 w-32 h-32 object-cover" />
                             <span class="text-sm text-muted-foreground">VOUCHER SHOP</span>
                         </div>
                     </div>
+
                     <div class="space-y-4 scrollable-list">
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
 
-                            <div>
-                                <div class="bg-green-500">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫10k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Tất cả hình thức thanh toán</span>
-                            </div>
+                        <c:forEach items="${listVF}" var="o">
+                            <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
+                                <div>
+                                    <div class="bg-green-500 voucher-name">${o.voucherName}</div>
+                                    <p class="text-sm text-muted-foreground">${o.description}</p>
+                                    <p class="text-sm text-muted-foreground">Ngày hết hạn: <fmt:formatDate value="${o.finishDate}" pattern="dd/MM/yyyy" /></p>
+                                    <span class="text-xs text-blue-500">Tất cả hình thức thanh toán</span>
+                                </div>
+                                <!--                                <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg" onclick="window.location.href = 'home'">Lưu</button>
+                                                                <button class="bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã lấy</button>-->
+                                <c:choose>
+                                    <c:when test="${o.hasVoucher}">
+                                        <!-- Nút "Đã lấy" hiển thị khi người dùng đã có voucher -->
+                                        <button class="bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã lấy</button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <!-- Nút "Lưu" hiển thị khi người dùng chưa có voucher -->
+                                        <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg" onclick="handleVoucherSave('${o.voucherId}')">Lưu</button>
+                                    </c:otherwise>
 
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
+                                </c:choose>
                             </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫15k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Freeshp lấy sớm</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
-                        <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
-                            <div>
-                                <div class="bg-green-500 text-white px-2 py-1 rounded mb-2">FREE SHIP</div>
-                                <p class="text-sm text-muted-foreground">Giảm tới đa ₫10k<br />Đơn Tối Thiểu ₫0</p>
-                                <span class="text-xs text-blue-500">Tất cả hình thức thanh toán</span>
-                            </div>
-                            <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg">Lưu</button>
-                        </div>
+                        </c:forEach>
+
                     </div>
-
                 </div>
                 <!-- Button Back -->
                 <a href="home" class="back-button mt-4">Trở lại trang chủ</a>
             </div>
         </div>
+
+        <script>
+            function handleVoucherSave(voucherId) {
+                // Hiển thị thông báo
+                alert("Lấy voucher thành công");
+
+                // Chuyển hướng đến trang nhận voucher
+                window.location.href = 'getFreeshipVoucher?voucherId=' + voucherId;
+            }
+        </script>
+
 
         <script>
             document.querySelectorAll('.text-center').forEach(item => {

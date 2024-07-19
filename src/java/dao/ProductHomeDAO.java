@@ -344,5 +344,10 @@ public class ProductHomeDAO {
         return listProductByIsSale;
     }
     
-
+//    public static void main(String[] args) {
+//        ProductHomeDAO dao = new ProductHomeDAO();
+//        for (ProductHome p : dao.getProductByCID("1")) {
+//            System.out.println(p.toString());
+//        }
+//    }
 }

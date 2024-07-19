@@ -8,70 +8,142 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding: 0;
+            }
+
             .custom-header {
-                background-color: #81C408; /* Màu nền header */
-                color: #fff; /* Màu chữ của header */
-                padding: 10px; /* Khoảng cách giữa nội dung và viền header */
-                width: 100%; /* Chiều rộng header bằng 100% */
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Đổ bóng cho header */
+                color: #fff;
+                padding: 10px;
+                width: 100%;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }
 
             .navbar-brand {
-                font-size: 1.5rem; /* Cỡ chữ của tiêu đề */
-            }
-            body {
-                margin-top: 20px;
-                background: #f8f8f8
+                font-size: 1.5rem;
+                margin: 0;
             }
 
             .avatar {
                 display: flex;
-                justify-content: center; /* căn giữa theo chiều ngang */
-                align-items: center; /* căn giữa theo chiều dọc */
-                width: 190px; /* Chiều rộng cố định của avatar */
+                justify-content: center;
+                align-items: center;
+                width: 190px;
                 height: 190px;
-                overflow: hidden; /* Ảnh sẽ bị cắt bớt nếu vượt quá kích thước của avatar */
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin: 0 auto 20px;
             }
 
             .avatar-img {
-                max-width: 100%; /* hình ảnh không vượt quá kích thước của ô avatar */
-                max-height: 100%; /* hình ảnh không vượt quá kích thước của ô avatar */
-                display: block; /* đảm bảo hình ảnh không bị căn giữa dọc */
-                margin: auto; /* căn giữa hình ảnh */
+                max-width: 100%;
+                max-height: 100%;
             }
 
             .nav {
                 display: flex;
-                flex-wrap: wrap;
-                gap: 10px; /* Khoảng cách giữa các mục */
-                list-style-type: none; /* Loại bỏ các dấu đầu dòng */
-                padding: 0; /* Xóa padding mặc định của danh sách */
+                flex-direction: column;
+                gap: 10px;
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
             }
 
             .nav-item {
-                flex: 1 1 100%; /* Mỗi mục chiếm hết chiều rộng của cột */
-                max-width: 100%; /* Đảm bảo mỗi mục không vượt quá chiều rộng tối đa */
+                width: 100%;
             }
 
             .nav-link {
                 display: block;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #f8f9fa;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+            .nav-link:hover {
+                background-color: #e2e6ea;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-control {
+                border: none;
+                border-bottom: 2px solid #ddd;
+                padding: 0.5rem;
+                font-size: 1rem;
+                background-color: transparent;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-bottom: 2px solid #81C408;
+            }
+
+            .btn-primary {
+                background-color: #81C408;
+                border: none;
+                transition: background-color 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #6ba306;
             }
 
             .username {
                 display: block;
                 text-align: center;
+                margin-bottom: 10px;
+                font-size: 1.2rem;
+                color: #555;
+            }
+
+            .content-section {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4">
-                <h1 class="navbar-brand mb-0 h4">Đổi mật khẩu</h1>
-                <div class="d-flex align-items-center">
-                    <span class="mr-3">Xin chào, ${account.name}</span>
-                    <a href="logout" class="btn btn-outline-danger btn-sm">Đăng xuất</a>
-                </div>
-            </header>
+            <c:choose>
+                <c:when test="${sessionScope.account.roleId == 2}">
+                    <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #81C408;">
+                        <h1 class="navbar-brand mb-0 h4">Đổi mật khẩu</h1>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">Xin chào, ${account.name}</span>
+                            <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                        </div>
+                    </header>
+                </c:when>
+                <c:when test="${sessionScope.account.roleId == 4}">
+                    <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #567086;">
+                        <h1 class="navbar-brand mb-0 h4">Đổi mật khẩu</h1>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">Xin chào, ${account.name}</span>
+                            <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                        </div>
+                    </header>
+                </c:when>
+                <c:when test="${sessionScope.account.roleId == 3}">
+                    <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #567086;">
+                        <h1 class="navbar-brand mb-0 h4">Đổi mật khẩu</h1>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">Xin chào, ${account.name}</span>
+                            <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                        </div>
+                    </header>
+                </c:when>
+            </c:choose>
             <div class="row flex-lg-nowrap">
                 <div class="col-12 col-lg-auto mb-3" style="width: 250px;">
                     <div class="card p-3">
@@ -81,7 +153,6 @@
                                     <img id="avatarImage" src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
                                 </div>
                             </div>
-
                             <c:choose>
                                 <c:when test="${sessionScope.account.roleId == 2}">
                                     <ul class="nav">
@@ -98,25 +169,18 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                            <a class="nav-link px-3" href="#">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Voucher</span>
                                             </a>
-                                        </li>
+                                        </li>                                 
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="OrderHistory.jsp">
+                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Lịch sử đơn hàng</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="OrderTracking.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Theo dõi đơn hàng</span>
+                                                <span>Đơn hàng</span>
                                             </a>
                                         </li>
                                     </ul>
-
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
@@ -138,6 +202,12 @@
                                                 <span>Setting banner</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Voucher</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </c:when>
                                 <c:when test="${sessionScope.account.roleId == 3}">
@@ -153,13 +223,7 @@
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Đổi mật khẩu</span>
                                             </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="SettingBanner.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
-                                            </a>
-                                        </li>
+                                        </li>                                  
                                     </ul>
                                 </c:when>
                             </c:choose>
@@ -179,15 +243,15 @@
                                                     <input type="hidden" name="accountId" value="${account.accountId}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="currentPassword">Mật khẩu cũ</label>
+                                                    <label for="currentPassword"></label>
                                                     <input type="password" class="form-control" name="currentPassword" placeholder="Nhập mật khẩu cũ" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="newPassword">Mật khẩu mới</label>
+                                                    <label for="newPassword"></label>
                                                     <input type="password" class="form-control" name="newPassword" placeholder="Nhập mật khẩu mới" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="confirmPassword">Nhập lại mật khẩu mới</label>
+                                                    <label for="confirmPassword"></label>
                                                     <input type="password" class="form-control" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required>
                                                 </div>
                                                 <input type="submit" class="btn btn-primary" value="Lưu">

@@ -1,5 +1,3 @@
-
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!DOCTYPE html>
@@ -58,7 +56,7 @@
                         <c:if test="${sessionScope.account.roleId == 2}">                          
                             <div class="header-left-detail-report">
                                 <i class="far fa-flag"></i>
-                                <a href="Report.jsp">Báo cáo</a>
+                                <a href="insertReport?accountId=${sessionScope.account.accountId}&restaurantId=${r.restaurantId}">Báo cáo</a>
                             </div>
                         </c:if>
                     </div>
@@ -71,7 +69,23 @@
                         </div>
                         <div class="header-right-detail">
                             <i class="fas fa-star"></i>
-                            <p>Đánh Giá: <span>${r.rateStar} / 5</span></p>
+                            <p>Đánh Giá: 
+                                <span>
+                                    <c:forEach begin="1" end="5" var="i">
+                                        <c:choose>
+                                            <c:when test="${i <= r.rateStar}">
+                                                <i class="fas fa-star" style="color: #ff0000;"></i>
+                                            </c:when>
+                                            <c:when test="${i - 0.5 == r.rateStar}">
+                                                <i class="fas fa-star-half-alt" style="color: #f50000;"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="far fa-star" style="color: #ff0000;"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </span>
+                            </p>
                         </div>
                         <div class="header-right-detail">
                             <i class="fas fa-user-check"></i>
@@ -99,53 +113,62 @@
 
             <div class="row justify-content-center">
                 <div class="col-lg-12">
-                    <div class="row g-4 justify-content-center">
-                        <c:forEach items="${listProductDTO}" var="p">
-                            <c:if test="${p.quantity >= 1 and p.status == true}">
-                                <div class="col-6 col-md-4 col-lg-2-4">
-                                    <div class="rounded position-relative fruite-item-restaurant" style="height: 400px;">
-                                        <div class="fruite-img-restaurant">
-                                            <a href="detail?pid=${p.producId}">
-                                                <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 260px; object-fit: cover;">
-                                            </a>
-                                        </div>
-                                        <c:if test="${p.isSale == true}">
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
-                                        </c:if>
-                                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                            <div style="height: 60px; overflow: hidden;">
-                                                <a href="detail?pid=${p.producId}" style="color: black; font-weight: bold; font-size: 18px;">${p.name}</a>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between;">
-                                                <h6 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>
-                                                <div style="display: flex;">
-                                                    <form action="addtocart" method="post">
-                                                        <input type="hidden" name="productId" value="${p.producId}">
-                                                        <button type="submit" class="text-primary" style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                        </button>
-                                                    </form>
-                                                    <!--                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                                                                        </div>-->
+                    <c:choose>
+                        <c:when test="${not empty listProductDTO}">
+                            <div class="row g-4 justify-content-center">
+                                <c:forEach items="${listProductDTO}" var="p">
+                                    <c:if test="${p.quantity >= 1 and (p.status == 1 or p.status == 3 or p.status == 4)}">
+                                        <div class="col-6 col-md-4 col-lg-2-4">
+                                            <div class="rounded position-relative fruite-item-restaurant" style="height: 400px;">
+                                                <div class="fruite-img-restaurant">
+                                                    <a href="detail?pid=${p.producId}">
+                                                        <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 260px; object-fit: cover;">
+                                                    </a>
+                                                </div>
+                                                <c:if test="${p.isSale == true}">
+                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
+                                                </c:if>
+                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                    <div style="height: 60px; overflow: hidden;">
+                                                        <a href="detail?pid=${p.producId}" style="color: black; font-weight: bold; font-size: 18px;">${p.name}</a>
+                                                    </div>
+                                                    <div style="display: flex; justify-content: space-between;">
+                                                        <h6 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>
+                                                        <div style="display: flex;">
+                                                            <form action="addtocart" method="post">
+                                                                <input type="hidden" name="productId" value="${p.producId}">
+                                                                <button type="submit" class="text-primary" style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                </button>
+                                                            </form>
+                                                            <!--                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                                                                                    <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                                                                                </div>-->
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </c:if>
+                                </c:forEach>
+                                <div class="col-12">
+                                    <div class="pagination d-flex justify-content-center mt-5">
+                                        <a href="restaurant?restaurantId=${restaurantId}&page=${1}" class="rounded">&laquo;</a>
+                                        <c:forEach var="i" begin="1" end="${totalPages}">
+                                            <a href="restaurant?restaurantId=${restaurantId}&page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
+                                        </c:forEach>
+                                        <a href="restaurant?restaurantId=${restaurantId}&page=${totalPages}" class="rounded">&raquo;</a>
                                     </div>
                                 </div>
-                            </c:if>
-                        </c:forEach>
-
-                        <div class="col-12">
-                            <div class="pagination d-flex justify-content-center mt-5">
-                                <a href="restaurant?restaurantId=${restaurantId}&page=${1}" class="rounded">&laquo;</a>
-                                <c:forEach var="i" begin="1" end="${totalPages}">
-                                    <a href="restaurant?restaurantId=${restaurantId}&page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
-                                </c:forEach>
-                                <a href="restaurant?restaurantId=${restaurantId}&page=${totalPages}" class="rounded">&raquo;</a>
                             </div>
-                        </div>
-                    </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div style="display: flex; justify-content: center;">
+                                <img src="img/chuacosanpham.png" width="100px" height="100px" alt="Không tìm thấy ảnh"/>
+                                <h3 style="display: flex; align-items: center;">Hiện tại nhà hàng chưa có sản phẩm nào</h3>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
@@ -189,3 +212,4 @@
     </body>
 
 </html>
+

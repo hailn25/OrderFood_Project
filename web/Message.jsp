@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -112,29 +113,34 @@
         <div class="flex h-screen bg-zinc-100 dark:bg-zinc-900">
             <div class="w-1/4 bg-card p-4 border-r border-border">
                 <div class="flex items-center justify-between mb-4">
+                      <button onclick="window.history.back();" class="p-2 rounded bg-primary text-primary-foreground">Back</button>
                     <h2 class="text-lg font-bold text-foreground">Đoạn chat</h2>
+                   
                 </div>
-                <input type="text" placeholder="Tìm kiếm trên Message" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
-                <div class="mb-4">
-                    <h3 class="text-sm font-semibold text-foreground">Hộp thư</h3>
-                    <h3 class="text-sm font-semibold text-foreground">Cộng đồng</h3>
-                </div>
+                <form class="flex items-center" action="searchUserMessage" >
+                    <input type="text" name="searchMessage" placeholder="Tìm kiếm tin nhắn" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                    <button type="submit" class="ml-2 p-2 mb-4 border border-border rounded bg-primary text-white focus:ring-2 focus:ring-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
                 <div class="space-y-2 overflow-y-auto">
-                    <div class="flex items-center space-x-2 p-2 rounded hover:bg-muted cursor-pointer">
-                        <img src="https://placehold.co/40x40" alt="User avatar" class="w-10 h-10 rounded-full" />
-                        <div class="flex-1">
-                            <h4 class="text-sm font-semibold text-foreground">Minh Hoàng</h4>
-                            <p class="text-xs text-muted-foreground">có code k gửi hình e xem phát · 1 giờ</p>
-                        </div>
-                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    </div>
+                    <c:forEach items="${listCusName}" var="m">
+                        <a href="messageRestaurant?aid=${m.userId}&rid=${sessionScope.account.accountId}" class="flex items-center space-x-2 p-2 rounded hover:bg-muted cursor-pointer">
+                            <img src="img/${m.imageCustomer}" alt="User avatar" class="w-10 h-10 rounded-full" />
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-foreground">${m.customerName}</h4>
+
+                            </div>
+                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        </a>
+                    </c:forEach>
                 </div>
             </div>
             <div class="flex-1 flex flex-col">
                 <div class="flex items-center justify-between p-4 border-b border-border bg-card">
                     <div class="flex items-center space-x-2">
-                        <img src="https://placehold.co/40x40" alt="Group avatar" class="w-10 h-10 rounded-full" />
-                        <h3 class="text-lg font-bold text-foreground">Bộ Tộc Cờ TFT</h3>
+<!--                        <img src="https://placehold.co/40x40" alt="Group avatar" class="w-10 h-10 rounded-full" />-->
+                        <h3 class="text-lg font-bold text-foreground">4FOODHD</h3>
                     </div>
                     <div class="flex space-x-2">
                         <button class="p-2 rounded-full bg-muted text-muted-foreground">
@@ -142,27 +148,58 @@
                         </button>
                     </div>
                 </div>
+
+
+
+
                 <div class="flex-1 p-4 overflow-y-auto space-y-4 bg-card">
-                    <div class="flex space-x-2">
-                        <img src="https://placehold.co/40x40" alt="User avatar" class="w-10 h-10 rounded-full" />
-                        <div class="flex-1">
-                            <div class="bg-muted p-2 rounded-lg shadow">
-                                <p class="text-sm text-foreground">3 tháng đi húp hàu rồi</p>
+                    <c:forEach items="${listMessage}" var="l" varStatus="status">
+                        <div class="flex space-x-2" <c:if test="${status.last}">id="lastMessage"</c:if>>
+                            <img src="img/${l.senderImageAvatar}" alt="User avatar" class="w-10 h-10 rounded-full" />
+                            <div class="flex-1">
+                                <c:if test="${l.senderId == accountId}">
+                                    <div class="bg-muted p-2 rounded-lg shadow" style="background: #03A9F4;">
+                                        <p class="text-sm text-foreground" style="color: white;">${l.messageContent}</p>
+                                    </div>
+                                </c:if>
+                                <c:if test="${l.senderId == aid}">
+                                    <div class="bg-muted p-2 rounded-lg shadow">
+                                        <p class="text-sm text-foreground">${l.messageContent}</p>
+                                    </div>
+                                </c:if>
+                                <span class="text-xs text-muted-foreground">${l.timeStamp}</span>
                             </div>
-                            <span class="text-xs text-muted-foreground">08:45</span>
                         </div>
+                    </c:forEach>
+                </div>
+
+
+
+
+
+
+                <form action="messageRestaurantInsert" >
+                    <div class="p-4 border-t border-border bg-card">
+                        <input type="hidden" name="senderId" value="${aid}"/>
+                        <input type="hidden" name="receiverId" value="${sessionScope.account.accountId}"/>
+                        <input type="text" placeholder="Nhập tin nhắn..." name="message" style="width:95%" class="w-full p-2 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                        <button type="submit" style="margin-left: 10px">
+                            <i class="far fa-paper-plane"></i>
+                        </button>
                     </div>
-                </div>
-                <div class="p-4 border-t border-border bg-card">
-                    <input type="text" placeholder="Nhập tin nhắn..." style="width:95%"  class="w-full p-2 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
-                    <button style="margin-left: 10px">
-                    <i class="far fa-paper-plane"></i>
-                    </button>
-                </div>
+                </form>
 
             </div>
         </div>
 
-
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var lastMessage = document.getElementById("lastMessage");
+                if (lastMessage) {
+                    lastMessage.scrollIntoView({behavior: "smooth"});
+                }
+            });
+        </script>
     </body>
+
 </html>

@@ -26,13 +26,16 @@ public class ListOrderDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-
-    public List<ListOrder> getListOrderById(int orderStatusId, int accountId) {
+    public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
         List<ListOrder> listOrderById = new ArrayList<>();
+        if (orderStatusIds == null || orderStatusIds.isEmpty()) {
+            return listOrderById;
+        }
         try {
-
-            String query = "SELECT\n"
+            StringBuilder query = new StringBuilder("SELECT\n"
                     + "    o.AccountId,\n"
+                    + "    o.OrderId,\n"
+                    + "    p.ProductId,\n"
                     + "    p.Name,\n"
                     + "    p.Price,\n"
                     + "    p.ImageURL,\n"
@@ -43,34 +46,45 @@ public class ListOrderDAO {
                     + "    o.Note,\n"
                     + "    od.Quantity,\n"
                     + "    od.TotalMoney,\n"
-                    + "	os.OrderStatusId,\n"
-                    + "	os.Status\n"
+                    + "    os.OrderStatusId,\n"
+                    + "    os.Status\n"
                     + "FROM [dbo].[Order] o\n"
                     + "JOIN [dbo].[OrderDetail] od ON o.OrderId = od.OrderId\n"
                     + "JOIN [dbo].[Product] p ON od.ProductId = p.ProductId\n"
                     + "JOIN [dbo].[OrderStatus] os ON o.OrderStatusId = os.OrderStatusId\n"
                     + "JOIN [dbo].[Restaurant] r ON p.RestaurantId = r.RestaurantId\n"
-                    + "WHERE o.OrderStatusId = ? AND o.AccountId = ?";
+                    + "WHERE o.OrderStatusId IN (");
+            for (int i = 0; i < orderStatusIds.size(); i++) {
+                query.append("?");
+                if (i < orderStatusIds.size() - 1) {
+                    query.append(",");
+                }
+            }
+            query.append(") AND o.AccountId = ?");
 
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, orderStatusId);
-            ps.setInt(2, accountId);
+            ps = conn.prepareStatement(query.toString());
+            for (int i = 0; i < orderStatusIds.size(); i++) {
+                ps.setInt(i + 1, orderStatusIds.get(i));
+            }
+            ps.setInt(orderStatusIds.size() + 1, accountId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listOrderById.add(new ListOrder(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getDouble(3),
+                        rs.getInt(2),
+                        rs.getInt(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        rs.getDouble(5),
                         rs.getString(6),
                         rs.getString(7),
                         rs.getString(8),
                         rs.getString(9),
-                        rs.getInt(10),
-                        rs.getDouble(11),
+                        rs.getString(10),
+                        rs.getString(11),
                         rs.getInt(12),
-                        rs.getString(13)));
+                        rs.getDouble(13),
+                        rs.getInt(14),
+                        rs.getString(15)));
             }
 
         } catch (SQLException ex) {
@@ -81,6 +95,7 @@ public class ListOrderDAO {
         return listOrderById;
     }
 
+    
     public List<OrderDTO> getListOrderById_V1(int orderStatusId, int accountId) {
         List<OrderDTO> listOrderById_V1 = new ArrayList<>();
         try {
@@ -114,8 +129,50 @@ public class ListOrderDAO {
         return listOrderById_V1;
     }
 
-    public static void main(String[] args) {
+    public boolean updateOrderStatus(int accountId, int orderId) throws ClassNotFoundException {
+        try {
+            // Câu lệnh SQL cập nhật
+            String query = "update [Order]\n"
+                    + "set OrderStatusId = 8\n"
+                    + "where AccountId = ? and OrderId = ?";
+
+            // Kết nối tới cơ sở dữ liệu
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+
+            // Thiết lập các tham số cho câu lệnh
+            ps.setInt(1, accountId);
+            ps.setInt(2, orderId);
+
+            // Thực thi câu lệnh cập nhật
+            int rowsUpdated = ps.executeUpdate();
+
+            // Kiểm tra xem có bản ghi nào được cập nhật không
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Đóng các tài nguyên
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+
+    public static void main(String[] args) throws ClassNotFoundException {
         ListOrderDAO dao = new ListOrderDAO();
-        System.out.println(dao.getListOrderById(1, 6));
+        System.out.println(dao);
     }
 }
+
+

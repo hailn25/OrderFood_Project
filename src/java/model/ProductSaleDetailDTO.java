@@ -17,6 +17,7 @@ public class ProductSaleDetailDTO {
     private double discount;
     private double salePrice;
     private double price;
+    
     public ProductSaleDetailDTO() {
     }
 

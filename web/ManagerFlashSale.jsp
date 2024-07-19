@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--day la icon edit, delete-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--day la icon edit, delete-->
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
         <title>4FOODHD</title>
@@ -21,7 +21,6 @@
                 width: 150px;
                 height: 150px;
             }
-
             .btn {
                 display: inline-block;
                 padding: 5px 10px;
@@ -37,6 +36,11 @@
                 transition: background-color 0.3s ease;
             }
 
+            .btn-blue {
+                background-color: #74C0FC;
+                color: white;
+            }
+
             .btn-green {
                 background-color: #28a745;
                 color: white;
@@ -44,6 +48,11 @@
 
             .btn-green:hover {
                 background-color: #218838;
+                color: white;
+            }
+
+            .btn-blue:hover {
+                background-color: #58A6FF;
                 color: white;
             }
 
@@ -56,6 +65,9 @@
                 background-color: #c82333;
                 color: white;
             }
+            .custom-star {
+                color: #FFB524 !important;
+            }
         </style>
     </head>
 
@@ -63,24 +75,7 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
 
-
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
@@ -123,7 +118,7 @@
                                 </a>
                             </li>
                         </c:if>
-                            
+
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerVoucher">
@@ -131,7 +126,13 @@
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="loadListRequestVoucher">
+                                    <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
+                                </a>
+                            </li>
+                        </c:if>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -179,23 +180,43 @@
                     <tbody>
                         <c:forEach items="${listF}" var="f">
                             <c:if test="${f.isFlashSale == 0}">
-                                <td>${f.productId}</td>
-                                <td> ${f.name}</td>
-                                <td>
-                                    <img src="img/${f.imageURL}" alt="Không thể tải ảnh">
+                                <tr>
+
+                                    <td>${f.productId}</td>
+                                    <td> ${f.name}</td>
+                                    <td>
+                                        <img src="img/${f.imageURL}" alt="Không thể tải ảnh">
+                                    </td>
+                                    <td style="color: red;">
+                                        Đang chờ xác nhận
+                                    </td>
+                                    <td><fmt:formatNumber value="${f.salePrice * 1000}" type="number" maxFractionDigits="0"/> VNĐ</td>
+ 
+                                     <td>
+                                    <c:choose>
+                                        <c:when test="${f.timeFrame == 1}">
+                                            10h --> 13h
+                                        </c:when>
+                                        <c:when test="${f.timeFrame == 2}">
+                                            13h --> 16h
+                                        </c:when>
+                                        <c:when test="${f.timeFrame == 3}">
+                                            16h --> 19h
+                                        </c:when>
+                                        <c:when test="${f.timeFrame == 4}">
+                                            19h --> 22h
+                                        </c:when>
+                                    </c:choose>
                                 </td>
-                                <td style="color: red;">
-                                    Đang chờ xác nhận
-                                </td>
-                                <td>${f.salePrice}</td>
-                                <td>${f.timeFrame}</td>                               
-                                <td>
-                                    <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                    <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
-                                </td>
-                                </td>
-                            </tr>
-                        </c:if>
+                                    <td>
+                                        <a href="viewDetailRequestFlashSale?vid=${f.productId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                        <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+
+                                    </td>
+
+                                </tr>
+                            </c:if>
                         </c:forEach>
                     </tbody>
                 </table>
@@ -219,6 +240,19 @@
                                                     window.location.href = event.target.closest('a').href;
                                                 }
                                             }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const prices = document.querySelectorAll('[id^="price-"]');
+                    prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                            const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                            // Định dạng giá thành VND
+                            const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                            // Cập nhật nội dung của thẻ h6
+                            priceElement.textContent = formattedPrice + " VNĐ";
+                    });
         </script>
     </body>
 </html>

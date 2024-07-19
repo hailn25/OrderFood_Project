@@ -126,36 +126,32 @@
                    class="button-link <c:if test='${param.orderStatusId == "3"}'>active</c:if>'">
                        Đã giao
                    </a>
-                   <a href="orderHistory?orderStatusId=4&accountId=${sessionScope.account.accountId}" 
-                   class="button-link <c:if test='${param.orderStatusId == "4"}'>active</c:if>'">
+                   <a href="orderHistory?orderStatusId=4,8&accountId=${sessionScope.account.accountId}" 
+                   class="button-link <c:if test='${param.orderStatusId == "4,8"}'>active</c:if>'">
                        Đã huỷ
-                   </a>       
-                   <a href="orderHistory?orderStatusId=5&accountId=${sessionScope.account.accountId}" 
-                   class="button-link">
-                    Tất cả
-                </a>
+                   </a>      
+                </div>
+                <nav>
+                    <a href="home">Home</a>
+                    <a href="profile">Profile</a>
+                    <a href="logout">Logout</a>
+                </nav>
             </div>
-            <nav>
-                <a href="home">Home</a>
-                <a href="profile">Profile</a>
-                <a href="logout">Logout</a>
-            </nav>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Ảnh</th>
-                    <th>Sản Phẩm</th>
-                    <th>Cửa hàng</th>
-                    <th>Giá</th>
-                    <th>Số Lượng</th>
-                    <th>Tổng</th>
-                    <th>Trạng thái</th>
-                    <th></th>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Sản Phẩm</th>
+                        <th>Cửa hàng</th>
+                        <th>Giá</th>
+                        <th>Số Lượng</th>
+                        <th>Tổng</th>
+                        <th>Trạng thái</th>
+                        <th></th>
 
-                </tr>
-            </thead>
-            <tbody>
+                    </tr>
+                </thead>
+                <tbody>
                 <c:forEach var="order" items="${listOrders}">
                     <tr>
                         <td><img src="img/${order.imageURL}" alt="${order.productName}" width="100"></td>                  
@@ -166,12 +162,21 @@
                         <td class="totalMoney">${order.totalMoney}</td>
                         <td>${order.status}</td>
                         <td>
-                            <c:if test="${order.orderStatusId == 3}">
-                                <a href="Feedback.jsp" class="rating-button">Đánh giá</a>
-                            </c:if>
-                            <c:if test="${order.orderStatusId == 1}">
-                                <a href="#" class="rating-button">Huỷ</a>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${order.orderStatusId == 3}">
+                                    <a href="insertFeedback?accountId=${sessionScope.account.accountId}&productId=${order.productId}" class="rating-button">Đánh giá</a>
+                                </c:when>
+                                <c:when test="${order.orderStatusId == 1}">
+                                    <form action="orderHistory">
+                                        <input type="hidden" name="cancelOrder" value="true">
+                                        <input type="hidden" name="orderId" value="${order.orderId}">
+                                        <button type="submit" class="cancel-button">Huỷ</button>
+                                    </form>
+                                </c:when>
+                                <c:otherwise>
+                                    <!-- Hiển thị trạng thái khác -->
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                     </tr>
                 </c:forEach>
@@ -201,3 +206,5 @@
         </script>
     </body>
 </html>
+
+

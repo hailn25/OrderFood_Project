@@ -139,4 +139,10 @@ public class Product {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", name=" + name + ", price=" + price + ", description=" + description + ", imageURL=" + imageURL + ", categoryId=" + categoryId + ", restaurantId=" + restaurantId + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + '}';
+    }
+    
+    
 }

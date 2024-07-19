@@ -50,7 +50,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -88,7 +88,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -124,7 +124,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -161,7 +161,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -176,8 +176,6 @@ public class FunctionShopDAO {
         FunctionShopDAO dao = new FunctionShopDAO();
 
 //        for (ProductDTO pt : dao.getAllProductDTOByCategoryName("Bánh kem")) {
-//            System.out.println(pt.toString());
-//        }
 //            System.out.println(pt.toString());
 //        }
     }

@@ -77,6 +77,7 @@
                                 </form>
                                 <form id="rangeForm" action="shop" method="POST" style="display: none;">
                                     <input type="hidden" id="hiddenRangeInput" name="rangeValue">
+                                    <input type="hidden" id="categoryName" value="${categoryName}" >
                                 </form>
                                 <div class="mb-3" style="margin: 10px">
                                     <h4 class="mb-2">Giá sản phẩm</h4>
@@ -173,7 +174,7 @@
                                     <c:when test="${not empty listProductDTO}">
                                         <div class="row g-4 justify-content-center">
                                             <c:forEach items="${listProductDTO}" var="p">
-                                                <c:if test="${p.quantity >= 1 and p.status == true}">
+                                                <c:if test="${p.quantity >= 1 and (p.status == 1 or p.status == 3 or p.status == 4)}">
                                                     <div class="col-md-6 col-lg-6 col-xl-4">
                                                         <div class="rounded position-relative fruite-item">
                                                             <div class="fruite-img">
@@ -302,6 +303,7 @@
                                             var rangeInput = document.getElementById('rangeInput').value;
                                             var hiddenRangeInput = document.getElementById('hiddenRangeInput');
                                             hiddenRangeInput.value = rangeInput;
+                                            var categoryName = document.getElementById('categoryName').value;
                                             document.getElementById('rangeForm').submit();
                                         }
         </script>

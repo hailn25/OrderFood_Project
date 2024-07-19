@@ -5,6 +5,7 @@
 package controller;
 
 import dao.FeedbackDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +25,8 @@ import java.sql.SQLException;
  */
 @MultipartConfig
 public class InsertFeedbackControll extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(InsertFeedbackControll.class.getName());
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -61,41 +66,55 @@ public class InsertFeedbackControll extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String productIdParam = request.getParameter("productId");
+        if (productIdParam != null && !productIdParam.isEmpty()) {
+            int productId = Integer.parseInt(productIdParam);
+            ProductDAO productDAO = new ProductDAO();
+            String productName = productDAO.getProductNameByProductId(productId);
+            request.setAttribute("productName", productName);
+            request.setAttribute("productId", productId); // Include the productId in the request
+        } else {
+            request.setAttribute("errorMessage", "Product ID is missing.");
+        }
+        request.getRequestDispatcher("Feedback.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        FeedbackDAO feedbackDAO = new FeedbackDAO();
+        ProductDAO productDAO = new ProductDAO();
         String rateStar = request.getParameter("rateStar");
         String feedbackText = request.getParameter("feedback");
         Part filePart = request.getPart("imageURL");
-        String accountId = request.getParameter("accountName");
-        String productId = request.getParameter("productId");
+        String accountId = request.getParameter("accountId");
         String date = request.getParameter("date");
 
-        String fileName = extractFileName(filePart);
-        String savePath = fileName;
-        File fileSaveDir = new File(savePath);
-        filePart.write(savePath);
+        String productIdParam = request.getParameter("productId");
+        logger.log(Level.INFO, "POST - productId: {0}", productIdParam);
+        if (productIdParam != null && !productIdParam.isEmpty()) {
+            int productId = Integer.parseInt(productIdParam);
+            String productName = productDAO.getProductNameByProductId(productId);
+            request.setAttribute("productName", productName);
 
-        String imageURL =fileName; // Update this based on your setup
+            String fileName = extractFileName(filePart);
+            String savePath = fileName;
+            File fileSaveDir = new File(savePath);
+            filePart.write(savePath);
 
-        try {
-            FeedbackDAO dao = new FeedbackDAO();
-            dao.insertFeedback(rateStar, feedbackText, imageURL, accountId, productId, date);
-            request.setAttribute("successMessage", "Phản hồi thành công!");
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-            request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
+            String imageURL = fileName; // Update this based on your setup
+
+            try {
+                feedbackDAO.insertFeedback(rateStar, feedbackText, imageURL, accountId, String.valueOf(productId), date);
+                // Insert thành công
+                request.setAttribute("successMessage", "Phản hồi đã được gửi thành công!");
+            } catch (SQLException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+                // Insert thất bại
+                request.setAttribute("errorMessage", "Đã xảy ra lỗi: " + ex.getMessage());
+            }
+        } else {
+            request.setAttribute("errorMessage", "Thiếu thông tin về sản phẩm.");
         }
 
         request.getRequestDispatcher("Feedback.jsp").forward(request, response);
@@ -123,3 +142,5 @@ public class InsertFeedbackControll extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

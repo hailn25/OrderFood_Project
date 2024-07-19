@@ -126,33 +126,17 @@
     <body id="reportsPage" style="background-color: #F6F6F6">
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="HomeOfRestaurant.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Nhà hàng: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
                         <c:if test="${sessionScope.account.roleId == 4}">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="HomeOfRestaurant.jsp">
-                                        <i class="fas fa-home"></i> Trang chủ
-                                        <span class="sr-only">(current)</span>
-                                    </a>
-                                </li>
-                            </c:if>
+                            <li class="nav-item">
+                                <a class="nav-link" href="HomeOfRestaurant.jsp">
+                                    <i class="fas fa-home"></i> Trang chủ
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item">
                                 <a class="nav-link" href="revenueRestaurant">
@@ -176,11 +160,18 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">                          
-<!--                            <li class="nav-item">
-                                <a class="nav-link" href="managerCloseProduct">
-                                    <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
+                            <!--                            <li class="nav-item">
+                                                            <a class="nav-link" href="managerCloseProduct">
+                                                                <i class="fas fa-shopping-cart"></i> Sản phẩm đang ẩn
+                                                            </a>
+                                                        </li>-->
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 4}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerFlashSaleProduct" id="btn-viewListProduct">
+                                    <i class="fas fa-bolt"></i> Sản phẩm đang FlashSale
                                 </a>
-                            </li>-->
+                            </li>
                         </c:if>
                         <c:if test="${sessionScope.account.roleId == 4}">
                             <li class="nav-item dropdown">
@@ -206,6 +197,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="Profile.jsp">
                                     <i class="far fa-user"></i> Tài khoản
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 4}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="messageRestaurant?accountId=${sessionScope.account.accountId}">
+                                    <i class="far fa-comments"></i> Tin nhắn
                                 </a>
                             </li>
                         </c:if>

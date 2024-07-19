@@ -43,6 +43,7 @@ public class ShopControl extends HttpServlet {
         request.setAttribute("listRestaurantDTO", listRestaurantDTO);
 
         String categoryName = request.getParameter("categoryName");
+        request.setAttribute("categoryName", categoryName);
         if (categoryName != null) {
             listProductDTO = daofunction.getAllProductDTOByCategoryName(categoryName);
             request.setAttribute("listProductDTO", listProductDTO);
@@ -59,7 +60,7 @@ public class ShopControl extends HttpServlet {
             }
         }
         
-        int itemsPerPage = 10;
+        int itemsPerPage = 9;
         int currentPage = 1;
 
         if (request.getParameter("page") != null) {

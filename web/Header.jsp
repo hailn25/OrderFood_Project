@@ -72,6 +72,10 @@
                             <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
                            <a href="flsale" class="nav-item nav-link ">Flash Sale</a>
                             <a href="blog" class="nav-item nav-link">Blog</a>
+                            <c:if test="${sessionScope.account != null}">
+                                <a href="loadVoucherFreeship" class="nav-item nav-link">Voucher</a>
+                            </c:if> 
+
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">
