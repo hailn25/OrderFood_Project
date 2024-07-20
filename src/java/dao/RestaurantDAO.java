@@ -28,9 +28,10 @@ public class RestaurantDAO {
     public int getRestaurantIdByAccountId(int accountId) {
         int restaurantId = 0;
         try {
-            String sql = "SELECT        RestaurantId\n"
-                    + "FROM            Restaurant\n"
-                    + "WHERE AccountId = ?";
+            String sql = """
+                         SELECT        RestaurantId
+                         FROM            Restaurant
+                         WHERE AccountId = ?""";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, accountId);
@@ -66,17 +67,18 @@ public class RestaurantDAO {
     public ArrayList<RestaurantDTO> getRestaurantDTOByRestaurantId(int restaurantId) {
         ArrayList<RestaurantDTO> listRestaurant = new ArrayList<>();
         try {
-            String sql = "SELECT \n"
-                    + "    r.RestaurantId,r.[Name] AS RestaurantName,r.[Address] AS RestaurantAddress,r.RateStar,a.ImageAvatar,a.CreateDate AS AccountCreateDate,a.Email,a.Phone,COUNT(p.ProductId) AS QuantityOfProduct\n"
-                    + "FROM \n"
-                    + "    Restaurant r\n"
-                    + "JOIN \n"
-                    + "    Account a ON r.AccountId = a.AccountId\n"
-                    + "LEFT JOIN \n"
-                    + "    Product p ON r.RestaurantId = p.RestaurantId\n"
-                    + "WHERE r.RestaurantId = ?\n"
-                    + "GROUP BY \n"
-                    + "    r.RestaurantId,r.[Name],r.[Address],r.RateStar,a.ImageAvatar,a.CreateDate,a.Email,a.Phone";
+            String sql = """
+                         SELECT 
+                                                          r.RestaurantId,r.[Name] AS RestaurantName,r.[Address] AS RestaurantAddress,r.RateStar,a.ImageAvatar,a.CreateDate AS AccountCreateDate,a.Email,a.Phone,COUNT(p.ProductId) AS QuantityOfProduct, a.status
+                                                      FROM 
+                                                          Restaurant r
+                                                      JOIN 
+                                                          Account a ON r.AccountId = a.AccountId
+                                                      LEFT JOIN 
+                                                          Product p ON r.RestaurantId = p.RestaurantId
+                                                      WHERE r.RestaurantId = ?
+                                                      GROUP BY 
+                                                          r.RestaurantId,r.[Name],r.[Address],r.RateStar,a.ImageAvatar,a.CreateDate,a.Email,a.Phone, a.status""";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, restaurantId);
@@ -92,7 +94,8 @@ public class RestaurantDAO {
                         rs.getDate(6),
                         rs.getString(7),
                         rs.getString(8),
-                        rs.getInt(9)));
+                        rs.getInt(9),
+                        rs.getInt(10)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -181,9 +184,10 @@ public class RestaurantDAO {
     public String getRestaurantNameByRestaurantId(int restaurantId) {
         String restaurantName = "";
         try {
-            String sql = "SELECT [Name]\n"
-                    + "FROM Restaurant\n"
-                    + "where RestaurantId = ?";
+            String sql = """
+                         SELECT [Name]
+                         FROM Restaurant
+                         where RestaurantId = ?""";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, restaurantId);
@@ -201,7 +205,7 @@ public class RestaurantDAO {
     }
 
     public static void main(String[] args) {
-        RestaurantDAO dao = new RestaurantDAO();
+//        RestaurantDAO dao = new RestaurantDAO();
 //        System.out.println(dao.getRestaurantIdByAccountId(8));
 //        for (RestaurantDTO r : dao.getRestaurantDTOByRestaurantId(1)) {
 //            System.out.println(r.toString());

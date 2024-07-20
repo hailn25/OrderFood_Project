@@ -61,7 +61,6 @@
         <div class="container-fluid fruite py-5" style="margin-top: 100px">
             <div class="container py-5">
                 <h1 class="mb-4">Tìm kiếm</h1>
-
                 <div class="row g-4">
                     <div class="col-lg-12">
                         <div class="row g-4">
@@ -77,12 +76,12 @@
                                 </form>
                                 <form id="rangeForm" action="shop" method="POST" style="display: none;">
                                     <input type="hidden" id="hiddenRangeInput" name="rangeValue">
-                                    <input type="hidden" id="categoryName" value="${categoryName}" >
+                                    <input type="categoryName" name="categoryName" value="${categoryName}">
                                 </form>
                                 <div class="mb-3" style="margin: 10px">
                                     <h4 class="mb-2">Giá sản phẩm</h4>
-                                    <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000" value="${not empty minPrice ? minPrice : 0}" oninput="updateAmount()" onchange="submitForm()">
-                                    <output id="amount" name="amount" min-value="0" max-value="1000" for="rangeInput">
+                                    <input type="range" step="1000" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000000" value="${not empty minPrice ? minPrice : 0}" oninput="updateAmount()" onchange="submitForm()">
+                                    <output id="amount" name="amount" min-value="0" max-value="1000000" for="rangeInput">
                                         <c:choose>
                                             <c:when test="${not empty minPrice}">
                                                 <span id="formattedMinPrice"></span> - 1.000.000 VND
@@ -128,34 +127,36 @@
                                     <div class="col-lg-12">
                                         <h4 class="mb-3">Nhà hàng nổi bật</h4>
                                         <c:forEach items="${listRestaurantDTO}" var="r" >
-                                            <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
-                                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                                    <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}">
-                                                        <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh" style="height: 80px; width: 80px; border: 2px solid black; border-radius: 8px">
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}" style="font-weight: bold;">${r.name}</a>
-                                                    <div class="d-flex mb-2">
-                                                        <c:forEach begin="1" end="5" var="i">
-                                                            <c:choose>
-                                                                <c:when test="${i <= r.rateStar}">
-                                                                    <i class="fa fa-star text-secondary"></i>
-                                                                </c:when>
-                                                                <c:when test="${i - 0.5 == r.rateStar}">
-                                                                    <i class="fa fa-star-half-alt text-secondary"></i>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:forEach>
+                                            <c:if test="${r.status == 1}">
+                                                <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
+                                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                                        <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}">
+                                                            <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh" style="height: 80px; width: 80px; border: 2px solid black; border-radius: 8px">
+                                                        </a>
                                                     </div>
-                                                    <div class="d-flex mb-2">
-                                                        <h5 class="fw-bold me-2">${r.address}</h5>
+                                                    <div>
+                                                        <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}" style="font-weight: bold;">${r.name}</a>
+                                                        <div class="d-flex mb-2">
+                                                            <c:forEach begin="1" end="5" var="i">
+                                                                <c:choose>
+                                                                    <c:when test="${i <= r.rateStar}">
+                                                                        <i class="fa fa-star text-secondary"></i>
+                                                                    </c:when>
+                                                                    <c:when test="${i - 0.5 == r.rateStar}">
+                                                                        <i class="fa fa-star-half-alt text-secondary"></i>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <div class="d-flex mb-2">
+                                                            <h5 class="fw-bold me-2">${r.address}</h5>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </c:if>
                                         </c:forEach>
 
                                         <!--                                        <div class="d-flex justify-content-center my-4">
@@ -263,7 +264,7 @@
                                             var value = rangeInput.value;
 
                                             // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
                                             amount.value = formattedValue;
                                             amount.innerText = formattedValue;
@@ -277,7 +278,7 @@
                                                 const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                                                 // Định dạng giá thành VND
-                                                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                                                const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
                                                 // Cập nhật nội dung của thẻ h6
                                                 priceElement.textContent = formattedPrice + " VNĐ";
@@ -287,14 +288,14 @@
                                         document.addEventListener('DOMContentLoaded', function () {
                                             // Định dạng giá trị của minPrice khi trang được tải
                                             var minPrice = ${not empty minPrice ? minPrice : 0};
-                                            var formattedMinPrice = (minPrice * 1000).toLocaleString('vi-VN');
+                                            var formattedMinPrice = (minPrice).toLocaleString('vi-VN');
                                             document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
 
                                             // Định dạng giá trị của thanh trượt khi trang được tải
                                             var rangeInput = document.getElementById('rangeInput');
                                             var amount = document.getElementById('amount');
                                             var value = rangeInput.value;
-                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
                                             amount.value = formattedValue;
                                             amount.innerText = formattedValue;
                                         });
@@ -303,7 +304,7 @@
                                             var rangeInput = document.getElementById('rangeInput').value;
                                             var hiddenRangeInput = document.getElementById('hiddenRangeInput');
                                             hiddenRangeInput.value = rangeInput;
-                                            var categoryName = document.getElementById('categoryName').value;
+                                            var categoryName = 
                                             document.getElementById('rangeForm').submit();
                                         }
         </script>

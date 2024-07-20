@@ -106,7 +106,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <p class=" mt-5 mb-5" style="color: black">Welcome back, <b>Staff</b></p>
+                        <p class=" mt-5 mb-5" style="color: black">Chào mừng bạn trở lại, <b>Staff</b></p>
                     </div>
                 </div>
 

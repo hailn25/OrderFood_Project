@@ -20,11 +20,12 @@ public class SliderDTO {
     private Date createDate;
     private Date updateDate;
     private String backLink;
-
+    private int statusAccount;
+    
     public SliderDTO() {
     }
 
-    public SliderDTO(int sliderId, String sliderTitle, String imageURL, int Arrange, String statusName, int updateBy, Date createDate, Date updateDate, String backLink) {
+    public SliderDTO(int sliderId, String sliderTitle, String imageURL, int Arrange, String statusName, int updateBy, Date createDate, Date updateDate, String backLink, int statusAccount) {
         this.sliderId = sliderId;
         this.sliderTitle = sliderTitle;
         this.imageURL = imageURL;
@@ -34,6 +35,7 @@ public class SliderDTO {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.backLink = backLink;
+        this.statusAccount = statusAccount;
     }
 
     public int getSliderId() {
@@ -108,10 +110,19 @@ public class SliderDTO {
         this.backLink = backLink;
     }
 
+    public int getStatusAccount() {
+        return statusAccount;
+    }
+
+    public void setStatusAccount(int statusAccount) {
+        this.statusAccount = statusAccount;
+    }
+
     @Override
     public String toString() {
-        return "SliderDTO{" + "sliderId=" + sliderId + ", sliderTitle=" + sliderTitle + ", imageURL=" + imageURL + ", Arrange=" + Arrange + ", statusName=" + statusName + ", updateBy=" + updateBy + ", createDate=" + createDate + ", updateDate=" + updateDate + ", backLink=" + backLink + '}';
+        return "SliderDTO{" + "sliderId=" + sliderId + ", sliderTitle=" + sliderTitle + ", imageURL=" + imageURL + ", Arrange=" + Arrange + ", statusName=" + statusName + ", updateBy=" + updateBy + ", createDate=" + createDate + ", updateDate=" + updateDate + ", backLink=" + backLink + ", statusAccount=" + statusAccount + '}';
     }
+
     
     
 }

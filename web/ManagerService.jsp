@@ -68,6 +68,16 @@
                 color: white;
             }
 
+            .btn-grey {
+                background-color: #6c757d;
+                color: white;
+            }
+
+            .btn-grey:hover {
+                background-color: #5a6268;
+                color: white;
+            }
+
             .status-confirmed {
                 display: flex;
                 align-items: center;
@@ -219,12 +229,14 @@
                                 <td>
                                     <a href="loadSlider?sliderId=${s.sliderId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
                                         <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
-                                        <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                        <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}&accountId=${s.updateBy}&updateDate=${s.updateDate}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}&accountId=${s.updateBy}&updateDate=${s.updateDate}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                        </c:if>
+                                        <c:if test="${s.statusName.equals('Xác nhận')}">
+                                        <a href="changeStatusSlider?changeStatus=${4}&sliderId=${s.sliderId}&accountId=${s.updateBy}&updateDate=${s.updateDate}" class="btn btn-grey" title="Xoá slider"><i class="fas fa-trash"></i></a>
                                         </c:if>
                                 </td>
                             </tr>
-
                         </c:forEach>
                     </tbody>
                 </table>

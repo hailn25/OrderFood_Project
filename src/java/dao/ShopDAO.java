@@ -145,10 +145,10 @@ public class ShopDAO {
         ArrayList<RestaurantDTO> listRestaurant = new ArrayList<>();
         try {
             String sql = """
-                         SELECT Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar
-                         FROM     Account INNER JOIN
-                         Restaurant ON Account.AccountId = Restaurant.AccountId
-                         ORDER BY Restaurant.RateStar DESC""";
+                         SELECT Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar, Account.status
+                                                  FROM     Account INNER JOIN
+                                                  Restaurant ON Account.AccountId = Restaurant.AccountId
+                                                  ORDER BY Restaurant.RateStar DESC""";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -159,7 +159,8 @@ public class ShopDAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getDouble(4),
-                        rs.getString(5)));
+                        rs.getString(5),
+                        rs.getInt(6)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
