@@ -14,17 +14,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Account;
-import model.OrderDTO;
-import model.OrderDetailDTO;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "ManagerShipperActions", urlPatterns = {"/managerActions"})
-public class ManagerShipperActions extends HttpServlet {
+@WebServlet(name = "CancelOrderForm", urlPatterns = {"/cancelOrderForm"})
+public class CancelOrderForm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,45 +38,9 @@ public class ManagerShipperActions extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
-            response.sendRedirect("Login.jsp");
-            return;
-        }
-        OrderDAO orderDAO = new OrderDAO();
-        String action = request.getParameter("action");
-        int orderId = Integer.parseInt(request.getParameter("oid"));
-
-        switch (action) {
-            case "accept":
-                orderDAO.updateOrderStatus(orderId, 2);
-                int acc = account.getAccountId();
-                ShipperDAO shipper = new ShipperDAO();
-                int shipperId = shipper.getShipperId(acc);
-                orderDAO.insertShipper(shipperId, orderId);
-                break;
-            case "refuse":
-                request.getRequestDispatcher("cancelOrderForm").forward(request, response);
-                break;
-            case "finish":
-                orderDAO.updateOrderStatus(orderId, 3);
-                orderDAO.insertDateFinish(orderId);
-                request.getRequestDispatcher("managerShipperSuccess").forward(request, response);
-                return;
-            default:
-
-                break;
-        }
-
-        ArrayList<OrderDTO> listOrder = orderDAO.getAllOrder(orderId);
-        request.setAttribute("list", listOrder);
-        request.getRequestDispatcher("managerShipper").forward(request, response);
-
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -86,9 +50,12 @@ public class ManagerShipperActions extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int orderId = Integer.parseInt(request.getParameter("oid"));
+        request.setAttribute("orderId", orderId);
+        request.getRequestDispatcher("FormCancel.jsp").forward(request, response);
     }
 
     /**
@@ -102,7 +69,24 @@ public class ManagerShipperActions extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        int accountId = account.getAccountId();
+        ShipperDAO shipper = new ShipperDAO();
+        int shipperId = shipper.getShipperId(accountId);
+
+        int orderId = Integer.parseInt(request.getParameter("oid"));
+        String reason = request.getParameter("reason");
+
+        try {
+            shipper.insertShipperMessage(orderId, shipperId, reason);
+            OrderDAO od = new OrderDAO();
+            od.updateOrderStatus(orderId, 5);
+            session.setAttribute("successMessage", "Phản hồi thành công!");
+            request.getRequestDispatcher("ViewOrderSuccess.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CancelOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

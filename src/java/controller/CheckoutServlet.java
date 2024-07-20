@@ -141,14 +141,14 @@ public class CheckoutServlet extends HttpServlet {
             session.setAttribute("amount", (long) Double.parseDouble(total));
             response.sendRedirect("paymentvnpay");
         } else {
-            sendOrderConfirmationEmail(account, cart, total, note, dao);
+           sendOrderConfirmationEmail(name, address, phone, email, cart, total, note, dao);
             session.removeAttribute("cart");
             session.setAttribute("size", 0);
             request.getRequestDispatcher("home").forward(request, response);
         }
     }
 
-    private void sendOrderConfirmationEmail(Account account, Cart cart, String total, String note, OrderDAO dao) {
+  private void sendOrderConfirmationEmail( String name,String address,String phone,String email, Cart cart, String total, String note, OrderDAO dao) {
         int orderDetailId = dao.getOrderDetailId();
         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         String subject = "4FoodHD - Xác nhận đơn hàng!";
@@ -163,7 +163,7 @@ public class CheckoutServlet extends HttpServlet {
                 + "</head>"
                 + "<body style=\" padding: 30px;\">"
                 + "    <div>"
-                + "        <h2 style=\"font-size: 25px;\">Cảm ơn " + account.getName() + " đã đặt hàng tại <a href=\"http://localhost:9999/Order_Food/home\">4FoodHD</a></h2>"
+                + "        <h2 style=\"font-size: 25px;\">Cảm ơn " +name+ " đã đặt hàng tại <a href=\"http://localhost:9999/Order_Food/home\">4FoodHD</a></h2>"
                 + "        <p>Đơn hàng của bạn đã được đặt thành công!</p>"
                 + "        <h1 style=\"margin-top: 50px; font-size: 28px\">Chi tiết đơn hàng của bạn</h1>"
                 + "        <table style=\"width:100%;border-spacing:inherit;border:1px solid #ddd\">"
@@ -172,11 +172,11 @@ public class CheckoutServlet extends HttpServlet {
                 + "                <td style=\"padding:10px;color:white\">ĐỊA CHỈ GIAO HÀNG</td>"
                 + "            </tr>"
                 + "            <tr style=\"color:#ce0707\">"
-                + "                <td style=\"padding:10px;border-right:1px solid #ddd\">Tên khách hàng : " + account.getName() + "</td>"
-                + "                <td style=\"padding:10px\">Địa chỉ : " + account.getAddress() + "</td>"
+                + "                <td style=\"padding:10px;border-right:1px solid #ddd\">Tên khách hàng : " +name + "</td>"
+                + "                <td style=\"padding:10px\">Địa chỉ : " + address + "</td>"
                 + "            </tr>"
                 + "            <tr style=\"color:#ce0707\">"
-                + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">Số điện thoại : " + account.getPhone() + "</td>"
+                + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">Số điện thoại : " + phone + "</td>"
                 + "            </tr>"
                 + "            <tr style=\"color:#ce0707\">"
                 + "                <td style=\"padding:10px;border-right:1px solid #ddd;\">Hình thức thanh toán : " + dao.getPayment(orderDetailId) + "</td>"
@@ -226,7 +226,7 @@ public class CheckoutServlet extends HttpServlet {
                 + "</html>";
 
         try {
-            EmailHandler.sendEmail(account.getEmail(), subject, content);
+            EmailHandler.sendEmail(email, subject, content);
         } catch (AddressException ex) {
             Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

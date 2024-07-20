@@ -88,8 +88,8 @@ public class AddToCartServlet extends HttpServlet {
         }
 
         String productId = request.getParameter("productId");
-        String quantityStr = request.getParameter("quantity"); // Lấy giá trị quantity từ request
-        int quantity = 1; // Giá trị mặc định
+        String quantityStr = request.getParameter("quantity"); 
+        int quantity = 1; 
 
         if (quantityStr != null && !quantityStr.isEmpty()) {
             quantity = Integer.parseInt(quantityStr);
@@ -103,7 +103,7 @@ public class AddToCartServlet extends HttpServlet {
                 double price = p.getPrice();
                 int maxquantity = dao.getQuantityProduct(id);
                 session.setAttribute("maxquantity", maxquantity);
-                Item t = new Item(p, quantity, price); // Sử dụng giá trị quantity lấy từ request
+                Item t = new Item(p, quantity, price); 
                 cart.addItem(t);
             }
         } catch (Exception e) {

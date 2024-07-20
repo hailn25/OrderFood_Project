@@ -49,8 +49,6 @@ public class ViewOrderByShipper extends HttpServlet {
     
     ArrayList<OrderDetailDTO> listOrderDetail = orderDAO.getOrderDetailByOidD(orderId);
     request.setAttribute("listOrderDetail", listOrderDetail);
-    
-    // Chuyển tiếp đến JSP hiển thị chi tiết đơn hàng
     request.getRequestDispatcher("ViewOrderByShipper.jsp").forward(request, response);
     } 
 

@@ -725,6 +725,40 @@ public class OrderDAO {
         return listOrders;
     }
 
+    public ArrayList<OrderDTO> getAllOrderSucess(int orderStatusId, int shipperId) {
+        ArrayList<OrderDTO> listOrders = new ArrayList<>();
+        try {
+            String sql = "  SELECT [Order].OrderId, [Order].Name, [Order].Phone, [Order].Address, [Order].Note, [Order].CreateDate, [Order].TotalMoney, OrderStatus.Status\n"
+                    + "                                                               FROM     [Order] INNER JOIN\n"
+                    + "                                                                             OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                    + "   where OrderStatus.OrderStatusId = ? and [Order].ShipperId = ?;";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderStatusId);
+            ps.setInt(2, shipperId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDTO order = new OrderDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getDouble(7),
+                        rs.getString(8)
+                );
+                listOrders.add(order);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
+        return listOrders;
+    }
+
     public void updateOrderStatus(int orderId, int orderStatusId) {
         String sql = "UPDATE [dbo].[Order] SET OrderStatusId = ? WHERE OrderId = ?";
         try {
@@ -748,7 +782,8 @@ public class OrderDAO {
             }
         }
     }
-     public void cancelOrderOfCustomer(String orderId) throws ClassNotFoundException, SQLException {
+
+    public void cancelOrderOfCustomer(String orderId) throws ClassNotFoundException, SQLException {
         String sql = "UPDATE o\n"
                 + "SET o.OrderStatusId = 7\n"
                 + "FROM [Order] o\n"
@@ -759,7 +794,7 @@ public class OrderDAO {
         ps.executeUpdate();
     }
 
-     public String getPayment(int orderDetailId) {
+    public String getPayment(int orderDetailId) {
         String sql = "SELECT PaymentBy FROM OrderDetail WHERE OrderDetailId = ?";
         try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderDetailId);
@@ -776,7 +811,6 @@ public class OrderDAO {
 
     public static void main(String[] args) throws Exception {
         OrderDAO db = new OrderDAO();
-        db.insertShipper(1, 81);
-
+        System.out.println(db.getOrderDetailByOidD(15));
     }
 }

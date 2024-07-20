@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
 import model.Cart;
+import model.Item;
 import model.Voucher;
 
 @WebServlet(name = "UseVoucherServlet", urlPatterns = {"/useVoucher"})
@@ -27,9 +28,14 @@ public class UseVoucherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-
+        session.setMaxInactiveInterval(180);
         if (account == null) {
             response.sendRedirect("Login.jsp");
             return;
@@ -49,16 +55,10 @@ public class UseVoucherServlet extends HttpServlet {
         List<Integer> listRestaurantId = dao.getRestaurantId(listProductId);
         VoucherDAO voucherDAO = new VoucherDAO();
         ArrayList<Voucher> listFree = voucherDAO.getAllVoucherWithQuantityByAccountIdFree(aid);
-        ArrayList<Voucher> listR = voucherDAO.getAllVoucherWithQuantityByAccountIdR(aid,listRestaurantId);
+        ArrayList<Voucher> listR = voucherDAO.getAllVoucherWithQuantityByAccountIdR(aid, listRestaurantId);
         request.setAttribute("listF", listFree);
         request.setAttribute("listR", listR);
-    }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        VoucherDAO voucherDAO = new VoucherDAO();
         String voucherFreeIdStr = request.getParameter("voucherFree");
         String voucherRIdStr = request.getParameter("voucherR");
 
@@ -71,8 +71,10 @@ public class UseVoucherServlet extends HttpServlet {
             int voucherRId = Integer.parseInt(voucherRIdStr);
             request.setAttribute("listVoucherR", voucherDAO.getDiscountByVoucherId(voucherRId));
         }
-
-        request.getRequestDispatcher("Checkout.jsp").forward(request, response);
+        List<Item> list = cart.getItems();
+        session.setAttribute("cart", cart);
+        session.setAttribute("size", list.size());
+        request.getRequestDispatcher("Checkout_2.jsp").forward(request, response);
     }
 
     @Override
