@@ -19,18 +19,20 @@ import model.ProductHome;
  * @author ADMIN
  */
 public class ProductHomeDAO {
-    
+
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
+
     public List<ProductHome> getAllProduct() {
         List<ProductHome> listProduct = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId";
         try {
             conn = new DBContext().getConnection();
@@ -46,19 +48,20 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 ));
             }
         } catch (Exception e) {
         }
         return listProduct;
     }
-    
+
     public List<CategoryListDetail> getAllCategory() {
         List<CategoryListDetail> listAllCategory = new ArrayList<>();
         String query = "select c.CategoryId, c.Name \n"
@@ -76,14 +79,16 @@ public class ProductHomeDAO {
         }
         return listAllCategory;
     }
-    
+
     public List<ProductHome> getProductByCID(String cid) {
         List<ProductHome> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId\n"
                 + "where c.CategoryId = ?";
         try {
@@ -101,25 +106,28 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 ));
             }
         } catch (Exception e) {
         }
         return list;
     }
-    
+
     public ProductHome getProductById(String id) {
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId\n"
                 + "where p.ProductId = ?";
         try {
@@ -137,26 +145,29 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 );
             }
         } catch (Exception e) {
         }
         return null;
     }
-    
+
     public List<ProductHome> getAllBestSellerProduct() {
         List<ProductHome> listBestSellerProduct = new ArrayList<>();
-        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId\n"
                 + "order by r.RateStar desc";
         try {
@@ -173,19 +184,20 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 ));
             }
         } catch (Exception e) {
         }
         return listBestSellerProduct;
     }
-    
+
     public List<ListProduct> getListProductP() {
         List<ListProduct> listProductP = new ArrayList<>();
         String query = "select p.ProductId, p.Name, p.Description, p.Price, p.ImageURL, c.Name, p.RestaurantId, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status\n"
@@ -215,7 +227,7 @@ public class ProductHomeDAO {
         }
         return listProductP;
     }
-    
+
     public List<CategoryListDetail> getCategoryListDetail() {
         List<CategoryListDetail> listCategoryListDetail = new ArrayList<>();
         String query = "select c.CategoryId, c.Name \n"
@@ -233,14 +245,16 @@ public class ProductHomeDAO {
         }
         return listCategoryListDetail;
     }
-    
+
     public List<ProductHome> getProductBySearchName(String txtSearch) {
         List<ProductHome> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId\n"
                 + "where p.[name] like ?";
         try {
@@ -258,26 +272,29 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 ));
             }
         } catch (Exception e) {
         }
         return list;
     }
-    
+
     public List<ProductHome> getProductByCategoryId(int id) {
         List<ProductHome> list = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId\n"
                 + "where c.CategoryId = ?";
         try {
@@ -295,26 +312,29 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 ));
             }
         } catch (Exception e) {
         }
         return list;
     }
- 
+
     public List<ProductHome> getProductByIsSale() {
         List<ProductHome> listProductByIsSale = new ArrayList<>();
-        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Product p\n"
-                + "join Restaurant r\n"
-                + "on p.RestaurantId = r.RestaurantId\n"
-                + "join Category c\n"
+        String query = "select p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
+                + "from Account a\n"
+                + "INNER JOIN Restaurant r\n"
+                + "on a.AccountId = r.AccountId\n"
+                + "INNER JOIN Product p\n"
+                + "on r.RestaurantId = p.RestaurantId\n"
+                + "INNER JOIN Category c\n"
                 + "on p.CategoryId = c.CategoryId\n"
                 + "where p.IsSale = 1";
         try {
@@ -331,18 +351,20 @@ public class ProductHomeDAO {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getBoolean(10),
-                        rs.getInt(11),
-                        rs.getDate(12),
+                        rs.getString(10),
+                        rs.getBoolean(11),
+                        rs.getInt(12),
                         rs.getDate(13),
-                        rs.getBoolean(14),
-                        rs.getDouble(15)
+                        rs.getDate(14),
+                        rs.getBoolean(15),
+                        rs.getDouble(16)
                 ));
             }
         } catch (Exception e) {
         }
         return listProductByIsSale;
     }
+
     public static void main(String[] args) {
         ProductHomeDAO dao = new ProductHomeDAO();
         System.out.println(dao.getProductBySearchName("Bánh"));

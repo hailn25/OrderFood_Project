@@ -18,6 +18,7 @@ import model.OrderDTO;
 import model.OrderDetailDTO;
 import model.OrderDetailDTO_Huyvq;
 import model.OrderDetailDTO_Huyvq_1;
+import model.OrderDetailProfile;
 import model.ViewDetail;
 
 public class OrderDAO {
@@ -108,6 +109,65 @@ public class OrderDAO {
 
         }
         return listOrderDetails;
+    }
+
+    public ArrayList<OrderDetailProfile> getOrderDetailByOrderId(int orderId) {
+        ArrayList<OrderDetailProfile> listOrderDetailsByAccountId = new ArrayList<>();
+        try {
+            String sql = "SELECT\n"
+                    + "[Order].AccountId,\n"
+                    + "OrderDetail.OrderDetailId,\n"
+                    + "OrderDetail.OrderId,\n"
+                    + "Product.ProductId,\n"
+                    + "Product.Name ,\n"
+                    + "Product.Price,\n"
+                    + "Product.ImageURL,\n"
+                    + "[Order].OrderStatusId,\n"
+                    + "OrderDetail.Quantity,\n"
+                    + "[Order].TotalMoney\n"
+                    + "FROM [Order]\n"
+                    + "INNER JOIN OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
+                    + "INNER JOIN Product ON OrderDetail.ProductId = Product.ProductId\n"
+                    + "WHERE [Order].OrderId = ?;";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDetailProfile orderDetail = new OrderDetailProfile(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getInt(9),
+                        rs.getDouble(10)
+                );
+                listOrderDetailsByAccountId.add(orderDetail);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listOrderDetailsByAccountId;
     }
 
     public int getQuantityOrderSuccessByRestaurantId(int restaurantId) throws SQLException {
@@ -867,7 +927,7 @@ public class OrderDAO {
 
     public static void main(String[] args) throws Exception {
         OrderDAO db = new OrderDAO();
-        db.insertShipper(1, 81);
+        System.out.println(db.getOrderDetailByOrderId(18));
 
     }
 }
