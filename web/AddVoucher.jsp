@@ -19,46 +19,6 @@
     </head>
     <body style="background-color: #F6F6F6">
 
-        <nav class="navbar navbar-expand-xl">
-            <div class="container h-100">
-                <a class="navbar-brand" href="Dashboard.jsp">
-                    <h1 class="tm-site-title mb-0">Nhà hàng</h1>
-                </a>
-                <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto h-100">
-                        <c:if test="${sessionScope.account.roleId == 5}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="ManagerStaff.jsp">
-                                    <i class="fas fa-home"></i> Trang chủ
-                                    <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                        </c:if>
-
-                        <c:if test="${sessionScope.account.roleId == 5}">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="managerVoucher">
-                                    <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
-                                </a>
-                            </li>
-                        </c:if>
-
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link d-block" href="Login.jsp">
-                                <b>Đăng xuất</b>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
 
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
@@ -86,7 +46,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="description">Giảm giá </label>
-                                        <input id="discount" name="discount" type="text" required class="form-control validate" />
+                                        <input id="discount" name="discount" type="number" required class="form-control validate" />
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -98,7 +58,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="quantity">Số lượng</label>
-                                        <input id="quantity" name="quantity" type="text" required class="form-control validate" />
+                                        <input id="quantity" name="quantity" type="number" required class="form-control validate" />
                                     </div>
                                   
                                      <div class="form-group mb-3">

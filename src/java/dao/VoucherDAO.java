@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -112,69 +114,69 @@ public class VoucherDAO {
         return listVoucher;
     }
 
-public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, List<Integer> list) {
-    ArrayList<Voucher> listVoucher = new ArrayList<>();
-    if (list == null || list.isEmpty()) {
+    public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, List<Integer> list) {
+        ArrayList<Voucher> listVoucher = new ArrayList<>();
+        if (list == null || list.isEmpty()) {
+            return listVoucher;
+        }
+
+        StringBuilder listStr = new StringBuilder("( ");
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) {
+                listStr.append(", ");
+            }
+            listStr.append(list.get(i));
+        }
+        listStr.append(" )");
+
+        String query = "SELECT \n"
+                + "    Voucher.VoucherId, \n"
+                + "    Voucher.VoucherName, \n"
+                + "    Voucher.Description, \n"
+                + "    Voucher.Quantity, \n"
+                + "    Voucher.ReleaseDate, \n"
+                + "    Voucher.FinishDate, \n"
+                + "    Voucher.Status, \n"
+                + "    Voucher.Discount, \n"
+                + "    Voucher.VoucherCategoryId, \n"
+                + "    Voucher.RestaurantId\n"
+                + "FROM \n"
+                + "    Voucher\n"
+                + "LEFT JOIN \n"
+                + "    AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId AND AccountVoucher.AccountId = ?\n"
+                + "WHERE \n"
+                + "    Voucher.VoucherCategoryId = 2\n"
+                + "    AND Voucher.RestaurantId IN " + listStr.toString();
+
+        try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, accountId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int voucherId = rs.getInt("VoucherId");
+                    String voucherName = rs.getString("VoucherName");
+                    String description = rs.getString("Description");
+                    int quantity = rs.getInt("Quantity");
+                    Date releaseDate = rs.getDate("ReleaseDate");
+                    Date finishDate = rs.getDate("FinishDate");
+                    int status = rs.getInt("Status");
+                    float discount = rs.getFloat("Discount");
+                    int voucherCategoryId = rs.getInt("VoucherCategoryId");
+                    int rId = rs.getInt("RestaurantId");
+
+                    Voucher voucher = new Voucher(voucherId, voucherName, description, quantity, releaseDate,
+                            finishDate, status, discount, voucherCategoryId, rId);
+                    // Không cần setQuantity(voucherCount) vì không có VoucherCount trong câu truy vấn
+                    listVoucher.add(voucher);
+                }
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, "Error fetching vouchers", ex);
+        }
+
         return listVoucher;
     }
-
-    StringBuilder listStr = new StringBuilder("( ");
-    for (int i = 0; i < list.size(); i++) {
-        if (i > 0) {
-            listStr.append(", ");
-        }
-        listStr.append(list.get(i));
-    }
-    listStr.append(" )");
-
-    String query = "SELECT \n"
-            + "    Voucher.VoucherId, \n"
-            + "    Voucher.VoucherName, \n"
-            + "    Voucher.Description, \n"
-            + "    Voucher.Quantity, \n"
-            + "    Voucher.ReleaseDate, \n"
-            + "    Voucher.FinishDate, \n"
-            + "    Voucher.Status, \n"
-            + "    Voucher.Discount, \n"
-            + "    Voucher.VoucherCategoryId, \n"
-            + "    Voucher.RestaurantId\n"
-            + "FROM \n"
-            + "    Voucher\n"
-            + "LEFT JOIN \n"
-            + "    AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId AND AccountVoucher.AccountId = ?\n"
-            + "WHERE \n"
-            + "    Voucher.VoucherCategoryId = 2\n"
-            + "    AND Voucher.RestaurantId IN " + listStr.toString();
-
-    try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-        ps.setInt(1, accountId);
-
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                int voucherId = rs.getInt("VoucherId");
-                String voucherName = rs.getString("VoucherName");
-                String description = rs.getString("Description");
-                int quantity = rs.getInt("Quantity");
-                Date releaseDate = rs.getDate("ReleaseDate");
-                Date finishDate = rs.getDate("FinishDate");
-                int status = rs.getInt("Status");
-                float discount = rs.getFloat("Discount");
-                int voucherCategoryId = rs.getInt("VoucherCategoryId");
-                int rId = rs.getInt("RestaurantId");
-
-                Voucher voucher = new Voucher(voucherId, voucherName, description, quantity, releaseDate,
-                        finishDate, status, discount, voucherCategoryId, rId);
-                // Không cần setQuantity(voucherCount) vì không có VoucherCount trong câu truy vấn
-                listVoucher.add(voucher);
-            }
-        }
-
-    } catch (SQLException | ClassNotFoundException ex) {
-        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, "Error fetching vouchers", ex);
-    }
-
-    return listVoucher;
-}
 
     public void addVoucher(String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId) {
         try {
@@ -250,8 +252,9 @@ public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, L
 
     public void deleteVoucher(int voucherId) {
         try {
-            String sql = "delete from [dbo].[Voucher] \n"
-                    + "where [VoucherId] = ?";
+            String sql = "UPDATE [dbo].[Voucher]\n"
+                    + "SET [Status] = 2\n"
+                    + "WHERE [VoucherId] = ?";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, voucherId);
@@ -262,6 +265,37 @@ public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, L
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+   public void updateQuantity(int voucherId) {
+    Connection con = null;
+    PreparedStatement ps = null;
+    try {
+        String sql = "UPDATE [dbo].[Voucher]\n"
+                   + "SET [Quantity] = [Quantity] - 1\n"
+                   + "WHERE [VoucherId] = ?";
+        con = new DBContext().getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, voucherId);
+        ps.executeUpdate();
+    } catch (SQLException ex) {
+        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ClassNotFoundException ex) {
+        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        // Đóng tài nguyên
+        try {
+            if (ps != null) {
+                ps.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+}
+
 
     public Voucher getVoucherById(int voucherId) {
         Voucher voucher = new Voucher();
@@ -418,7 +452,7 @@ public ArrayList<Voucher> getAllVoucherWithQuantityByAccountIdR(int accountId, L
 
     public static void main(String[] args) {
         VoucherDAO v = new VoucherDAO();
-
+        v.updateQuantity(5);
     }
 
 }

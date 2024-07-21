@@ -64,11 +64,13 @@ public class UseVoucherServlet extends HttpServlet {
 
         if (voucherFreeIdStr != null && !voucherFreeIdStr.isEmpty()) {
             int voucherFreeId = Integer.parseInt(voucherFreeIdStr);
+            voucherDAO.updateQuantity(voucherFreeId);
             request.setAttribute("listFree", voucherDAO.getDiscountByVoucherId(voucherFreeId));
         }
 
         if (voucherRIdStr != null && !voucherRIdStr.isEmpty()) {
             int voucherRId = Integer.parseInt(voucherRIdStr);
+             voucherDAO.updateQuantity(voucherRId);
             request.setAttribute("listVoucherR", voucherDAO.getDiscountByVoucherId(voucherRId));
         }
         List<Item> list = cart.getItems();

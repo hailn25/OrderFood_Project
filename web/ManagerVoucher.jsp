@@ -1,10 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
@@ -22,9 +21,7 @@
                     <a class="navbar-brand" href="ManagerStaff.jsp">
                         <c:if test="${not empty sessionScope.account.name}">
                             <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                            </c:if>
-
-
+                        </c:if>
                     </a>
                     <button
                         class="navbar-toggler ml-auto mr-0"
@@ -34,13 +31,11 @@
                         aria-controls="navbarSupportedContent"
                         aria-expanded="false"
                         aria-label="Toggle navigation"
-                        >
+                    >
                         <i class="fas fa-bars tm-nav-icon"></i>
                     </button>
-
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto h-100">
-
                             <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link" href="ManagerStaff.jsp">
@@ -49,37 +44,35 @@
                                     </a>
                                 </li>
                             </c:if>
-
-                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link " href="managerBlog">
                                         <i class="far fa-file-alt"></i> Quản lý blog
                                     </a>
                                 </li>
                             </c:if>
-
-                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerService">
                                         <i class="fas fa-sliders-h"></i> Dịch vụ 
                                     </a>
                                 </li>
                             </c:if>
-                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link" href="managerReport">
                                         <i class="far fa-comment-dots"></i> Quản lý báo cáo
                                     </a>
                                 </li>
                             </c:if>
-                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link " href="managerProductFlashSale">
                                         <i class="far fa-clock"></i> Flash Sale
                                     </a>
                                 </li>
                             </c:if>
-                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <c:if test="${sessionScope.account.roleId == 5}">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="managerVoucher">
                                         <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
@@ -89,17 +82,16 @@
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <c:if test = "${sessionScope.account == null}"> 
+                                <c:if test="${sessionScope.account == null}">
                                     <a class="nav-link d-block" href="Login.jsp">
                                         <b>Đăng nhập</b>
                                     </a>
-
-                                </c:if> 
-                                <c:if test = "${sessionScope.account != null}"> 
+                                </c:if>
+                                <c:if test="${sessionScope.account != null}">
                                     <a class="nav-link d-block" href="logout">
                                         <b>Đăng xuất</b>
                                     </a>
-                                </c:if> 
+                                </c:if>
                             </li>
                         </ul>
                     </div>
@@ -115,7 +107,7 @@
                             <h2>Quản lý <b>mã giảm giá </b></h2>
                         </div>
                         <div class="col-sm-6">
-                            <a href="AddVoucher.jsp"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm Voucher mới</span></a>
+                            <a href="AddVoucher.jsp" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm Voucher mới</span></a>
                         </div>
                     </div>
                 </div>
@@ -126,41 +118,37 @@
                             <th>Mã giảm giá</th>
                             <th>Nội dung</th>
                             <th>Số lượng</th>
-                            <th>Giảm giá </th>
+                            <th>Giảm giá</th>
                             <th>Ngày phát hành</th>
-                            <th>Ngày  kết thúc</th>
-                            <th>Trạng thái  </th>
-                             <th>Loại voucher  </th>
-                            <th>Tác vụ </th>
-
+                            <th>Ngày kết thúc</th>
+                            <th>Trạng thái</th>
+                            <th>Loại voucher</th>
+                            <th>Tác vụ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach items="${list}" var="v">
-                            <tr>
-
-                                <td>${v.voucherId}</td>
-                                <td>${v.voucherName}</td>
-                                <td>${v.description}</td>
-                                <td>${v.quantity}</td>
-                                 <td>${v.discount}</td>
-                                <td>${v.releaseDate}</td>
-                                <td>${v.finishDate}</td>
-                                <td style="color: ${v.status == 1 ? 'green' : 'red'};">
-                                    ${v.status == 1 ? "Đang hiển thị" : "Đang ẩn"}
-                                </td>
-                                  <td style="color: ${v.voucherCategoryId == 1 ? 'green' : 'blue'};">
-                                    ${v.voucherCategoryId== 1 ? "FreeShip" : "Voucher Nhà Hàng"}
-                                </td>
-
-
-                                <td>
-                                    <a href="editVoucher?vid=${v.voucherId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
-
-                                    <a href="deleteVoucher?vid=${v.voucherId}" class="delete" data-toggle="modal" onclick="confirmDelete(event)"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                </td>
-
-                            </tr>
+                            <c:if test="${v.status == 1 || v.status == 0}">
+                                <tr>
+                                    <td>${v.voucherId}</td>
+                                    <td>${v.voucherName}</td>
+                                    <td>${v.description}</td>
+                                    <td>${v.quantity}</td>
+                                    <td>${v.discount}</td>
+                                    <td><fmt:formatDate value="${v.releaseDate}" pattern="dd-MM-yyyy" /></td>
+                                    <td><fmt:formatDate value="${v.finishDate}" pattern="dd-MM-yyyy" /></td>
+                                    <td style="color: ${v.status == 1 ? 'red' : 'green'};">
+                                        ${v.status == 1 ? "Đang ẩn" : "Đang hiển thị"}
+                                    </td>
+                                    <td style="color: ${v.voucherCategoryId == 1 ? 'green' : 'blue'};">
+                                        ${v.voucherCategoryId == 1 ? "FreeShip" : "Voucher Nhà Hàng"}
+                                    </td>
+                                    <td>
+                                        <a href="editVoucher?vid=${v.voucherId}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
+                                        <a href="deleteVoucher?vid=${v.voucherId}" class="delete" data-toggle="modal" onclick="confirmDelete(event)"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    </td>
+                                </tr>
+                            </c:if>
                         </c:forEach>
                     </tbody>
                 </table>
@@ -171,7 +159,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                        new DataTable('#example');
+            new DataTable('#example');
         </script>
     </body>
 </html>
