@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,28 +48,28 @@
                                         <input id="saleStatus_Before" name="saleStatus_Before" type="hidden" value="${isSale}" class="form-control validate" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="name">Tên sản phẩm</label>
-                                        <input id="name" name="name" type="text" required value="${detail.name}" class="form-control validate" />
+                                        <label for="">Tên sản phẩm</label>
+                                        <input id="name" name="name" type="text" required value="${detail.name}" class="form-control validate read-only" />
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="description">Mô tả</label>
-                                        <textarea class="form-control validate tm-small" rows="5" name="description" required>${detail.description}</textarea>
+                                        <label for="">Mô tả</label>
+                                        <textarea class="form-control validate tm-small read-only" rows="5" name="description" required>${detail.description}</textarea>
                                     </div>
-                                    <div class="form-group mb-3">
+                                    <div hidden="" class="form-group mb-3">
                                         <label for="category">Loại sản phẩm</label>
-                                        <select style="color: white" class="custom-select tm-select-accounts" name="category" required>
+                                        <select style="color: white" class="custom-select tm-select-accounts " name="category" required>
                                             <c:forEach items="${listC}" var="o">
                                                 <option value="${o.categoryId}" ${o.categoryId == cid ? "selected" : ""}>${o.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
 
-                                    <div class="row">
+                                    <div hidden="" class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="category">Trạng thái</label>
                                             <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
-                                                <option value="0" ${detail.status == false  ? "selected" : ""}>Ẩn</option>
-                                                <option value="1" ${detail.status == true ? "selected" : ""}>Bán hàng</option>
+                                                <option value="0" ${detail.status == 0  ? "selected" : ""}>Ẩn</option>
+                                                <option value="1" ${detail.status == 1 ? "selected" : ""}>Bán hàng</option>
                                             </select>
                                         </div>
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
@@ -82,13 +83,18 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                                            <label for="price">Đơn giá</label>
-                                            <input id="price" name="price" type="text" required value="${detail.price}" class="form-control validate" />
+                                        <div hidden="" class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="">Đơn giá</label>
+                                            <input id="price" name="price" type="number" required value="${detail.price}" class="form-control validate read-only" />
                                         </div>
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                            <label for="">Đơn giá</label>
+                                            <input id="" name="" type="text" required value="<fmt:formatNumber value='${detail.price}' type='number' minFractionDigits='0' maxFractionDigits='0'/> VNĐ" class="form-control validate read-only" readonly/>
+                                        </div>
+
+                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="quantity">Số lượng</label>
-                                            <input id="quantity" name="quantity" type="text" required value="${detail.quantity}" class="form-control validate" />
+                                            <input id="quantity" name="quantity" type="number" min="1" required value="${detail.quantity}" class="form-control validate" />
                                         </div>
                                     </div>
                                 </div>
@@ -98,7 +104,7 @@
                                         <img id="currentImage" src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
                                     <!-- Khung chứa nút chọn ảnh -->
-                                    <div class="custom-file mt-3 mb-3">
+                                    <div hidden="" class="custom-file mt-3 mb-3">
                                         <input id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />
                                         <input type="button" class="btn btn-primary btn-block mx-auto text-uppercase" value="Chọn ảnh" onclick="document.getElementById('fileInput').click();" />
                                     </div>
@@ -119,10 +125,10 @@
                                         }
                                     }
                                 </script>
-                                <div class="col-6">
+                                <div class="col-6" style="margin-top: 50px">
                                     <a href="managerOpenProduct" class="btn btn-primary btn-block text-uppercase">Huỷ bỏ</a>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6" style="margin-top: 50px">
                                     <input type="submit" class="btn btn-primary btn-block text-uppercase" value="Cập nhật ngay" />
                                 </div>
                             </div>
@@ -140,3 +146,5 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
+
+

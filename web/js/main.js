@@ -133,19 +133,102 @@
 
 
     // Product Quantity
-    $('.quantity button').on('click', function () {
-        var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
-        if (button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInput = document.querySelector('.quantity-input');
+        const addToCheckoutForm = document.getElementById('addToCheckout');
+        const checkoutQuantityInput = document.getElementById('checkoutQuantity');
+
+        quantityInput.addEventListener('input', function () {
+            let newValue = parseInt(quantityInput.value);
+            if (isNaN(newValue) || newValue < 1) {
+                newValue = 1;
             }
-        }
-        button.parent().parent().find('input').val(newVal);
+            quantityInput.value = newValue;
+            checkoutQuantityInput.value = newValue;
+        });
+
+        addToCheckoutForm.addEventListener('submit', function () {
+            checkoutQuantityInput.value = quantityInput.value;
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const addToCartForm = document.getElementById('addToCartForm');
+        const addToCartQuantityInput = document.getElementById('addToCartQuantity');
+
+        quantityInputs.forEach(function (quantityInput) {
+            const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+
+            btnPlus.addEventListener('click', function () {
+                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+            });
+
+            btnMinus.addEventListener('click', function () {
+                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+            });
+
+            quantityInput.addEventListener('input', function () {
+                let newValue = parseInt(quantityInput.value);
+                if (isNaN(newValue) || newValue < 1) {
+                    newValue = 1;
+                }
+                updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+            });
+
+            // Function to update quantity and price
+            function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
+                if (newQuantity < 1) {
+                    confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
+                    return;
+                }
+                if (newQuantity > maxQuantity) {
+                    alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                    return;
+                }
+
+                quantityInput.value = newQuantity;
+                addToCartQuantityInput.value = newQuantity;
+                updatePrice(quantityInput, newQuantity);
+            }
+
+            function updatePrice(quantityInput, quantity) {
+                const pricePerItem = parseFloat(quantityInput.dataset.price);
+                // Example of updating total price display based on quantity
+                const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
+                const totalPrice = quantity * pricePerItem * 1000;
+                totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+            }
+
+            updatePrice(quantityInput, parseInt(quantityInput.value));
+        });
+
+        // Example of submitting form
+        addToCartForm.addEventListener('submit', function (event) {
+            // You can add additional validation or actions before submitting the form
+            // event.preventDefault(); // Uncomment to prevent default form submission for testing
+            // Example of fetching data if needed
+            const formData = new FormData(addToCartForm);
+            fetch(addToCartForm.action, {
+                method: 'POST',
+                body: formData
+            })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        // Handle response data if necessary
+                    })
+                    .catch(error => {
+                        console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                    });
+        });
     });
 
 })(jQuery);

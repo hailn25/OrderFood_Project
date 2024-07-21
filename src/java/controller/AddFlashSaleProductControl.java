@@ -119,7 +119,7 @@ public class AddFlashSaleProductControl extends HttpServlet {
             ProductSaleDAO dao1 = new ProductSaleDAO();
             dao1.insertFlashSaleProduct(productId, startTime, endTime, salePrice, discount, 0, quantity, timeFrame, restaurantId, java.sql.Date.valueOf(createDate));
             dao1.updateStockBeforeFlashSale(stock, quantity, productId);
-
+            dao.changeStatusToPendingFlashSale(productId);
             request.getRequestDispatcher("managerFlashSaleProduct").forward(request, response);
 //            request.setAttribute("productId", productId);
 //            request.getRequestDispatcher("AddFlashSaleProduct.jsp").forward(request, response);
@@ -170,5 +170,3 @@ public class AddFlashSaleProductControl extends HttpServlet {
     }// </editor-fold>
 
 }
-
-

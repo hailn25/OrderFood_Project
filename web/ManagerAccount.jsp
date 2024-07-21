@@ -8,10 +8,13 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--day la icon edit, delete-->
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
         <link rel="stylesheet" href="css/fontawesome.min.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--day la icon edit, delete-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
 
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
 
-        <title>4FOODHD</title>
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -31,6 +34,10 @@
                     'wght' 400,
                     'GRAD' 0,
                     'opsz' 24
+            }
+            .bigger{
+                width: 27;
+                height: 25;
             }
         </style>
     </head>
@@ -162,22 +169,24 @@
                                 <td>${o.email}</td>
                                 <td>${o.name}</td>
                                 <td>
-                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Người dùng" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Nhà hàng" : (o.roleId == 5 ? "Nhân viên" : "Unknown role"))))}
+                                    ${o.roleId == 1 ? "Admin" : (o.roleId == 2 ? "Khách hàng" : (o.roleId == 3 ? "Shipper" : (o.roleId == 4 ? "Nhà hàng" : (o.roleId == 5 ? "Nhân viên" : "Unknown role"))))}
                                 </td>
-                                <td class="${o.status ? "active" : "banned"}">${o.status ? "Hoạt động" : "Bị cấm"}</td>
+                                <td class="${o.status == 1 ? "active" : "banned"}">${o.status == 1 ? "Hoạt động" : "Bị cấm"}</td>
                                 <td><img src="img/${o.imageAvatar}" alt="Không thể tải ảnh"></td>
                                 <td>
                                     <a href="loadAccount?aid=${o.accountId}&roleId=${o.roleId}&status=${o.status}"  class="edit" data-toggle="modal"><i class="material-icons fas fa-edit" style="color: #5c98ff" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
-                                    <c:if test="${o.status == true}">
-                                        <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmDelete(event)" class="delete" data-toggle="modal">
-                                            <i class="material-icons fas fa-toggle-on" style="color: green" data-toggle="tooltip" title="Khoá tài khoản"></i>
+                                    <c:if test="${o.status == 1}">
+                                        <a href="changeStatusAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmDelete(event)" class="delete" data-toggle="modal">
+                                            <i class="material-icons fas fa-toggle-on" style="color: green" data-toggle="tooltip" title="Cấm tài khoản"></i>
                                         </a>
                                     </c:if>
-                                    <c:if test="${o.status == false}">
-                                        <a href="deleteAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmOpen(event)" class="delete" data-toggle="modal">
+                                    <c:if test="${o.status == 0}">
+                                        <a href="changeStatusAccount?aid=${o.accountId}&status=${o.status}" onclick="confirmOpen(event)" class="read-only delete" data-toggle="modal">
                                             <i class="material-icons fas fa-toggle-off" style="color: green" data-toggle="tooltip" title="Mở khoá tài khoản"></i>
                                         </a>
                                     </c:if>
+                                    <a href="deleteAccount?aid=${o.accountId}" onclick="confirmDelete_1(event)" class="delete" data-toggle="modal"><i class="material-icons far fa-trash-alt " style="color: #ff0000;" title="Xoá tài khoản" ></i></a>
+
 
                                 </td>
                             </tr>
@@ -193,41 +202,51 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-                                            new DataTable('#example');
+                                        new DataTable('#example');
 
-                                            function confirmDelete(event) {
-                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+                                        function confirmDelete(event) {
+                                            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
 
-                                                var confirmAction = confirm("Bạn có chắc chắn muốn khoá tài khoản này không?");
+                                            var confirmAction = confirm("Bạn có chắc chắn muốn cấm tài khoản này không?\nSau khi cấm thì không thể mở lại được!");
 
-                                                if (confirmAction) {
-                                                    window.location.href = event.target.closest('a').href;
-                                                }
+                                            if (confirmAction) {
+                                                window.location.href = event.target.closest('a').href;
                                             }
+                                        }
 
-                                            function confirmOpen(event) {
-                                                event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+                                        function confirmDelete_1(event) {
+                                            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
 
-                                                var userConfirmed = confirm("Bạn có chắc muốn mở khoá tài khoản này không?");
+                                            var confirmAction = confirm("Bạn có chắc chắn muốn xoá tài khoản này không?");
 
-                                                if (userConfirmed) {
-                                                    window.location.href = event.currentTarget.href;
-                                                }
+                                            if (confirmAction) {
+                                                window.location.href = event.target.closest('a').href;
                                             }
+                                        }
+
+                                        function confirmOpen(event) {
+                                            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+                                            var userConfirmed = confirm("Bạn có chắc muốn mở khoá tài khoản này không?");
+
+                                            if (userConfirmed) {
+                                                window.location.href = event.currentTarget.href;
+                                            }
+                                        }
 
 // Gắn hàm confirmDelete vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Khoá tài khoản"
-                                            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Khoá tài khoản"]').forEach(function (element) {
-                                                element.onclick = function (event) {
-                                                    confirmDelete(event);
-                                                };
-                                            });
+                                        document.querySelectorAll('.delete[data-toggle="tooltip"][title="Khoá tài khoản"]').forEach(function (element) {
+                                            element.onclick = function (event) {
+                                                confirmDelete(event);
+                                            };
+                                        });
 
 // Gắn hàm confirmOpen vào sự kiện onclick của tất cả các liên kết có lớp .delete và tiêu đề "Mở khoá tài khoản"
-                                            document.querySelectorAll('.delete[data-toggle="tooltip"][title="Mở khoá tài khoản"]').forEach(function (element) {
-                                                element.onclick = function (event) {
-                                                    confirmOpen(event);
-                                                };
-                                            });
+                                        document.querySelectorAll('.delete[data-toggle="tooltip"][title="Mở khoá tài khoản"]').forEach(function (element) {
+                                            element.onclick = function (event) {
+                                                confirmOpen(event);
+                                            };
+                                        });
 
 
         </script>
@@ -235,3 +254,5 @@
 
     </body>
 </html>
+
+

@@ -30,8 +30,10 @@ public class ProductDAO {
 
     public int getQuantityOfProduct() throws ClassNotFoundException {
         try {
-            String sql = "select COUNT(ProductId)\n"
-                    + "from [dbo].[Product]";
+            String sql = """
+                         select COUNT(ProductId)
+                         from [dbo].[Product]
+                         where Status = 1 OR Status = 2 OR Status = 3 OR Status = 4""";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -66,7 +68,7 @@ public class ProductDAO {
         ArrayList<Product> list = new ArrayList<>();
         String sql = "SELECT *\n"
                 + "FROM [dbo].[Product]\n"
-                + "WHERE [RestaurantId] = ? and [Status] = 1";
+                + "WHERE [RestaurantId] = ? and ([Status] = 1)";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, restaurantId);
@@ -83,7 +85,7 @@ public class ProductDAO {
             int quantity = rs.getInt(9);
             Date createDate = rs.getDate(10);
             Date updateDate = rs.getDate(11);
-            boolean status = rs.getBoolean(12);
+            int status = rs.getInt(12);
             Product s = new Product(productId, name, price, description, imageURL,
                     categoryId, restaurantId1, isSale, quantity, createDate,
                     updateDate, status);
@@ -114,7 +116,7 @@ public class ProductDAO {
             int quantity = rs.getInt(9);
             Date createDate = rs.getDate(10);
             Date updateDate = rs.getDate(11);
-            boolean status = rs.getBoolean(12);
+            int status = rs.getInt(12);
             Product s = new Product(productId, name, price, description, imageURL,
                     categoryId, restaurantId1, isSale, quantity, createDate,
                     updateDate, status);
@@ -265,7 +267,7 @@ public class ProductDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)
+                        rs.getInt(12)
                 );
             }
         } catch (Exception e) {
@@ -308,7 +310,7 @@ public class ProductDAO {
         try {
 
             String query = "SELECT Quantity\n"
-                    + "FROM    Product  where ProductId = ?";
+                    + "           FROM    Product  where ProductId = ?";
             conn = new DBContext().getConnection();
 
             PreparedStatement ps = conn.prepareStatement(query);
@@ -398,6 +400,100 @@ public class ProductDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+
+    public ArrayList<Product> getProductToFlashsaleByRestaurantId(int restaurantId) throws SQLException, Exception {
+        ArrayList<Product> list = new ArrayList<>();
+        String sql = """
+                     SELECT    distinct    Product.*
+                     FROM            Product 
+                     WHERE [RestaurantId] = ? and ( [Status] = 1  or [Status] = 4 )""";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int productId = rs.getInt(1);
+            String name = rs.getString(2);
+            double price = rs.getDouble(3);
+            String description = rs.getString(4);
+            String imageURL = rs.getString(5);
+            int categoryId = rs.getInt(6);
+            int restaurantId1 = rs.getInt(7);
+            boolean isSale = rs.getBoolean(8);
+            int quantity = rs.getInt(9);
+            Date createDate = rs.getDate(10);
+            Date updateDate = rs.getDate(11);
+            int status = rs.getInt(12);
+            Product s = new Product(productId, name, price, description, imageURL,
+                    categoryId, restaurantId1, isSale, quantity, createDate,
+                    updateDate, status);
+            list.add(s);
+        }
+        return list;
+    }
+
+    public void changeStatusToPendingFlashSale(int productId) {
+        try {
+            String sql = "update Product\n"
+                    + "set Status = 3\n"
+                    + "where ProductId	= ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void changeStatusWhenDeleteFlashSale(int productId) {
+        try {
+            String sql = "update Product\n"
+                    + "set Status = 1\n"
+                    + "where ProductId	= ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public ArrayList<Product> getSearchProductToFlashsaleByRestaurantId(int restaurantId, String productName) throws SQLException, Exception {
+        ArrayList<Product> list = new ArrayList<>();
+        String sql = " SELECT    distinct    Product.*\n"
+                + "                                          FROM            Product \n"
+                + "                                          WHERE [RestaurantId] = ? and ( [Status] = 1  or [Status] = 4 ) and Name like N'%" + productName + "%'";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+//        ps.setString(2, productName);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int productId = rs.getInt(1);
+            String name = rs.getString(2);
+            double price = rs.getDouble(3);
+            String description = rs.getString(4);
+            String imageURL = rs.getString(5);
+            int categoryId = rs.getInt(6);
+            int restaurantId1 = rs.getInt(7);
+            boolean isSale = rs.getBoolean(8);
+            int quantity = rs.getInt(9);
+            Date createDate = rs.getDate(10);
+            Date updateDate = rs.getDate(11);
+            int status = rs.getInt(12);
+            Product s = new Product(productId, name, price, description, imageURL,
+                    categoryId, restaurantId1, isSale, quantity, createDate,
+                    updateDate, status);
+            list.add(s);
+        }
+        return list;
     }
 
 }

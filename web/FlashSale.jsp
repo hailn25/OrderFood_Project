@@ -149,106 +149,48 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid fixed-top">
-            <div class="container topbar bg-primary d-none d-lg-block">
-                <div class="d-flex justify-content-between">
-                    <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
-                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
-                    </div>
-                    <div class="top-link pe-2">
-                        <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
-                        </c:if> 
-                        <c:if test="${sessionScope.account != null}">
-                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
-                            <small class="text-white ms-2">Hello, ${account.name}</small>
-                            <span class="text-white ms-2">|</span>
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
-                        </c:if> 
-                    </div>
-                </div>
-            </div>
-            <div class="container px-0">
-                <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="home" class="navbar-brand"><h1 class="text-primary display-6">4FOODHD</h1></a>
-                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
-                    </button>
-                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                        <div class="navbar-nav mx-auto">
-                            <a href="shop" class="nav-item nav-link">Lọc sản phẩm</a>
-                            <a href="flsale" class="nav-item nav-link active">Flash Sale</a>
-                            <a href="blog" class="nav-item nav-link">Blog</a>
-                            <c:if test="${sessionScope.account != null}">
-                                <a href="loadVoucherFreeship" class="nav-item nav-link">Voucher</a>
-                            </c:if> 
+        <jsp:include page="Header.jsp"></jsp:include>
 
-                            <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
-                        </div>
-                        <div class="d-flex m-3 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="fas fa-search text-primary"></i>
-                            </button>
-
-                            <c:set value="${sessionScope.size}" var="size"></c:set>
-                                <a href="Cart.jsp" class="position-relative me-4 my-auto">
-                                    <i class="fa fa-shopping-bag fa-2x"></i>
-                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
-                            </a>
-
-                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
-                            <c:if test="${not empty sessionScope.account}">
-                                <a href="profile" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            </c:if>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-
-        <div class="container">
-            <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
-        </div>
-
-        <header>
             <div class="container">
-                <div class="row " style="background: #81C408">
-                    <!-- Khung thời gian 1 -->
-                    <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
-                        <span style="color: white;font-size: 30px" >10:00-13:00</span><br>
-                        <span class="status" id="status1"></span>
-                    </div>
-                    <!-- Khung thời gian 2 -->
-                    <div class="col" id="timeSlot2" onclick="window.location = 'flsale?timeFrame=2'" >
-                        <span style="color: white;font-size: 30px" >13:00-16:00</span><br>
-                        <span class="status"  id="status2"></span>
-                    </div>
-                    <!-- Khung thời gian 3 -->
-                    <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'" >
-                        <span style="color: white;font-size: 30px" >16:00-19:00</span><br>
-                        <span class="status"  id="status3"></span>
-                    </div>
-                    <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
-                        <span style="color: white;font-size: 30px" >19:00-22:00</span><br>
-                        <span class="status"  id="status4"></span>
-                    </div>
-                    <div class="col-md-3">
-                        <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
-                        <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
+                <img src="img/flashsale.jpg" class="img-fluid rounded" style="width: 100%; height: 20%; margin-top: 170px; margin-bottom: 10px" alt="Image">
+            </div>
+
+            <header>
+                <div class="container">
+                    <div class="row " style="background: #81C408">
+                        <!-- Khung thời gian 1 -->
+                        <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
+                            <span style="color: white;font-size: 30px" >10:00-13:00</span><br>
+                            <span class="status" id="status1"></span>
+                        </div>
+                        <!-- Khung thời gian 2 -->
+                        <div class="col" id="timeSlot2" onclick="window.location = 'flsale?timeFrame=2'" >
+                            <span style="color: white;font-size: 30px" >13:00-16:00</span><br>
+                            <span class="status"  id="status2"></span>
+                        </div>
+                        <!-- Khung thời gian 3 -->
+                        <div class="col" id="timeSlot3" onclick="window.location = 'flsale?timeFrame=3'" >
+                            <span style="color: white;font-size: 30px" >16:00-19:00</span><br>
+                            <span class="status"  id="status3"></span>
+                        </div>
+                        <div class="col" id="timeSlot4" onclick="window.location = 'flsale?timeFrame=4'" >
+                            <span style="color: white;font-size: 30px" >19:00-22:00</span><br>
+                            <span class="status"  id="status4"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <span style="color: #cc0000;font-size: 29px;margin-left: 40px" id="mess" ></span><br>
+                            <span id="time" style="color: #fff;font-size: 20px;margin-left: 60px"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        <div class="container-fluid fruite py-5">
-            <div class="container py-5">                  
-                <div class="tab-content">
-                    <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4" id="product-container">
+            </header>
+            <div class="container-fluid fruite py-5">
+                <div class="container py-5">                  
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="row g-4">
+                                <div class="col-lg-12">
+                                    <div class="row g-4" id="product-container">
                                     <c:forEach items="${listPS}" var="p">
                                         <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
                                             <div class="rounded position-relative fruite-item">
@@ -478,13 +420,30 @@
                     const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                     // Định dạng giá thành VND
-                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                    const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
                     // Cập nhật nội dung của thẻ h6
                     priceElement.textContent = formattedPrice + " VNĐ";
                 });
             });
 
+        </script>
+        <script type="text/javascript">
+            function sendRequestToServlet() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'automatic', true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log('Servlet response: ' + xhr.responseText);
+                    }
+                };
+                xhr.send();
+            }
+
+// Gọi hàm sendRequestToServlet ngay khi trang được tải
+            window.onload = function () {
+                sendRequestToServlet();
+            };
         </script>
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

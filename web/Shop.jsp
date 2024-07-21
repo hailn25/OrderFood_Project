@@ -3,7 +3,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html lang="en">
 
     <head>
@@ -36,66 +35,7 @@
 
     <body>
 
-        <div class="container-fluid fixed-top">
-            <div class="container topbar bg-primary d-none d-lg-block">
-                <div class="d-flex justify-content-between">
-                    <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
-                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
-                    </div>
-                    <div class="top-link pe-2">
-                        <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
-                        </c:if> 
-                        <c:if test="${sessionScope.account != null}">
-                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
-                            <small class="text-white ms-2">Hello, ${account.name}</small>
-                            <span class="text-white ms-2">|</span>
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
-                        </c:if> 
-                    </div>
-                </div>
-            </div>
-            <div class="container px-0">
-                <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="home" class="navbar-brand"><h1 class="text-primary display-6">4FOODHD</h1></a>
-                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
-                    </button>
-                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                        <div class="navbar-nav mx-auto">
-                            <a href="home" class="nav-item nav-link ">Trang chủ</a>
-                            <a href="shop" class="nav-item nav-link active">Lọc sản phẩm</a>
-                           <a href="flsale" class="nav-item nav-link ">Flash Sale</a>
-                            <a href="blog" class="nav-item nav-link">Blog</a>
-                            <c:if test="${sessionScope.account != null}">
-                                <a href="loadVoucherFreeship" class="nav-item nav-link">Voucher</a>
-                            </c:if> 
-
-                            <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
-                        </div>
-                        <div class="d-flex m-3 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="fas fa-search text-primary"></i>
-                            </button>
-
-                            <c:set value="${sessionScope.size}" var="size"></c:set>
-                                <a href="Cart.jsp" class="position-relative me-4 my-auto">
-                                    <i class="fa fa-shopping-bag fa-2x"></i>
-                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
-                            </a>
-
-                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
-                            <c:if test="${not empty sessionScope.account}">
-                                <a href="profile" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            </c:if>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <%@include file="Header.jsp" %>
 
 
         <!-- Modal Search Start -->
@@ -121,7 +61,6 @@
         <div class="container-fluid fruite py-5" style="margin-top: 100px">
             <div class="container py-5">
                 <h1 class="mb-4">Tìm kiếm</h1>
-
                 <div class="row g-4">
                     <div class="col-lg-12">
                         <div class="row g-4">
@@ -137,11 +76,12 @@
                                 </form>
                                 <form id="rangeForm" action="shop" method="POST" style="display: none;">
                                     <input type="hidden" id="hiddenRangeInput" name="rangeValue">
+                                    <input type="categoryName" name="categoryName" value="${categoryName}">
                                 </form>
                                 <div class="mb-3" style="margin: 10px">
                                     <h4 class="mb-2">Giá sản phẩm</h4>
-                                    <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000" value="${not empty minPrice ? minPrice : 0}" oninput="updateAmount()" onchange="submitForm()">
-                                    <output id="amount" name="amount" min-value="0" max-value="1000" for="rangeInput">
+                                    <input type="range" step="1000" class="form-range w-100" id="rangeInput" name="rangeInput" min="0" max="1000000" value="${not empty minPrice ? minPrice : 0}" oninput="updateAmount()" onchange="submitForm()">
+                                    <output id="amount" name="amount" min-value="0" max-value="1000000" for="rangeInput">
                                         <c:choose>
                                             <c:when test="${not empty minPrice}">
                                                 <span id="formattedMinPrice"></span> - 1.000.000 VND
@@ -187,34 +127,36 @@
                                     <div class="col-lg-12">
                                         <h4 class="mb-3">Nhà hàng nổi bật</h4>
                                         <c:forEach items="${listRestaurantDTO}" var="r" >
-                                            <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
-                                                <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                                    <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}">
-                                                        <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh" style="height: 80px; width: 80px; border: 2px solid black; border-radius: 8px">
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}" style="font-weight: bold;">${r.name}</a>
-                                                    <div class="d-flex mb-2">
-                                                        <c:forEach begin="1" end="5" var="i">
-                                                            <c:choose>
-                                                                <c:when test="${i <= r.rateStar}">
-                                                                    <i class="fa fa-star text-secondary"></i>
-                                                                </c:when>
-                                                                <c:when test="${i - 0.5 == r.rateStar}">
-                                                                    <i class="fa fa-star-half-alt text-secondary"></i>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:forEach>
+                                            <c:if test="${r.status == 1}">
+                                                <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
+                                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                                        <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}">
+                                                            <img src="img/${r.imageAvatar}" class="img-fluid rounded" alt="Không thể tải ảnh" style="height: 80px; width: 80px; border: 2px solid black; border-radius: 8px">
+                                                        </a>
                                                     </div>
-                                                    <div class="d-flex mb-2">
-                                                        <h5 class="fw-bold me-2">${r.address}</h5>
+                                                    <div>
+                                                        <a href="restaurant?restaurantId=${r.restaurantId}&page=${1}" style="font-weight: bold;">${r.name}</a>
+                                                        <div class="d-flex mb-2">
+                                                            <c:forEach begin="1" end="5" var="i">
+                                                                <c:choose>
+                                                                    <c:when test="${i <= r.rateStar}">
+                                                                        <i class="fa fa-star text-secondary"></i>
+                                                                    </c:when>
+                                                                    <c:when test="${i - 0.5 == r.rateStar}">
+                                                                        <i class="fa fa-star-half-alt text-secondary"></i>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <div class="d-flex mb-2">
+                                                            <h5 class="fw-bold me-2">${r.address}</h5>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </c:if>
                                         </c:forEach>
 
                                         <!--                                        <div class="d-flex justify-content-center my-4">
@@ -233,7 +175,7 @@
                                     <c:when test="${not empty listProductDTO}">
                                         <div class="row g-4 justify-content-center">
                                             <c:forEach items="${listProductDTO}" var="p">
-                                                <c:if test="${p.quantity >= 1 and p.status == true}">
+                                                <c:if test="${p.quantity >= 1 and (p.status == 1 or p.status == 3 or p.status == 4)}">
                                                     <div class="col-md-6 col-lg-6 col-xl-4">
                                                         <div class="rounded position-relative fruite-item">
                                                             <div class="fruite-img">
@@ -322,7 +264,7 @@
                                             var value = rangeInput.value;
 
                                             // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
                                             amount.value = formattedValue;
                                             amount.innerText = formattedValue;
@@ -336,7 +278,7 @@
                                                 const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                                                 // Định dạng giá thành VND
-                                                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                                                const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
                                                 // Cập nhật nội dung của thẻ h6
                                                 priceElement.textContent = formattedPrice + " VNĐ";
@@ -346,14 +288,14 @@
                                         document.addEventListener('DOMContentLoaded', function () {
                                             // Định dạng giá trị của minPrice khi trang được tải
                                             var minPrice = ${not empty minPrice ? minPrice : 0};
-                                            var formattedMinPrice = (minPrice * 1000).toLocaleString('vi-VN');
+                                            var formattedMinPrice = (minPrice).toLocaleString('vi-VN');
                                             document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
 
                                             // Định dạng giá trị của thanh trượt khi trang được tải
                                             var rangeInput = document.getElementById('rangeInput');
                                             var amount = document.getElementById('amount');
                                             var value = rangeInput.value;
-                                            var formattedValue = (value * 1000).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
                                             amount.value = formattedValue;
                                             amount.innerText = formattedValue;
                                         });
@@ -362,9 +304,11 @@
                                             var rangeInput = document.getElementById('rangeInput').value;
                                             var hiddenRangeInput = document.getElementById('hiddenRangeInput');
                                             hiddenRangeInput.value = rangeInput;
+                                            var categoryName = 
                                             document.getElementById('rangeForm').submit();
                                         }
         </script>
     </body>
 
 </html>
+

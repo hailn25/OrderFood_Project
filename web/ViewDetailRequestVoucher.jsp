@@ -68,12 +68,12 @@
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="releaseDate">Ngày bắt đầu</label>
-                                            <fmt:formatDate value="${detail.releaseDate}" pattern="dd/MM/yyyy" var="formattedReleaseDate" />
+                                            <fmt:formatDate value="${detail.releaseDate}" pattern="dd-MM-yyyy" var="formattedReleaseDate" />
                                             <input readonly="" id="releaseDate" name="releaseDate" type="text" required value="${formattedReleaseDate}" class="form-control validate read-only" />
                                         </div>
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="finishDate">Ngày kết thúc</label>
-                                            <fmt:formatDate value="${detail.finishDate}" pattern="dd/MM/yyyy" var="formattedReleaseDate" />
+                                            <fmt:formatDate value="${detail.finishDate}" pattern="dd-MM-yyyy" var="formattedReleaseDate" />
                                             <input readonly="" id="finishDate" name="finishDate" type="text" required value="${formattedReleaseDate}" class="form-control validate read-only" />
 
                                         </div>
@@ -82,7 +82,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
+                                        <img style="width: 350px; height: 350px" src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -103,3 +103,6 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
+
+
+

@@ -68,7 +68,7 @@
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="home" class="nav-item nav-link">Trang chủ</a>
                             <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
                            <a href="flsale" class="nav-item nav-link ">Flash Sale</a>
                             <a href="blog" class="nav-item nav-link">Blog</a>
@@ -115,3 +115,4 @@
         <script src="js/main.js"></script>
     </body>
 </html>
+

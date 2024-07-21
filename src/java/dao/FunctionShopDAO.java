@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -50,7 +50,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -88,7 +88,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -124,7 +124,7 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -161,7 +161,62 @@ public class FunctionShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
+                        rs.getInt(13)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listProductDTO;
+    }
+
+    public ArrayList<ProductDTO> searchByPriceAndCategoryName(int minPrice, String categoryName) {
+        ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
+        try {
+            String sql = "SELECT \n"
+                    + "    Product.ProductId, \n"
+                    + "    Product.Name, \n"
+                    + "    Product.Price, \n"
+                    + "    Product.Description, \n"
+                    + "    Product.ImageURL, \n"
+                    + "    Product.CategoryId, \n"
+                    + "    Account.ImageAvatar, \n"
+                    + "    Product.IsSale, \n"
+                    + "    Product.Quantity, \n"
+                    + "    Product.CreateDate, \n"
+                    + "    Product.UpdateDate, \n"
+                    + "    Product.Status, \n"
+                    + "    Product.RestaurantId\n"
+                    + "FROM \n"
+                    + "    Product \n"
+                    + "INNER JOIN\n"
+                    + "    Category ON Product.CategoryId = Category.CategoryId \n"
+                    + "INNER JOIN\n"
+                    + "    Restaurant ON Product.RestaurantId = Restaurant.RestaurantId \n"
+                    + "INNER JOIN\n"
+                    + "    Account ON Restaurant.AccountId = Account.AccountId\n"
+                    + "WHERE \n"
+                    + "    Product.Price BETWEEN ? AND (SELECT MAX(Product.Price) FROM Product) AND Category.Name like N'%"+categoryName+"%'";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, minPrice);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listProductDTO.add(new ProductDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getBoolean(8),
+                        rs.getInt(9),
+                        rs.getDate(10),
+                        rs.getDate(11),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -178,7 +233,10 @@ public class FunctionShopDAO {
 //        for (ProductDTO pt : dao.getAllProductDTOByCategoryName("Bánh kem")) {
 //            System.out.println(pt.toString());
 //        }
-//            System.out.println(pt.toString());
+//        for (ProductDTO p : dao.searchByPriceAndCategoryName(150000, "Đồ ăn")) {
+//            System.out.println(p.toString());
 //        }
     }
 }
+
+

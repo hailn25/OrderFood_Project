@@ -174,16 +174,17 @@ public class MessageDAO {
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + text + "%");
             rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(new CustomerName(rs.getString(1), rs.getString(2),rs.getInt(3)));
-               
+            while (rs.next()) {
+                list.add(new CustomerName(rs.getString(1), rs.getString(2), rs.getInt(3)));
+
             }
-             return list;
+            return list;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
+
     public ArrayList<RestaurantName> getListRestaurantName(int userId) {
         ArrayList<RestaurantName> listRestaurant = new ArrayList<>();
         try {
@@ -314,28 +315,7 @@ public class MessageDAO {
 
                 ps2.executeUpdate();
 
-//                int conversationId1 = 0;
-//                String sql3 = "SELECT [ConversationId]\n"
-//                        + "FROM [dbo].[Conversation]\n"
-//                        + "WHERE  [UserId] = ? and [RestaurantId] = ?";
-//                Connection con3 = new DBContext().getConnection();
-//                PreparedStatement ps3 = con3.prepareStatement(sql3);
-//                ps3.setInt(1, senderId);
-//                ps3.setInt(2, receiverId);
-//                ResultSet rs3 = ps3.executeQuery();
-//                while (rs3.next()) {
-//                    conversationId1 = rs3.getInt(1);
-//                }
-//                String sql4 = "INSERT INTO Message (ConversationId, SenderId, ReceiverId, MessageContent)\n"
-//                        + "VALUES (?, ?, ?, ?);";
-//                Connection con4 = new DBContext().getConnection();
-//                PreparedStatement ps4 = con4.prepareStatement(sql4);
-//                ps4.setInt(1, conversationId);
-//                ps4.setInt(2, senderId);
-//                ps4.setInt(3, receiverId);
-//                ps4.setString(4, messageContent);
-//
-//                ps4.executeUpdate();
+                insertMessageUser(senderId, receiverId, messageContent);
             }
 
         } catch (SQLException ex) {
@@ -371,9 +351,6 @@ public class MessageDAO {
         }
         return listRestaurant;
     }
-
-
-
 
     public static void main(String[] args) throws SQLException {
         MessageDAO m = new MessageDAO();

@@ -54,7 +54,7 @@ public class LoginWithGoogle extends HttpServlet {
             AccountDAO dao = new AccountDAO();
             HttpSession session = request.getSession();
             Account a = dao.getAccountByEmail(toEmail);
-            if (a != null && a.isStatus() == false) {
+            if (a != null && a.getStatus() == 0) {
                 request.setAttribute("err", "Tài khoản của bạn đã bị chặn");
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
             } else if (a != null && a.getLoginWith() == 1) {

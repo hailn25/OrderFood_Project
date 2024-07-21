@@ -151,6 +151,11 @@
             .voucher-name {
                 text-transform: uppercase;
             }
+            .bg-card {
+                max-width: 800px; /* Thay đổi giá trị này theo kích thước mong muốn */
+                width: 100%; /* Đảm bảo nó chiếm toàn bộ chiều rộng của phần tử chứa */
+            }
+
 
         </style>
     </head>
@@ -178,10 +183,9 @@
             </div>
 
         </div>
-       
-                            
-        <div class="bg-background text-primary-foreground min-h-screen flex items-center justify-center" style="margin-top: 100px;">
-            <div class="max-w-lg w-full">
+
+        <div style="margin-top: 50px" class="bg-background text-primary-foreground min-h-screen flex items-center justify-center">
+            <div class="bg-card">
                 <div class="bg-card shadow-lg rounded-lg p-4 space-y-4">
 
                     <div class="flex justify-around">
@@ -201,8 +205,8 @@
                             <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
                                 <div>
                                     <div class="bg-green-500 voucher-name">${o.voucherName}</div>
-                                    <p class="text-sm text-muted-foreground">${o.description}</p>
-                                    <p class="text-sm text-muted-foreground">Ngày hết hạn: <fmt:formatDate value="${o.finishDate}" pattern="dd/MM/yyyy" /></p>
+                                    <p style="color: #45595B" class="text-lg font-bold mb-2">${o.description}</p>
+                                    <p  class="text-sm text-muted-foreground font-bold">Ngày hết hạn: <fmt:formatDate value="${o.finishDate}" pattern="dd-MM-yyyy" /></p>
                                     <span class="text-xs text-blue-500">Tất cả hình thức thanh toán</span>
                                 </div>
                                 <!--                                <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg" onclick="window.location.href = 'home'">Lưu</button>
@@ -265,6 +269,3 @@
         <script src="js/main.js"></script>
     </body>
 </html>
-
-
-

@@ -119,10 +119,8 @@
                 animation-timeline: view();
                 animation-range: entry 0% cover 40%;
             }
-
-
-
         </style>
+
     </head>
 
     <body>
@@ -141,6 +139,7 @@
                                 <input type="search" id="searchInput" class="form-control p-3" placeholder="keywords" name="txt" aria-describedby="search-icon-1">
                                 <button type="submit" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                             </form>
+                            <div id="error-message" class="text-danger mt-3" style="display: none;">Tên tìm kiếm không hợp lệ</div>
                         </div>
                     </div>
                 </div>
@@ -200,7 +199,7 @@
                             <div class="col-lg-12">
                                 <div class="row g-4" id="product-container">
                                     <c:forEach items="${listP}" var="p" varStatus="status">
-                                        <c:if test="${p.quantity > 0}">
+                                        <c:if test="${p.quantity > 0 && p.status}">
                                             <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
                                                 <div class="rounded position-relative fruite-item">
                                                     <div class="fruite-img">
@@ -210,19 +209,22 @@
                                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                         <h4>
                                                             <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
-                                                        </h4>
-                                                        
-                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6> 
-                                                            <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
-                                                                <input type="hidden" name="productId" value="${p.id}">
+                                                        </h4>                                                      
+                                                        <div style="display: flex; justify-content: space-between;">
+                                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6>   
+                                                            <div style="display: flex;">
                                                                 <form action="addtocart" method="post" >
                                                                     <input type="hidden" name="productId" value="${p.id}">
                                                                     <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
                                                                         <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                                                     </button>
                                                                 </form>
-                                                            </form>
+                                                                <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                                    <a href="restaurant?restaurantId=${p.restaurantId}&page=${1}">
+                                                                        <img src="img/${p.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                                    </a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -243,11 +245,11 @@
         <!-- Fruits Shop End-->
         <!-- Vesitable Shop Start-->
         <div class="container-fluid vesitable py-5">
-            <div class="container py-5"id="Block" >
+            <div class="container py-5" id="Block">
                 <h1 class="mb-0">Sản phẩm</h1>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
                     <c:forEach var="v" items="${listV}">
-                        <div class="border border-primary rounded position-relative vesitable-item" >
+                        <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
                                 <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="${v.name}">
                             </div>
@@ -255,13 +257,12 @@
                             <div class="p-4 d-flex flex-column justify-content-between rounded-bottom flex-grow-1">
                                 <div>
                                     <h4><a href="detail?pid=${v.id}" style="color: black;" class="product-name">${v.name}</a></h4>
-                                    <p class="truncate-description">${v.decription}</p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${v.id}">${v.price}</h6>
-                                    <form action="addtocart" method="post" >
-                                        <input type="hidden" name="productId" value="${p.id}">
-                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                    <h6 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${v.id}">${v.price}</h6>
+                                    <form action="addtocart" method="post">
+                                        <input type="hidden" name="productId" value="${v.id}">
+                                        <button type="submit" class="text-primary" style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
                                             <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                         </button>
                                     </form>
@@ -289,16 +290,20 @@
                                     </div>
                                     <div class="col-6">
                                         <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
-                                        <p>${b.restaurantName}</p>
                                         <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${b.id}">${b.price}</h6>
-                                        <form id="${b.id}" onsubmit="addToCart(${b.id});return false;">
+                                        <div style="display: flex;">
                                             <form action="addtocart" method="post" >
-                                                <input type="hidden" name="productId" value="${p.id}">
+                                                <input type="hidden" name="productId" value="${b.id}">
                                                 <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
                                                     <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                                 </button>
                                             </form>
-                                        </form>
+                                            <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                <a href="restaurant?restaurantId=${b.restaurantId}&page=${1}">
+                                                    <img src="img/${b.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -446,11 +451,22 @@
                     const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                     // Định dạng giá thành VND
-                    const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                    const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
                     // Cập nhật nội dung của thẻ h6
                     priceElement.textContent = formattedPrice + " VNĐ";
                 });
+            });
+        </script>
+        <script>
+            document.getElementById("searchForm").addEventListener("submit", function (event) {
+                var searchInput = document.getElementById("searchInput").value.trim();
+                if (searchInput === "") {
+                    event.preventDefault();
+                    document.getElementById("error-message").style.display = "block";
+                } else {
+                    document.getElementById("error-message").style.display = "none";
+                }
             });
         </script>
 

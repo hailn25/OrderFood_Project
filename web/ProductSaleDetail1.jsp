@@ -200,7 +200,7 @@
                         const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                         // Định dạng giá thành VND
-                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                        const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
                         // Cập nhật nội dung của thẻ h6
                         priceElement.textContent = formattedPrice + " VNĐ";

@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ListOrder;
@@ -26,10 +28,10 @@ public class ListOrderDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
-        List<ListOrder> listOrderById = new ArrayList<>();
+public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
+        Map<Integer, ListOrder> orderMap = new HashMap<>();
         if (orderStatusIds == null || orderStatusIds.isEmpty()) {
-            return listOrderById;
+            return new ArrayList<>(orderMap.values());
         }
         try {
             StringBuilder query = new StringBuilder("SELECT\n"
@@ -39,15 +41,16 @@ public class ListOrderDAO {
                     + "    p.Name,\n"
                     + "    p.Price,\n"
                     + "    p.ImageURL,\n"
-                    + "    r.Name,\n"
-                    + "    o.Name,\n"
+                    + "    r.Name AS RestaurantName,\n"
+                    + "    o.Name AS OrderName,\n"
                     + "    o.Phone,\n"
                     + "    o.Address,\n"
                     + "    o.Note,\n"
                     + "    od.Quantity,\n"
                     + "    od.TotalMoney,\n"
                     + "    os.OrderStatusId,\n"
-                    + "    os.Status\n"
+                    + "    os.Status,\n"
+                    + "    o.CreateDate\n"
                     + "FROM [dbo].[Order] o\n"
                     + "JOIN [dbo].[OrderDetail] od ON o.OrderId = od.OrderId\n"
                     + "JOIN [dbo].[Product] p ON od.ProductId = p.ProductId\n"
@@ -70,21 +73,33 @@ public class ListOrderDAO {
             ps.setInt(orderStatusIds.size() + 1, accountId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listOrderById.add(new ListOrder(rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getInt(3),
-                        rs.getString(4),
-                        rs.getDouble(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getString(9),
-                        rs.getString(10),
-                        rs.getString(11),
-                        rs.getInt(12),
-                        rs.getDouble(13),
-                        rs.getInt(14),
-                        rs.getString(15)));
+                int orderId = rs.getInt("OrderId");
+                ListOrder listOrder;
+                if (orderMap.containsKey(orderId)) {
+                    listOrder = orderMap.get(orderId);
+                } else {
+                    listOrder = new ListOrder(rs.getInt("AccountId"),
+                            orderId,
+                            rs.getInt("ProductId"),
+                            rs.getString("Name"),
+                            rs.getDouble("Price"),
+                            rs.getString("ImageURL"),
+                            rs.getString("RestaurantName"),
+                            rs.getString("OrderName"),
+                            rs.getString("Phone"),
+                            rs.getString("Address"),
+                            rs.getString("Note"),
+                            rs.getInt("Quantity"),
+                            rs.getDouble("TotalMoney"),
+                            rs.getInt("OrderStatusId"),
+                            rs.getString("Status"),
+                            rs.getDate("CreateDate")
+                    );
+                    orderMap.put(orderId, listOrder);
+                }
+                // Update the quantity and total money for the existing order
+                listOrder.setQuantity(listOrder.getQuantity() + rs.getInt("Quantity"));
+                listOrder.setTotalMoney(listOrder.getTotalMoney() + rs.getDouble("TotalMoney"));
             }
 
         } catch (SQLException ex) {
@@ -92,7 +107,7 @@ public class ListOrderDAO {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ListOrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return listOrderById;
+        return new ArrayList<>(orderMap.values());
     }
 
     

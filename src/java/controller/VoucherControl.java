@@ -88,11 +88,12 @@ public class VoucherControl extends HttpServlet {
         VoucherDAO voucherDAO = new VoucherDAO();
         try {
             voucherDAO.insertVoucherAccountDetails(voucherName, description, quantity, releaseDate, finishDate, status, discount, voucherCategoryId, String.valueOf(restaurantId));
-            response.sendRedirect("Voucher.jsp"); // Redirect to a success page
+            request.setAttribute("success", "Voucher inserted successfully!");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("Voucher.jsp"); // Redirect to an error page
+            request.setAttribute("error", "Error inserting voucher!");
         }
+        request.getRequestDispatcher("Voucher.jsp").forward(request, response);
     }
 
     /**

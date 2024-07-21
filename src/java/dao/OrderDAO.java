@@ -18,6 +18,7 @@ import model.OrderDTO;
 import model.OrderDetailDTO;
 import model.OrderDetailDTO_Huyvq;
 import model.OrderDetailDTO_Huyvq_1;
+import model.OrderDetailProfile;
 import model.ViewDetail;
 
 public class OrderDAO {
@@ -290,25 +291,36 @@ public class OrderDAO {
 
     public ArrayList<OrderDetailDTO_Huyvq> getAllOrderByRestaurantId(int restaurantId) throws SQLException, Exception {
         ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
-        String sql = "SELECT \n"
-                + "    [Order].OrderId, \n"
-                + "    [Order].Name, \n"
-                + "    SUM(OrderDetail.Quantity * Product.Price) AS TotalMoney, \n"
-                + "    OrderStatus.OrderStatusId\n"
-                + "FROM \n"
-                + "    [Order]\n"
-                + "INNER JOIN \n"
-                + "    OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
-                + "INNER JOIN \n"
-                + "    OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
-                + "INNER JOIN \n"
-                + "    Product ON OrderDetail.ProductId = Product.ProductId\n"
-                + "WHERE \n"
-                + "    Product.RestaurantId = ?\n"
-                + "GROUP BY \n"
-                + "    [Order].OrderId, \n"
-                + "    [Order].Name, \n"
-                + "    OrderStatus.OrderStatusId";
+        String sql = """
+                     SELECT 
+                             [Order].OrderId, 
+                             [Order].Name, 
+                             SUM(OrderDetail.Quantity * Product.Price) AS TotalMoney, 
+                             OrderStatus.OrderStatusId
+                         FROM 
+                             [Order]
+                         INNER JOIN 
+                             OrderDetail ON [Order].OrderId = OrderDetail.OrderId
+                         INNER JOIN 
+                             OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId
+                         INNER JOIN 
+                             Product ON OrderDetail.ProductId = Product.ProductId
+                         WHERE 
+                             Product.RestaurantId = ?
+                         GROUP BY 
+                             [Order].OrderId, 
+                             [Order].Name, 
+                             OrderStatus.OrderStatusId
+                         ORDER BY 
+                             CASE 
+                                 WHEN OrderStatus.OrderStatusId = 6 THEN 1
+                                 WHEN OrderStatus.OrderStatusId = 1 THEN 2
+                                 WHEN OrderStatus.OrderStatusId = 2 THEN 3
+                                 WHEN OrderStatus.OrderStatusId = 3 THEN 4
+                                 WHEN OrderStatus.OrderStatusId = 4 THEN 5
+                                 WHEN OrderStatus.OrderStatusId = 5 THEN 6
+                                 WHEN OrderStatus.OrderStatusId = 7 THEN 7
+                             END""";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, restaurantId);
@@ -325,6 +337,7 @@ public class OrderDAO {
         }
         return list;
     }
+
 
     public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_1(int restaurantId) throws SQLException, Exception {
         ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
@@ -863,6 +876,65 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<OrderDetailProfile> getOrderDetailByOrderId(int orderId) {
+        ArrayList<OrderDetailProfile> listOrderDetailsByAccountId = new ArrayList<>();
+        try {
+            String sql = "SELECT\n"
+                    + "[Order].AccountId,\n"
+                    + "OrderDetail.OrderDetailId,\n"
+                    + "OrderDetail.OrderId,\n"
+                    + "Product.ProductId,\n"
+                    + "Product.Name ,\n"
+                    + "Product.Price,\n"
+                    + "Product.ImageURL,\n"
+                    + "[Order].OrderStatusId,\n"
+                    + "OrderDetail.Quantity,\n"
+                    + "[Order].TotalMoney\n"
+                    + "FROM [Order]\n"
+                    + "INNER JOIN OrderDetail ON [Order].OrderId = OrderDetail.OrderId\n"
+                    + "INNER JOIN Product ON OrderDetail.ProductId = Product.ProductId\n"
+                    + "WHERE [Order].OrderId = ?;";
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDetailProfile orderDetail = new OrderDetailProfile(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getInt(9),
+                        rs.getDouble(10)
+                );
+                listOrderDetailsByAccountId.add(orderDetail);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listOrderDetailsByAccountId;
     }
 
     public static void main(String[] args) throws Exception {

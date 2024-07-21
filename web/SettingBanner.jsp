@@ -112,15 +112,22 @@
                 border-radius: 10px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
+
+            .image-preview {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4">
-                <h1 class="navbar-brand mb-0 h4">thiết lập biểu ngữ</h1>
+                <h1 class="navbar-brand mb-0 h4">Thiết lập quảng cáo</h1>
                 <div class="d-flex align-items-center">
                     <span class="mr-3">Xin chào, ${account.name}</span>
-                    <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                    <a href="logout" class="btn btn-outline-danger btn-sm">Đăng xuất</a>
                 </div>
             </header>
             <div class="row flex-lg-nowrap">
@@ -170,21 +177,21 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link px-3" href="profile">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Thông tin tài khoản</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Đổi mật khẩu</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="SettingBanner.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
                                             <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Thiết lập mã giảm giá</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -244,15 +251,15 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="createDate">Create Date</label>
-                                                    <input type="text" class="form-control" id="displayDate" readonly>
+                                                    <label for="createDate" style="display: none">Create Date</label>
+                                                    <input type="hidden" class="form-control" id="displayDate" readonly>
                                                     <input type="hidden" id="createDate" name="createDate">
                                                     <div class="text-danger" id="createDateError"></div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="updateDate">Update Date</label>
-                                                    <input type="date" class="form-control" id="updateDate" name="updateDate" required>
+                                                    <label for="updateDate" style="display: none">Update Date</label>
+                                                    <input type="hidden" class="form-control" id="updateDate" name="updateDate" readonly>
                                                     <div class="text-danger" id="updateDateError"></div>
                                                 </div>
 
@@ -260,7 +267,7 @@
                                                     <label for="imageAvatar">Image</label>
                                                     <input type="file" class="form-control" id="imageAvatar" name="imageAvatar" accept="image/*" onchange="previewImage(event)" required>
                                                     <div class="text-danger" id="imageAvatarError"></div>
-                                                </div>
+                                                </div>                                            
 
                                                 <div class="form-group text-center">
                                                     <img id="imagePreview" class="image-preview" style="display: none;">
@@ -284,10 +291,15 @@
         <script>
                                                         window.onload = function () {
                                                             var createDateInput = document.getElementById('createDate');
+                                                            var updateDateInput = document.getElementById('updateDate');
                                                             var displayDateInput = document.getElementById('displayDate');
-                                                            var currentDate = new Date().toISOString().split('T')[0];
-                                                            createDateInput.value = currentDate;
-                                                            displayDateInput.value = currentDate;
+                                                            var currentDate = new Date();
+                                                            var formattedDate = currentDate.toISOString().split('T')[0];
+
+                                                            // Set the date to today's date
+                                                            createDateInput.value = formattedDate;
+                                                            displayDateInput.value = formattedDate;
+                                                            updateDateInput.value = formattedDate;
                                                         };
 
                                                         function previewImage(event) {
@@ -343,9 +355,9 @@
                                                             }
 
                                                             // Validate imageAvatar
-                                                            var imageAvatar = document.getElementById("imageAvatar").value.trim();
-                                                            if (imageAvatar === "") {
-                                                                document.getElementById("imageAvatarError").innerHTML = "Image URL is required.";
+                                                            var imageAvatar = document.getElementById("imageAvatar").files.length;
+                                                            if (imageAvatar === 0) {
+                                                                document.getElementById("imageAvatarError").innerHTML = "Image is required.";
                                                                 isValid = false;
                                                             }
 

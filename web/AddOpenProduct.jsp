@@ -56,7 +56,7 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" hidden="">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="status">Trạng thái</label>
                                             <select style="color: white" class="custom-select tm-select-accounts" name="status" required>
@@ -75,17 +75,17 @@
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="price">Đơn giá</label>
-                                            <input id="price" name="price" type="text" required class="form-control validate" />
+                                            <input id="price" name="price" min="1" type="number" required class="form-control validate" />
                                         </div>
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="quantity">Số lượng</label>
-                                            <input id="quantity" name="quantity" type="text" required class="form-control validate" />
+                                            <input id="quantity" name="quantity" type="number" min="1" required class="form-control validate" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <div class="tm-product-img-preview mx-auto">
-                                        <img id="preview" src="" class="img-fluid d-block mx-auto" style="display:none;"/>
+                                        <img style="width: 350px; height: 350px" id="preview" src="" class="img-fluid d-block mx-auto" style="display:none;"/>
                                     </div>
                                     <div class="custom-file mt-3 mb-3">
                                         <input id="fileInput" name="image" type="file" style="display:none;" onchange="previewImage(event);" />
@@ -130,3 +130,6 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
+
+
+

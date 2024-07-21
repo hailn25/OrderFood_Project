@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Date;
+
 
 /**
  *
@@ -25,11 +27,12 @@ public class ListOrder {
     private double totalMoney;
     private int orderStatusId;
     private String status;
+    private Date createDate;
 
     public ListOrder() {
     }
 
-    public ListOrder(int accountId, int orderId, int productId, String productName, double price, String imageURL, String restaurant, String accountName, String phone, String address, String note, int quantity, double totalMoney, int orderStatusId, String status) {
+    public ListOrder(int accountId, int orderId, int productId, String productName, double price, String imageURL, String restaurant, String accountName, String phone, String address, String note, int quantity, double totalMoney, int orderStatusId, String status, Date createDate) {
         this.accountId = accountId;
         this.orderId = orderId;
         this.productId = productId;
@@ -45,6 +48,7 @@ public class ListOrder {
         this.totalMoney = totalMoney;
         this.orderStatusId = orderStatusId;
         this.status = status;
+        this.createDate = createDate;
     }
 
     public int getAccountId() {
@@ -167,11 +171,18 @@ public class ListOrder {
         this.status = status;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
-        return "ListOrder{" + "accountId=" + accountId + ", orderId=" + orderId + ", productId=" + productId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + '}';
+        return "ListOrder{" + "accountId=" + accountId + ", orderId=" + orderId + ", productId=" + productId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + ", createDate=" + createDate + '}';
     }
+
     
 }
-
-

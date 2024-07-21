@@ -35,6 +35,79 @@
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
         <link href="css/detail.css" rel="stylesheet">
+        <style>
+            .vesitable-item {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 100%;
+                min-width: 300px;
+                max-width: 300px;
+                height: 100%;
+                min-height: 450px;
+                max-height: 450px;
+                margin: 10px;
+            }
+
+            .vesitable-img img {
+                width: 150px;
+                height: 220px;
+                object-fit: cover;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+
+            .vesitable .owl-carousel .owl-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
+
+            .vesitable .owl-carousel .owl-item.active {
+                display: flex;
+            }
+
+            .text-white.bg-primary {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+
+            .p-4.pb-0.rounded-bottom {
+                padding-bottom: 15px !important;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .d-flex.justify-content-between.flex-lg-wrap {
+                margin-top: auto;
+            }
+
+            .p-4.pb-0.rounded-bottom h4 {
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+            }
+
+            .p-4.pb-0.rounded-bottom p.description {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+
+            .p-4.pb-0.rounded-bottom p.fs-5 {
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            .p-4.pb-0.rounded-bottom a.btn {
+                font-size: 1rem;
+                padding: 5px 10px;
+            }
+        </style>
     </head>
 
     <body>
@@ -89,23 +162,26 @@
                                 <p class="mb-3">Category: ${detail.categoryName}</p>
                                 <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
                                 <div class="d-flex mb-4" id="star-rating">
-                                    <!-- Các ngôi sao sẽ được thêm động bởi JavaScript -->
+
                                 </div>
                                 <p class="mb-4">${detail.decription}</p>
                                 <p class="mb-4">Quantity: ${detail.quantity}</p>
-                                <div class="input-group quantity mb-5" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                                <div style="margin-bottom: 30px">
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div style="display: flex; margin: 0 30; ">
                                     <form id="addToCartForm" action="addtocart" method="post" style="margin-right: 30px">
                                         <input type="hidden" name="productId" value="${detail.id}">
@@ -127,14 +203,14 @@
                             </div>
                             <div class="col-lg-12">
                                 <nav>
-                                    <div class="nav nav-tabs mb-3">                                     
+                                    <div class="nav nav-tabs mb-3">
                                         <button class="nav-link border-white border-bottom-0" type="button" role="tab"
-                                                id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                                id="nav-mission-tab" onclick="toggleReviews()"
                                                 aria-controls="nav-mission" aria-selected="false">Reviews</button>
                                     </div>
                                 </nav>
                                 <div class="tab-content mb-5">
-                                    <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
+                                    <div class="tab-pane" id="reviews-section" style="display: none;" role="tabpanel" aria-labelledby="nav-mission-tab">
                                         <c:forEach var="review" items="${reviews}">
                                             <div class="d-flex">
                                                 <img src="img/${review.imageAvatar}" class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;" alt="">
@@ -143,16 +219,16 @@
                                                     <div class="d-flex justify-content-between">
                                                         <h5>${review.nameAccount}</h5>
                                                         <div class="d-flex mb-3">
-                                                            <c:forEach begin="1" end="5" varStatus="status">
+                                                            <c:forEach begin="1" end="5" var="i">
                                                                 <c:choose>
-                                                                    <c:when test="${status.index <= (review.rateStar)}">
+                                                                    <c:when test="${i <= review.rateStar}">
                                                                         <i class="fa fa-star text-secondary"></i>
                                                                     </c:when>
-                                                                    <c:when test="${(review.rateStar - status.index) > -0.5 && (review.rateStar - status.index) < 0}">
+                                                                    <c:when test="${i - 0.5 == review.rateStar}">
                                                                         <i class="fa fa-star-half-alt text-secondary"></i>
                                                                     </c:when>
                                                                     <c:otherwise>
-                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </c:forEach>
@@ -191,7 +267,12 @@
                                             </div>
                                         </div>
                                     </c:forEach>
-                                </div>                              
+                                </div>
+                                <!-- Buttons to toggle view -->
+                                <div id="toggleButtons" class="mt-3">
+                                    <button class="btn btn-primary" onclick="showMore()">Xem thêm</button>
+                                    <button class="btn btn-secondary d-none" onclick="showLess()">Thu gọn</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,9 +289,21 @@
                                     <div class="p-4 pb-0 rounded-bottom">
                                         <h4>${relatedProduct.name}</h4>
                                         <p class="description">${relatedProduct.decription}</p>
-                                        <div class="d-flex justify-content-between flex-lg-wrap">
-                                            <p class="text-dark fs-5 fw-bold">${relatedProduct.price}</p>
-                                            <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${relatedProduct.id}">${relatedProduct.price}</h6>   
+                                            <div style="display: flex;">
+                                                <form action="addtocart" method="post" >
+                                                    <input type="hidden" name="productId" value="${relatedProduct.id}">
+                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                    </button>
+                                                </form>
+                                                <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                    <a href="restaurant?restaurantId=${relatedProduct.restaurantId}&page=${1}">
+                                                        <img src="img/${relatedProduct.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -225,137 +318,30 @@
             <!-- Footer Start -->
 
             <jsp:include page="Footer.jsp"></jsp:include>
-                <!-- Footer End -->
-                <!-- Back to Top -->
-                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+            <!-- Footer End -->
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
 
-                <!-- JavaScript Libraries -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="lib/easing/easing.min.js"></script>
-                <script src="lib/waypoints/waypoints.min.js"></script>
-                <script src="lib/lightbox/js/lightbox.min.js"></script>
-                <script src="lib/owlcarousel/owl.carousel.min.js"></script>           
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const quantityInput = document.querySelector('.quantity-input');
-                        const addToCheckoutForm = document.getElementById('addToCheckout');
-                        const checkoutQuantityInput = document.getElementById('checkoutQuantity');
+            <!-- JavaScript Libraries -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="lib/easing/easing.min.js"></script>
+            <script src="lib/waypoints/waypoints.min.js"></script>
+            <script src="lib/lightbox/js/lightbox.min.js"></script>
+            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-                        quantityInput.addEventListener('input', function () {
-                            let newValue = parseInt(quantityInput.value);
-                            if (isNaN(newValue) || newValue < 1) {
-                                newValue = 1;
-                            }
-                            quantityInput.value = newValue;
-                            checkoutQuantityInput.value = newValue;
-                        });
-
-                        addToCheckoutForm.addEventListener('submit', function () {
-                            checkoutQuantityInput.value = quantityInput.value;
-                        });
-                    });
-                </script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const quantityInputs = document.querySelectorAll('.quantity-input');
-                        const addToCartForm = document.getElementById('addToCartForm');
-                        const addToCartQuantityInput = document.getElementById('addToCartQuantity');
-
-                        quantityInputs.forEach(function (quantityInput) {
-                            const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
-                            const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
-                            const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
-
-                            btnPlus.addEventListener('click', function () {
-                                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
-                            });
-
-                            btnMinus.addEventListener('click', function () {
-                                updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
-                            });
-
-                            quantityInput.addEventListener('input', function () {
-                                let newValue = parseInt(quantityInput.value);
-                                if (isNaN(newValue) || newValue < 1) {
-                                    newValue = 1;
-                                }
-                                updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
-                            });
-
-                            // Function to update quantity and price
-                            function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
-                                if (newQuantity < 1) {
-                                    confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
-                                    return;
-                                }
-                                if (newQuantity > maxQuantity) {
-                                    alert('Số lượng vượt quá số lượng tối đa có sẵn');
-                                    return;
-                                }
-
-                                quantityInput.value = newQuantity;
-                                addToCartQuantityInput.value = newQuantity;
-                                updatePrice(quantityInput, newQuantity);
-                            }
-
-                            function updatePrice(quantityInput, quantity) {
-                                const pricePerItem = parseFloat(quantityInput.dataset.price);
-                                // Example of updating total price display based on quantity
-                                const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
-                                const totalPrice = quantity * pricePerItem * 1000;
-                                totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
-                            }
-
-                            updatePrice(quantityInput, parseInt(quantityInput.value));
-                        });
-
-                        // Example of submitting form
-                        addToCartForm.addEventListener('submit', function (event) {
-                            // You can add additional validation or actions before submitting the form
-                            // event.preventDefault(); // Uncomment to prevent default form submission for testing
-                            // Example of fetching data if needed
-                            const formData = new FormData(addToCartForm);
-                            fetch(addToCartForm.action, {
-                                method: 'POST',
-                                body: formData
-                            })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Network response was not ok');
+            <!-- Template Javascript -->
+            <script src="js/main.js"></script>  
+            <script>
+                                        function toggleReviews() {
+                                            var reviewsSection = document.getElementById('reviews-section');
+                                            if (reviewsSection.style.display === 'none') {
+                                                reviewsSection.style.display = 'block';
+                                            } else {
+                                                reviewsSection.style.display = 'none';
+                                            }
                                         }
-                                        return response.text();
-                                    })
-                                    .then(data => {
-                                        // Handle response data if necessary
-                                    })
-                                    .catch(error => {
-                                        console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
-                                    });
-                        });
-                    });
-                </script>
-
-                <script>
-                    // Lấy giá trị sao từ thuộc tính JSP
-                    var rating = ${detail.rateStar};
-                    var starContainer = document.getElementById('star-rating');
-
-                    for (var i = 1; i <= 5; i++) {
-                        var star = document.createElement('i');
-                        star.className = 'fa fa-star';
-                        if (i <= Math.floor(rating)) {
-                            star.classList.add('text-primary'); // Đổi màu sao được đánh giá
-                        } else {
-                            star.classList.add('text-secondary'); // Đổi màu sao không được đánh giá
-                        }
-                        if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                            star.className = 'fa fa-star-half'; // Nửa sao
-                            star.classList.add('text-primary');
-                        }
-                        starContainer.appendChild(star);
-                    }
             </script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
@@ -366,7 +352,7 @@
                         const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                         // Định dạng giá thành VND
-                        const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                        const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
                         // Cập nhật nội dung của thẻ h6
                         priceElement.textContent = formattedPrice + " VNĐ";
@@ -386,7 +372,21 @@
                     loadMoreBtn.classList.toggle('d-none');
                     showLessBtn.classList.toggle('d-none');
                 }
+            </script>          
+            <script>
+                function showMore() {
+                    document.querySelectorAll('.more-item').forEach(item => item.classList.remove('d-none'));
+                    document.getElementById('toggleButtons').innerHTML = `
+            <button class="btn btn-secondary" onclick="showLess()">Thu gọn</button>
+        `;
+                }
+
+                function showLess() {
+                    document.querySelectorAll('.more-item').forEach(item => item.classList.add('d-none'));
+                    document.getElementById('toggleButtons').innerHTML = `
+            <button class="btn btn-primary" onclick="showMore()">Xem thêm</button>
+        `;
+                }
             </script>
-            
     </body>
 </html>

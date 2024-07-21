@@ -4,9 +4,8 @@
  */
 package controller;
 
-import dao.OrderDAO;
-import dao.ProductDAO;
-import dao.RestaurantDAO;
+import dal.DBContext;
+import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,20 +13,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Account;
-import model.OrderDetailDTO_Huyvq;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "managerOrderOfCustomer_6", urlPatterns = {"/managerOrderOfCustomer_6"})
-public class ManagerOrderOfCustomerControl_6 extends HttpServlet {
+@WebServlet(name = "ChangeStatusAccountControl", urlPatterns = {"/changeStatusAccount"})
+public class ChangeStatusAccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,20 +37,25 @@ public class ManagerOrderOfCustomerControl_6 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            Account a = (Account) session.getAttribute("account");
-            int accountId = a.getAccountId();
-            RestaurantDAO dao2 = new RestaurantDAO();
-            int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
+            response.setContentType("text/html;charset=UTF-8");
+            String aid = request.getParameter("aid");
+            int status = Integer.parseInt(request.getParameter("status"));
+            LocalDate updateDate = LocalDate.now();
+            
+            if (status == 0) {
+                AccountDAO dao = new AccountDAO();
+                dao.unbanAccount(updateDate.toString(), aid);
+                response.sendRedirect("managerAccount");
+            } else {
+                AccountDAO dao = new AccountDAO();
+                dao.banAccount(updateDate.toString(), aid);
+                response.sendRedirect("managerAccount");
+            }
 
-            OrderDAO dao = new OrderDAO();
-
-            ArrayList<OrderDetailDTO_Huyvq> listO = dao.getOrderStatusByRestaurantId_6(restaurantId);
-
-            request.setAttribute("listO", listO);
-            request.getRequestDispatcher("ManagerOrderOfCustomer.jsp").forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ManagerOrderOfCustomerControl_6.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChangeStatusAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ChangeStatusAccountControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

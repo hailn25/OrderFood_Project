@@ -177,22 +177,11 @@
 
 
 
-                            <c:if test="${sessionScope.account.roleId == 4}">
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                        <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
-                                        <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                            <c:if test="${sessionScope.account.roleId == 4}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerOrderOfCustomer_0">
+                                        <i class="far fa-file-alt"></i> Quản lý đơn hàng
                                     </a>
-                                    <div class="dropdown-menu" id="dropdownMenu">
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
-                                        <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
-                                    </div>
                                 </li>
                             </c:if>
 
@@ -292,33 +281,27 @@
                         <p>Doanh thu</p>
                     </div>
                 </div>
-                <a href="managerOpenProduct">
-                    <div class="info-square">
-                        <i class="fas fa-box icon icon-products"></i>
-                        <div>
-                            <h2 class="default-text">${totalProducts}</h2>
-                            <p>Sản phẩm đang bán</p>
-                        </div>
+                <div class="info-square">
+                    <i class="fas fa-box icon icon-products"></i>
+                    <div>
+                        <h2 class="default-text">${totalProducts}</h2>
+                        <p>Sản phẩm đang bán</p>
                     </div>
-                </a>
-                <a href="managerOrderOfCustomer_6">
-                    <div class="info-square">
-                        <i class="fas fa-clock icon icon-orders-pending"></i>
-                        <div>
-                            <h2 class="default-text">${totalPendingOrders}</h2>
-                            <p>Đơn hàng đang chờ xác nhận</p>
-                        </div>
+                </div>
+                <div class="info-square">
+                    <i class="fas fa-clock icon icon-orders-pending"></i>
+                    <div>
+                        <h2 class="default-text">${totalPendingOrders}</h2>
+                        <p>Đơn hàng đang chờ xác nhận</p>
                     </div>
-                </a>
-                <a href="managerOrderOfCustomer_3">
-                    <div class="info-square">
-                        <i class="fas fa-check-circle icon icon-orders-success"></i>
-                        <div>
-                            <h2 class="default-text">${totalCompletedOrders}</h2>
-                            <p>Đơn hàng đã giao thành công</p>
-                        </div>
+                </div>
+                <div class="info-square">
+                    <i class="fas fa-check-circle icon icon-orders-success"></i>
+                    <div>
+                        <h2 class="default-text">${totalCompletedOrders}</h2>
+                        <p>Đơn hàng đã giao thành công</p>
                     </div>
-                </a>
+                </div>
             </div>
 
             <div class="col-12 tm-block-col">
@@ -338,34 +321,12 @@
         <!-- https://getbootstrap.com/ -->
         <script src="js/tooplate-scripts.js"></script>
 
-        <script>
-                function toggleDropdown(event) {
-                    event.preventDefault();
-                    var dropdownMenu = document.getElementById("dropdownMenu");
-                    dropdownMenu.classList.toggle("show");
-                }
-
-// Đóng dropdown menu nếu click ngoài nó
-                window.onclick = function (event) {
-                    if (!event.target.matches('.dropdown-toggle')) {
-                        var dropdowns = document.getElementsByClassName("dropdown-menu");
-                        for (var i = 0; i < dropdowns.length; i++) {
-                            var openDropdown = dropdowns[i];
-                            if (openDropdown.classList.contains('show')) {
-                                openDropdown.classList.remove('show');
-                            }
-                        }
-                    }
-                }
-                function toggleDropdown(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    var dropdownMenu = document.getElementById("dropdownMenu");
-                    dropdownMenu.classList.toggle("show");
-                }
-        </script>
+       
 
 
     </body>
 
 </html>
+
+
+

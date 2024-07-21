@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +39,7 @@
                         <form enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-6 col-lg-6 col-md-12">
-                                    
+
                                     <div class="form-group mb-3">
                                         <label for="name">Tên nhà hàng</label>
                                         <input id="name" name="name" type="text" required value="${detail.restaurantName}" class="form-control read-only" readonly/>
@@ -49,13 +50,15 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="name">Ngày gửi đơn tố cáo</label>
-                                        <input readonly="" id="date" name="date" type="text" required value="${detail.createDate}" class="form-control validate read-only" />
+                                        <fmt:formatDate value="${detail.createDate}" pattern="dd-MM-yyyy" var="formattedDate" />
+                                        <input readonly="" id="date" name="date" type="text" required value="${formattedDate}" class="form-control validate read-only" />
+
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
+                                        <img style="width: 350px; height: 350px" src="img/${detail.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
                                 </div>
                                 <div class="col-3">
@@ -76,6 +79,8 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
+
+
 
 
 

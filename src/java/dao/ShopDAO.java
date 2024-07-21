@@ -45,7 +45,7 @@ public class ShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12)));
+                        rs.getInt(12)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,7 +130,7 @@ public class ShopDAO {
                         rs.getInt(9),
                         rs.getDate(10),
                         rs.getDate(11),
-                        rs.getBoolean(12),
+                        rs.getInt(12),
                         rs.getInt(13)));
             }
         } catch (SQLException ex) {
@@ -144,10 +144,11 @@ public class ShopDAO {
     public ArrayList<RestaurantDTO> getAllRestaurantDTO() {
         ArrayList<RestaurantDTO> listRestaurant = new ArrayList<>();
         try {
-            String sql = "SELECT Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar\n"
-                    + "FROM     Account INNER JOIN\n"
-                    + "Restaurant ON Account.AccountId = Restaurant.AccountId\n"
-                    + "ORDER BY Restaurant.RateStar DESC";
+            String sql = """
+                         SELECT Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar, Account.status
+                                                  FROM     Account INNER JOIN
+                                                  Restaurant ON Account.AccountId = Restaurant.AccountId
+                                                  ORDER BY Restaurant.RateStar DESC""";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -158,7 +159,8 @@ public class ShopDAO {
                         rs.getString(2),
                         rs.getString(3),
                         rs.getDouble(4),
-                        rs.getString(5)));
+                        rs.getString(5),
+                        rs.getInt(6)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ShopDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -188,3 +190,5 @@ public class ShopDAO {
 //        }
     }
 }
+
+

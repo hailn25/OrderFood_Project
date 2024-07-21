@@ -180,7 +180,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="voucherList?accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Mã giảm giá</span>
                                             </a>
                                         </li>                                 
                                         <li class="nav-item">
@@ -194,7 +194,7 @@
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
                                         <li class="nav-item">
-                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                            <a class="nav-link px-3 active" href="HomeOfRestaurant.jsp">
                                                 <i class="fa fa-fw fa-bar-chart mr-1"></i>
                                                 <span>Trang chủ</span>
                                             </a>
@@ -208,13 +208,13 @@
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="SettingBanner.jsp">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
+                                                <span>Thiết lập quảng cáo</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Thiết lập mã giảm giá</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -290,6 +290,14 @@
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Xử lý sự kiện click cho các link trong navbar
+                $('.nav-link').click(function () {
+                    $('.nav-link').removeClass('active-link'); // Xóa class active-link từ tất cả các link
+                    $(this).addClass('active-link'); // Thêm class active-link vào link được click
+                });
+            });
+        </script>
     </body>
 </html>
-

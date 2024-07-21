@@ -4,9 +4,7 @@
  */
 package controller;
 
-import dao.OrderDAO;
 import dao.ProductDAO;
-import dao.RestaurantDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,20 +12,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Account;
-import model.OrderDetailDTO_Huyvq;
-import model.Product;
+import utils.Validation;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "managerOrderOfCustomer_7", urlPatterns = {"/managerOrderOfCustomer_7"})
-public class ManagerOrderOfCustomerControl_7 extends HttpServlet {
+@WebServlet(name = "SearchListManagerToFlashSaleControl", urlPatterns = {"/searchListManagerToFlashSale"})
+public class SearchListManagerToFlashSaleControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,20 +35,23 @@ public class ManagerOrderOfCustomerControl_7 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            Account a = (Account) session.getAttribute("account");
-            int accountId = a.getAccountId();
-            RestaurantDAO dao2 = new RestaurantDAO();
-            int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
+            ProductDAO dao = new ProductDAO();
+            String productName = request.getParameter("productName");
 
-            OrderDAO dao = new OrderDAO();
-
-            ArrayList<OrderDetailDTO_Huyvq> listO = dao.getOrderStatusByRestaurantId_7(restaurantId);
-
-            request.setAttribute("listO", listO);
-            request.getRequestDispatcher("ManagerOrderOfCustomer.jsp").forward(request, response);
+            if (productName != null) {
+                int lengthProductName = Validation.removeAllBlank(productName).length();
+                if (lengthProductName > 0) {
+                    productName = Validation.removeUnnecessaryBlank(productName);
+                    int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
+                    request.setAttribute("listP", dao.getSearchProductToFlashsaleByRestaurantId(restaurantId, productName));
+                    request.setAttribute("restaurantId", restaurantId);
+                } else {
+                    request.setAttribute("error", "Tên tìm kiếm không hợp lệ!");
+                }
+            }
+            request.getRequestDispatcher("ListProductToSelect.jsp").forward(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(ManagerOrderOfCustomerControl_7.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SearchListManagerToFlashSaleControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -78,7 +75,7 @@ public class ManagerOrderOfCustomerControl_7 extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-* @throws ServletException if a servlet-specific error occurs
+     * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override

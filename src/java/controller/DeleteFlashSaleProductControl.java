@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.ProductDAO;
@@ -22,18 +21,20 @@ import java.util.logging.Logger;
  *
  * @author Vu Huy
  */
-@WebServlet(name="DeleteFlashSaleProductControl", urlPatterns={"/deleteFlashSaleProduct"})
+@WebServlet(name = "DeleteFlashSaleProductControl", urlPatterns = {"/deleteFlashSaleProduct"})
 public class DeleteFlashSaleProductControl extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         try {
             int productId = Integer.parseInt(request.getParameter("pid"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -42,15 +43,17 @@ public class DeleteFlashSaleProductControl extends HttpServlet {
             int stock = dao1.getQuantityProduct(productId);
             dao.updateStockAfterFlashSale(stock, quantity, productId);
             dao.deleteFlashSaleProduct(productId);
+            dao1.changeStatusWhenDeleteFlashSale(productId);
             response.sendRedirect("managerFlashSaleProduct");
         } catch (SQLException ex) {
             Logger.getLogger(DeleteFlashSaleProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -58,12 +61,13 @@ public class DeleteFlashSaleProductControl extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -71,12 +75,13 @@ public class DeleteFlashSaleProductControl extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

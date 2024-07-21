@@ -97,7 +97,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img id="currentImage" src="img/${imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
+                                        <img style="width: 350px; height: 350px" id="currentImage" src="img/${imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
                                     <!-- Khung chứa nút chọn ảnh -->
                                     <div class="custom-file mt-3 mb-3">

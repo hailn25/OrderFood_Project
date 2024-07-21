@@ -91,6 +91,14 @@ public class ProductSaleDetailDTO {
         this.salePrice = salePrice;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "ProductSaleDetailDTO{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", imageURL=" + imageURL + ", quantity=" + quantity + ", discount=" + discount + ", salePrice=" + salePrice + ", price=" + price + '}';

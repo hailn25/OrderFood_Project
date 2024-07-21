@@ -38,11 +38,13 @@ public class MessageUser1Control extends HttpServlet {
         MessageDAO messsageDAO = new MessageDAO();
         int userId = 0;
         int restaurantId = 0;
+        String error = request.getParameter("error");
         if (request.getParameter("userId") != null && request.getParameter("restaurantId") != null) {
             userId = Integer.parseInt(request.getParameter("userId"));
             restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
         }
 
+        request.setAttribute("error", error);
         request.setAttribute("userId", userId);
         request.setAttribute("restaurantId", restaurantId);
 
@@ -95,3 +97,5 @@ public class MessageUser1Control extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

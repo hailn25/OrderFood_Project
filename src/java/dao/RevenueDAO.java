@@ -58,26 +58,22 @@ public class RevenueDAO {
         return 0;
     }
 
-//    public static void main(String[] args) {
-//        RevenueDAO dao = new RevenueDAO();
-//        System.out.println(dao.getRevenueSliderOfWeb());
-//    }
-
     public double getRevenueOfWeb(int month, int year) {
-        String sql = "SELECT \n"
-                + "               MONTH(O.FinishDate) AS month,\n"
-                + "            YEAR(O.FinishDate) AS year,\n"
-                + "            SUM(O.TotalMoney) AS total_revenue\n"
-                + "        FROM \n"
-                + "        [Order] O\n"
-                + "          WHERE \n"
-                + "            O.OrderStatusId = 3\n"
-                + "                 AND MONTH(O.FinishDate) = ?\n"
-                + "				 AND YEAR(O.FinishDate) = ?\n"
-                + "              GROUP BY \n"
-                + "                YEAR(O.FinishDate), MONTH(O.FinishDate)\n"
-                + "             ORDER BY \n"
-                + "                 YEAR(O.FinishDate), MONTH(O.FinishDate)";
+        String sql = """
+                     SELECT 
+                                    MONTH(O.FinishDate) AS month,
+                                 YEAR(O.FinishDate) AS year,
+                                 SUM(O.TotalMoney) AS total_revenue
+                             FROM 
+                             [Order] O
+                               WHERE 
+                                 O.OrderStatusId = 3
+                                      AND MONTH(O.FinishDate) = ?
+                     \t\t\t\t AND YEAR(O.FinishDate) = ?
+                                   GROUP BY 
+                                     YEAR(O.FinishDate), MONTH(O.FinishDate)
+                                  ORDER BY 
+                                      YEAR(O.FinishDate), MONTH(O.FinishDate)""";
 
         // Initialize resources
         Connection conn = null;
@@ -93,7 +89,7 @@ public class RevenueDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                double totalRevenue = rs.getDouble("total_revenue") * 1000;
+                double totalRevenue = rs.getDouble("total_revenue");
                 double finalRevenue = totalRevenue * 0.05;
                 return Math.ceil(finalRevenue);
             }
@@ -140,31 +136,58 @@ public class RevenueDAO {
         return 0;
     }
 
+    public double getRevenueSliderOfRestaurant(int restaurantId, int year, int month) {
+        try {
+            String sql = """
+                        select count(SliderId)
+                        from Slider
+                        where (SliderStatusId = 3 or SliderStatusId = 4) and UpdateBy = ?
+                        and YEAR(UpdateDate) = ? and MONTH(UpdateDate) = ?
+                         """;
+
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            ps.setInt(2, year);
+            ps.setInt(3, month);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1) * 500000;
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RevenueDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RevenueDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        RevenueDAO dao = new RevenueDAO();
+        System.out.println(dao.getMonthBecomeRestaurant(9));
+    }
+
     public int AccountValid1(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 1 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 1 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1) AND MONTH(UpdateDate) IN (2,3,4,5,6,7,8,9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
                          FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 1""";
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, year);
             ps.setInt(2, year);
+            ps.setInt(3, year);
+            ps.setInt(4, year);
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount1 = rs.getInt("number_of_accounts");
@@ -179,25 +202,17 @@ public class RevenueDAO {
     public int AccountValid2(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 2 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 2 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2) AND MONTH(UpdateDate) IN (3,4,5,6,7,8,9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
                          FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 2""";
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -218,28 +233,18 @@ public class RevenueDAO {
 
     public int AccountValid3(int year) {
         String sql = """
-                     SELECT 
-                             COUNT(AccountId) AS number_of_accounts
+                     	SELECT 
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 3 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 3 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3) AND MONTH(UpdateDate) IN (4,5,6,7,8,9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
                          FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 3;""";
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -247,8 +252,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount3 = rs.getInt("number_of_accounts");
@@ -262,30 +265,18 @@ public class RevenueDAO {
 
     public int AccountValid4(int year) {
         String sql = """
-                     SELECT 
-                         COUNT(AccountId) AS number_of_accounts
-                     FROM 
-                         Account
-                     WHERE 
-                         Account.RoleId = 4
-                         AND (
-                             (Account.Status = 1 AND (
-                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                             ))
-                             OR 
-                             (
-                                 Account.Status = 0 AND (
-                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                                 )
-                             )
-                         )
-                         AND MONTH(LastDateLogin) >= 4""";
+                    SELECT 
+                            SUM(
+                                CASE 
+                                    WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 4 AND DAY(UpdateDate) != 1 THEN 1
+                                    WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 4 AND DAY(UpdateDate)  = 1 THEN 0
+                        			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4) AND MONTH(UpdateDate) IN (5,6,7,8,9,10,11,12) THEN 1
+                        			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4) AND YEAR(UpdateDate) = ? THEN 1
+                                    ELSE 0
+                                END
+                            ) AS number_of_accounts
+                        FROM 
+                            Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -293,11 +284,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount4 = rs.getInt("number_of_accounts");
@@ -312,31 +298,17 @@ public class RevenueDAO {
     public int AccountValid5(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 5 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 5 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5) AND MONTH(UpdateDate) IN (6,7,8,9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
                          FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 5""";
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -344,13 +316,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount5 = rs.getInt("number_of_accounts");
@@ -365,33 +330,17 @@ public class RevenueDAO {
     public int AccountValid6(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 6 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ?  AND MONTH(UpdateDate) = 6 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ?  AND MONTH(CreateDate) IN (1,2,3,4,5,6) AND MONTH(UpdateDate) IN (7,8,9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6) AND YEAR(UpdateDate) = ?  THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
                          FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 6""";
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -399,15 +348,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount6 = rs.getInt("number_of_accounts");
@@ -422,35 +362,17 @@ public class RevenueDAO {
     public int AccountValid7(int year) {
         String sql = """
                      SELECT 
-                         COUNT(AccountId) AS number_of_accounts
-                     FROM 
-                         Account
-                     WHERE 
-                         Account.RoleId = 4
-                         AND (
-                             (Account.Status = 1 AND (
-                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                             ))
-                             OR 
-                             (
-                                 Account.Status = 0 AND (
-                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                                 )
-                             )
-                         )
-                         AND MONTH(LastDateLogin) >= 7""";
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 7 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 7 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7) AND MONTH(UpdateDate) IN (8,9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6,7) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
+                         FROM 
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -458,17 +380,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-            ps.setInt(13, year);
-            ps.setInt(14, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount7 = rs.getInt("number_of_accounts");
@@ -483,37 +394,17 @@ public class RevenueDAO {
     public int AccountValid8(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 8 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 8 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7,8) AND MONTH(UpdateDate) IN (9,10,11,12) THEN 1
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6,7,8) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
                          FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 8""";
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -521,19 +412,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-            ps.setInt(13, year);
-            ps.setInt(14, year);
-            ps.setInt(15, year);
-            ps.setInt(16, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount8 = rs.getInt("number_of_accounts");
@@ -548,39 +426,17 @@ public class RevenueDAO {
     public int AccountValid9(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
-                         FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 9""";
+                                     SUM(
+                                         CASE 
+                                             WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 9 AND DAY(UpdateDate) != 1 THEN 1
+                                             WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 9 AND DAY(UpdateDate)  = 1 THEN 0
+                                 			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7,8,9) AND MONTH(UpdateDate) IN (10,11,12) THEN 1
+                                 			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6,7,8,9) AND YEAR(UpdateDate) = ? THEN 1
+                                             ELSE 0
+                                         END
+                                     ) AS number_of_accounts
+                                 FROM 
+                                     Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -588,21 +444,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-            ps.setInt(13, year);
-            ps.setInt(14, year);
-            ps.setInt(15, year);
-            ps.setInt(16, year);
-            ps.setInt(17, year);
-            ps.setInt(18, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount9 = rs.getInt("number_of_accounts");
@@ -617,41 +458,17 @@ public class RevenueDAO {
     public int AccountValid10(int year) {
         String sql = """
                      SELECT 
-                             COUNT(AccountId) AS number_of_accounts
-                         FROM 
-                             Account
-                         WHERE 
-                             Account.RoleId = 4
-                             AND (
-                                 (Account.Status = 1 AND (
-                                     (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
-                                     OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                         			OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                                 ))
-                                 OR 
-                                 (
-                                     Account.Status = 0 AND (
-                                         (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
-                                         OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                         				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                                     )
-                                 )
-                             )
-                             AND MONTH(LastDateLogin) >= 10""";
+                                     SUM(
+                                         CASE 
+                                             WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 10 AND DAY(UpdateDate) != 1 THEN 1
+                                             WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 10 AND DAY(UpdateDate)  = 1 THEN 0
+                                 			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7,8,9,10) AND MONTH(UpdateDate) IN (11,12) THEN 1
+                                 			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6,7,8,9,10) AND YEAR(UpdateDate) = ? THEN 1
+                                             ELSE 0
+                                         END
+                                     ) AS number_of_accounts
+                                 FROM 
+                                     Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -659,23 +476,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-            ps.setInt(13, year);
-            ps.setInt(14, year);
-            ps.setInt(15, year);
-            ps.setInt(16, year);
-            ps.setInt(17, year);
-            ps.setInt(18, year);
-            ps.setInt(19, year);
-            ps.setInt(20, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount10 = rs.getInt("number_of_accounts");
@@ -690,43 +490,17 @@ public class RevenueDAO {
     public int AccountValid11(int year) {
         String sql = """
                      SELECT 
-                         COUNT(AccountId) AS number_of_accounts
-                     FROM 
-                         Account
-                     WHERE 
-                         Account.RoleId = 4
-                         AND (
-                             (Account.Status = 1 AND (
-                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
-                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
-                             ))
-                             OR 
-                             (
-                                 Account.Status = 0 AND (
-                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
-                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
-                                 )
-                             )
-                         )
-                         AND MONTH(LastDateLogin) >= 11""";
+                                 SUM(
+                                     CASE 
+                                         WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 11 AND DAY(UpdateDate) != 1 THEN 1
+                                         WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(UpdateDate) = 11 AND DAY(UpdateDate)  = 1 THEN 0
+                             			WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7,8,9,10,11) AND MONTH(UpdateDate) IN (12) THEN 1
+                             			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6,7,8,9,10,11) AND YEAR(UpdateDate) = ? THEN 1
+                                         ELSE 0
+                                     END
+                                 ) AS number_of_accounts
+                             FROM 
+                                 Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -734,25 +508,6 @@ public class RevenueDAO {
             ps.setInt(2, year);
             ps.setInt(3, year);
             ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-            ps.setInt(13, year);
-            ps.setInt(14, year);
-            ps.setInt(15, year);
-            ps.setInt(16, year);
-            ps.setInt(17, year);
-            ps.setInt(18, year);
-            ps.setInt(19, year);
-            ps.setInt(20, year);
-            ps.setInt(21, year);
-            ps.setInt(22, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount11 = rs.getInt("number_of_accounts");
@@ -767,73 +522,22 @@ public class RevenueDAO {
     public int AccountValid12(int year) {
         String sql = """
                      SELECT 
-                         COUNT(AccountId) AS number_of_accounts
-                     FROM 
-                         Account
-                     WHERE 
-                         Account.RoleId = 4
-                         AND (
-                             (Account.Status = 1 AND (
-                                 (DAY(UpdateDate) BETWEEN 1 AND 15 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)
-                                 OR (MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
-                     			OR (MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
-                             ))
-                             OR 
-                             (
-                                 Account.Status = 0 AND (
-                                     (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 12 AND YEAR(UpdateDate) = ?)
-                                     OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 1 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 2 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 3 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 4 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 5 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 6 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 7 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 8 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 9 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 10 AND YEAR(UpdateDate) = ?)
-                     				OR (DAY(UpdateDate) >= 2 AND MONTH(UpdateDate) = 11 AND YEAR(UpdateDate) = ?)
-                                 )
-                             )
-                         )
-                         AND MONTH(LastDateLogin) >= 12""";
+                             SUM(
+                                 CASE 
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7,8,9,10,11,12) AND MONTH(UpdateDate) = 12 AND DAY(UpdateDate) != 1 THEN 1
+                                     WHEN  Account.RoleId = 4 and Account.Status = 0 AND YEAR(UpdateDate) = ? AND MONTH(CreateDate) IN (1,2,3,4,5,6,7,8,9,10,11,12) AND MONTH(UpdateDate) = 12 AND DAY(UpdateDate)  = 1 THEN 0
+                         			WHEN  Account.RoleId = 4 and Account.Status = 1 AND MONTH(UpdateDate) IN (1,2,3,4,5,6,7,8,9,10,11,12) AND YEAR(UpdateDate) = ? THEN 1
+                                     ELSE 0
+                                 END
+                             ) AS number_of_accounts
+                         FROM 
+                             Account""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, year);
             ps.setInt(2, year);
             ps.setInt(3, year);
-            ps.setInt(4, year);
-            ps.setInt(5, year);
-            ps.setInt(6, year);
-            ps.setInt(7, year);
-            ps.setInt(8, year);
-            ps.setInt(9, year);
-            ps.setInt(10, year);
-            ps.setInt(11, year);
-            ps.setInt(12, year);
-            ps.setInt(13, year);
-            ps.setInt(14, year);
-            ps.setInt(15, year);
-            ps.setInt(16, year);
-            ps.setInt(17, year);
-            ps.setInt(18, year);
-            ps.setInt(19, year);
-            ps.setInt(20, year);
-            ps.setInt(21, year);
-            ps.setInt(22, year);
-            ps.setInt(23, year);
-            ps.setInt(24, year);
-
             rs = ps.executeQuery();
             if (rs.next()) {
                 int numberAccount12 = rs.getInt("number_of_accounts");
@@ -845,4 +549,27 @@ public class RevenueDAO {
         return 0;
     }
 
+    public int getMonthBecomeRestaurant(int accountId) {
+        try {
+            String sql = "select MONTH(CreateDate) as Month\n"
+                    + "from Account\n"
+                    + "where AccountId = 9";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RevenueDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RevenueDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    
 }
+
+
+

@@ -40,18 +40,19 @@ public class LoadListProductToSelect extends HttpServlet {
             throws ServletException, IOException {
         try {
             response.setContentType("text/html;charset=UTF-8");
-            
+
             HttpSession session = request.getSession();
             Account a = (Account) session.getAttribute("account");
             int accountId = a.getAccountId();
             RestaurantDAO dao2 = new RestaurantDAO();
             int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
-            
+
             ProductDAO dao = new ProductDAO();
-            
-            ArrayList<Product> listP = dao.getOpenProductByRestaurantId(restaurantId);
-            
+
+            ArrayList<Product> listP = dao.getProductToFlashsaleByRestaurantId(restaurantId);
+
             request.setAttribute("listP", listP);
+            request.setAttribute("restaurantId", restaurantId);
             request.getRequestDispatcher("ListProductToSelect.jsp").forward(request, response);
         } catch (Exception ex) {
             Logger.getLogger(LoadListProductToSelect.class.getName()).log(Level.SEVERE, null, ex);

@@ -7,7 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html lang="en">
 
     <head>
@@ -56,66 +55,7 @@
 
     <body>
 
-        <div class="container-fluid fixed-top">
-            <div class="container topbar bg-primary d-none d-lg-block">
-                <div class="d-flex justify-content-between">
-                    <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">DH FPT</a></small>
-                        <!--<small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>-->
-                    </div>
-                    <div class="top-link pe-2">
-                        <c:if test = "${sessionScope.account == null}"> 
-                            <a href="Login.jsp" class="text-white"><small class="text-white ms-2">Đăng nhập</small></a>
-                        </c:if> 
-                        <c:if test="${sessionScope.account != null}">
-                            <c:set var="username" value="${fn:substringBefore(sessionScope.account.email, '@')}" />
-                            <small class="text-white ms-2">Hello, ${account.name}</small>
-                            <span class="text-white ms-2">|</span>
-                            <a href="logout" class="text-white"><small class="text-white ms-2">Đăng xuất</small></a>
-                        </c:if> 
-                    </div>
-                </div>
-            </div>
-            <div class="container px-0">
-                <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="home" class="navbar-brand"><h1 class="text-primary display-6">4FOODHD</h1></a>
-                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
-                    </button>
-                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                        <div class="navbar-nav mx-auto">
-                            <a href="home" class="nav-item nav-link ">Trang chủ</a>
-                            <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
-                           <a href="flsale" class="nav-item nav-link ">Flash Sale</a>
-                            <a href="blog" class="nav-item nav-link active" >Blog</a>
-                            <c:if test="${sessionScope.account != null}">
-                                <a href="loadVoucherFreeship" class="nav-item nav-link">Voucher</a>
-                            </c:if> 
-
-                            <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
-                        </div>
-                        <div class="d-flex m-3 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="fas fa-search text-primary"></i>
-                            </button>
-
-                            <c:set value="${sessionScope.size}" var="size"></c:set>
-                                <a href="Cart.jsp" class="position-relative me-4 my-auto">
-                                    <i class="fa fa-shopping-bag fa-2x"></i>
-                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${size}</span>
-                            </a>
-
-                            <!-- Kiểm tra nếu người dùng đã đăng nhập -->
-                            <c:if test="${not empty sessionScope.account}">
-                                <a href="profile" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            </c:if>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <%@include file="Header.jsp" %>
 
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
@@ -181,15 +121,6 @@
 
                 <!-- Sidebar Start -->
                 <div class="col-lg-4">
-                    <!-- Search Form Start -->
-                    <div class="mb-5">
-                        <div class="input-group">
-                            <input type="text" class="form-control p-3" placeholder="Từ khoá">
-                            <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
-                        </div>
-                    </div>
-                    <!-- Search Form End -->
-
                     <!-- Recent Post Start -->
                     <div class="mb-5">
                         <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Bài viết gần đây</h3>
@@ -244,3 +175,5 @@
     </body>
 
 </html>
+
+

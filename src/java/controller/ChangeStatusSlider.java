@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.RestaurantDAO;
 import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -33,12 +38,38 @@ public class ChangeStatusSlider extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         SliderDAO sliderDAO = new SliderDAO();
+        RestaurantDAO restaurantDAO = new RestaurantDAO();
         int changeStatus = Integer.parseInt(request.getParameter("changeStatus"));
         int sliderId = Integer.parseInt(request.getParameter("sliderId"));
+        int accountId = Integer.parseInt(request.getParameter("accountId"));
+        int restaurantId = restaurantDAO.getRestaurantIdByAccountId(Integer.parseInt(request.getParameter("accountId")));
+        String updateDate = request.getParameter("updateDate");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        String formattedDate = "2024-01-01";
+        try {
+            date = formatter.parse(updateDate);
+
+            // Sử dụng Calendar để cộng thêm một tháng và đặt ngày là 01
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.MONTH, 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+            // Lấy ngày cập nhật
+            Date updatedDate = calendar.getTime();
+            formattedDate = formatter.format(updatedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
         if (changeStatus == 3) {
-            sliderDAO.changeStatusSlider(sliderId, changeStatus);
+            sliderDAO.changeStatusSlider(sliderId, changeStatus, restaurantId, formattedDate);
+        } else if(changeStatus == 2) {
+            sliderDAO.changeStatusSlider(sliderId, changeStatus, restaurantId, formattedDate);
         } else {
-            sliderDAO.changeStatusSlider(sliderId, changeStatus);
+            sliderDAO.changeStatusSlider(sliderId, changeStatus, accountId, updateDate);
         }
 
         request.getRequestDispatcher("managerService").forward(request, response);
@@ -84,3 +115,6 @@ public class ChangeStatusSlider extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
+

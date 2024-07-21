@@ -39,7 +39,7 @@ public class ManagerAccountControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         Account a = (Account) session.getAttribute("account");
-        if (a.getRoleId() == 1 || a.getRoleId() == 5) {
+        if (a.getRoleId() == 1) {
             AccountDAO dao = new AccountDAO();
             ArrayList<Account> list = dao.getAllAccount();
             request.setAttribute("listA", list);

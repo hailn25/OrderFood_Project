@@ -23,12 +23,12 @@ public class Product {
     private int quantity;
     private Date createDate;
     private Date updateDate;
-    private boolean status;
+    private int status;
 
     public Product() {
     }
 
-    public Product(int productId, String name, double price, String description, String imageURL, int categoryId, int restaurantId, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status) {
+    public Product(int productId, String name, double price, String description, String imageURL, int categoryId, int restaurantId, boolean isSale, int quantity, Date createDate, Date updateDate, int status) {
         this.productId = productId;
         this.name = name;
         this.price = price;
@@ -42,6 +42,8 @@ public class Product {
         this.updateDate = updateDate;
         this.status = status;
     }
+
+    
 
     public int getProductId() {
         return productId;
@@ -131,12 +133,19 @@ public class Product {
         this.updateDate = updateDate;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", name=" + name + ", price=" + price + ", description=" + description + ", imageURL=" + imageURL + ", categoryId=" + categoryId + ", restaurantId=" + restaurantId + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + '}';
+    }
+
+    
 
 }

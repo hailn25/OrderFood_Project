@@ -346,8 +346,10 @@ public class ProductSaleDAO {
 
     public void deleteFlashSaleProduct(int productId) throws SQLException {
         try {
-            String sql = "DELETE FROM [dbo].[Product_Sale]\n"
-                    + "WHERE [ProductID] = ?";
+            String sql = """
+                         update [dbo].[Product_Sale]
+                         set [IsFlashSale] = 4
+                         where ProductID = ?""";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, productId);
@@ -380,9 +382,287 @@ public class ProductSaleDAO {
         return null;
     }
 
+    public void ChangeStatusIsFlashSale1() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 1 AND CAST(p.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale2() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 2 AND CAST(p.StartTime AS DATE) <= CAST(GETDATE() AS DATE)";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale3() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 3 AND CAST(p.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale4() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 4 AND CAST(p.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale1() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 1 AND CAST(ps.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale2() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 2 AND CAST(ps.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale3() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 3 AND CAST(ps.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale4() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 4 AND CAST(ps.StartTime AS DATE) <= CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale11() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 1 AND CAST(p.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale22() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 2 AND CAST(p.StartTime AS DATE) < CAST(GETDATE() AS DATE)";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale33() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 3 AND CAST(p.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusIsFlashSale44() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.IsFlashSale = 3\n"
+                    + "FROM [dbo].[Product_Sale] p\n"
+                    + "WHERE p.TimeFrame = 4 AND CAST(p.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale11() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 1 AND CAST(ps.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale22() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 2 AND CAST(ps.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale33() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 3 AND CAST(ps.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ChangeStatusProductAfterFlashSale44() throws SQLException {
+        try {
+            String sql = "UPDATE p\n"
+                    + "SET p.[Status] = 1\n"
+                    + "FROM [dbo].[Product] p\n"
+                    + "JOIN [dbo].[Product_Sale] ps ON p.ProductId = ps.ProductID\n"
+                    + "WHERE ps.IsFlashSale = 3 AND ps.TimeFrame = 4 AND CAST(ps.StartTime AS DATE) < CAST(GETDATE() AS DATE);";
+            conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductSaleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public ProductFlashSaleDTO getDetailFlashSaleProductByRestaurantId(int restaurantId, int pId) throws SQLException, Exception {
+        String sql = """
+                     SELECT        Product_Sale.*, Product.Name ProductName, Product.ImageURL
+                     FROM            Product INNER JOIN
+                                     Product_Sale ON Product.ProductId = Product_Sale.ProductID INNER JOIN
+                                     Restaurant ON Product.RestaurantId = Restaurant.RestaurantId
+                     WHERE Restaurant.RestaurantId = ? and Product.ProductId = ?  and Product_Sale.Quantity > 0 and (Product_Sale.IsFlashSale = 0 or Product_Sale.IsFlashSale = 1
+                                          or Product_Sale.IsFlashSale = 2 or Product_Sale.IsFlashSale = 3)""";
+        conn = new DBContext().getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, restaurantId);
+        ps.setInt(2, pId);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            int productId = rs.getInt("ProductId");
+            String productName = rs.getString("ProductName");
+            int isFlashSale = rs.getInt("IsFlashSale");
+            String imageURL = rs.getString("ImageURL");
+            int quantity = rs.getInt("Quantity");
+            double discount = rs.getDouble("Discount");
+            int timeFrame = rs.getInt("TimeFrame");
+            Date date = rs.getDate("StartTime");
+            double salePrice = rs.getDouble("SalePrice");
+
+            return new ProductFlashSaleDTO(productId, productName, isFlashSale, salePrice,
+                    imageURL, quantity, discount, timeFrame, date);
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws SQLException {
         ProductSaleDAO dao = new ProductSaleDAO();
-        System.out.println(dao.ListProductFlashSale("2024-07-19"));
+        dao.ChangeStatusProductAfterFlashSale1();
 
     }
 

@@ -134,22 +134,11 @@
                                                             </a>
                                                         </li>-->
                         </c:if>
-                        <c:if test="${sessionScope.account.roleId == 4}">
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuLink" onclick="toggleDropdown(event)">
-                                    <i class="far fa-file-alt" onclick="toggleDropdown(event)"></i>
-                                    <span onclick="toggleDropdown(event)"> Quản lý đơn hàng <i class="fas fa-angle-down"></i> </span>
+                        <c:if test="${sessionScope.account.roleId == 4}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerOrderOfCustomer_0">
+                                    <i class="far fa-file-alt"></i> Quản lý đơn hàng
                                 </a>
-                                <div class="dropdown-menu" id="dropdownMenu">
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_0">Tất cả đơn hàng của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_6">Đơn hàng đang chờ xác nhận của nhà hàng</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_1">Đơn hàng đang chờ xác nhận của shipper</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_2">Đơn hàng đang giao</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_3">Đơn hàng giao thành công</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_4">Đơn hàng bị khách hàng huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_5">Đơn hàng bị shipper huỷ</a>
-                                    <a class="dropdown-item" href="managerOrderOfCustomer_7">Đơn hàng do nhà hàng huỷ</a>
-                                </div>
                             </li>
                         </c:if>
 
@@ -157,6 +146,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="Profile.jsp">
                                     <i class="far fa-user"></i> Tài khoản
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${sessionScope.account.roleId == 4}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="messageRestaurant?accountId=${sessionScope.account.accountId}">
+                                    <i class="far fa-comments"></i> Tin nhắn
                                 </a>
                             </li>
                         </c:if>
@@ -186,7 +182,7 @@
                             <h2>Quản lý sản phẩm<b> FlashSale</b></h2>
                         </div>
                         <div class="col-sm-6">
-                            <a href="loadListProductToSelect"  id="btn-addNewProduct" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm mới</span></a>
+                            <a href="loadListProductToSelect"  id="btn-addNewProduct" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm sản phẩm FlashSale</span></a>
                         </div>
                     </div>
                 </div>
@@ -212,8 +208,8 @@
                                 <td>${o.productName}</td>
                                 <td>${o.quantity}</td>
                                 <td><fmt:formatNumber value="${o.discount * 100}" type="number" maxFractionDigits="0"/>%</td>
-                                <td><fmt:formatNumber value="${o.salePrice * 1000}" type="number" maxFractionDigits="0"/> vnđ</td>
-                                <td><fmt:formatDate value="${o.date}" pattern="dd/MM/yyyy"/></td>
+                                <td><fmt:formatNumber value="${o.salePrice}" type="number" maxFractionDigits="0"/> VNĐ</td>
+                                <td><fmt:formatDate value="${o.date}" pattern="dd-MM-yyyy"/></td>
                                 <td>
                                     <c:choose>
                                         <c:when test="${o.timeFrame == 1}">
@@ -252,15 +248,15 @@
                                     <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
                                 </td>
                                 <td>
-                                    <!--<a href="loadOpenProduct?pid=${o.productId}}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa sản phẩm">&#xE254;</i></a>-->
-                                    <a href="deleteFlashSaleProduct?pid=${o.productId}&quantity=${o.quantity}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Ẩn sản phẩm" style="color: red">&#xE872;</i></a>
+                                    <a href="viewDetailFlashSaleProduct?pid=${o.productId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                    <a href="deleteFlashSaleProduct?pid=${o.productId}&quantity=${o.quantity}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xoá sản phẩm" style="color: red">&#xE872;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
             </div>
-            <a href="loadListProductToSelect" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm mới</a>
+            <a href="loadListProductToSelect" class="btn btn-primary btn-block text-uppercase mb-3">Thêm sản phẩm FlashSale</a>
         </div>
 
         <!--cai nay cua ProGear-->
@@ -286,32 +282,7 @@
                 }
             }
         </script>
-        <script>
-            function toggleDropdown(event) {
-                event.preventDefault();
-                var dropdownMenu = document.getElementById("dropdownMenu");
-                dropdownMenu.classList.toggle("show");
-            }
 
-            // Đóng dropdown menu nếu click ngoài nó
-            window.onclick = function (event) {
-                if (!event.target.matches('.dropdown-toggle')) {
-                    var dropdowns = document.getElementsByClassName("dropdown-menu");
-                    for (var i = 0; i < dropdowns.length; i++) {
-                        var openDropdown = dropdowns[i];
-                        if (openDropdown.classList.contains('show')) {
-                            openDropdown.classList.remove('show');
-                        }
-                    }
-                }
-            }
-            function toggleDropdown(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                var dropdownMenu = document.getElementById("dropdownMenu");
-                dropdownMenu.classList.toggle("show");
-            }
-        </script>
         <script>
             function confirmTurnOffSale(event) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
@@ -351,3 +322,6 @@
 
     </body>
 </html>
+
+
+

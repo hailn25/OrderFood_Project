@@ -28,7 +28,7 @@ public class FeedbackDAO {
 
     public List<Feedback> getFeedbackByProductId(int productId) {
         List<Feedback> listFeedback = new ArrayList<>();
-        String query = "select p.ProductId, p.Name, p.Price, p.Description, p.ImageURL, p.CategoryId, p.RestaurantId, f.FeedbackId, f.Feedback, f.Date, f.RateStar, a.ImageAvatar, a.Name\n"
+        String query = "select p.ProductId, p.Name, p.Price, p.Description, f.ImageURL, p.CategoryId, p.RestaurantId, f.FeedbackId, f.Feedback, f.Date, f.RateStar, a.ImageAvatar, a.Name\n"
                 + "from Feedback f\n"
                 + "join Product p\n"
                 + "on f.ProductId = p.ProductId\n"

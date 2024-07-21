@@ -52,7 +52,7 @@
                 --ring: 240 4.9% 83.9%;
             }
 
-            img{
+            img {
                 width: 150px;
                 height: 150px;
             }
@@ -67,32 +67,36 @@
                 width: 300px; /* Adjust the width as needed */
                 margin: 0 auto; /* Center the form */
             }
-
         </style>
     </head>
     <body class="bg-light">
-        <div class=" d-flex align-items-center justify-content-center vh-100 bg-dark bg-opacity-50">
+        <div class="d-flex align-items-center justify-content-center vh-100 bg-dark bg-opacity-50">
             <div class="card shadow-lg w-50">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2 class="h5 mb-0">Chọn sản phẩm</h2>
                 </div>
                 <div class="card-body">
-                    <div class="mb-4">
-                        <div class="input-group">
-                            <input id="voucher-code" type="text" class="form-control" placeholder="Tên sản phẩm">
-                            <button class="btn btn-outline-secondary">TÌM KIẾM</button>
+                    <form action="searchListManagerToFlashSale" method="get">
+                        <div>
+                            <input type="hidden" name="restaurantId" value="${restaurantId}">
                         </div>
-                    </div>
-                    <form action="chooseProduct" method="post">
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <input name="productName" type="search" class="form-control" placeholder="Tên sản phẩm">
+                                <button type="submit" class="btn btn-outline-secondary">TÌM KIẾM</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form id="productForm" action="chooseProduct" method="post">
                         <div class="mb-auto">
-                            <div class="list-group overflow-auto ">
+                            <div class="list-group overflow-auto">
                                 <c:forEach var="l" items="${listP}">
                                     <label class="list-group-item d-flex align-items-center">
                                         <div class="flex-grow-1">
                                             <h4 class="h6 mb-1">${l.name}</h4>
                                             <p class="small text-muted">Số lượng trong kho: ${l.quantity}</p>
                                         </div>
-                                        <img src="img/${l.imageURL}" alt="Không thể tải ảnh">
+                                        <img style="width: 150px; height: 150px" src="img/${l.imageURL}" alt="Không thể tải ảnh">
                                         <input type="radio" name="productId" value="${l.productId}" class="form-check-input ms-3">
                                     </label>
                                 </c:forEach>
@@ -100,9 +104,7 @@
                         </div>
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-outline-secondary me-2" type="button" onclick="goBack()">Quay lại</button>
-
-                            <button class="btn btn-primary" type="submit">Xác nhận</button>
-
+                            <button class="btn btn-primary" type="button" onclick="validateAndSubmit()">Xác nhận</button>
                         </div>
                     </form>
                 </div>
@@ -112,9 +114,31 @@
             function goBack() {
                 window.history.back();
             }
+
+            function validateAndSubmit() {
+                const form = document.getElementById('productForm');
+                const radios = form.querySelectorAll('input[name="productId"]');
+                let isChecked = false;
+
+                radios.forEach((radio) => {
+                    if (radio.checked) {
+                        isChecked = true;
+                    }
+                });
+
+                if (isChecked) {
+                    form.submit();
+                } else {
+                    alert('Vui lòng chọn một sản phẩm trước khi xác nhận.');
+                }
+            }
+
             function toggleDarkMode() {
                 document.body.classList.toggle('dark');
             }
         </script>
     </body>
 </html>
+
+
+

@@ -24,7 +24,7 @@
     <body id="reportsPage" style="background-color: #F6F6F6">
         <div class="" id="home">
 
-            <nav class="navbar navbar-expand-xl">
+             <nav class="navbar navbar-expand-xl">
                 <div class="container h-100">
 
 
@@ -113,7 +113,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <p class=" mt-5 mb-5" style="color: black">Welcome back, <b>Staff</b></p>
+                        <p class=" mt-5 mb-5" style="color: black">Chào mừng bạn trở lại, <b>Staff</b></p>
                     </div>
                 </div>
 

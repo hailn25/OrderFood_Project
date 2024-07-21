@@ -39,7 +39,6 @@ public class OrderHistoryControl extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int accountId = 0;
-        int orderId = 0;
 
         // Lấy accountId từ session
         Account account = (Account) request.getSession().getAttribute("account");
@@ -58,7 +57,7 @@ public class OrderHistoryControl extends HttpServlet {
         }
 
         if (request.getParameter("cancelOrder") != null && request.getParameter("orderId") != null) {
-            orderId = Integer.parseInt(request.getParameter("orderId"));
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
             ListOrderDAO listOrderDAO = new ListOrderDAO();
 
             boolean isUpdated = false;
@@ -81,9 +80,6 @@ public class OrderHistoryControl extends HttpServlet {
         ListOrderDAO listOrderDAO = new ListOrderDAO();
         List<ListOrder> listOrders = listOrderDAO.getListOrderByIds(orderStatusIds, accountId);
         request.setAttribute("listOrders", listOrders);
-
-        List<OrderDTO> listOrderById_V1 = listOrderDAO.getListOrderById_V1(orderStatusIds.get(0), accountId); // Chỉ sử dụng giá trị đầu tiên cho phương thức cũ
-        request.setAttribute("listOrderById_V1", listOrderById_V1);
 
         // Chuyển tiếp tới trang hiển thị đơn hàng
         request.getRequestDispatcher("ShowOrder.jsp").forward(request, response);
@@ -129,3 +125,5 @@ public class OrderHistoryControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

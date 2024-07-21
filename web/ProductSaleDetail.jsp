@@ -88,8 +88,9 @@
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${fsdetail.name}</h4>
                                 <p id="countdown"  style="font-size: 20px; color: orange "></p>
-                                <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${fsdetail.productId}">${fsdetail.salePrice}</h5>
 
+                                <h5 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${fsdetail.productId}">${fsdetail.salePrice}</h5>
+                               
 
                                 <div class="d-flex mb-4" id="star-rating">
                                     <!-- Các ngôi sao sẽ được thêm động bởi JavaScript -->
@@ -230,7 +231,7 @@
                             const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
                             // Định dạng giá thành VND
-                            const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
+                            const formattedPrice = (priceValue).toLocaleString('vi-VN');
                             // Cập nhật nội dung của thẻ h6
                             priceElement.textContent = formattedPrice + " VNĐ";
                         });
@@ -290,7 +291,7 @@
                             const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
                             const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
                             const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
-                            const salePriceElement = document.getElementById(`salePrice-${quantityInput.dataset.productId}`);
+                            const salePriceElement = document.getElementById(`price-${quantityInput.dataset.productId}`);
                             const originalPriceElement = document.getElementById(`originalPrice-${quantityInput.dataset.productId}`);
 
                             let alertShown = false; // Flag to track alert display
@@ -320,7 +321,7 @@
                                     alert('Số lượng vượt quá số lượng tối đa có sẵn');
                                     return;
                                 }
-                                if (newQuantity > 2) {
+                                if (newQuantity > 1) {
                                     if (!alertShown) {
                                         alert('Bạn sẽ không được mua với giá flash sale khi mua từ 2 sản phẩm trở lên');
                                         alertShown = true; // Set flag to true after showing alert

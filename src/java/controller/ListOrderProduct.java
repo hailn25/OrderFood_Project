@@ -6,22 +6,22 @@ package controller;
 
 import dao.OrderDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import model.OrderDetailDTO;
+import model.OrderDetailProfile;
+import model.ViewDetail;
 
 /**
  *
- * @author Vu Huy
+ * @author ADMIN
  */
-@WebServlet(name = "CancelOrderControl", urlPatterns = {"/cancelOrder"})
-public class CancelOrderControl extends HttpServlet {
+@WebServlet(name = "ListOrderProduct", urlPatterns = {"/listOrderProduct"})
+public class ListOrderProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,41 +34,28 @@ public class CancelOrderControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            String oid = request.getParameter("oid");
-            OrderDAO dao = new OrderDAO();
-            dao.cancelOrderOfCustomer(oid);
-            request.getRequestDispatcher("managerOrderOfCustomer_0").forward(request, response);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CancelOrderControl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(CancelOrderControl.class.getName()).log(Level.SEVERE, null, ex);
+        OrderDAO orderDAO = new OrderDAO();
+        String action = request.getParameter("action");
+        int orderId = Integer.parseInt(request.getParameter("oid"));
+
+        if ("view".equals(action)) {
+            orderDAO.getOrderDetailByOrderId(orderId);
         }
+
+
+        ArrayList<OrderDetailProfile> listOrderDetailsByAccountId = orderDAO.getOrderDetailByOrderId(orderId);
+        request.setAttribute("listOrderDetailsByAccountId", listOrderDetailsByAccountId);
+
+        // Chuyển tiếp đến JSP hiển thị chi tiết đơn hàng
+        request.getRequestDispatcher("OrderDetail.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -84,4 +71,7 @@ public class CancelOrderControl extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
+    
 }

@@ -90,6 +90,3 @@ public class ChooseProductControl extends HttpServlet {
     }// </editor-fold>
 
 }
-
-
-
