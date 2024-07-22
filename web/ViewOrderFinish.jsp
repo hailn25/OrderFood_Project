@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -53,6 +53,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link " href="managerShipperCancel">
                                         <i class="fas fa-trash-alt"></i> Đơn hàng bị hủy
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="Profile.jsp">
+                                        <i class="far fa-user"></i> Tài khoản
                                     </a>
                                 </li>
                             </c:if>
@@ -109,15 +116,15 @@
                                 <td>${o.phone}</td>
                                 <td>${o.address}</td>
                                 <td>${o.note}</td>
-                                <td>${o.createDate}</td>
+                                <td><fmt:formatDate value="${o.createDate}" pattern="dd-MM-yyyy" /></td>
                                 <td>${o.totalMoney}</td>
                                 <td>
-                                          ${o.status}
+                                    ${o.status}
 
                                 </td>
 
                                 <td>
-                                  
+
 
                                     <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
 

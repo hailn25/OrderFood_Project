@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
 import model.Cart;
+import model.Item;
 import model.Voucher;
 
 @WebServlet(name = "UseVoucherServlet", urlPatterns = {"/useVoucher"})
@@ -27,52 +28,77 @@ public class UseVoucherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
-            response.sendRedirect("Login.jsp");
-            return;
-        }
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new Cart();
-        }
-
-        int productId = 0;
-        if (request.getParameter("productId") != null) {
-            productId = Integer.parseInt(request.getParameter("productId"));
-        }
-        int aid = account.getAccountId();
-        ProductDAO dao = new ProductDAO();
-        List<Integer> listProductId = cart.getAllProductIdOfCart();
-        List<Integer> listRestaurantId = dao.getRestaurantId(listProductId);
-        VoucherDAO voucherDAO = new VoucherDAO();
-        ArrayList<Voucher> listFree = voucherDAO.getAllVoucherWithQuantityByAccountIdFree(aid);
-        ArrayList<Voucher> listR = voucherDAO.getAllVoucherWithQuantityByAccountIdR(aid,listRestaurantId);
-        request.setAttribute("listF", listFree);
-        request.setAttribute("listR", listR);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new Cart();
+        }
 
         VoucherDAO voucherDAO = new VoucherDAO();
-        String voucherFreeIdStr = request.getParameter("voucherFree");
         String voucherRIdStr = request.getParameter("voucherR");
+        String voucherFreeStr = request.getParameter("voucherFree");
 
-        if (voucherFreeIdStr != null && !voucherFreeIdStr.isEmpty()) {
-            int voucherFreeId = Integer.parseInt(voucherFreeIdStr);
-            request.setAttribute("listFree", voucherDAO.getDiscountByVoucherId(voucherFreeId));
-        }
+        double shippingFee = 30000;
+        double shippingDiscount = 0;
+        double subtotal = 0;
+        double voucherDiscount = 0;
 
+        // Apply restaurant-specific voucher
         if (voucherRIdStr != null && !voucherRIdStr.isEmpty()) {
             int voucherRId = Integer.parseInt(voucherRIdStr);
-            request.setAttribute("listVoucherR", voucherDAO.getDiscountByVoucherId(voucherRId));
+            Voucher voucherR = voucherDAO.getDiscountByVoucherRId(voucherRId);
+            int restaurantId = voucherR.getRestaurantId();
+            List<Item> items = cart.getItems();
+            for (Item item : items) {
+                double price = item.getProduct().getPrice();
+                if (item.getProduct().getRestaurantId() == restaurantId) {
+                    double discount = price * voucherR.getDiscount() / 100;
+                    item.setDiscountedPrice(price - discount);
+                    voucherDiscount += discount * item.getQuantity();
+                } else {
+                    item.setDiscountedPrice(price);
+                }
+                subtotal += item.getDiscountedPrice() * item.getQuantity();
+            }
+
+            voucherDAO.updateQuantity(voucherRId);
+
+        } else {
+            List<Item> items = cart.getItems();
+            for (Item item : items) {
+                item.setDiscountedPrice(item.getProduct().getPrice());
+                subtotal += item.getDiscountedPrice() * item.getQuantity();
+            }
         }
 
-        request.getRequestDispatcher("Checkout.jsp").forward(request, response);
+        // Apply free shipping voucher
+        if (voucherFreeStr != null && !voucherFreeStr.isEmpty()) {
+            int voucherFreeId = Integer.parseInt(voucherFreeStr);
+            int shippingDiscountRate = voucherDAO.getDiscountByVoucherId(voucherFreeId);
+            shippingDiscount = shippingFee * (shippingDiscountRate / 100.0); // Chia bằng 100.0 để có phép chia chính xác
+            voucherDAO.updateQuantity(voucherFreeId);
+        }
+
+        double total = subtotal + shippingFee - shippingDiscount - voucherDiscount;
+        request.setAttribute("subtotal", subtotal);
+        request.setAttribute("shippingFee", shippingFee);
+        request.setAttribute("shippingDiscount", shippingDiscount);
+        request.setAttribute("voucherDiscount", voucherDiscount);
+        request.setAttribute("total", total);
+
+        session.setAttribute("cart", cart);
+        request.getRequestDispatcher("Checkout_2.jsp").forward(request, response);
     }
 
     @Override

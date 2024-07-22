@@ -46,7 +46,7 @@
                         <!-- Customer Information -->
                         <div class="col-md-6 mb-4">
                             <h2>Thông tin khách hàng</h2>
-                            <form name="checkoutForm" action="checkout" method="post" onsubmit="return validateForm()">
+                            <form name="checkoutForm" action="checkout2" method="post" onsubmit="return validateForm()">
                                 <div id="errorMessage" style="color: red;"></div>
                                 <div class="row g-3">
                                     <div class="col-md-12">
@@ -65,12 +65,7 @@
                                     <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
                                     <input type="tel" class="form-control" name="phone" value="${account.phone}">
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-check my-3">
-                                        <input class="form-check-input" type="checkbox" id="Address" name="Address" value="Address" onchange="redirectToCheckout()">
-                                        <label class="form-check-label" for="Address">Giao hàng đến địa chỉ khác?</label>
-                                    </div>
-                                </div>
+
                                 <div class="col-12">
                                     <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="5" placeholder="Ghi chú"></textarea>
                                 </div>
@@ -78,11 +73,10 @@
 
 
                     </div>
-                    <!-- Order Summary -->
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <h2>Giỏ hàng</h2>
                         <div class="table-responsive">
-                            <table class="table" ">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th scope="col">Sản phẩm</th>
@@ -93,81 +87,47 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    <c:set var="cartItems" value="${sessionScope.cart.items}" />
-                                    <c:forEach var="item" items="${cartItems}">
+                                    <c:forEach var="item" items="${sessionScope.cart.items}">
                                         <tr>
                                             <td><img src="img/${item.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="Không thể tải ảnh"></td>
                                             <td>${item.product.name}</td>
-                                            <td><fmt:formatNumber value="${item.price * 1000}" maxFractionDigits="1" /></td>
+                                            <td><fmt:formatNumber value="${item.price}" maxFractionDigits="0" /> VNĐ</td>
                                             <td>${item.quantity}</td>
-                                            <td><fmt:formatNumber value="${item.quantity * item.price * 1000}" maxFractionDigits="2" /></td>
+                                            <td><fmt:formatNumber value="${item.price * item.quantity}" maxFractionDigits="0" /> VNĐ</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
                         </div>
-
-                        <!--                            <form action="showVoucher" method="get">
-                                                        <div class="mt-5">
-                                                            <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                                                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Sử dụng Voucher</button>
-                                                        </div>
-                                                    </form>
-                        -->
-                        <c:set var="subtotal" value="0" />
-                        <c:forEach var="item" items="${sessionScope.cart.items}">
-                            <c:set var="subtotal" value="${subtotal + (item.quantity * item.product.price * 1000)}" />
-                        </c:forEach>
-
-                        <c:set var="shippingFee" value="30000" />
-                        <c:set var="shippingDiscountRate" value="${listFree / 100}" />
-                        <c:set var="shippingDiscount" value="${shippingDiscountRate * shippingFee}" />
-
-                        <c:set var="voucherDiscountRate" value="${listVoucherR / 100}" />
-                        <c:set var="voucherDiscount" value="${voucherDiscountRate * subtotal}" />
-
-                        <c:set var="total" value="${subtotal + shippingFee - shippingDiscount - voucherDiscount}" />
-
                         <div class="border p-4 mt-4" style="margin-bottom: 50px">
                             <h2 class="mb-4">Tổng thanh toán</h2>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Tổng tiền hàng</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0" /></span>
+                                <span class="text-muted-foreground"><fmt:formatNumber value="${subtotal}" maxFractionDigits="0" /> VNĐ</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Phí vận chuyển</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" currencySymbol="VND" maxFractionDigits="0" /></span>
+                                <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" maxFractionDigits="0" /> VNĐ</span>
                             </div>
-                            <c:set var="shippingDiscount" value="${shippingDiscountRate * shippingFee}" />
-                            <c:set var="voucherDiscountRate" value="${listVoucherR / 100}" />
-
-
                             <c:if test="${shippingDiscount != 0}">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted-foreground">Giảm giá phí vận chuyển</span>
-                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${shippingDiscount}" currencySymbol="VND" maxFractionDigits="0" /></span>
+                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${shippingDiscount}" maxFractionDigits="0" /> VNĐ</span>
                                 </div>
                             </c:if>
-
-
-                            <c:if test="${voucherDiscountRate != 0}">
+                            <c:if test="${voucherDiscount != 0}">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted-foreground">Giảm giá voucher</span>
-                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" currencySymbol="VND" maxFractionDigits="0" /></span>
+                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" maxFractionDigits="0" /> VNĐ</span>
                                 </div>
                             </c:if>
-
                             <hr>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Tổng đơn hàng</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${total}" currencySymbol="VND" maxFractionDigits="0" /></span>
+                                <span class="text-muted-foreground"><fmt:formatNumber value="${total}" maxFractionDigits="0" /> VNĐ</span>
                                 <input type="hidden" name="cost" value="${total}" />
-
-
                             </div>
                         </div>
-
 
                         <div class="row mt-4">
                             <div class="col-md-12">
@@ -198,7 +158,7 @@
                 </div>
             </div>
         </div>
-        <!-- Checkout Page End -->
+       
         <jsp:include page="Footer.jsp"></jsp:include>
         <!-- External JavaScripts -->
         <script src="js/bootstrap.bundle.min.js"></script>
@@ -207,46 +167,105 @@
         <script src="js/script.js"></script>
         <!-- Custom JavaScripts -->
         <script>
-                                       function cancelOrder() {
-                                           if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
-                                               // Reset the cart (optional)
-                                               resetCart();
-                                               // Redirect to home page
-                                               window.location.href = "home";
-                                           }
-                                       }
+                                function cancelOrder() {
+                                    if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
+                                        resetCart();
+                                        window.location.href = "home";
+                                    }
+                                }
 
-                                       function resetCart() {
-                                           // AJAX request to reset the cart if needed
-                                           // Example: Clear session or reset cart variables
-                                           // Here, we assume a session attribute 'cart' exists and can be cleared
-                                           fetch('resetCart', {
-                                               method: 'POST'
-                                           }).then(response => {
-                                               if (response.ok) {
-                                                   console.log('Cart reset successfully.');
-                                               } else {
-                                                   console.error('Failed to reset cart.');
-                                               }
-                                           }).catch(error => {
-                                               console.error('Error resetting cart:', error);
-                                           });
-                                       }
+                                function resetCart() {
+                                    fetch('resetCart', {
+                                        method: 'POST'
+                                    }).then(response => {
+                                        if (response.ok) {
+                                            console.log('Cart reset successfully.');
+                                        } else {
+                                            console.error('Failed to reset cart.');
+                                        }
+                                    }).catch(error => {
+                                        console.error('Error resetting cart:', error);
+                                    });
+                                }
         </script>
-         <script>
-        function redirectToCheckout() {
-            var checkbox = document.getElementById("Address");
-            if (checkbox.checked) {
-                window.location.href = "Checkout_1.jsp";
-            }
-        }
+        <script>
+            function validateForm() {
+                var errorMessage = document.getElementById("errorMessage");
+                var name = document.getElementById("name").value.trim();
+                var address = document.getElementById("address").value.trim();
+                var email = document.getElementById("email").value.trim();
+                var phone = document.getElementById("phone").value.trim();
+                var note = document.getElementById("note").value.trim();
+                var payment = document.querySelector('input[name="payment"]:checked');
+                var namePattern = /^[a-zA-Z]/;
+                var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
         
-        function handlePaymentSuccess() {
-            alert("Thanh toán thành công!");
-          
-           window.location.href = "home";
-        }
-    </script>
+                errorMessage.textContent = "";
+
+                if (name === "") {
+                    errorMessage.textContent = "Vui lòng nhập họ và tên.";
+                    return false;
+                } else if (!namePattern.test(name)) {
+                    errorMessage.textContent = "Họ và tên không được bắt đầu bằng số hoặc kí tự đặc biệt.";
+                    return false;
+                } else if (name.length < 5 || name.length > 64) {
+                    errorMessage.textContent = "Họ và tên phải có độ dài từ 5 - 64 kí tự.";
+                    return false;
+                }
+
+                if (email === "") {
+                    errorMessage.textContent = "Vui lòng nhập email.";
+                    return false;
+                } else if (!emailPattern.test(email)) {
+                    errorMessage.textContent = "Vui lòng nhập đúng định dạng email.";
+                    return false;
+                } else if (email.length < 5 || email.length > 60) {
+                    errorMessage.textContent = "Email phải có độ dài từ 5 - 60 kí tự.";
+                    return false;
+                }
+
+                if (phone === "") {
+                    errorMessage.textContent = "Vui lòng nhập số điện thoại.";
+                    return false;
+                } else if (phone.length !== 10) {
+                    errorMessage.textContent = "Số điện thoại phải có 10 số.";
+                    return false;
+                } else if (isNaN(phone)) {
+                    errorMessage.textContent = "Số điện thoại phải là số.";
+                    return false;
+                }
+
+                if (address === "") {
+                    errorMessage.textContent = "Vui lòng nhập địa chỉ.";
+                    return false;
+                } else if (address.length < 5 || address.length > 64) {
+                    errorMessage.textContent = "Địa chỉ phải có độ dài từ 5 - 64 kí tự.";
+                    return false;
+                }
+
+                if (!payment) {
+                    errorMessage.textContent = "Vui lòng chọn phương thức thanh toán.";
+                    return false;
+                }
+
+                if (note.length > 60) {
+                    errorMessage.textContent = "Ghi chú không được vượt quá 60 kí tự.";
+                    return false;
+                }
+
+                return true;
+            }
+
+        </script>
+        <script>
+
+            function handlePaymentSuccess() {
+                alert("Thanh toán thành công!");
+
+                window.location.href = "home";
+            }
+        </script>
 
     </body>
 </html>

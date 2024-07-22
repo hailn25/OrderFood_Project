@@ -194,7 +194,7 @@
                                                                 <div style="display: flex; justify-content: space-between;">
                                                                     <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>   
                                                                     <div style="display: flex;">
-                                                                        <form action="addtocart" method="post" >
+                                                                        <form id="${p.producId}" onsubmit="addToCart(${p.producId}); return false;">
                                                                             <input type="hidden" name="productId" value="${p.producId}">
                                                                             <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
                                                                                 <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
@@ -256,57 +256,85 @@
         <script src="lib/lightbox/js/lightbox.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
         <!-- Template Javascript -->
-        <script src="js/main.js"></script>
         <script>
-                                        function updateAmount() {
-                                            var rangeInput = document.getElementById('rangeInput');
-                                            var amount = document.getElementById('amount');
-                                            var value = rangeInput.value;
+                                                                            function addToCart(productId) {
+                                                                                var xhr = new XMLHttpRequest();
+                                                                                var url = "addtocart";
 
-                                            // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
-                                            amount.value = formattedValue;
-                                            amount.innerText = formattedValue;
-                                        }
+                                                                                xhr.open("POST", url, true);
 
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            const prices = document.querySelectorAll('[id^="price-"]');
 
-                                            prices.forEach(priceElement => {
-                                                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                                                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                                                                                xhr.onload = function () {
+                                                                                    if (xhr.status >= 200 && xhr.status < 10000) {
 
-                                                // Định dạng giá thành VND
-                                                const formattedPrice = (priceValue).toLocaleString('vi-VN');
+                                                                                        alert("Đã thêm vào giỏ hàng thành công!");
+                                                                                    } else {
+                                                                                        // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
+                                                                                        alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+                                                                                    }
+                                                                                };
 
-                                                // Cập nhật nội dung của thẻ h6
-                                                priceElement.textContent = formattedPrice + " VNĐ";
-                                            });
-                                        });
 
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            // Định dạng giá trị của minPrice khi trang được tải
-                                            var minPrice = ${not empty minPrice ? minPrice : 0};
-                                            var formattedMinPrice = (minPrice).toLocaleString('vi-VN');
-                                            document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
+                                                                                xhr.onerror = function () {
+                                                                                    alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+                                                                                };
 
-                                            // Định dạng giá trị của thanh trượt khi trang được tải
-                                            var rangeInput = document.getElementById('rangeInput');
-                                            var amount = document.getElementById('amount');
-                                            var value = rangeInput.value;
-                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
-                                            amount.value = formattedValue;
-                                            amount.innerText = formattedValue;
-                                        });
+                                                                                // Gửi yêu cầu với dữ liệu sản phẩm
+                                                                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                                                                xhr.send("productId=" + productId);
+                                                                            }
+        </script>
+        <script>
+            function updateAmount() {
+                var rangeInput = document.getElementById('rangeInput');
+                var amount = document.getElementById('amount');
+                var value = rangeInput.value;
 
-                                        function submitForm() {
-                                            var rangeInput = document.getElementById('rangeInput').value;
-                                            var hiddenRangeInput = document.getElementById('hiddenRangeInput');
-                                            hiddenRangeInput.value = rangeInput;
-                                            var categoryName = 
-                                            document.getElementById('rangeForm').submit();
-                                        }
+                // Định dạng giá trị với dấu chấm phân tách hàng nghìn
+                var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+
+                amount.value = formattedValue;
+                amount.innerText = formattedValue;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue).toLocaleString('vi-VN');
+
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Định dạng giá trị của minPrice khi trang được tải
+                var minPrice = ${not empty minPrice ? minPrice : 0};
+                var formattedMinPrice = (minPrice).toLocaleString('vi-VN');
+                document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
+
+                // Định dạng giá trị của thanh trượt khi trang được tải
+                var rangeInput = document.getElementById('rangeInput');
+                var amount = document.getElementById('amount');
+                var value = rangeInput.value;
+                var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                amount.value = formattedValue;
+                amount.innerText = formattedValue;
+            });
+
+            function submitForm() {
+                var rangeInput = document.getElementById('rangeInput').value;
+                var hiddenRangeInput = document.getElementById('hiddenRangeInput');
+                hiddenRangeInput.value = rangeInput;
+                var categoryName =
+                        document.getElementById('rangeForm').submit();
+            }
         </script>
     </body>
 

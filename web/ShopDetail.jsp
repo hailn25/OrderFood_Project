@@ -161,8 +161,20 @@
                                 <h4 class="fw-bold mb-3">${detail.name}</h4>
                                 <p class="mb-3">Category: ${detail.categoryName}</p>
                                 <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
-                                <div class="d-flex mb-4" id="star-rating">
-
+                                <div class="d-flex mb-4">
+                                    <c:forEach begin="1" end="5" var="i">
+                                        <c:choose>
+                                            <c:when test="${i <= detail.rateStar}">
+                                                <i class="fa fa-star text-secondary"></i>
+                                            </c:when>
+                                            <c:when test="${i - 0.5 == detail.rateStar}">
+                                                <i class="fa fa-star-half-alt text-secondary"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
                                 </div>
                                 <p class="mb-4">${detail.decription}</p>
                                 <p class="mb-4">Quantity: ${detail.quantity}</p>
@@ -249,7 +261,7 @@
                     <div class="col-lg-4 col-xl-3">
                         <div class="row g-4 fruite">
                             <div class="col-lg-12">
-                                <h4 class="mb-4">Sản phẩm nổi bật</h4>
+                                <h4 class="mb-4">Sản phẩm giảm giá</h4>
                                 <div id="productList">
                                     <c:forEach var="listProductByIsSale" items="${listProductByIsSale}" varStatus="status">
                                         <div class="product-item d-flex align-items-center justify-content-start mb-4 ${status.index >= 2 ? 'd-none more-item' : ''}" id="Block-${status.index}">
@@ -372,7 +384,106 @@
                     loadMoreBtn.classList.toggle('d-none');
                     showLessBtn.classList.toggle('d-none');
                 }
-            </script>          
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const quantityInput = document.querySelector('.quantity-input');
+                    const addToCheckoutForm = document.getElementById('addToCheckout');
+                    const checkoutQuantityInput = document.getElementById('checkoutQuantity');
+
+                    quantityInput.addEventListener('input', function () {
+                        let newValue = parseInt(quantityInput.value);
+                        if (isNaN(newValue) || newValue < 1) {
+                            newValue = 1;
+                        }
+                        quantityInput.value = newValue;
+                        checkoutQuantityInput.value = newValue;
+                    });
+
+                    addToCheckoutForm.addEventListener('submit', function () {
+                        checkoutQuantityInput.value = quantityInput.value;
+                    });
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const quantityInputs = document.querySelectorAll('.quantity-input');
+                    const addToCartForm = document.getElementById('addToCartForm');
+                    const addToCartQuantityInput = document.getElementById('addToCartQuantity');
+
+                    quantityInputs.forEach(function (quantityInput) {
+                        const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+                        const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+                        const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+
+                        btnPlus.addEventListener('click', function () {
+                            updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+                        });
+
+                        btnMinus.addEventListener('click', function () {
+                            updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+                        });
+
+                        quantityInput.addEventListener('input', function () {
+                            let newValue = parseInt(quantityInput.value);
+                            if (isNaN(newValue) || newValue < 1) {
+                                newValue = 1;
+                            }
+                            updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                        });
+
+                        // Function to update quantity and price
+                        function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
+                            if (newQuantity < 1) {
+                                confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
+                                return;
+                            }
+                            if (newQuantity > maxQuantity) {
+                                alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                                return;
+                            }
+
+                            quantityInput.value = newQuantity;
+                            addToCartQuantityInput.value = newQuantity;
+                            updatePrice(quantityInput, newQuantity);
+                        }
+
+                        function updatePrice(quantityInput, quantity) {
+                            const pricePerItem = parseFloat(quantityInput.dataset.price);
+                            // Example of updating total price display based on quantity
+                            const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
+                            const totalPrice = quantity * pricePerItem * 1000;
+                            totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+                        }
+
+                        updatePrice(quantityInput, parseInt(quantityInput.value));
+                    });
+
+                    // Example of submitting form
+                    addToCartForm.addEventListener('submit', function (event) {
+                        // You can add additional validation or actions before submitting the form
+                        // event.preventDefault(); // Uncomment to prevent default form submission for testing
+                        // Example of fetching data if needed
+                        const formData = new FormData(addToCartForm);
+                        fetch(addToCartForm.action, {
+                            method: 'POST',
+                            body: formData
+                        })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.text();
+                                })
+                                .then(data => {
+                                    // Handle response data if necessary
+                                })
+                                .catch(error => {
+                                    console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                                });
+                    });
+                });
+            </script>
             <script>
                 function showMore() {
                     document.querySelectorAll('.more-item').forEach(item => item.classList.remove('d-none'));

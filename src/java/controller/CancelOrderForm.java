@@ -14,17 +14,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Account;
-import model.DeliveryIssue;
-import model.OrderDTO;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "ManagerShipperCancel", urlPatterns = {"/managerShipperCancel"})
-public class ManagerShipperCancel extends HttpServlet {
+@WebServlet(name = "CancelOrderForm", urlPatterns = {"/cancelOrderForm"})
+public class CancelOrderForm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,19 +37,10 @@ public class ManagerShipperCancel extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        OrderDAO orderDAO = new OrderDAO();
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        int accountId = account.getAccountId();
-        ShipperDAO shipper = new ShipperDAO();
-        int shipperId = shipper.getShipperId(accountId);
-        ArrayList<DeliveryIssue> listOrderCancel = shipper.getAllOrderCancel(shipperId);
-        request.setAttribute("list", listOrderCancel);
-        request.getRequestDispatcher("ViewOrderCancel.jsp").forward(request, response);
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -59,9 +50,12 @@ public class ManagerShipperCancel extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int orderId = Integer.parseInt(request.getParameter("oid"));
+        request.setAttribute("orderId", orderId);
+        request.getRequestDispatcher("FormCancel.jsp").forward(request, response);
     }
 
     /**
@@ -75,7 +69,24 @@ public class ManagerShipperCancel extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        int accountId = account.getAccountId();
+        ShipperDAO shipper = new ShipperDAO();
+        int shipperId = shipper.getShipperId(accountId);
+
+        int orderId = Integer.parseInt(request.getParameter("oid"));
+        String reason = request.getParameter("reason");
+
+        try {
+            shipper.insertShipperMessage(orderId, shipperId, reason);
+            OrderDAO od = new OrderDAO();
+            od.updateOrderStatus(orderId, 5);
+            session.setAttribute("successMessage", "Phản hồi thành công!");
+            request.getRequestDispatcher("ViewOrderSuccess.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CancelOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

@@ -311,8 +311,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="accountId">Account ID:</label>
-                                            <input type="text" class="form-control" id="accountId" name="accountId" value="${sessionScope.account.accountId}" readonly>
+                                            <label for="accountId" style="display: none">Account ID:</label>
+                                            <input type="hidden" class="form-control" id="accountId" name="accountId" value="${sessionScope.account.accountId}" readonly>
                                         </div>
 
                                         <div class="form-group">

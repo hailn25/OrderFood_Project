@@ -936,7 +936,39 @@ public class OrderDAO {
         }
         return listOrderDetailsByAccountId;
     }
+    public ArrayList<OrderDTO> getAllOrderSucess(int orderStatusId, int shipperId) {
+        ArrayList<OrderDTO> listOrders = new ArrayList<>();
+        try {
+            String sql = "  SELECT [Order].OrderId, [Order].Name, [Order].Phone, [Order].Address, [Order].Note, [Order].CreateDate, [Order].TotalMoney, OrderStatus.Status\n"
+                    + "                                                               FROM     [Order] INNER JOIN\n"
+                    + "                                                                             OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId\n"
+                    + "   where OrderStatus.OrderStatusId = ? and [Order].ShipperId = ?;";
 
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderStatusId);
+            ps.setInt(2, shipperId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDTO order = new OrderDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getDate(6),
+                        rs.getDouble(7),
+                        rs.getString(8)
+                );
+                listOrders.add(order);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
+        return listOrders;
+    }
     public static void main(String[] args) throws Exception {
         OrderDAO db = new OrderDAO();
         db.insertShipper(1, 81);

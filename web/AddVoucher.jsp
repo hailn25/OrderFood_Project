@@ -19,7 +19,6 @@
     </head>
     <body style="background-color: #F6F6F6">
 
-        
 
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
@@ -47,7 +46,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="description">Giảm giá </label>
-                                        <input id="discount" name="discount" type="text" required class="form-control validate" />
+                                        <input id="discount" name="discount" type="number" required class="form-control validate" />
                                     </div>
 
                                     <div class="form-group mb-3">
@@ -59,7 +58,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="quantity">Số lượng</label>
-                                        <input id="quantity" name="quantity" type="text" required class="form-control validate" />
+                                        <input id="quantity" name="quantity" type="number" required class="form-control validate" />
                                     </div>
                                   
                                      <div class="form-group mb-3">
@@ -101,5 +100,3 @@
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
-
-

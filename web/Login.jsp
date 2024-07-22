@@ -92,7 +92,7 @@
                                         <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Mật khẩu" required>
                                     </div>
                                     <p class="small mb-4"><a class="text-muted" href="ForgetPassword.jsp">Quên mật khẩu?</a></p>
-<!--                                    <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>-->
+                                    <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>
                                     <div style="color:red" id="error"></div>
                                     <button class="btn btn-primary btn-lg btn-block" type="submit" >Đăng nhập</button>
                                     <hr class="my-4">
