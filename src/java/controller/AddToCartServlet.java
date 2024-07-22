@@ -103,7 +103,7 @@ public class AddToCartServlet extends HttpServlet {
                 double price = p.getPrice();
                 int maxquantity = dao.getQuantityProduct(id);
                 session.setAttribute("maxquantity", maxquantity);
-                Item t = new Item(p, quantity, price); 
+                Item t = new Item(p, quantity, price,0); 
                 cart.addItem(t);
             }
         } catch (Exception e) {

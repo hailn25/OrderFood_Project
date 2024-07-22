@@ -166,97 +166,97 @@
         <!-- Checkout Page End -->
 
         <jsp:include page="Footer.jsp"></jsp:include>
-<script>
-    function cancelOrder() {
-        if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
-            resetCart();
-            window.location.href = "home";
-        }
-    }
-
-    function resetCart() {
-        fetch('resetCart', {
-            method: 'POST'
-        }).then(response => {
-            if (response.ok) {
-                console.log('Cart reset successfully.');
-            } else {
-                console.error('Failed to reset cart.');
+        <script>
+            function cancelOrder() {
+                if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
+                    resetCart();
+                    window.location.href = "home";
+                }
             }
-        }).catch(error => {
-            console.error('Error resetting cart:', error);
-        });
-    }
-</script>
+
+            function resetCart() {
+                fetch('resetCart', {
+                    method: 'POST'
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Cart reset successfully.');
+                    } else {
+                        console.error('Failed to reset cart.');
+                    }
+                }).catch(error => {
+                    console.error('Error resetting cart:', error);
+                });
+            }
+        </script>
 
         <script>
-                function validateForm() {
-                    var errorMessage = document.getElementById("errorMessage");
-                    var name = document.getElementById("name").value.trim();
-                    var address = document.getElementById("address").value.trim();
-                    var email = document.getElementById("email").value.trim();
-                    var phone = document.getElementById("phone").value.trim();
-                    var note = document.getElementById("note").value.trim();
-                    var payment = document.querySelector('input[name="payment"]:checked');
-                    var namePattern = /^[a-zA-Z]/;
-                    var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            function validateForm() {
+                var errorMessage = document.getElementById("errorMessage");
+                var name = document.getElementById("name").value.trim();
+                var address = document.getElementById("address").value.trim();
+                var email = document.getElementById("email").value.trim();
+                var phone = document.getElementById("phone").value.trim();
+                var note = document.getElementById("note").value.trim();
+                var payment = document.querySelector('input[name="payment"]:checked');
+                var namePattern = /^[a-zA-Z]/;
+                var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
-                    // Reset error message
-                    errorMessage.textContent = "";
+                // Reset error message
+                errorMessage.textContent = "";
 
-                    if (name === "") {
-                        errorMessage.textContent = "Vui lòng nhập họ và tên.";
-                        return false;
-                    } else if (!namePattern.test(name)) {
-                        errorMessage.textContent = "Họ và tên không được bắt đầu bằng số hoặc kí tự đặc biệt.";
-                        return false;
-                    } else if (name.length < 5 || name.length > 64) {
-                        errorMessage.textContent = "Họ và tên phải có độ dài từ 5 - 64 kí tự.";
-                        return false;
-                    }
-
-                    if (email === "") {
-                        errorMessage.textContent = "Vui lòng nhập email.";
-                        return false;
-                    } else if (!emailPattern.test(email)) {
-                        errorMessage.textContent = "Vui lòng nhập đúng định dạng email.";
-                        return false;
-                    } else if (email.length < 5 || email.length > 60) {
-                        errorMessage.textContent = "Email phải có độ dài từ 5 - 60 kí tự.";
-                        return false;
-                    }
-
-                    if (phone === "") {
-                        errorMessage.textContent = "Vui lòng nhập số điện thoại.";
-                        return false;
-                    } else if (phone.length !== 10) {
-                        errorMessage.textContent = "Số điện thoại phải có 10 số.";
-                        return false;
-                    } else if (isNaN(phone)) {
-                        errorMessage.textContent = "Số điện thoại phải là số.";
-                        return false;
-                    }
-
-                    if (address === "") {
-                        errorMessage.textContent = "Vui lòng nhập địa chỉ.";
-                        return false;
-                    } else if (address.length < 5 || address.length > 64) {
-                        errorMessage.textContent = "Địa chỉ phải có độ dài từ 5 - 64 kí tự.";
-                        return false;
-                    }
-
-                    if (!payment) {
-                        errorMessage.textContent = "Vui lòng chọn phương thức thanh toán.";
-                        return false;
-                    }
-
-                    if (note.length > 60) {
-                        errorMessage.textContent = "Ghi chú không được vượt quá 60 kí tự.";
-                        return false;
-                    }
-
-                    return true;
+                if (name === "") {
+                    errorMessage.textContent = "Vui lòng nhập họ và tên.";
+                    return false;
+                } else if (!namePattern.test(name)) {
+                    errorMessage.textContent = "Họ và tên không được bắt đầu bằng số hoặc kí tự đặc biệt.";
+                    return false;
+                } else if (name.length < 5 || name.length > 64) {
+                    errorMessage.textContent = "Họ và tên phải có độ dài từ 5 - 64 kí tự.";
+                    return false;
                 }
+
+                if (email === "") {
+                    errorMessage.textContent = "Vui lòng nhập email.";
+                    return false;
+                } else if (!emailPattern.test(email)) {
+                    errorMessage.textContent = "Vui lòng nhập đúng định dạng email.";
+                    return false;
+                } else if (email.length < 5 || email.length > 60) {
+                    errorMessage.textContent = "Email phải có độ dài từ 5 - 60 kí tự.";
+                    return false;
+                }
+
+                if (phone === "") {
+                    errorMessage.textContent = "Vui lòng nhập số điện thoại.";
+                    return false;
+                } else if (phone.length !== 10) {
+                    errorMessage.textContent = "Số điện thoại phải có 10 số.";
+                    return false;
+                } else if (isNaN(phone)) {
+                    errorMessage.textContent = "Số điện thoại phải là số.";
+                    return false;
+                }
+
+                if (address === "") {
+                    errorMessage.textContent = "Vui lòng nhập địa chỉ.";
+                    return false;
+                } else if (address.length < 5 || address.length > 64) {
+                    errorMessage.textContent = "Địa chỉ phải có độ dài từ 5 - 64 kí tự.";
+                    return false;
+                }
+
+                if (!payment) {
+                    errorMessage.textContent = "Vui lòng chọn phương thức thanh toán.";
+                    return false;
+                }
+
+                if (note.length > 60) {
+                    errorMessage.textContent = "Ghi chú không được vượt quá 60 kí tự.";
+                    return false;
+                }
+
+                return true;
+            }
 
         </script>
 

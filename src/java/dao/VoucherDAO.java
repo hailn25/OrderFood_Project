@@ -266,36 +266,35 @@ public class VoucherDAO {
         }
     }
 
-   public void updateQuantity(int voucherId) {
-    Connection con = null;
-    PreparedStatement ps = null;
-    try {
-        String sql = "UPDATE [dbo].[Voucher]\n"
-                   + "SET [Quantity] = [Quantity] - 1\n"
-                   + "WHERE [VoucherId] = ?";
-        con = new DBContext().getConnection();
-        ps = con.prepareStatement(sql);
-        ps.setInt(1, voucherId);
-        ps.executeUpdate();
-    } catch (SQLException ex) {
-        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (ClassNotFoundException ex) {
-        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        // Đóng tài nguyên
+    public void updateQuantity(int voucherId) {
+        Connection con = null;
+        PreparedStatement ps = null;
         try {
-            if (ps != null) {
-                ps.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            String sql = "UPDATE [dbo].[Voucher]\n"
+                    + "SET [Quantity] = [Quantity] - 1\n"
+                    + "WHERE [VoucherId] = ?";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, voucherId);
+            ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Đóng tài nguyên
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-}
-
 
     public Voucher getVoucherById(int voucherId) {
         Voucher voucher = new Voucher();
@@ -344,6 +343,74 @@ public class VoucherDAO {
 
         }
         return 0;
+    }
+
+    public Voucher getDiscountByVoucherRId(int voucherId) {
+        String sql = "SELECT [VoucherId], [Discount], [RestaurantId] FROM [dbo].[Voucher] WHERE [VoucherId] = ?;";
+        Voucher voucher = null;
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, voucherId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                voucher = new Voucher();
+                voucher.setVoucherId(rs.getInt("VoucherId"));
+                voucher.setDiscount(rs.getInt("Discount"));
+                voucher.setRestaurantId(rs.getInt("RestaurantId"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return voucher;
+    }
+
+    public Voucher getVoucherByRestaurantId(int restaurantId) {
+        String sql = "SELECT [VoucherId], [Discount], [RestaurantId] FROM [dbo].[Voucher] WHERE [RestaurantId] = ?;";
+        Voucher voucher = null;
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                voucher = new Voucher();
+                voucher.setVoucherId(rs.getInt("VoucherId"));
+                voucher.setDiscount(rs.getInt("Discount"));
+                voucher.setRestaurantId(rs.getInt("RestaurantId"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return voucher;
     }
 
     public void insertVoucherAccountDetails(String accountId, String voucherName, String description, int quantity, String releaseDate, String finishDate, String status) throws SQLException, ClassNotFoundException {

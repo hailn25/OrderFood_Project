@@ -106,7 +106,7 @@ public class Checkout2Servlet extends HttpServlet {
                 double price = p.getPrice();
                 int maxquantity = dao.getQuantityProduct(id);
                 session.setAttribute("maxquantity", maxquantity);
-                Item t = new Item(p, quantity, price);
+                Item t = new Item(p, quantity, price,0);
                 cart.addItem(t);
             }
         } catch (Exception e) {
@@ -171,7 +171,7 @@ public class Checkout2Servlet extends HttpServlet {
             sendOrderConfirmationEmail(name, address, phone, email, cart, total, note, dao);
             session.removeAttribute("cart");
             session.setAttribute("size", 0);
-            request.getRequestDispatcher("home").forward(request, response);
+           request.getRequestDispatcher("Buysuccessfull.jsp").forward(request, response);
         }
     }
 

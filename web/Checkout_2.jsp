@@ -73,11 +73,10 @@
 
 
                     </div>
-                    <!-- Order Summary -->
                     <div class="col-md-6">
                         <h2>Giỏ hàng</h2>
                         <div class="table-responsive">
-                            <table class="table" ">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th scope="col">Sản phẩm</th>
@@ -88,81 +87,47 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    <c:set var="cartItems" value="${sessionScope.cart.items}" />
-                                    <c:forEach var="item" items="${cartItems}">
+                                    <c:forEach var="item" items="${sessionScope.cart.items}">
                                         <tr>
                                             <td><img src="img/${item.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="Không thể tải ảnh"></td>
                                             <td>${item.product.name}</td>
-                                            <td><fmt:formatNumber value="${item.price}" maxFractionDigits="1" /></td>
+                                            <td><fmt:formatNumber value="${item.price}" maxFractionDigits="0" /> VNĐ</td>
                                             <td>${item.quantity}</td>
-                                            <td><fmt:formatNumber value="${item.quantity * item.price}" maxFractionDigits="2" /></td>
+                                            <td><fmt:formatNumber value="${item.price * item.quantity}" maxFractionDigits="0" /> VNĐ</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
                         </div>
-
-                        <!--                            <form action="showVoucher" method="get">
-                                                        <div class="mt-5">
-                                                            <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                                                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Sử dụng Voucher</button>
-                                                        </div>
-                                                    </form>
-                        -->
-                        <c:set var="subtotal" value="0" />
-                        <c:forEach var="item" items="${sessionScope.cart.items}">
-                            <c:set var="subtotal" value="${subtotal + (item.quantity * item.product.price)}" />
-                        </c:forEach>
-
-                        <c:set var="shippingFee" value="30000" />
-                        <c:set var="shippingDiscountRate" value="${listFree / 100}" />
-                        <c:set var="shippingDiscount" value="${shippingDiscountRate * shippingFee}" />
-
-                        <c:set var="voucherDiscountRate" value="${listVoucherR / 100}" />
-                        <c:set var="voucherDiscount" value="${voucherDiscountRate * subtotal}" />
-
-                        <c:set var="total" value="${subtotal + shippingFee - shippingDiscount - voucherDiscount}" />
-
                         <div class="border p-4 mt-4" style="margin-bottom: 50px">
                             <h2 class="mb-4">Tổng thanh toán</h2>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Tổng tiền hàng</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0" /> VNĐ</span>
+                                <span class="text-muted-foreground"><fmt:formatNumber value="${subtotal}" maxFractionDigits="0" /> VNĐ</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Phí vận chuyển</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" currencySymbol="VND" maxFractionDigits="0" />VNĐ</span>
+                                <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" maxFractionDigits="0" /> VNĐ</span>
                             </div>
-                            <c:set var="shippingDiscount" value="${shippingDiscountRate * shippingFee}" />
-                            <c:set var="voucherDiscountRate" value="${listVoucherR / 100}" />
-
-
                             <c:if test="${shippingDiscount != 0}">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted-foreground">Giảm giá phí vận chuyển</span>
-                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${shippingDiscount}" currencySymbol="VND" maxFractionDigits="0" />VNĐ</span>
+                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${shippingDiscount}" maxFractionDigits="0" /> VNĐ</span>
                                 </div>
                             </c:if>
-
-
-                            <c:if test="${voucherDiscountRate != 0}">
+                            <c:if test="${voucherDiscount != 0}">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted-foreground">Giảm giá voucher</span>
-                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" currencySymbol="VND" maxFractionDigits="0" />VNĐ</span>
+                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" maxFractionDigits="0" /> VNĐ</span>
                                 </div>
                             </c:if>
-
                             <hr>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted-foreground">Tổng đơn hàng</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${total}" currencySymbol="VND" maxFractionDigits="0" />VNĐ</span>
+                                <span class="text-muted-foreground"><fmt:formatNumber value="${total}" maxFractionDigits="0" /> VNĐ</span>
                                 <input type="hidden" name="cost" value="${total}" />
-
-
                             </div>
                         </div>
-
 
                         <div class="row mt-4">
                             <div class="col-md-12">
@@ -193,7 +158,7 @@
                 </div>
             </div>
         </div>
-        <!-- Checkout Page End -->
+       
         <jsp:include page="Footer.jsp"></jsp:include>
         <!-- External JavaScripts -->
         <script src="js/bootstrap.bundle.min.js"></script>
@@ -235,7 +200,7 @@
                 var namePattern = /^[a-zA-Z]/;
                 var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
-                // Reset error message
+        
                 errorMessage.textContent = "";
 
                 if (name === "") {
