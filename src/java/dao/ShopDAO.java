@@ -59,7 +59,7 @@ public class ShopDAO {
         ArrayList<Category> listCategory = new ArrayList<>();
         try {
             String sql = "SELECT *\n"
-                    + "FROM [orderfoodperfect].[dbo].[Category]";
+                    + "FROM [dbo].[Category];";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -82,15 +82,22 @@ public class ShopDAO {
         ArrayList<CategoryDTO> listCategoryDTO = new ArrayList<>();
         try {
             String sql = "SELECT\n"
-                    + "c.name,\n"
-                    + "COUNT(p.ProductId)\n"
+                    + "    c.Name AS CategoryName,\n"
+                    + "    COUNT(p.ProductId) AS ProductCount\n"
                     + "FROM \n"
-                    + "Category c\n"
+                    + "    Category c\n"
                     + "JOIN \n"
-                    + "Product p ON c.CategoryId = p.CategoryId\n"
-                    + "WHERE p.Status = 1 and p.Quantity >= 1\n"
+                    + "    Product p ON c.CategoryId = p.CategoryId\n"
+                    + "JOIN \n"
+                    + "    Restaurant r ON p.RestaurantId = r.RestaurantId\n"
+                    + "JOIN \n"
+                    + "    Account a ON r.AccountId = a.AccountId\n"
+                    + "WHERE \n"
+                    + "    p.Status = 1 \n"
+                    + "    AND p.Quantity >= 1\n"
+                    + "	AND a.Status = 1\n"
                     + "GROUP BY\n"
-                    + "c.[Name]";
+                    + "    c.Name";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -110,10 +117,27 @@ public class ShopDAO {
     public ArrayList<ProductDTO> getAllProductDTO() {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
-                    + "FROM Account INNER JOIN\n"
-                    + "                  Restaurant ON Account.AccountId = Restaurant.AccountId INNER JOIN\n"
-                    + "                  Product ON Restaurant.RestaurantId = Product.RestaurantId";
+            String sql = "SELECT \n"
+                    + "    Product.ProductId, \n"
+                    + "    Product.Name, \n"
+                    + "    Product.Price, \n"
+                    + "    Product.Description, \n"
+                    + "    Product.ImageURL, \n"
+                    + "    Product.CategoryId, \n"
+                    + "    Account.ImageAvatar, \n"
+                    + "    Product.IsSale, \n"
+                    + "    Product.Quantity, \n"
+                    + "    Product.CreateDate, \n"
+                    + "    Product.UpdateDate, \n"
+                    + "    Product.Status, \n"
+                    + "    Product.RestaurantId\n"
+                    + "FROM \n"
+                    + "    Account \n"
+                    + "INNER JOIN \n"
+                    + "    Restaurant ON Account.AccountId = Restaurant.AccountId \n"
+                    + "INNER JOIN \n"
+                    + "    Product ON Restaurant.RestaurantId = Product.RestaurantId\n"
+                    + "WHERE Account.[Status] = 1";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -145,10 +169,10 @@ public class ShopDAO {
         ArrayList<RestaurantDTO> listRestaurant = new ArrayList<>();
         try {
             String sql = """
-                         SELECT Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar, Account.status
-                                                  FROM     Account INNER JOIN
-                                                  Restaurant ON Account.AccountId = Restaurant.AccountId
-                                                  ORDER BY Restaurant.RateStar DESC""";
+                         SELECT Top 4 Restaurant.RestaurantId, Restaurant.Name, Restaurant.Address, Restaurant.RateStar, Account.ImageAvatar, Account.status
+                                                                           FROM     Account INNER JOIN
+                                                                           Restaurant ON Account.AccountId = Restaurant.AccountId
+                                                                           ORDER BY Restaurant.RateStar DESC""";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();

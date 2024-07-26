@@ -237,6 +237,48 @@ public class BlogDAO {
         return blogDTO;
     }
 
+    public ArrayList<BlogDTO> getBlogDTOByName(String blogName) {
+        ArrayList<BlogDTO> list = new ArrayList<>();
+        try {
+            String sql = "SELECT \n"
+                    + "    Blog.BlogId, \n"
+                    + "    Blog.Title, \n"
+                    + "    Blog.[Content], \n"
+                    + "    Blog.ImageURL, \n"
+                    + "    Blog.Summary, \n"
+                    + "    Account.Name, \n"
+                    + "    Blog.Status, \n"
+                    + "    Blog.CreateDate, \n"
+                    + "    Blog.UpdateDate\n"
+                    + "FROM \n"
+                    + "    Account\n"
+                    + "INNER JOIN \n"
+                    + "    Blog ON Account.AccountId = Blog.UpdateBy\n"
+                    + "WHERE \n"
+                    + "    Blog.[Title] like N'%" + blogName + "%'  AND Blog.Status = 1";
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new BlogDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getBoolean(7),
+                        rs.getDate(8),
+                        rs.getDate(9)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         BlogDAO dao = new BlogDAO();
 //        for (BlogDTO b : dao.getAllBlogDTO()) {

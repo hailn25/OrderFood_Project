@@ -125,7 +125,7 @@
                         <th>Tiêu đề</th>
                         <th>Ảnh</th>
                         <th>Trạng thái</th>
-                        <th>Ngày đăng</th>
+                        <th>Ngày tạo</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>

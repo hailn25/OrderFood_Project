@@ -1,4 +1,4 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -27,12 +27,30 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> getAllProductDTOByCategoryName(String categoryName) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
-                    + "FROM     Product INNER JOIN\n"
-                    + "                  Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
-                    + "                  Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
-                    + "                  Account ON Restaurant.AccountId = Account.AccountId\n"
-                    + "WHERE Category.Name = ?";
+            String sql = "SELECT \n"
+                    + "    Product.ProductId, \n"
+                    + "    Product.Name, \n"
+                    + "    Product.Price, \n"
+                    + "    Product.Description, \n"
+                    + "    Product.ImageURL, \n"
+                    + "    Product.CategoryId, \n"
+                    + "    Account.ImageAvatar, \n"
+                    + "    Product.IsSale, \n"
+                    + "    Product.Quantity, \n"
+                    + "    Product.CreateDate, \n"
+                    + "    Product.UpdateDate, \n"
+                    + "    Product.Status, \n"
+                    + "    Product.RestaurantId\n"
+                    + "FROM     \n"
+                    + "    Product \n"
+                    + "INNER JOIN\n"
+                    + "    Category ON Product.CategoryId = Category.CategoryId \n"
+                    + "INNER JOIN\n"
+                    + "    Restaurant ON Product.RestaurantId = Restaurant.RestaurantId \n"
+                    + "INNER JOIN\n"
+                    + "    Account ON Restaurant.AccountId = Account.AccountId\n"
+                    + "WHERE \n"
+                    + "    Category.Name = ? AND Product.[Status] = 1 AND Account.Status = 1;";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, categoryName);
@@ -70,7 +88,7 @@ public class FunctionShopDAO {
                     + "Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
                     + "Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
                     + "Account ON Restaurant.AccountId = Account.AccountId\n"
-                    + "WHERE Product.Name like N'%" + productName + "%'";
+                    + "WHERE Product.Name like N'%" + productName + "%' AND Account.Status = 1";
 
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -138,12 +156,30 @@ public class FunctionShopDAO {
     public ArrayList<ProductDTO> searchByPrice(int minPrice) {
         ArrayList<ProductDTO> listProductDTO = new ArrayList<>();
         try {
-            String sql = "SELECT Product.ProductId, Product.Name, Product.Price, Product.Description, Product.ImageURL, Product.CategoryId, Account.ImageAvatar, Product.IsSale, Product.Quantity, Product.CreateDate, Product.UpdateDate, Product.Status, Product.RestaurantId\n"
-                    + "FROM    Product INNER JOIN\n"
-                    + "		Category ON Product.CategoryId = Category.CategoryId INNER JOIN\n"
-                    + "		Restaurant ON Product.RestaurantId = Restaurant.RestaurantId INNER JOIN\n"
-                    + "		Account ON Restaurant.AccountId = Account.AccountId\n"
-                    + "WHERE Product.Price between ? and  (SELECT MAX(Product.Price) FROM Product)";
+            String sql = "SELECT \n"
+                    + "    Product.ProductId, \n"
+                    + "    Product.Name, \n"
+                    + "    Product.Price, \n"
+                    + "    Product.Description, \n"
+                    + "    Product.ImageURL, \n"
+                    + "    Product.CategoryId, \n"
+                    + "    Account.ImageAvatar, \n"
+                    + "    Product.IsSale, \n"
+                    + "    Product.Quantity, \n"
+                    + "    Product.CreateDate, \n"
+                    + "    Product.UpdateDate, \n"
+                    + "    Product.Status, \n"
+                    + "    Product.RestaurantId\n"
+                    + "FROM \n"
+                    + "    Product \n"
+                    + "INNER JOIN\n"
+                    + "    Category ON Product.CategoryId = Category.CategoryId \n"
+                    + "INNER JOIN\n"
+                    + "    Restaurant ON Product.RestaurantId = Restaurant.RestaurantId \n"
+                    + "INNER JOIN\n"
+                    + "    Account ON Restaurant.AccountId = Account.AccountId\n"
+                    + "WHERE \n"
+                    + "    Product.Price BETWEEN 100000 AND (SELECT MAX(Product.Price) FROM Product) AND Account.Status = 1;";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, minPrice);
@@ -198,7 +234,7 @@ public class FunctionShopDAO {
                     + "INNER JOIN\n"
                     + "    Account ON Restaurant.AccountId = Account.AccountId\n"
                     + "WHERE \n"
-                    + "    Product.Price BETWEEN ? AND (SELECT MAX(Product.Price) FROM Product) AND Category.Name like N'%"+categoryName+"%'";
+                    + "    Product.Price BETWEEN ? AND (SELECT MAX(Product.Price) FROM Product) AND Category.Name like N'%" + categoryName + "%' AND Account.Status = 1;";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, minPrice);

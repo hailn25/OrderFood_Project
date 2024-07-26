@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Blog;
 import model.BlogDTO;
+import utils.Validation;
 
 /**
  *
@@ -38,6 +39,7 @@ public class BlogControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         BlogDAO dao = new BlogDAO();
         ArrayList<BlogDTO> listBlogDTO = dao.getAllBlogDTO();
+        ArrayList<BlogDTO> listBlogDTO1 = dao.getAllBlogDTO();
         int itemsPerPage = 5;
         int currentPage = 1;
 
@@ -57,6 +59,7 @@ public class BlogControl extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("paginatedList", paginatedList);
         request.setAttribute("listBlogDTO", listBlogDTO);
+        request.setAttribute("listBlogDTO1", listBlogDTO1);
 
         request.getRequestDispatcher("Blog.jsp").forward(request, response);
     }
@@ -87,7 +90,40 @@ public class BlogControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        BlogDAO dao = new BlogDAO();
+        String error = "Từ khoá tìm kiếm không hợp lệ";
+        ArrayList<BlogDTO> listBlogDTO1 = dao.getAllBlogDTO();
+        ArrayList<BlogDTO> listBlogDTO = dao.getAllBlogDTO();
+        String blogName = request.getParameter("blogName");
+        int lengthBlogName = Validation.removeAllBlank(blogName).length();
+        if (lengthBlogName == 0) {
+            request.setAttribute("error", error);
+        } else {
+            blogName = Validation.removeUnnecessaryBlank(blogName);
+            listBlogDTO = dao.getBlogDTOByName(blogName);
+        }
+
+        int itemsPerPage = 5;
+        int currentPage = 1;
+
+        if (request.getParameter("page") != null) {
+            currentPage = Integer.parseInt(request.getParameter("page"));
+        }
+
+        int totalItems = listBlogDTO.size();
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        int start = (currentPage - 1) * itemsPerPage;
+        int end = Math.min(start + itemsPerPage, totalItems);
+
+        List<BlogDTO> paginatedList = listBlogDTO.subList(start, end);
+
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("paginatedList", paginatedList);
+        request.setAttribute("listBlogDTO", listBlogDTO);
+        request.setAttribute("listBlogDTO1", listBlogDTO1);
+        request.getRequestDispatcher("Blog.jsp").forward(request, response);
     }
 
     /**

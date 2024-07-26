@@ -114,10 +114,6 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                                    <div class="form-group mb-3">
-                                        <label for="datesubmit">Ngày đăng </label>
-                                        <input type="date" name="datesubmit" value="${blog.updateDate}" required="" id="datesubmit" class="form-control">
-                                    </div>
                                     <div class="tm-product-img-edit mx-auto">
                                         <img id="currentImage" src="img/${blog.imageURL}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>

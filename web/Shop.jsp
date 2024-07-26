@@ -31,6 +31,48 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <style>
+            @keyframes shake {
+                0% {
+                    transform: translateX(0);
+                }
+                25% {
+                    transform: translateX(-5px);
+                }
+                50% {
+                    transform: translateX(5px);
+                }
+                75% {
+                    transform: translateX(-5px);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
+            #show-more-btn {
+                border: none;
+                color: #fff;
+                background-color: #81C408;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                transition: all 0.3s ease;
+            }
+
+            #show-more-btn:hover {
+                background-color: #81C008;
+                color: #fff;
+                animation: shake 0.5s;
+            }
+
+            .d-none {
+                display: none;
+            }
+        </style>
     </head>
 
     <body>
@@ -111,22 +153,25 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <h4>Phân Loại</h4>
-                                            <ul class="list-unstyled fruite-categorie">
-                                                <c:forEach items="${listTotalQuantityByCategory}" var="c">
-                                                    <li>
-                                                        <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="shop?categoryName=${c.name}"><i class="fas fa-utensils" style="margin-right: 5px;"></i>${c.name}</a>
+                                            <ul class="list-unstyled fruite-categorie" id="category-list">
+                                                <c:forEach items="${listTotalQuantityByCategory}" var="c" varStatus="status">
+                                                    <li class="<c:if test="${status.index >= 2}">d-none</c:if>">
+                                                            <div class="d-flex justify-content-between fruite-name">
+                                                                <a href="shop?categoryName=${c.name}">
+                                                                <i class="fas fa-utensils" style="margin-right: 5px;"></i>${c.name}
+                                                            </a>
                                                             <span>(${c.totalQuantity})</span>
                                                         </div>
                                                     </li>
                                                 </c:forEach>
                                             </ul>
+                                            <button id="show-more-btn" class="<c:if test="${fn:length(listTotalQuantityByCategory) <= 2}">d-none</c:if>">Xem thêm</button>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-lg-12">
-                                        <h4 class="mb-3">Nhà hàng nổi bật</h4>
-                                        <c:forEach items="${listRestaurantDTO}" var="r" >
+                                        <div class="col-lg-12">
+                                            <h4 class="mb-3">Nhà hàng nổi bật</h4>
+                                        <c:forEach items="${listRestaurantDTO}" var="r">
                                             <c:if test="${r.status == 1}">
                                                 <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
                                                     <div class="rounded me-4" style="width: 100px; height: 100px;">
@@ -304,9 +349,34 @@
                                             var rangeInput = document.getElementById('rangeInput').value;
                                             var hiddenRangeInput = document.getElementById('hiddenRangeInput');
                                             hiddenRangeInput.value = rangeInput;
-                                            var categoryName = 
-                                            document.getElementById('rangeForm').submit();
+                                            var categoryName =
+                                                    document.getElementById('rangeForm').submit();
                                         }
+
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const categoryList = document.getElementById('category-list');
+                                            const showMoreBtn = document.getElementById('show-more-btn');
+                                            const hiddenItems = categoryList.querySelectorAll('li.d-none');
+
+                                            let isExpanded = false;
+
+                                            if (hiddenItems.length > 0) {
+                                                showMoreBtn.addEventListener('click', function () {
+                                                    if (!isExpanded) {
+                                                        hiddenItems.forEach(function (item) {
+                                                            item.classList.remove('d-none');
+                                                        });
+                                                        showMoreBtn.textContent = 'Thu gọn'; // Change button text to "Show Less"
+                                                    } else {
+                                                        hiddenItems.forEach(function (item) {
+                                                            item.classList.add('d-none');
+                                                        });
+                                                        showMoreBtn.textContent = 'Xem thêm'; // Change button text to "Show More"
+                                                    }
+                                                    isExpanded = !isExpanded; // Toggle the state
+                                                });
+                                            }
+                                        });
         </script>
     </body>
 

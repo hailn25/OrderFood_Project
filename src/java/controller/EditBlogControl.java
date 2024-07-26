@@ -90,20 +90,8 @@ public class EditBlogControl extends HttpServlet {
         int lengthTitle = Validation.removeAllBlank(title).length();
         int lengthContent = Validation.removeAllBlank(content).length();
         int lengthSummary = Validation.removeAllBlank(summary).length();
-        if (lengthTitle < 5 || lengthTitle > 60) {
-            request.setAttribute("error", "Độ dài tiêu đề phải lớn hơn 4 và nhỏ hơn 61");
-            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if (lengthContent < 100 || lengthContent > 500) {
-            request.setAttribute("error", "Độ dài nội dung phải lớn hơn 99 và nhỏ hơn 501");
-            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if (lengthSummary < 30 || lengthSummary > 50) {
-            request.setAttribute("error", "Độ dài tóm tắt phải lớn hơn 29 và nhỏ hơn 51");
-            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if (request.getParameter("status") == null) {
-            request.setAttribute("error", "Chưa chọn trạng thái");
-            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else if (request.getParameter("datesubmit") == null) {
-            request.setAttribute("error", "Chưa chọn ngày đăng");
+        if (lengthTitle == 0 || lengthContent == 0 || lengthSummary == 0 || request.getParameter("status") == null) {
+            request.setAttribute("error", error);
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
         } else {
 //            boolean status = Boolean.parseBoolean(request.getParameter("status"));
@@ -120,7 +108,6 @@ public class EditBlogControl extends HttpServlet {
 //                response.sendRedirect("managerBlog");
 //            }
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
-            String dateSubmitStr = request.getParameter("datesubmit");
             String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
             if (fileName != null && !fileName.isEmpty()) {
@@ -128,38 +115,20 @@ public class EditBlogControl extends HttpServlet {
                     String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
                     filePart.write(uploadPath);
                     img = fileName;
-                    try {
-                        SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
-                        Date dateSubmit = spf.parse(dateSubmitStr);
-                        if (dateSubmit.after(today)) {
-                            blogDAO.editBlog(title, content, img, summary, 2, status, dateSubmit, blogId);
-                            response.sendRedirect("managerBlog");
-                        } else {
-                            error = "Ngày đăng phải sau ngày hiện tại";
-                            request.setAttribute("error", error);
-                            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-                        }
-                    } catch (Exception e) {
-                    }
+
+                    blogDAO.editBlog(title, content, img, summary, 2, status, today, blogId);
+                    response.sendRedirect("managerBlog");
+
                 } else {
                     request.setAttribute("error", "Chỉ chấp nhận các tệp JPG, PNG, hoặc WebP!");
                     request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
                 }
             } else {
                 img = request.getParameter("OldImage");
-                try {
-                    SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date dateSubmit = spf.parse(dateSubmitStr);
-                    if (dateSubmit.after(today)) {
-                        blogDAO.editBlog(title, content, img, summary, 2, status, dateSubmit, blogId);
-                        response.sendRedirect("managerBlog");
-                    } else {
-                        error = "Ngày đăng phải sau ngày hiện tại";
-                        request.setAttribute("error", error);
-                        request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-                    }
-                } catch (Exception e) {
-                }
+
+                blogDAO.editBlog(title, content, img, summary, 2, status, today, blogId);
+                response.sendRedirect("managerBlog");
+
             }
         }
 
