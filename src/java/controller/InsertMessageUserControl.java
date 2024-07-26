@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.Validation;
 
 /**
  *
@@ -44,9 +45,20 @@ public class InsertMessageUserControl extends HttpServlet {
         }
 
         String messageContent = request.getParameter("messageContent");
-
-        messageDAO.insertMessageUser(senderId, receiverId, messageContent);
-        request.getRequestDispatcher("messageUser1?userId=" + senderId + "&restaurantId="+ receiverId).forward(request, response);
+        String error = "";
+        
+        if (messageContent != null) {
+            int lengthProductName = Validation.removeAllBlank(messageContent).length();
+            if (lengthProductName > 0) {
+                messageContent = Validation.removeUnnecessaryBlank(messageContent);
+                 messageDAO.insertMessageUser(senderId, receiverId, messageContent);
+            } else {
+                error = "Tin nhắn không hợp lệ";
+            }
+        }
+        
+       
+        request.getRequestDispatcher("messageUser1?userId=" + senderId + "&restaurantId="+ receiverId+"&error="+error).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

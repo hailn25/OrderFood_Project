@@ -43,6 +43,7 @@ public class MessageUserControl extends HttpServlet {
              restaurantStr = Integer.parseInt(request.getParameter("restaurantId"));
         }
         
+        request.setAttribute("error", "Chào mừng bạn đến với tin nhắn!");
         request.setAttribute("userId", userId);
         int restaurantId = messsageDAO.getAccountIdByRestaurantId(restaurantStr);
         request.setAttribute("restaurantId", restaurantId);

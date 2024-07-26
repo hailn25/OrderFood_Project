@@ -10,6 +10,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+       <title>4FOODHD</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
@@ -108,6 +109,14 @@
                 }
             }
         </style>
+        <script type="text/javascript">
+            window.onload = function () {
+                var error = "<%= (String) request.getAttribute("error") %>";
+                if (error !== "") {
+                    alert(error);
+                }
+            };
+        </script>
     </head>
     <body>
 
@@ -154,31 +163,42 @@
                                         </div>-->
                 </div>
                 <div class="flex-1 p-4 overflow-y-auto space-y-4 bg-card">
-                    <c:forEach items="${listMessageUser}" var="m" varStatus="status">
-                        <div class="flex space-x-2 " <c:if test="${status.last}">id="lastMessage"</c:if>>
-                            <img src="img/${m.senderImageAvatar}" alt="Không thể tải ảnh" class="w-10 h-10 rounded-full" />
-                            <div class="flex-1">
+                    <c:choose>
+                        <c:when test="${not empty listMessageUser}">
+                            <c:forEach items="${listMessageUser}" var="m" varStatus="status">
 
-                                <c:if test="${m.senderId == userId}">
-                                    <div class="bg-muted p-2 rounded-lg shadow"  style="background: #03A9F4;">
-                                        <p class="text-sm text-foreground" style="color: white;">${m.messageContent}</p>
+                                <div class="flex space-x-2 " <c:if test="${status.last}">id="lastMessage"</c:if>>
+                                    <img src="img/${m.senderImageAvatar}" alt="Không thể tải ảnh" class="w-10 h-10 rounded-full" />
+                                    <div class="flex-1">
+
+                                        <c:if test="${m.senderId == userId}">
+                                            <div class="bg-muted p-2 rounded-lg shadow"  style="background: #03A9F4;">
+                                                <p class="text-sm text-foreground" style="color: white;">${m.messageContent}</p>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${m.senderId == restaurantId}">
+                                            <div class="bg-muted p-2 rounded-lg shadow">
+                                                <p class="text-sm text-foreground">${m.messageContent}</p>
+                                            </div>
+                                        </c:if>
+                                        <span class="text-xs text-muted-foreground">${m.formattedTimestamp}</span>
                                     </div>
-                                </c:if>
-                                <c:if test="${m.senderId == restaurantId}">
-                                    <div class="bg-muted p-2 rounded-lg shadow">
-                                        <p class="text-sm text-foreground">${m.messageContent}</p>
-                                    </div>
-                                </c:if>
-                                <span class="text-xs text-muted-foreground">${m.formattedTimestamp}</span>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div style="display: flex; justify-content: center;">
+                                <img src="img/message_blank.jpg" width="100px" height="100px" alt="Không tìm thấy ảnh"/>
+                                <h3 style="display: flex; align-items: center;">Hãy gửi tin nhắn cho chúng tôi!</h3>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <div class="p-4 border-t border-border bg-card">
                     <form action="insertMessage" method="POST">
                         <input name="senderId" value="${userId}" hidden/>
                         <input name="receiverId" value="${restaurantId}" hidden/>
-                        <input name="messageContent" type="text" placeholder="Nhập tin nhắn..." style="width:95%"  class="w-full p-2 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                        <input name="messageContent" type="text" required="" placeholder="Nhập tin nhắn..." style="width:95%"  class="w-full p-2 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
                         <button style="margin-left: 10px" >
                             <i class="far fa-paper-plane"></i>
                         </button>
