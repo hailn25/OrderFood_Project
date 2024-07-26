@@ -80,27 +80,69 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                                            <label for="role">Vai trò</label>
-                                            <select class="custom-select tm-select-accounts select" name="role" required>
-                                                <c:forEach items="${listRole}" var="o">
-                                                    <option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-                                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                                            <label for="category">Trạng thái</label>
-                                            <select class="custom-select tm-select-accounts select" name="status" required>
-                                                <option value="1" ${status ? "selected" : ""}>Hoạt động</option>
-                                                <option value="0" ${status == false ? "selected" : ""}>Bị cấm</option>
-                                            </select>
-                                        </div>
+                                        <c:if test="${roleId == 2 && status == 1}">
+                                            <div class=" form-group mb-3 col-xs-12 col-sm-6">
+                                                <label for="role">Vai trò</label>
+                                                <select class="custom-select tm-select-accounts select" name="role" required>
+                                                    <!--<option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>-->
+                                                    <option value="2" ${2 == roleId ? "selected" : ""}>Khách hàng</option>
+                                                    <option value="3" ${3 == roleId ? "selected" : ""}>Shipper</option>
+                                                    <option value="4" ${4 == roleId ? "selected" : ""}>Nhà hàng</option>
+                                                    <option value="5" ${5 == roleId ? "selected" : ""}>Nhân viên</option>
+                                                </select>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${roleId == 2 && status == 0}">
+                                            <div class=" form-group mb-3 col-xs-12 col-sm-6">
+                                                <label for="role">Vai trò</label>
+                                                <select class="read-only custom-select tm-select-accounts select" name="role" required>
+                                                    <!--<option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>-->
+                                                    <option value="2" ${2 == roleId ? "selected" : ""}>Khách hàng</option>
+                                                    <option value="3" ${3 == roleId ? "selected" : ""}>Shipper</option>
+                                                    <option value="4" ${4 == roleId ? "selected" : ""}>Nhà hàng</option>
+                                                    <option value="5" ${5 == roleId ? "selected" : ""}>Nhân viên</option>
+                                                </select>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${roleId == 3 || roleId == 4 || roleId == 5}">
+                                            <div class=" form-group mb-3 col-xs-12 col-sm-6">
+                                                <label for="role">Vai trò</label>
+                                                <select class="read-only custom-select tm-select-accounts select" name="role" required>
+                                                    <!--<option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>-->
+                                                    <option value="2" ${2 == roleId ? "selected" : ""}>Khách hàng</option>
+                                                    <option value="3" ${3 == roleId ? "selected" : ""}>Shipper</option>
+                                                    <option value="4" ${4 == roleId ? "selected" : ""}>Nhà hàng</option>
+                                                    <option value="5" ${5 == roleId ? "selected" : ""}>Nhân viên</option>
+                                                </select>
+                                            </div>
+                                        </c:if>
+
+                                        <c:if test="${status == 1}">
+                                            <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                                <label for="status">Trạng thái</label>
+                                                <select class="custom-select tm-select-accounts select" name="status" required>
+                                                    <option value="1" ${status == 1 ? "selected" : ""}>Hoạt động</option>
+                                                    <option value="0" ${status == 0 ? "selected" : ""}>Cấm</option>
+                                                </select>
+                                            </div>
+                                        </c:if>
+
+                                        <c:if test="${status == 0}">
+                                            <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                                <label for="status">Trạng thái</label>
+                                                <select class="read-only custom-select tm-select-accounts select" name="status" required>
+                                                    <option value="1" ${status == 1 ? "selected" : ""}>Hoạt động</option>
+                                                    <option value="0" ${status == 0 ? "selected" : ""}>Cấm</option>
+                                                </select>
+                                            </div>
+                                        </c:if>
+
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                                     <!-- Khung chứa hình ảnh sản phẩm -->
                                     <div class="tm-product-img-edit mx-auto">
-                                        <img id="currentImage" src="img/${detail.imageAvatar}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
+                                        <img style="width: 350px; height: 350px" id="currentImage" src="img/${detail.imageAvatar}" alt="Không thể tải ảnh" class="img-fluid d-block mx-auto" style="color: white">
                                     </div>
                                     <!-- Khung chứa nút chọn ảnh -->
                                     <div class="custom-file mt-3 mb-3">
@@ -151,3 +193,6 @@
         <!-- https://getbootstrap.com/ -->
     </body>
 </html>
+
+
+

@@ -1,3 +1,4 @@
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -187,9 +188,15 @@
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
                                         <li class="nav-item">
-                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                            <a class="nav-link px-3 active" href="HomeOfRestaurant.jsp">
                                                 <i class="fa fa-fw fa-bar-chart mr-1"></i>
                                                 <span>Trang chủ</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-3" href="profile">
+                                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                                <span>Thông tin tài khoản</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -197,17 +204,11 @@
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Đổi mật khẩu</span>
                                             </a>
-                                        </li>
+                                        </li>                             
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="SettingBanner.jsp">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Thiết lập quảng cáo</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -239,47 +240,65 @@
                         <div class="col mb-3">
                             <div class="card">
                                 <div id="personalInfo" class="content-section">
-                                    <div class="card-body">
+                                    <div class="card-body">                                 
+                                        <!-- Hiển thị thông báo thành công -->
+                                        <c:if test="${not empty success}">
+                                            <div class="alert alert-success" role="alert">
+                                                ${success}
+                                            </div>
+                                        </c:if>
+
+                                        <!-- Hiển thị thông báo lỗi -->
+                                        <c:if test="${not empty error}">
+                                            <div class="alert alert-danger" role="alert">
+                                                ${error}
+                                            </div>
+                                        </c:if>
                                         <form action="voucher" method="post">
                                             <div class="form-group">
-                                                <label for="voucherName">Voucher Name:</label>
+                                                <label for="voucherName">Tên mã giảm giá</label>
                                                 <input type="text" id="voucherName" name="voucherName" class="form-control" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="description">Description:</label>
+                                                <label for="description">Chi tiết</label>
                                                 <textarea id="description" name="description" rows="4" class="form-control" required></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label for="quantity">Quantity:</label>
+                                                <label for="quantity">Số lượng</label>
                                                 <input type="number" id="quantity" name="quantity" class="form-control" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="releaseDate">Release Date:</label>
+                                                <label for="releaseDate">Ngày phát hành</label>
                                                 <input type="date" id="releaseDate" name="releaseDate" class="form-control" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="finishDate">Finish Date:</label>
+                                                <label for="finishDate">Ngày kết thúc</label>
                                                 <input type="date" id="finishDate" name="finishDate" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="status" style="display: none;">Status:</label>
-                                                <input type="hidden" id="status" name="status" value="1" required>
+                                                <input type="hidden" id="status" name="status" value="0" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="discount">Discount:</label>
-                                                <input type="text" id="discount" name="discount" class="form-control" required>
+                                                <label for="discount">Giảm giá</label>
+                                                <div class="input-group">
+                                                    <input type="number" id="discount" name="discount" class="form-control" required min="1" max="100" step="0.01">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="voucherCategoryId" style="display: none;">VoucherCategoryId:</label>
-                                                <input type="hidden" id="voucherCategoryId" name="voucherCategoryId" value="1" class="form-control hidden" required>
+                                                <input type="hidden" id="voucherCategoryId" name="voucherCategoryId" value="2" class="form-control hidden" required>
                                             </div>
-                                            
+
                                             <div class="form-group">
                                                 <label for="restauranId" class="hidden" style="display: none;">restauranId</label>
                                                 <input type="hidden" id="restauranId" name="restauranId" value="${sessionScope.account.accountId}" class="form-control hidden" required>
                                             </div>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-primary">Gửi</button>
                                             </div>
                                         </form>
                                     </div>

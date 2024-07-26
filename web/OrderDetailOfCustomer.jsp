@@ -41,8 +41,11 @@
                                     <input id="paymentMethod" name="paymentMethod" type="text" required value="${listV.paymentBy}" class="form-control validate read-only">
                                 </div>
                                 <div class=" form-group mb-3">
-                                    <label for="purchaseDate">Ngày mua</label>
-                                    <input id="purchaseDate" name="purchaseDate" type="text" required value="${listV.createDate}" class="form-control validate read-only">
+                                    <!--                                    <label for="purchaseDate">Ngày mua</label>
+                                                                        <input id="purchaseDate" name="purchaseDate" type="text" required value="${listV.createDate}" class="form-control validate read-only">-->
+                                    <label for="name">Ngày mua</label>
+                                    <fmt:formatDate value="${listV.createDate}" pattern="dd-MM-yyyy" var="formattedDate" />
+                                    <input readonly="" id="date" name="date" type="text" required value="${formattedDate}" class="form-control validate read-only" />
                                 </div>
 
                             </div>
@@ -107,15 +110,15 @@
                                         <tr>
                                             <td class="center-text">${order.productId}</td>
                                             <td>${order.productName}</td>
-                                            <td><fmt:formatNumber value="${order.price * 1000}" pattern="###,### VNĐ" /></td>
+                                            <td><fmt:formatNumber value="${order.price}" pattern="###,### VNĐ" /></td>
                                             <td class="center-text">${order.quantity}</td>
-                                            <td><fmt:formatNumber value="${order.price * order.quantity * 1000}" pattern="###,### VNĐ" /></td>
+                                            <td><fmt:formatNumber value="${order.price * order.quantity}" pattern="###,### VNĐ" /></td>
                                             <c:set var="totalPrice" value="${totalPrice + (order.price * order.quantity)}" />
                                         </tr>
                                     </c:forEach>
                                     <tr>
                                         <td colspan="4" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
-                                        <td style="font-weight: bold;"><fmt:formatNumber value="${totalPrice * 1000}" pattern="###,### VNĐ" /></td>
+                                        <td style="font-weight: bold;"><fmt:formatNumber value="${totalPrice}" pattern="###,### VNĐ" /></td>
 
                                     </tr>
 
@@ -141,3 +144,6 @@
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
+
+
+

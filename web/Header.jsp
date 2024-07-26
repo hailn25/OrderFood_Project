@@ -68,10 +68,14 @@
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <a href="home" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="home" class="nav-item nav-link">Trang chủ</a>
                             <a href="shop" class="nav-item nav-link ">Lọc sản phẩm</a>
                            <a href="flsale" class="nav-item nav-link ">Flash Sale</a>
                             <a href="blog" class="nav-item nav-link">Blog</a>
+                            <c:if test="${sessionScope.account != null}">
+                                <a href="loadVoucherFreeship" class="nav-item nav-link">Voucher</a>
+                            </c:if> 
+
                             <!--<a href="Contact.jsp" class="nav-item nav-link">Contact</a>-->
                         </div>
                         <div class="d-flex m-3 me-0">
@@ -111,3 +115,4 @@
         <script src="js/main.js"></script>
     </body>
 </html>
+

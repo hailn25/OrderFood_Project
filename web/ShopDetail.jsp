@@ -178,25 +178,40 @@
                                 </div>
                                 <p class="mb-4">${detail.decription}</p>
                                 <p class="mb-4">Quantity: ${detail.quantity}</p>
-                                <div class="input-group quantity mb-5" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                                <div style="margin-bottom: 30px">
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <form action="addtocart" method="post">
-                                    <input type="hidden" name="productId" value="${detail.id}">
-                                    <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                    </button>
-                                </form>
+
+                                <div style="display: flex; margin: 0 30; ">
+                                    <form id="addToCartForm" action="addtocart" method="post" style="margin-right: 30px">
+                                        <input type="hidden" name="productId" value="${detail.id}">
+                                        <input type="hidden" name="quantity" id="addToCartQuantity" value="1">
+                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                        </button>
+                                    </form>
+                                    <form id="addToCheckout" action="checkout2" method="get">
+                                        <input type="hidden" name="productId" value="${detail.id}">
+                                        <input type="hidden" name="quantityCart" id="checkoutQuantity" value="1">
+                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+
+                                            <i class="fas fa-cart-arrow-down me-2 text-primary"></i>Mua ngay
+
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -246,7 +261,7 @@
                     <div class="col-lg-4 col-xl-3">
                         <div class="row g-4 fruite">
                             <div class="col-lg-12">
-                                <h4 class="mb-4">Sản phẩm nổi bật</h4>
+                                <h4 class="mb-4">Sản phẩm giảm giá</h4>
                                 <div id="productList">
                                     <c:forEach var="listProductByIsSale" items="${listProductByIsSale}" varStatus="status">
                                         <div class="product-item d-flex align-items-center justify-content-start mb-4 ${status.index >= 2 ? 'd-none more-item' : ''}" id="Block-${status.index}">
@@ -264,7 +279,12 @@
                                             </div>
                                         </div>
                                     </c:forEach>
-                                </div>                              
+                                </div>
+                                <!-- Buttons to toggle view -->
+                                <div id="toggleButtons" class="mt-3">
+                                    <button class="btn btn-primary" onclick="showMore()">Xem thêm</button>
+                                    <button class="btn btn-secondary d-none" onclick="showLess()">Thu gọn</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -273,32 +293,34 @@
                     <div class="vesitable">
                         <div class="owl-carousel vegetable-carousel justify-content-center">
                             <c:forEach var="relatedProduct" items="${listSameCategoryProducts}">
-                                <div class="border border-primary rounded position-relative vesitable-item">
-                                    <div class="vesitable-img">
-                                        <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
-                                    </div>
-                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
-                                    <div class="p-4 pb-0 rounded-bottom">
-                                        <h4>${relatedProduct.name}</h4>
-                                        <p class="description">${relatedProduct.decription}</p>
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${relatedProduct.id}">${relatedProduct.price}</h6>   
-                                            <div style="display: flex;">
-                                                <form action="addtocart" method="post" >
-                                                    <input type="hidden" name="productId" value="${relatedProduct.id}">
-                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                    </button>
-                                                </form>
-                                                <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                    <a href="restaurant?restaurantId=${relatedProduct.restaurantId}&page=${1}">
-                                                        <img src="img/${relatedProduct.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                    </a>
+                                <c:if test="${relatedProduct.quantity > 0 && relatedProduct.status > 0 && relatedProduct.statusAccount != 0}">
+                                    <div class="border border-primary rounded position-relative vesitable-item">
+                                        <div class="vesitable-img">
+                                            <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
+                                        </div>
+                                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
+                                        <div class="p-4 pb-0 rounded-bottom">
+                                            <h4>${relatedProduct.name}</h4>
+                                            <p class="description">${relatedProduct.decription}</p>
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${relatedProduct.id}">${relatedProduct.price}</h6>   
+                                                <div style="display: flex;">
+                                                    <form action="addtocart" method="post" >
+                                                        <input type="hidden" name="productId" value="${relatedProduct.id}">
+                                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                        </button>
+                                                    </form>
+                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                        <a href="restaurant?restaurantId=${relatedProduct.restaurantId}&page=${1}">
+                                                            <img src="img/${relatedProduct.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>
@@ -326,14 +348,14 @@
             <!-- Template Javascript -->
             <script src="js/main.js"></script>  
             <script>
-                                                    function toggleReviews() {
-                                                        var reviewsSection = document.getElementById('reviews-section');
-                                                        if (reviewsSection.style.display === 'none') {
-                                                            reviewsSection.style.display = 'block';
-                                                        } else {
-                                                            reviewsSection.style.display = 'none';
-                                                        }
-                                                    }
+                                        function toggleReviews() {
+                                            var reviewsSection = document.getElementById('reviews-section');
+                                            if (reviewsSection.style.display === 'none') {
+                                                reviewsSection.style.display = 'block';
+                                            } else {
+                                                reviewsSection.style.display = 'none';
+                                            }
+                                        }
             </script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
@@ -363,6 +385,120 @@
 
                     loadMoreBtn.classList.toggle('d-none');
                     showLessBtn.classList.toggle('d-none');
+                }
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const quantityInput = document.querySelector('.quantity-input');
+                    const addToCheckoutForm = document.getElementById('addToCheckout');
+                    const checkoutQuantityInput = document.getElementById('checkoutQuantity');
+
+                    quantityInput.addEventListener('input', function () {
+                        let newValue = parseInt(quantityInput.value);
+                        if (isNaN(newValue) || newValue < 1) {
+                            newValue = 1;
+                        }
+                        quantityInput.value = newValue;
+                        checkoutQuantityInput.value = newValue;
+                    });
+
+                    addToCheckoutForm.addEventListener('submit', function () {
+                        checkoutQuantityInput.value = quantityInput.value;
+                    });
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const quantityInputs = document.querySelectorAll('.quantity-input');
+                    const addToCartForm = document.getElementById('addToCartForm');
+                    const addToCartQuantityInput = document.getElementById('addToCartQuantity');
+
+                    quantityInputs.forEach(function (quantityInput) {
+                        const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
+                        const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
+                        const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
+
+                        btnPlus.addEventListener('click', function () {
+                            updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+                        });
+
+                        btnMinus.addEventListener('click', function () {
+                            updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+                        });
+
+                        quantityInput.addEventListener('input', function () {
+                            let newValue = parseInt(quantityInput.value);
+                            if (isNaN(newValue) || newValue < 1) {
+                                newValue = 1;
+                            }
+                            updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                        });
+
+                        // Function to update quantity and price
+                        function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
+                            if (newQuantity < 1) {
+                                confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
+                                return;
+                            }
+                            if (newQuantity > maxQuantity) {
+                                alert('Số lượng vượt quá số lượng tối đa có sẵn');
+                                return;
+                            }
+
+                            quantityInput.value = newQuantity;
+                            addToCartQuantityInput.value = newQuantity;
+                            updatePrice(quantityInput, newQuantity);
+                        }
+
+                        function updatePrice(quantityInput, quantity) {
+                            const pricePerItem = parseFloat(quantityInput.dataset.price);
+                            // Example of updating total price display based on quantity
+                            const totalPriceElement = quantityInput.closest('.row').querySelector('.price-total');
+                            const totalPrice = quantity * pricePerItem * 1000;
+                            totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+                        }
+
+                        updatePrice(quantityInput, parseInt(quantityInput.value));
+                    });
+
+                    // Example of submitting form
+                    addToCartForm.addEventListener('submit', function (event) {
+                        // You can add additional validation or actions before submitting the form
+                        // event.preventDefault(); // Uncomment to prevent default form submission for testing
+                        // Example of fetching data if needed
+                        const formData = new FormData(addToCartForm);
+                        fetch(addToCartForm.action, {
+                            method: 'POST',
+                            body: formData
+                        })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.text();
+                                })
+                                .then(data => {
+                                    // Handle response data if necessary
+                                })
+                                .catch(error => {
+                                    console.error('Có vấn đề xảy ra trong quá trình fetch:', error);
+                                });
+                    });
+                });
+            </script>
+            <script>
+                function showMore() {
+                    document.querySelectorAll('.more-item').forEach(item => item.classList.remove('d-none'));
+                    document.getElementById('toggleButtons').innerHTML = `
+            <button class="btn btn-secondary" onclick="showLess()">Thu gọn</button>
+        `;
+                }
+
+                function showLess() {
+                    document.querySelectorAll('.more-item').forEach(item => item.classList.add('d-none'));
+                    document.getElementById('toggleButtons').innerHTML = `
+            <button class="btn btn-primary" onclick="showMore()">Xem thêm</button>
+        `;
                 }
             </script>
     </body>

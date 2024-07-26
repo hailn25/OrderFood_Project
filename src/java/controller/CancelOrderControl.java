@@ -38,7 +38,7 @@ public class CancelOrderControl extends HttpServlet {
             String oid = request.getParameter("oid");
             OrderDAO dao = new OrderDAO();
             dao.cancelOrderOfCustomer(oid);
-            request.getRequestDispatcher("managerOrderOfCustomer_6").forward(request, response);
+            request.getRequestDispatcher("managerOrderOfCustomer_0").forward(request, response);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CancelOrderControl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

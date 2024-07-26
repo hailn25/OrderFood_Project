@@ -43,6 +43,7 @@ public class ShopControl extends HttpServlet {
         request.setAttribute("listRestaurantDTO", listRestaurantDTO);
 
         String categoryName = request.getParameter("categoryName");
+        request.setAttribute("categoryName", categoryName);
         if (categoryName != null) {
             listProductDTO = daofunction.getAllProductDTOByCategoryName(categoryName);
             request.setAttribute("listProductDTO", listProductDTO);
@@ -58,8 +59,8 @@ public class ShopControl extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        
-        int itemsPerPage = 10;
+
+        int itemsPerPage = 9;
         int currentPage = 1;
 
         if (request.getParameter("page") != null) {
@@ -77,7 +78,7 @@ public class ShopControl extends HttpServlet {
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("listProductDTO", listProductDTO);
-        
+
         request.getRequestDispatcher("Shop.jsp").forward(request, response);
     }
 
@@ -119,7 +120,7 @@ public class ShopControl extends HttpServlet {
             }
         }
 
-        if (request.getParameter("rangeValue") != null) {
+        if (request.getParameter("rangeValue") != null && request.getParameter("categoryName") == null) {
             try {
                 int minPrice = Integer.parseInt(request.getParameter("rangeValue"));
                 listProductDTO = daofunction.searchByPrice(minPrice);
@@ -127,11 +128,27 @@ public class ShopControl extends HttpServlet {
                 request.setAttribute("listProductDTO", listProductDTO);
 
             } catch (NumberFormatException e) {
-                
+            }
+        } else if (request.getParameter("rangeValue") == null && request.getParameter("categoryName") != null) {
+            String categoryName = request.getParameter("categoryName");
+            listProductDTO = daofunction.searchByPriceAndCategoryName(0, categoryName);
+            request.setAttribute("minPrice", 0);
+            request.setAttribute("categoryName", categoryName);
+            request.setAttribute("listProductDTO", listProductDTO);
+        } else {
+            try {
+                String categoryName = request.getParameter("categoryName");
+                int minPrice = Integer.parseInt(request.getParameter("rangeValue"));
+                listProductDTO = daofunction.searchByPriceAndCategoryName(minPrice, categoryName);
+                request.setAttribute("minPrice", minPrice);
+                request.setAttribute("categoryName", categoryName);
+                request.setAttribute("listProductDTO", listProductDTO);
+
+            } catch (NumberFormatException e) {
             }
         }
-        
-        int itemsPerPage = 10;
+
+        int itemsPerPage = 9;
         int currentPage = 1;
 
         if (request.getParameter("page") != null) {
@@ -163,3 +180,5 @@ public class ShopControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

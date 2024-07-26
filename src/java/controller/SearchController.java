@@ -41,8 +41,8 @@ public class SearchController extends HttpServlet {
         ProductHomeDAO dao = new ProductHomeDAO();
         SliderDAO sliderDAO = new SliderDAO();
         List<ProductHome> list = dao.getProductBySearchName(txtSearch);
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
+        List<ProductHome> listBestSellerProduct = dao.getAllOSTProduct();
+        List<ProductHome> listProduct = dao.getProductHome();
         ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
         ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class SearchController extends HttpServlet {
         }
 
         request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
+        request.setAttribute("listV", listProduct);
         request.setAttribute("listB", listBestSellerProduct);
         request.setAttribute("listSlider", listSlider);
         request.setAttribute("listSliderDot", listSliderDot);

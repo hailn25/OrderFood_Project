@@ -29,37 +29,24 @@
 
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
-                <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
-
-
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
 
                         <c:if test="${sessionScope.account.roleId == 5}">
                             <li class="nav-item">
-                                <a class="nav-link" href="ManagerStaff.jsp">
+                                <a class="nav-link " href="ManagerStaff.jsp">
                                     <i class="fas fa-home"></i> Trang chủ
                                     <span class="sr-only">(current)</span>
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="managerCategory">
+                                    <i class="fas fa-bookmark"></i> Loại sản phẩm
+                                </a>
+                            </li>
+                        </c:if>
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link active" href="managerBlog">
@@ -75,6 +62,7 @@
                                 </a>
                             </li>
                         </c:if>
+
                         <c:if test="${sessionScope.account.roleId == 5}">                          
                             <li class="nav-item">
                                 <a class="nav-link" href="managerReport">
@@ -96,7 +84,13 @@
                                 </a>
                             </li>
                         </c:if>
-
+                        <c:if test="${sessionScope.account.roleId == 5}">                          
+                            <li class="nav-item">
+                                <a class="nav-link" href="loadListRequestVoucher">
+                                    <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
+                                </a>
+                            </li>
+                        </c:if>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -151,7 +145,7 @@
                                 <td style="color: ${b.status ? 'green' : 'red'};">
                                     ${b.status ? "Đang hiển thị" : "Đang ẩn"}
                                 </td>
-                                <td>${b.createDate}</td>
+                                <td><fmt:formatDate value="${b.createDate}" pattern="dd-MM-yyyy" /></td>
                                 <td>
                                     <a href="editBlog?bid=${b.blogId}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Chỉnh sửa">&#xE254;</i></a>
                                     <c:if test="${b.status == true}">
@@ -216,5 +210,8 @@
         </script>
     </body>
 </html>
+
+
+
 
 

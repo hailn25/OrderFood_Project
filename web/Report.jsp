@@ -14,11 +14,18 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
     <body>
+        <!-- Header Section -->
+        <header class="text-white py-3" style="background-color: #81C408">
+            <div class="container">
+                <h1 class="mb-0" style="color: red">Tố Cáo Của Hàng</h1>
+                <p class="lead mb-0">Điền vào mẫu dưới đây để gửi tố cáo</p>
+            </div>
+        </header>
+
         <div class="container">
             <div class="row justify-content-center mt-5">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header bg-danger text-white">Tố cáo</div>
                         <div class="card-body">
                             <%-- Kiểm tra và hiển thị thông báo thành công nếu có --%>
                             <% if (request.getAttribute("successMessage") != null) { %>
@@ -34,30 +41,30 @@
                             </div>
                             <% } %>
 
-                            <form action="insertReport" method="POST" enctype="multipart/form-data">
+                            <form id="reportForm" action="insertReport" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label>Restaurant Name</label>
+                                    <input type="text" class="form-control" value="${restaurantName}" readonly>
+                                </div>
+                                
                                 <div class="form-group">
                                     <label for="description">Mô tả</label>
                                     <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="accountId">AccountId</label>
-                                    <input type="text" class="form-control" id="accountId" name="accountId" value="${sessionScope.account.accountId}" readonly required>
+                                    <label for="accountId" style="display: none">AccountId</label>
+                                    <input type="hidden" class="form-control" id="accountId" name="accountId" value="${sessionScope.account.accountId}" readonly required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="restaurantId" style="display: none">RestaurantId</label>
                                     <input type="hidden" class="form-control" id="restaurantId" name="restaurantId" value="${restaurantId}" readonly>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label>Restaurant Name</label>
-                                    <input type="text" class="form-control" value="${restaurantName}" readonly>
-                                </div>
 
                                 <div class="form-group">
-                                    <label for="status">Trạng thái</label>
-                                    <input type="hinden" class="form-control" id="status" value="1" name="status" readonly>
+                                    <label for="status" style="display: none">Trạng thái</label>
+                                    <input type="hidden" class="form-control" id="status" value="1" name="status" readonly>
                                 </div>
 
                                 <div class="form-group">
@@ -104,7 +111,7 @@
                                                 errorMessage += "Mô tả không được để trống.\n";
                                             }
                                             if (imageURL === "") {
-                                                errorMessage += "imageURL không được để trống.\n";
+                                                errorMessage += "ImageURL không được để trống.\n";
                                             }
                                             if (restaurantId === "") {
                                                 errorMessage += "Restaurant ID không được để trống.\n";
@@ -122,31 +129,28 @@
                                                 event.preventDefault(); // Ngăn không submit form
                                             }
                                         });
-        </script>
-        <script>
-            function previewImage(event) {
-                var input = event.target;
-                var reader = new FileReader();
-                reader.onload = function () {
-                    var dataURL = reader.result;
-                    var output = document.getElementById('imagePreview');
-                    output.src = dataURL;
-                    output.style.display = 'block'; // Hiển thị ảnh mới
-                };
-                if (input.files && input.files[0]) {
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
 
+                                        function previewImage(event) {
+                                            var input = event.target;
+                                            var reader = new FileReader();
+                                            reader.onload = function () {
+                                                var dataURL = reader.result;
+                                                var output = document.getElementById('imagePreview');
+                                                output.src = dataURL;
+                                                output.style.display = 'block'; // Hiển thị ảnh mới
+                                            };
+                                            if (input.files && input.files[0]) {
+                                                reader.readAsDataURL(input.files[0]);
+                                            }
+                                        }
 
-            window.onload = function () {
-                var dateInput = document.getElementById('createDate');
-                var displayDateInput = document.getElementById('displayDate');
-                var currentDate = new Date().toISOString().split('T')[0];
-                dateInput.value = currentDate;
-                displayDateInput.value = currentDate;
-            }
+                                        window.onload = function () {
+                                            var dateInput = document.getElementById('createDate');
+                                            var displayDateInput = document.getElementById('displayDate');
+                                            var currentDate = new Date().toISOString().split('T')[0];
+                                            dateInput.value = currentDate;
+                                            displayDateInput.value = currentDate;
+                                        }
         </script>
     </body>
 </html>
-

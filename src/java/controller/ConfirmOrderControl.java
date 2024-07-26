@@ -40,7 +40,7 @@ public class ConfirmOrderControl extends HttpServlet {
                 String oid = request.getParameter("oid");
                 OrderDAO dao = new OrderDAO();
                 dao.confirmOrderOfCustomer(oid);
-                request.getRequestDispatcher("managerOrderOfCustomer_6").forward(request, response);
+                request.getRequestDispatcher("managerOrderOfCustomer_0").forward(request, response);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ConfirmOrderControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,7 +82,7 @@ public class ConfirmOrderControl extends HttpServlet {
     /**
      * Returns a short description of the servlet.
      *
-* @return a String containing servlet description
+     * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {

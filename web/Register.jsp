@@ -11,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-        <title>Register</title>
+        <title>4FOODHD</title>
         <style>
          
             body, html {
@@ -68,13 +68,14 @@
                                         <div class="form-outline mb-4">
                                             <input name="address"  type="text" id="inputaddress" class="form-control" placeholder="Địa chỉ" >
                                         </div>
+                                        
 
                                         <div class="d-flex justify-content-center">
                                             <button type="submit"
                                                     class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Đăng ký</button>
                                         </div>
 
-                                        <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="Login.jsp"
+                                        <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản? <a href="Login.jsp"
                                                                                                                 ><u>Đăng nhập</u></a></p>
 
                                     </form>

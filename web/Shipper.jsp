@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -98,7 +98,7 @@
                             <th>Họ và tên</th>
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
-                            <th>Ghi chú</th>
+<!--                            <th>Ghi chú</th>-->
                             <th>Ngày đặt</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái đơn hàng</th>
@@ -112,13 +112,13 @@
                                 <td>${o.name}</td>
                                 <td>${o.phone}</td>
                                 <td>${o.address}</td>
-                                <td>${o.note}</td>
-                                <td>${o.createDate}</td>
+<!--                                <td>${o.note}</td>-->
+                                <td><fmt:formatDate value="${o.createDate}" pattern="dd-MM-yyyy" /></td>
                                 <td>${o.totalMoney}</td>
                                 <td>${o.status}</td>
                                 <td>
                                     <a href="managerActions?action=accept&oid=${o.orderId}" class="accept" data-toggle="modal" onclick="return confirm('Bạn có chắc chắn xác nhận đơn không?');"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xác nhận đơn hàng">&#xe5ca;</i></a>
-                                    <a href="managerActions?action=refuse&oid=${o.orderId}" class="refuse" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Không chấp nhận" style="color: red;">&#xe5cd;</i></a>
+<!--                                    <a href="managerActions?action=refuse&oid=${o.orderId}" class="refuse" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Không nhận đơn" style="color: red;">&#xe5cd;</i></a>-->
                                     <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng">&#xe8f4;</i></a>
                                 </td>
                             </tr>
@@ -132,7 +132,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script>
-            new DataTable('#example');
+                                        new DataTable('#example');
         </script>
     </body>
 </html>

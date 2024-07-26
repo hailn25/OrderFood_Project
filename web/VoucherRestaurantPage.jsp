@@ -1,22 +1,23 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
-        
+
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
         <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
-        
+
         <style type="text/tailwindcss">
             @layer base {
                 :root {
@@ -96,10 +97,30 @@
             }
         </style>
 
+        <style>
+            .button-margin-top {
+                margin-top: 10px;
+            }
+            .bg-card {
+                max-width: 800px; /* Thay đổi giá trị này theo kích thước mong muốn */
+                width: 100%; /* Đảm bảo nó chiếm toàn bộ chiều rộng của phần tử chứa */
+            }
+            .bg-green-500 {
+                display: inline-block; /* Đảm bảo chỉ bao quanh nội dung */
+                color: #ffffff; /* Màu chữ trắng */
+                padding: 2px 8px; /* Khoảng cách bên trong */
+                border-radius: 5px; /* Bo góc */
+                margin-bottom: 8px; /* Khoảng cách phía dưới */
+            }
+            .voucher-name {
+                text-transform: uppercase;
+            }
+        </style>
+        
     </head>
     <body>
-        
-        <!-- Navbar start -->
+
+         <!-- Navbar start -->
         <div class="container-fluid fixed-top">
             <div class="container topbar bg-primary d-none d-lg-block">
                 <div class="d-flex justify-content-between">
@@ -122,148 +143,67 @@
             </div>
 
         </div>
-        
-        <div class="bg-background text-primary-foreground min-h-screen flex items-center justify-center">
-            <div class="max-w-lg w-full">
+
+        <div style="margin-top: 50px" class="bg-background text-primary-foreground min-h-screen flex items-center justify-center">
+            <div class="bg-card ">
                 <div class="bg-card shadow-lg rounded-lg p-4 space-y-4">
                     <div class="flex justify-around">
-                        <div class="text-center" data-href="VoucherFreeshipPage.jsp">
+                        <div class="text-center" data-href="loadVoucherFreeship">
                             <img src="img/IconFreeship.png" alt="Voucher Freeship" class="mx-auto mb-2 w-32 h-32 object-cover" />
                             <span class="text-sm text-muted-foreground">VOUCHER FREESHIP</span>
                         </div>
-                        <div class="text-center active_logo" data-href="VoucherRestaurantPage.jsp">
+                        <div class="text-center active_logo" data-href="loadVoucherRestaurant">
                             <img src="img/IconVoucher.png" alt="Voucher Shop" class="mx-auto mb-2 w-32 h-32 object-cover" />
-                            <span class="text-sm text-muted-foreground">VOUCHER SHOP</span>
+                            <span class="text-sm text-muted-foreground">VOUCHER RESTAURANT</span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4 p-4 scrollable-list">
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="Eleanor Accessory logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">Eleanor Access...</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 20k Đơn Tối Thiểu ₫199k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
 
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="Coolmate logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">Coolmate - Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 8%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
+                        <c:forEach items="${listVR}" var="o">
+                            <div class="bg-card p-4 rounded-lg shadow-md">
+                                <div class="flex items-center mb-4">
+                                    <img style="width: 100px; height: 100px; border: 2px solid black; border-radius: 8px;" src="img/${o.imageURL}" alt="Không thể tải ảnh" class="w-12 h-12 rounded-full mr-4" />
+                                    <span style="color: #45595B"  class="voucher-name text-lg font-bold mb-2">${o.restaurantName}</span>
+                                </div>
+                                <div class="text-card-foreground">
+                                    <h2 class="text-lg font-bold mb-2">${o.description}</h2>
+                                    <p class="text-sm text-muted-foreground font-bold">Ngày hết hạn: <fmt:formatDate value="${o.finishDate}" pattern="dd-MM-yyyy" /></p>
+                                    <span class="block mt-2 text-xs text-blue-500">Tất cả hình thức thanh toán</span>
 
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="Teelab Official logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">Teelab Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm ₫20k</h2>
-                                <p class="text-sm mb-2">Giảm Tối Thiểu ₫200k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
+                                    <!--<button class="button-margin-top bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>-->
+                                    <c:choose>
+                                        <c:when test="${o.hasVoucher}">
+                                            <!-- Nút "Đã lấy" hiển thị khi người dùng đã có voucher -->
+                                            <button class="button-margin-top bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã lấy</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <!-- Nút "Lưu" hiển thị khi người dùng chưa có voucher -->
+                                            <button class="button-margin-top bg-primary text-primary-foreground px-4 py-2 rounded-lg" onclick="handleVoucherSave('${o.voucherId}')">Lưu</button>
+                                        </c:otherwise>
 
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="VINGO logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">VINGO Official</span>
+                                    </c:choose>
+                                </div>
                             </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="VINGO logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">VINGO Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="VINGO logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">VINGO Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="VINGO logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">VINGO Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="VINGO logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">VINGO Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
-                        <div class="bg-card p-4 rounded-lg shadow-md">
-                            <div class="flex items-center mb-4">
-                                <img src="https://placehold.co/50x50" alt="VINGO logo" class="w-12 h-12 rounded-full mr-4" />
-                                <span class="text-muted-foreground">VINGO Official</span>
-                            </div>
-                            <div class="text-card-foreground">
-                                <h2 class="text-lg font-bold mb-2">Giảm 10%</h2>
-                                <p class="text-sm mb-2">Giảm tới đa 40k Đơn Tối Thiểu ₫250k</p>
-                                <button class="bg-primary text-primary-foreground px-4 py-1 rounded-full mb-2">Shopee Mall</button>
-                                <button class="bg-destructive text-destructive-foreground px-4 py-1 rounded-full">Lưu</button>
-                                <a href="#" class="text-primary block mt-2">Điều Kiện</a>
-                            </div>
-                        </div>
+                        </c:forEach>
+
+
                     </div>
                 </div>
-                                <a href="home" class="back-button mt-4">Trở lại trang chủ</a>
+                <a href="home" class="back-button mt-4">Trở lại trang chủ</a>
 
             </div>
         </div>
+
+        <script>
+            function handleVoucherSave(voucherId) {
+                // Hiển thị thông báo
+                alert("Lấy voucher thành công");
+
+                // Chuyển hướng đến trang nhận voucher
+                window.location.href = 'getVoucherRestaurant?voucherId=' + voucherId;
+            }
+        </script>
+
         <script>
             document.querySelectorAll('.text-center').forEach(item => {
                 item.addEventListener('click', () => {
@@ -276,49 +216,49 @@
         </script>
     </body>
     <script type="text/javascript">
-            window.tailwind.config = {
-                darkMode: ['class'],
-                theme: {
-                    extend: {
-                        colors: {
-                            border: 'hsl(var(--border))',
-                            input: 'hsl(var(--input))',
-                            ring: 'hsl(var(--ring))',
-                            background: 'hsl(var(--background))',
-                            foreground: 'hsl(var(--foreground))',
-                            primary: {
-                                DEFAULT: 'hsl(var(--primary))',
-                                foreground: 'hsl(var(--primary-foreground))'
-                            },
-                            secondary: {
-                                DEFAULT: 'hsl(var(--secondary))',
-                                foreground: 'hsl(var(--secondary-foreground))'
-                            },
-                            destructive: {
-                                DEFAULT: 'hsl(var(--destructive))',
-                                foreground: 'hsl(var(--destructive-foreground))'
-                            },
-                            muted: {
-                                DEFAULT: 'hsl(var(--muted))',
-                                foreground: 'hsl(var(--muted-foreground))'
-                            },
-                            accent: {
-                                DEFAULT: 'hsl(var(--accent))',
-                                foreground: 'hsl(var(--accent-foreground))'
-                            },
-                            popover: {
-                                DEFAULT: 'hsl(var(--popover))',
-                                foreground: 'hsl(var(--popover-foreground))'
-                            },
-                            card: {
-                                DEFAULT: 'hsl(var(--card))',
-                                foreground: 'hsl(var(--card-foreground))'
-                            },
+        window.tailwind.config = {
+            darkMode: ['class'],
+            theme: {
+                extend: {
+                    colors: {
+                        border: 'hsl(var(--border))',
+                        input: 'hsl(var(--input))',
+                        ring: 'hsl(var(--ring))',
+                        background: 'hsl(var(--background))',
+                        foreground: 'hsl(var(--foreground))',
+                        primary: {
+                            DEFAULT: 'hsl(var(--primary))',
+                            foreground: 'hsl(var(--primary-foreground))'
                         },
-                    }
+                        secondary: {
+                            DEFAULT: 'hsl(var(--secondary))',
+                            foreground: 'hsl(var(--secondary-foreground))'
+                        },
+                        destructive: {
+                            DEFAULT: 'hsl(var(--destructive))',
+                            foreground: 'hsl(var(--destructive-foreground))'
+                        },
+                        muted: {
+                            DEFAULT: 'hsl(var(--muted))',
+                            foreground: 'hsl(var(--muted-foreground))'
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(var(--accent))',
+                            foreground: 'hsl(var(--accent-foreground))'
+                        },
+                        popover: {
+                            DEFAULT: 'hsl(var(--popover))',
+                            foreground: 'hsl(var(--popover-foreground))'
+                        },
+                        card: {
+                            DEFAULT: 'hsl(var(--card))',
+                            foreground: 'hsl(var(--card-foreground))'
+                        },
+                    },
                 }
             }
-        </script>
+        }
+    </script>
 </html>
 
 

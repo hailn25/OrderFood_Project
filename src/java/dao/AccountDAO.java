@@ -19,9 +19,12 @@ public class AccountDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-     public ArrayList<Account> getAllAccount() {
+    public ArrayList<Account> getAllAccount() {
         ArrayList<Account> listAccount = new ArrayList<>();
-        String sql = "select * from Account\n";
+        String sql = """
+                     SELECT * 
+                     FROM Account
+                     WHERE RoleId IN (2, 3, 4, 5) and Status in (0, 1);""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -37,7 +40,7 @@ public class AccountDAO {
                         rs.getString(7),
                         rs.getString(8),
                         rs.getInt(9),
-                        rs.getBoolean(10),
+                        rs.getInt(10),
                         rs.getDate(11),
                         rs.getDate(12),
                         rs.getDate(13),
@@ -49,7 +52,7 @@ public class AccountDAO {
         return listAccount;
     }
 
-   public Account getAccountByAId(String accountId) {
+    public Account getAccountByAId(String accountId) {
         String sql = "select *\n"
                 + "from Account\n"
                 + "where AccountId = ?";
@@ -69,13 +72,13 @@ public class AccountDAO {
                 String address = rs.getString(7);
                 String imageAvatar = rs.getString(8);
                 int loginWith = rs.getInt(9);
-                boolean status = rs.getBoolean(10);
+                int status = rs.getInt(10);
                 Date lastDateLogin = rs.getDate(11);
                 Date createDate = rs.getDate(12);
                 Date updateDate = rs.getDate(13);
                 int roleId = rs.getInt(14);
 
-                Account s = new Account(accountID, email, password, fullName, gender, phone, address, imageAvatar,loginWith, status, lastDateLogin, createDate, updateDate, roleId);
+                Account s = new Account(accountID, email, password, fullName, gender, phone, address, imageAvatar, loginWith, status, lastDateLogin, createDate, updateDate, roleId);
                 return s;
             }
         } catch (Exception e) {
@@ -83,8 +86,7 @@ public class AccountDAO {
         return null;
     }
 
-
-     public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
+    public void editAccount(String roleId, String status, String accountId) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set RoleId = ?, [Status] = ?\n"
@@ -99,23 +101,7 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     public void editAccountR(String roleId, String status, String updateDate, String accountId) throws SQLException, ClassNotFoundException {
-        try {
-            String sql = "update [dbo].[Account]\n"
-                    + "set RoleId = ?, [Status] = ?, [UpdateDate] = ?\n"
-                    + "where [AccountId] = ?";
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, roleId);
-            ps.setString(2, status);
-            ps.setString(3, updateDate);
-            ps.setString(4, accountId);
-            ps.executeUpdate();
-        } catch (Exception ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+
     public void banAccount(String updateDate, String aid) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
@@ -131,7 +117,7 @@ public class AccountDAO {
         }
     }
 
-    public void unbanAccount(String updateDate ,String aid) throws SQLException, ClassNotFoundException {
+    public void unbanAccount(String updateDate, String aid) throws SQLException, ClassNotFoundException {
         try {
             String sql = "update [dbo].[Account]\n"
                     + "set [Status] = 1, [UpdateDate] = ?\n"
@@ -145,11 +131,6 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-
-
-   
- 
 
     public Account checkLogin(String email, String password) {
         String sql = "select * from Account where [Email] = ? and [Password] = ?";
@@ -169,7 +150,7 @@ public class AccountDAO {
                         rs.getString(7),
                         rs.getString(8),
                         rs.getInt(9),
-                        rs.getBoolean(10),
+                        rs.getInt(10),
                         rs.getDate(11),
                         rs.getDate(12),
                         rs.getDate(13),
@@ -180,7 +161,7 @@ public class AccountDAO {
         return null;
     }
 
-   public Account registerAccount(String email, String password, String fullName, boolean gender, String phone, String address) {
+    public Account registerAccount(String email, String password, String fullName, boolean gender, String phone, String address) {
         try {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
@@ -200,7 +181,7 @@ public class AccountDAO {
             ps.setString(6, address);
             ps.setString(7, imageAvatar);
 
-            ps.setInt(8,0 );
+            ps.setInt(8, 0);
             ps.setBoolean(9, true);
 
             ps.setString(10, date);
@@ -211,8 +192,9 @@ public class AccountDAO {
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-      return null;
+        return null;
     }
+
     public boolean checkAccountExist(String email) {
         try {
             String sql = "select * from Account where Email = ?";
@@ -251,7 +233,8 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
- public void ChangePassword(String email, String password) throws SQLException{
+
+    public void ChangePassword(String email, String password) throws SQLException {
         try {
             LocalDate curDate = LocalDate.now();
             String date = curDate.toString();
@@ -266,7 +249,8 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid, String imageAvatar ) {
+
+    public void updateAccount(String name, String email, String phone, String address, boolean gender, String aid, String imageAvatar) {
         String query = "update Account\n"
                 + "  set [Name] = ?,\n"
                 + "  [Email] = ?,\n"
@@ -291,10 +275,12 @@ public class AccountDAO {
         } catch (Exception e) {
         }
     }
+
     public void deleteAccount(String aid) throws SQLException, ClassNotFoundException {
         try {
-            String sql = "delete from [dbo].[Account]\n"
-                    + "where [AccountId] = ?";
+            String sql = "UPDATE [dbo].[Account]\n"
+                    + "SET Status = 2\n"
+                    + "WHERE AccountId = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, aid);
@@ -304,6 +290,7 @@ public class AccountDAO {
         }
 
     }
+
     public void updatePassword(String password, String aid) {
         String query = "UPDATE Account SET Password = ? WHERE AccountId = ?";
         try {
@@ -317,6 +304,7 @@ public class AccountDAO {
         } catch (Exception e) {
         }
     }
+
     public boolean checkPassword(String accountId, String currentPassword) {
         String sql = "SELECT * FROM Account WHERE AccountId = ? AND Password = ?";
         try {
@@ -333,6 +321,7 @@ public class AccountDAO {
         }
         return false;
     }
+
     private void closeResources() {
         try {
             if (rs != null) {
@@ -349,12 +338,10 @@ public class AccountDAO {
         }
     }
 
-    
-    
-public Account getAccountByEmail(String email) throws SQLException{
+    public Account getAccountByEmail(String email) throws SQLException {
         try {
             String sql = "select * from Account where Email = ?";
-            conn = new  DBContext().getConnection();
+            conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
@@ -368,7 +355,7 @@ public Account getAccountByEmail(String email) throws SQLException{
                         rs.getString(7),
                         rs.getString(8),
                         rs.getInt(9),
-                        rs.getBoolean(10),
+                        rs.getInt(10),
                         rs.getDate(11),
                         rs.getDate(12),
                         rs.getDate(13),
@@ -377,11 +364,8 @@ public Account getAccountByEmail(String email) throws SQLException{
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-         return null;
+        return null;
     }
-    
-
-
 
     public void insertAccountLoginGoogle(String email, int loginWith) throws SQLException {
         try {
@@ -405,7 +389,6 @@ public Account getAccountByEmail(String email) throws SQLException{
 
     }
 
-
     public ArrayList<Role> getAllRole() {
         ArrayList<Role> listRole = new ArrayList<>();
         String sql = "select * from Role";
@@ -423,9 +406,9 @@ public Account getAccountByEmail(String email) throws SQLException{
         }
         return listRole;
 
-}
+    }
 
-     public int getQuantityOfAccount() throws ClassNotFoundException {
+    public int getQuantityOfAccount() throws ClassNotFoundException {
         try {
             String sql = "select count(AccountId)\n"
                     + "from [dbo].[Account]";
@@ -440,14 +423,6 @@ public Account getAccountByEmail(String email) throws SQLException{
         }
         return 0;
     }
-
-    
-
-    
-
-    
-    
-   
 
     public int getAccountIdByRestaurantId(int restaurantId) {
         int accountId = 0;
@@ -472,5 +447,39 @@ public Account getAccountByEmail(String email) throws SQLException{
         return accountId;
     }
 
-}
+    public void editAccountOnlyRole(String roleId, String dateNow, String accountId) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = """
+                         update [dbo].[Account]
+                         set RoleId = ?, [UpdateDate] = ?, [CreateDate] = ?
+                         where [AccountId] = ?""";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, roleId);
+            ps.setString(2, dateNow);
+            ps.setString(3, dateNow);
+            ps.setString(4, accountId);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
+    public void editAccountOnlyStatus(String status, String dateNow, String accountId) throws SQLException, ClassNotFoundException {
+        try {
+            String sql = """
+                         update [dbo].[Account]
+                         set [Status] = ?, [UpdateDate] = ?
+                         where [AccountId] = ?""";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setString(2, dateNow);
+            ps.setString(3, accountId);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+}

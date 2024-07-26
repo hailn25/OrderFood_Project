@@ -56,7 +56,7 @@
                                 <script>
                                     const totalPriceElement = document.createElement('span');
                                     const totalPriceValue = parseFloat('${listOrderDetailsByAccountId[0].totalPrice}'.replace(/[^0-9.-]+/g, ""));
-                                    const formattedTotalPrice = (totalPriceValue * 10000).toLocaleString('vi-VN');
+                                    const formattedTotalPrice = (totalPriceValue).toLocaleString('vi-VN');
                                     totalPriceElement.textContent = formattedTotalPrice + " VNĐ";
                                     document.write(totalPriceElement.outerHTML);
                                 </script>

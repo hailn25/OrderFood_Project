@@ -60,21 +60,11 @@
                     </div>
                 </div>
             </div>
-            <!-- Modal Search End -->
 
-            <!-- Single Page Header start -->
-            <div class="container-fluid page-header py-5">
-                <h1 class="text-center text-white display-6">Cart</h1>
-                <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active text-white">Cart</li>
-                </ol>
-            </div>
             <!-- Single Page Header End -->
 
             <!-- Cart Page Start -->
-            <div class="container-fluid py-5">
+            <div class="container-fluid py-5" style="margin-top: 150px">
                 <div class="container py-5">
                     <div class="table-responsive">
                         <table class="table">
@@ -97,100 +87,102 @@
                                             <img src="img/${i.product.imageURL}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                         </div>
                                     </td>
-                                    <td>
-                                        <p class="mb-0 mt-4">${i.product.name}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 mt-4">
-                                            <fmt:formatNumber value="${i.price*1000}" currencySymbol="VND" maxFractionDigits="0"/>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <div class="input-group quantity mt-4" style="width: 100px;">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </div>
-                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="${i.quantity}" data-product-id="${i.product.productId}" data-price="${i.price}" data-max-quantity="10">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="mb-0 mt-4 total-price">
-                                            <fmt:formatNumber value="${i.quantity * i.price*1000}" type="currency" currencySymbol="VND" maxFractionDigits="0"/>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <form id="deleteForm${i.product.productId}" action="process" method="post">
-                                            <input type="hidden" name="id" value="${i.product.productId}"/>
-                                            <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="confirmDelete(event, 'deleteForm${i.product.productId}')">
-                                                <i class="fa fa-times text-danger"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </c:forEach>
+                            <input type="hidden" name="productId" value="${i.product.productId}" />
+                            <td>
+                                <p class="mb-0 mt-4">${i.product.name}</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">
+                                    <fmt:formatNumber value="${i.price}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ
+                                </p>
+                            </td>
+                            <td>
+                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="${i.quantity}" data-product-id="${i.product.productId}" data-price="${i.price}" data-max-quantity=${maxquantity}>
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4 total-price">
+                                    <fmt:formatNumber value="${i.quantity * i.price}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ
+                                </p>
+                            </td>
+                            <td>
+                                <form id="deleteForm${i.product.productId}" action="process" method="post">
+                                    <input type="hidden" name="id" value="${i.product.productId}"/>
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4" onclick="confirmDelete(event, 'deleteForm${i.product.productId}')">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                <div class="container mt-5">
-                    <div class="mt-5">
-                        <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Chọn Voucher</button>
-                    </div>
-                         
-                        <th scope="row"></th>
-                        <td class="py-5">
-                            <p class="mb-0 text-dark py-4">Shipping</p>
-                        </td>
-                        <td colspan="3" class="py-5">
-                            <div class="form-check text-start">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
-                                <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                            </div>
-                            <div class="form-check text-start">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
-                                <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                            </div>
-                            <div class="form-check text-start">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
-                                <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
-                            </div>
-                        
-                    </tr>
-                </div>
-
-                <div class="row g-4 justify-content-end">
-                    <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
-                        <div class="bg-light rounded">
-                            <div class="p-4">
-                                <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
-                                <c:set var="subtotal" value="0"/>
-                                <c:forEach var="i" items="${o.items}">
-                                    <c:set var="subtotal" value="${subtotal + (i.quantity * i.price*1000)}"/>
-                                </c:forEach>
-
-                                <div class="d-flex justify-content-between mb-4">
-                                    <h5 class="mb-0 me-4">Subtotal:</h5>
-                                    <span class="subtotal"><fmt:formatNumber value="${subtotal}" currencySymbol="VND" maxFractionDigits="0"/></span>
-                                </div>
-                                <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                    <h5 class="mb-0 ps-4 me-4">Total</h5>
-                                    <span class="cart-total"><fmt:formatNumber value="${subtotal}"  currencySymbol="VND" maxFractionDigits="0"/></span>
-                                </div>
-
-                                <form action="checkout" method="get">
-                                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.cart and not empty sessionScope.cart.items}">
+                        <div class="container mt-5">
+                        </div>
+                        <div class="row g-4 justify-content-between">
+                            <!-- Voucher Section -->
+                            <div class="col-md-5">
+                                <form action="showVoucher" method="get">
+                                    <div class="mt-5">
+                                        <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+                                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Sử dụng Voucher</button>
+                                    </div>
                                 </form>
                             </div>
+                            <!-- Cart Total Section -->
+                            <div class="col-md-5">
+                                <div class="bg-light rounded">
+                                    <div class="p-4">
+                                        <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                                        <c:set var="subtotal" value="0"/>
+                                        <c:forEach var="i" items="${o.items}">
+                                            <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
+                                        </c:forEach>
+                                        <c:set var="shippingFee" value="30000" />
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <h5 class="mb-0 me-4">Subtotal:</h5>
+                                            <span class="subtotal"><fmt:formatNumber value="${subtotal}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <span class="text-muted-foreground">Phí vận chuyển:</span>
+                                            <span class="text-muted-foreground formatted-shipping-fee">
+                                                <fmt:formatNumber value="${shippingFee}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ
+                                            </span>
+                                        </div>
+
+                                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                            <h5 class="mb-0 ps-4 me-4">Total</h5>
+                                            <span class="cart-total"><fmt:formatNumber value="${subtotal + shippingFee}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ</span>
+                                        </div>
+                                        <form action="checkout" method="get">
+                                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="submit">Mua Hàng</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="display: flex; justify-content: center;">
+                            <img src="img/cart.png" width="300px" height="250px" alt="Không tìm thấy ảnh"/>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
         </div>
 
@@ -207,10 +199,15 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const quantityInputs = document.querySelectorAll('.quantity-input');
+                function formatCurrency(amount) {
+                    let formatted = amount.toString().replace(/\D/g, '');
+                    formatted = formatted.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    return formatted + ' VNĐ';
+                }
 
                 function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
                     if (newQuantity < 1) {
-                        alert('Số lượng không hợp lệ');
+                        confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
                         return;
                     }
                     if (newQuantity > maxQuantity) {
@@ -243,8 +240,8 @@
                 function updatePrice(quantityInput, quantity) {
                     const pricePerItem = parseFloat(quantityInput.dataset.price);
                     const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
-                    const totalPrice = quantity * pricePerItem * 1000;
-                    totalPriceElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalPrice);
+                    const totalPrice = quantity * pricePerItem;
+                    totalPriceElement.innerText = formatCurrency(totalPrice);
                 }
 
                 function updateTotal() {
@@ -252,13 +249,17 @@
                     const rows = document.querySelectorAll('tbody > tr');
                     rows.forEach(function (row) {
                         const priceElement = row.querySelector('.total-price');
-                        total += parseFloat(priceElement.innerText.replace(/[^\d.-]/g, ''));
+                        total += parseFloat(priceElement.innerText.replace(/\D/g, ''));
                     });
+
+                    const shippingFee = 30000;
                     const subtotalElement = document.querySelector('.subtotal');
-                    subtotalElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(total);
+                    subtotalElement.innerText = formatCurrency(total);
                     const totalElement = document.querySelector('.cart-total');
-                    totalElement.innerText = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(total);
+                    totalElement.innerText = formatCurrency(total + shippingFee);
                 }
+
+
 
                 quantityInputs.forEach(function (quantityInput) {
                     const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);

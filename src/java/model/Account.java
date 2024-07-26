@@ -21,7 +21,7 @@ public class Account {
     private String address;
     private int loginWith;
     private String imageAvatar;
-    private boolean status;
+    private int status;
     private Date lastDateLogin;
     private Date createDate;
     private Date updateDate;
@@ -30,7 +30,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(int accountId, String email, String password, String name, boolean gender, String phone, String address, String imageAvatar, int loginWith, boolean status, Date lastDateLogin, Date createDate, Date updateDate, int roleId) {
+    public Account(int accountId, String email, String password, String name, boolean gender, String phone, String address, String imageAvatar, int loginWith, int status, Date lastDateLogin, Date createDate, Date updateDate, int roleId) {
         this.accountId = accountId;
         this.email = email;
         this.password = password;
@@ -119,13 +119,15 @@ public class Account {
         this.imageAvatar = imageAvatar;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
+
+    
 
     public Date getLastDateLogin() {
         return lastDateLogin;

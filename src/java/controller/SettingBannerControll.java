@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import model.Account;
 
-
 @MultipartConfig
 public class SettingBannerControll extends HttpServlet {
 

@@ -157,7 +157,7 @@
 
             <header>
                 <div class="container">
-                    <div class="row " style="background: #6A737A">
+                    <div class="row " style="background: #81C408">
                         <!-- Khung thời gian 1 -->
                         <div class="col" id="timeSlot1" onclick="window.location = 'flsale?timeFrame=1'" >
                             <span style="color: white;font-size: 30px" >10:00-13:00</span><br>
@@ -185,14 +185,12 @@
                 </div>
             </header>
             <div class="container-fluid fruite py-5">
-                <div class="container py-5">
+                <div class="container py-5">                  
                     <div class="tab-content">
                         <div id="tab-1" class="tab-pane fade show p-0 active">
                             <div class="row g-4">
                                 <div class="col-lg-12">
-                                    <div class="row g-4">
-
-
+                                    <div class="row g-4" id="product-container">
                                     <c:forEach items="${listPS}" var="p">
                                         <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
                                             <div class="rounded position-relative fruite-item">
@@ -220,195 +218,242 @@
                                                                 <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
                                                             </button>
                                                         </form>
+
                                                         <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 5px; ">
-                                                            <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                            <a href="restaurant?restaurantId=${p.restaurantId}&page=${1}">
+                                                                <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </c:forEach>
 
+                                    </c:forEach>
+                                </div>
                             </div>
-                        </div>
+                        </div>                       
                     </div>
                 </div>
             </div>
         </div>      
-    </div>
-    <jsp:include page="Footer.jsp"></jsp:include>
+
+        <jsp:include page="Footer.jsp"></jsp:include>
 
 
 
 
-    <script type="text/javascript">
-        // Biến toàn cục để lưu khung thời gian được chọn
-        var selectedTimeSlot = null;
+        <script type="text/javascript">
+            // Biến toàn cục để lưu khung thời gian được chọn
+            var selectedTimeSlot = null;
 
-        // Hàm để xử lý sự kiện nhấp chuột vào một khung thời gian
-        function getParamFromURL(paramName) {
-            var url = new URL(window.location.href);
-            return url.searchParams.get(paramName);
-        }
-        selectedTimeSlot = getParamFromURL("timeFrame");
+            // Hàm để xử lý sự kiện nhấp chuột vào một khung thời gian
+            function getParamFromURL(paramName) {
+                var url = new URL(window.location.href);
+                return url.searchParams.get(paramName);
+            }
+            selectedTimeSlot = getParamFromURL("timeFrame");
 
+            // Hàm để cập nhật trạng thái và đếm ngược
+            function updateStatusAndCountdown() {
+                var now = new Date();
+                var hour = now.getHours();
+                var countdown = new Date(now);
 
-        // Hàm để cập nhật trạng thái và đếm ngược
-        function updateStatusAndCountdown() {
-            var now = new Date();
-            var hour = now.getHours();
-            var countdown = new Date(now);
+                var timeSlots = document.querySelectorAll('.col');
+                for (var i = 0; i < timeSlots.length; i++) {
+                    timeSlots[i].classList.remove('selected');
+                }
 
-            var timeSlots = document.querySelectorAll('.col');
-            for (var i = 0; i < timeSlots.length; i++) {
-                timeSlots[i].classList.remove('selected');
+                var selectedTimeSlot = getParamFromURL("timeFrame");
+
+                var timeSlot, status;
+
+                if (hour < 10) {
+                    timeSlot = document.getElementById('timeSlot1');
+                    status = 'Sắp diễn ra';
+                    document.getElementById("status1").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                    countdown.setHours(10, 0, 0, 0); // Set the countdown time to 10:00
+                } else if (hour < 13) {
+                    timeSlot = document.getElementById('timeSlot1');
+                    document.getElementById("status1").innerHTML = 'Đang diễn ra';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    status = 'Đang diễn ra';
+                    countdown.setHours(13, 0, 0, 0); // Set the countdown time to 13:00
+                } else if (hour < 16) {
+                    timeSlot = document.getElementById('timeSlot2');
+                    status = 'Sắp diễn ra';
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Đang diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    countdown.setHours(16, 0, 0, 0); // Set the countdown time to 16:00
+                } else if (hour < 19) {
+                    timeSlot = document.getElementById('timeSlot3');
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status3").innerHTML = 'Đang diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot2').style.pointerEvents = 'none';
+                    status = 'Đang diễn ra';
+                    countdown.setHours(19, 0, 0, 0); // Set the countdown time to 19:00
+                } else if (hour < 22) {
+                    timeSlot = document.getElementById('timeSlot4');
+                    document.getElementById("status1").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status2").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status3").innerHTML = 'Đã kết thúc';
+                    document.getElementById("status4").innerHTML = 'Đang diễn ra';
+                    document.getElementById("mess").innerHTML = 'Kết thúc trong';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot2').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot3').style.pointerEvents = 'none';
+                    status = 'Đang diễn ra';
+                    countdown.setHours(22, 0, 0, 0); // Set the countdown time to 22:00
+                } else {
+                    timeSlot = document.getElementById('timeSlot1');
+                    status = 'Sắp diễn ra';
+                    document.getElementById("status1").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status2").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status3").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("status4").innerHTML = 'Sắp diễn ra';
+                    document.getElementById("mess").innerHTML = 'Diễn ra sau';
+                    document.getElementById('timeSlot1').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot2').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot3').style.pointerEvents = 'none';
+                    document.getElementById('timeSlot4').style.pointerEvents = 'none';
+                    countdown.setHours(10, 0, 0, 0); // Set the countdown time to 10:00 next day
+                    countdown.setDate(countdown.getDate() + 1);
+                }
+
+                if (selectedTimeSlot !== null) {
+                    document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
+                    timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(13, 0, 0, 0);
+                    } else if (selectedTimeSlot === '2') {
+                        countdown.setHours(16, 0, 0, 0);
+                    } else if (selectedTimeSlot === '3') {
+                        countdown.setHours(19, 0, 0, 0);
+                    } else if (selectedTimeSlot === '4') {
+                        countdown.setHours(22, 0, 0, 0);
+                    }
+                } else {
+                    timeSlot.classList.add('selected');
+                }
+
+                var itemsSale = document.querySelectorAll('.showP');
+                var hidden = document.querySelectorAll('.hideP');
+
+                if (status === 'Sắp diễn ra') {
+                    if (selectedTimeSlot === '1') {
+                        countdown.setHours(13, 0, 0, 0);
+                    } else if (selectedTimeSlot === '2') {
+                        countdown.setHours(16, 0, 0, 0);
+                    } else if (selectedTimeSlot === '3') {
+                        countdown.setHours(19, 0, 0, 0);
+                    } else if (selectedTimeSlot === '4') {
+                        countdown.setHours(22, 0, 0, 0);
+                    }
+                    for (var i = 0; i < itemsSale.length; i++) {
+                        itemsSale[i].style.display = 'none';
+                    }
+                } else {
+                    for (var i = 0; i < hidden.length; i++) {
+                        hidden[i].style.display = 'none';
+                    }
+                }
+
+                var countdownElement = document.getElementById('time');
+                var countdownTime = countdown - now;
+
+                var hours = Math.floor((countdownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((countdownTime % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((countdownTime % (1000 * 60)) / 1000);
+
+                hours = String(hours).padStart(2, '0');
+                minutes = String(minutes).padStart(2, '0');
+                seconds = String(seconds).padStart(2, '0');
+
+                countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
             }
 
-            var selectedTimeSlot = getParamFromURL("timeFrame");
+            setInterval(updateStatusAndCountdown, 1000);
 
-            var timeSlot, status;
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
 
-            if (hour < 10) {
-                timeSlot = document.getElementById('timeSlot1');
-                status = 'Sắp diễn ra';
-                document.getElementById("status1").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status2").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status3").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status4").innerHTML = 'Sắp diễn ra';
-                document.getElementById("mess").innerHTML = 'Diễn ra sau';
-            } else if (hour < 13) {
-                timeSlot = document.getElementById('timeSlot1');
-                document.getElementById("status1").innerHTML = 'Đang diễn ra';
-                document.getElementById("status2").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status3").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status4").innerHTML = 'Sắp diễn ra';
-                document.getElementById("mess").innerHTML = 'Kết thúc trong';
-                status = 'Đang diễn ra';
-            } else if (hour < 16) {
-                timeSlot = document.getElementById('timeSlot2');
-                status = 'Sắp diễn ra';
-                document.getElementById("status1").innerHTML = 'Đã kết thúc';
-                document.getElementById("status2").innerHTML = 'Đang diễn ra';
-                document.getElementById("status3").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status4").innerHTML = 'Sắp diễn ra';
-                document.getElementById("mess").innerHTML = 'Kết thúc trong';
-                document.getElementById('timeSlot1').style.pointerEvents = 'none';
-            } else if (hour < 19) {
-                timeSlot = document.getElementById('timeSlot3');
-                document.getElementById("status1").innerHTML = 'Đã kết thúc';
-                document.getElementById("status2").innerHTML = 'Đã kết thúc';
-                document.getElementById("status3").innerHTML = 'Đang diễn ra';
-                document.getElementById("status4").innerHTML = 'Sắp diễn ra';
-                document.getElementById("mess").innerHTML = 'Kết thúc trong';
-                document.getElementById('timeSlot1').style.pointerEvents = 'none';
-                document.getElementById('timeSlot2').style.pointerEvents = 'none';
-                status = 'Đang diễn ra';
-            } else if (hour < 22) {
-                timeSlot = document.getElementById('timeSlot4');
-                document.getElementById("status1").innerHTML = 'Đã kết thúc';
-                document.getElementById("status2").innerHTML = 'Đã kết thúc';
-                document.getElementById("status3").innerHTML = 'Đã kết thúc';
-                document.getElementById("status4").innerHTML = 'Đang diễn ra';
-                document.getElementById("mess").innerHTML = 'Kết thúc trong';
-                document.getElementById('timeSlot1').style.pointerEvents = 'none';
-                document.getElementById('timeSlot2').style.pointerEvents = 'none';
-                document.getElementById('timeSlot3').style.pointerEvents = 'none';
-                status = 'Đang diễn ra';
-            } else {
-                timeSlot = document.getElementById('timeSlot1');
-                status = 'Sắp diễn ra';
-                document.getElementById("status1").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status2").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status3").innerHTML = 'Sắp diễn ra';
-                document.getElementById("status4").innerHTML = 'Sắp diễn ra';
-                document.getElementById("mess").innerHTML = 'Diễn ra sau';
-                document.getElementById('timeSlot1').style.pointerEvents = 'none';
-                document.getElementById('timeSlot2').style.pointerEvents = 'none';
-                document.getElementById('timeSlot3').style.pointerEvents = 'none';
-                document.getElementById('timeSlot4').style.pointerEvents = 'none';
-            }
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Extract the productId from the element's id
+                    const discount50Button = document.getElementById('discount-50-' + priceId);
+                    const discount25Button = document.getElementById('discount-25-' + priceId);
+                    const originalPrice = parseFloat(priceElement.dataset.originalPrice);
 
-            if (selectedTimeSlot !== null) {
-                document.getElementById('timeSlot' + selectedTimeSlot).classList.add('selected');
-                timeSlot = document.getElementById('timeSlot' + selectedTimeSlot);
-                if (selectedTimeSlot === '1') {
-                    countdown.setHours(13, 0, 0, 0);
-                } else if (selectedTimeSlot === '2') {
-                    countdown.setHours(16, 0, 0, 0);
-                } else if (selectedTimeSlot === '3') {
-                    countdown.setHours(19, 0, 0, 0);
-                } else if (selectedTimeSlot === '4') {
-                    countdown.setHours(22, 0, 0, 0);
-                }
-            } else {
-                timeSlot.classList.add('selected');
-            }
+                    discount50Button.addEventListener('click', function () {
+                        const discountedPrice = originalPrice * 0.5;
+                        priceElement.innerText = discountedPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                    });
 
-            var itemsSale = document.querySelectorAll('.showP');
-            var hidden = document.querySelectorAll('.hideP');
-
-            if (status === 'Sắp diễn ra') {
-                if (selectedTimeSlot === '1') {
-                    countdown.setHours(13, 0, 0, 0);
-                } else if (selectedTimeSlot === '2') {
-                    countdown.setHours(16, 0, 0, 0);
-                } else if (selectedTimeSlot === '3') {
-                    countdown.setHours(19, 0, 0, 0);
-                } else if (selectedTimeSlot === '4') {
-                    countdown.setHours(22, 0, 0, 0);
-                }
-                for (var i = 0; i < itemsSale.length; i++) {
-                    itemsSale[i].style.display = 'none';
-                }
-            } else {
-                for (var i = 0; i < hidden.length; i++) {
-                    hidden[i].style.display = 'none';
-                }
-            }
-
-            var countdownElement = document.getElementById('time');
-            var countdownTime = countdown - now;
-
-            var hours = Math.floor((countdownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((countdownTime % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((countdownTime % (1000 * 60)) / 1000);
-
-            hours = String(hours).padStart(2, '0');
-            minutes = String(minutes).padStart(2, '0');
-            seconds = String(seconds).padStart(2, '0');
-
-            countdownElement.textContent = hours + ": " + minutes + ": " + seconds;
-        }
-
-        setInterval(updateStatusAndCountdown, 1000);
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const prices = document.querySelectorAll('[id^="price-"]');
-
-            prices.forEach(priceElement => {
-                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
-
-                // Định dạng giá thành VND
-                const formattedPrice = (priceValue * 1000).toLocaleString('vi-VN');
-
-                // Cập nhật nội dung của thẻ h6
-                priceElement.textContent = formattedPrice + " VNĐ";
+                    discount25Button.addEventListener('click', function () {
+                        const discountedPrice = originalPrice * 0.75;
+                        priceElement.innerText = discountedPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                    });
+                });
             });
-        });
-    </script>
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery.nicescroll.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.countdown.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/mixitup.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
-</body>
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
+
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue).toLocaleString('vi-VN');
+
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
+
+        </script>
+        <script type="text/javascript">
+            function sendRequestToServlet() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'automatic', true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log('Servlet response: ' + xhr.responseText);
+                    }
+                };
+                xhr.send();
+            }
+
+// Gọi hàm sendRequestToServlet ngay khi trang được tải
+            window.onload = function () {
+                sendRequestToServlet();
+            };
+        </script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.nicescroll.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/jquery.countdown.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 </html>

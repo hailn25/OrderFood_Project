@@ -115,7 +115,7 @@
     </head>
     <body>
         <div class="container">
-             <c:choose>
+            <c:choose>
                 <c:when test="${sessionScope.account.roleId == 2}">
                     <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #81C408;">
                         <h1 class="navbar-brand mb-0 h4">Đổi mật khẩu</h1>
@@ -163,15 +163,15 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                            <a class="nav-link px-3" href="profile">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đổi mật khẩu</span>
+                                                <span>Thông tin tài khoản</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="#">
+                                            <a class="nav-link px-3" href="voucherList?accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Mã giảm giá</span>
                                             </a>
                                         </li>                                 
                                         <li class="nav-item">
@@ -191,21 +191,21 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                            <a class="nav-link px-3" href="profile">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đổi mật khẩu</span>
+                                                <span>Thông tin tài khoản</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="SettingBanner.jsp">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
+                                                <span>Thiết lập quảng cáo</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Thiết lập mã giảm giá</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -219,9 +219,9 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
+                                            <a class="nav-link px-3" href="profile">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đổi mật khẩu</span>
+                                                <span>Thông tin tài khoản</span>
                                             </a>
                                         </li>                                  
                                     </ul>
@@ -316,3 +316,5 @@
 
     </body>
 </html>
+
+

@@ -58,107 +58,154 @@
                 color: white;
             }
 
+            .btn-blue {
+                background-color: #74C0FC;
+                color: white;
+            }
+
+            .btn-blue:hover {
+                background-color: #58A6FF;
+                color: white;
+            }
+
+            .btn-grey {
+                background-color: #6c757d;
+                color: white;
+            }
+
+            .btn-grey:hover {
+                background-color: #5a6268;
+                color: white;
+            }
+
+            .status-confirmed {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 80px;
+                border-radius: 8px;
+                background-color: #ADFF2F;
+                color: white;
+            }
+            .status-rejected {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 80px;
+                border-radius: 8px;
+                background-color: #FF5557;
+                color: white;
+            }
+            .status-other {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 35px;
+                width: 150px;
+                border-radius: 8px;
+                background-color: #F6DB67;
+                color: white;
+            }
+
         </style>
     </head>
 
     <body id="reportsPage" style="background-color: #F6F6F6">
 
-        <nav class="navbar navbar-expand-xl">
-            <div class="container h-100">
-                <a class="navbar-brand" href="ManagerStaff.jsp">
-                    <c:if test="${not empty sessionScope.account.name}">
-                        <h1 class="tm-site-title mb-0">Staff: <br><b>${sessionScope.account.name}</b></h1>
-                        </c:if>
+         <nav class="navbar navbar-expand-xl">
+                <div class="container h-100">
 
 
-                </a>
-                <button
-                    class="navbar-toggler ml-auto mr-0"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    >
-                    <i class="fas fa-bars tm-nav-icon"></i>
-                </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto h-100">
+                            <c:if test="${sessionScope.account.roleId == 5}">
+                                <li class="nav-item">
+                                    <a class="nav-link " href="ManagerStaff.jsp">
+                                        <i class="fas fa-home"></i> Trang chủ
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 5}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerCategory">
+                                        <i class="fas fa-bookmark"></i> Loại sản phẩm
+                                    </a>
+                                </li>
+                            </c:if>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto h-100">
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerBlog">
+                                        <i class="far fa-file-alt"></i> Quản lý blog
+                                    </a>
+                                </li>
+                            </c:if>
 
-                        <c:if test="${sessionScope.account.roleId == 5}">
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="managerService">
+                                        <i class="fas fa-sliders-h"></i> Dịch vụ 
+                                    </a>
+                                </li>
+                            </c:if>
+
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerReport">
+                                        <i class="far fa-comment-dots"></i> Quản lý báo cáo
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link " href="managerProductFlashSale">
+                                        <i class="far fa-clock"></i> Flash Sale
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link" href="managerVoucher">
+                                        <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:if test="${sessionScope.account.roleId == 5}">                          
+                                <li class="nav-item">
+                                    <a class="nav-link" href="loadListRequestVoucher">
+                                        <i class="fas fa-tasks"></i> Yêu cầu thêm voucher
+                                    </a>
+                                </li>
+                            </c:if>
+                        </ul>
+                        <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="ManagerStaff.jsp">
-                                    <i class="fas fa-home"></i> Trang chủ
-                                    <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                        </c:if>
+                                <c:if test = "${sessionScope.account == null}"> 
+                                    <a class="nav-link d-block" href="Login.jsp">
+                                        <b>Đăng nhập</b>
+                                    </a>
 
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerBlog">
-                                    <i class="far fa-file-alt"></i> Quản lý blog
-                                </a>
+                                </c:if> 
+                                <c:if test = "${sessionScope.account != null}"> 
+                                    <a class="nav-link d-block" href="logout">
+                                        <b>Đăng xuất</b>
+                                    </a>
+                                </c:if> 
                             </li>
-                        </c:if>
-
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link active" href="managerService">
-                                    <i class="fas fa-sliders-h"></i> Dịch vụ 
-                                </a>
-                            </li>
-                        </c:if>
-
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerReport">
-                                    <i class="far fa-comment-dots"></i> Quản lý báo cáo
-                                </a>
-                            </li>
-                        </c:if>
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link " href="managerProductFlashSale">
-                                    <i class="far fa-clock"></i> Flash Sale
-                                </a>
-                            </li>
-                        </c:if>
-                        <c:if test="${sessionScope.account.roleId == 5}">                          
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerVoucher">
-                                    <i class="fas fa-ticket-alt"></i> Quản lý mã giảm giá
-                                </a>
-                            </li>
-                        </c:if>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <c:if test = "${sessionScope.account == null}"> 
-                                <a class="nav-link d-block" href="Login.jsp">
-                                    <b>Đăng nhập</b>
-                                </a>
-
-                            </c:if> 
-                            <c:if test = "${sessionScope.account != null}"> 
-                                <a class="nav-link d-block" href="logout">
-                                    <b>Đăng xuất</b>
-                                </a>
-                            </c:if> 
-                        </li>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
         <div class="container">
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Yêu cầu quảng cáo từ <b>Nhà hàng</b></h2>
+                            <h2>Yêu cầu quảng cáo từ <b>Nhà Hàng</b></h2>
                         </div>
                     </div>
                 </div>
@@ -174,20 +221,28 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${listSlider}" var="s">
-                            <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
-                                <tr>
-                                    <td>${s.sliderId}</td>
-                                    <td class="title" data-title>${s.sliderTitle}</td>
-                                    <td>
-                                        <img src="img/${s.imageURL}" alt="Không thể tải ảnh">
-                                    </td>
-                                    <td>${s.statusName}</td>
-                                    <td>
-                                        <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                        <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
-                                    </td>
-                                </tr>
-                            </c:if>
+                            <tr>
+                                <td>${s.sliderId}</td>
+                                <td class="title" data-title>${s.sliderTitle}</td>
+                                <td>
+                                    <img src="img/${s.imageURL}" style="object-fit: cover;" alt="Không thể tải ảnh">
+                                </td>
+                                <td>
+                                    <p class="${s.statusName == 'Xác nhận' ? 'status-confirmed' : s.statusName == 'Từ chối' ? 'status-rejected' : 'status-other'}">
+                                        ${s.statusName}
+                                    </p>
+                                </td>
+                                <td>
+                                    <a href="loadSlider?sliderId=${s.sliderId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                        <c:if test="${s.statusName.equals('Đang chờ xác nhận')}">
+                                        <a href="changeStatusSlider?changeStatus=${3}&sliderId=${s.sliderId}&accountId=${s.updateBy}&updateDate=${s.updateDate}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="changeStatusSlider?changeStatus=${2}&sliderId=${s.sliderId}&accountId=${s.updateBy}&updateDate=${s.updateDate}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                        </c:if>
+                                        <c:if test="${s.statusName.equals('Xác nhận')}">
+                                        <a href="changeStatusSlider?changeStatus=${4}&sliderId=${s.sliderId}&accountId=${s.updateBy}&updateDate=${s.updateDate}" class="btn btn-grey" title="Xoá slider"><i class="fas fa-trash"></i></a>
+                                        </c:if>
+                                </td>
+                            </tr>
                         </c:forEach>
                     </tbody>
                 </table>
@@ -214,5 +269,7 @@
         </script>
     </body>
 </html>
+
+
 
 

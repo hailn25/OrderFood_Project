@@ -9,17 +9,20 @@ package model;
  * @author ADMIN
  */
 public class Item {
+
     private Product product;
     private int quantity;
     private double price;
+    private double discountedPrice;
 
     public Item() {
     }
 
-    public Item(Product product, int quantity, double price) {
+    public Item(Product product, int quantity, double price, double discountedPrice) {
         this.product = product;
         this.quantity = quantity;
         this.price = price;
+        this.discountedPrice = discountedPrice;
     }
 
     public Product getProduct() {
@@ -45,5 +48,19 @@ public class Item {
     public void setPrice(double price) {
         this.price = price;
     }
-    
+
+    public double getDiscountedPrice() {
+        return discountedPrice;
+    }
+
+    public void setDiscountedPrice(double discountedPrice) {
+        this.discountedPrice = discountedPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" + "product=" + product + ", quantity=" + quantity + ", price=" + price + ", discountedPrice=" + discountedPrice + '}';
+    }
+
+  
 }

@@ -4,9 +4,7 @@
  */
 package controller;
 
-import dao.OrderDAO;
-import dao.ProductDAO;
-import dao.RestaurantDAO;
+import dao.MessageDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,20 +12,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Account;
-import model.OrderDetailDTO_Huyvq;
-import model.Product;
+import model.MessageUser;
+import model.RestaurantName;
 
 /**
  *
- * @author Vu Huy
+ * @author quoch
  */
-@WebServlet(name = "managerOrderOfCustomer_5", urlPatterns = {"/managerOrderOfCustomer_5"})
-public class ManagerOrderOfCustomerControl_5 extends HttpServlet {
+@WebServlet(name = "MessageUserControl", urlPatterns = {"/messageUser"})
+public class MessageUserControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,22 +34,26 @@ public class ManagerOrderOfCustomerControl_5 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            HttpSession session = request.getSession();
-            Account a = (Account) session.getAttribute("account");
-            int accountId = a.getAccountId();
-            RestaurantDAO dao2 = new RestaurantDAO();
-            int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
-
-            OrderDAO dao = new OrderDAO();
-
-            ArrayList<OrderDetailDTO_Huyvq> listO = dao.getOrderStatusByRestaurantId_5(restaurantId);
-
-            request.setAttribute("listO", listO);
-            request.getRequestDispatcher("ManagerOrderOfCustomer.jsp").forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ManagerOrderOfCustomerControl_5.class.getName()).log(Level.SEVERE, null, ex);
+        response.setContentType("text/html;charset=UTF-8");
+        MessageDAO messsageDAO = new MessageDAO();
+        int userId = 0;
+        int restaurantStr = 0;
+        if(request.getParameter("userId") != null && request.getParameter("restaurantId") != null){
+             userId = Integer.parseInt(request.getParameter("userId"));
+             restaurantStr = Integer.parseInt(request.getParameter("restaurantId"));
         }
+        
+        request.setAttribute("error", "Chào mừng bạn đến với tin nhắn!");
+        request.setAttribute("userId", userId);
+        int restaurantId = messsageDAO.getAccountIdByRestaurantId(restaurantStr);
+        request.setAttribute("restaurantId", restaurantId);
+
+        ArrayList<RestaurantName> listRestaurantName = messsageDAO.getListRestaurantName(userId);
+        request.setAttribute("listRestaurantName", listRestaurantName);
+        ArrayList<MessageUser> listMessageUser = messsageDAO.getMessageUser(userId, restaurantId);
+        request.setAttribute("listMessageUser", listMessageUser);
+
+        request.getRequestDispatcher("MessageUser.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -98,3 +96,5 @@ public class ManagerOrderOfCustomerControl_5 extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

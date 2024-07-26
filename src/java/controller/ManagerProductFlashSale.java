@@ -39,12 +39,14 @@ public class ManagerProductFlashSale extends HttpServlet {
     throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         ProductSaleDAO dao = new ProductSaleDAO();
-        List<ProductSaleDTO1> listF = dao.ListProductFlashSale();
+        String date = request.getParameter("date");
+        List<ProductSaleDTO1> listF = dao.ListProductFlashSale(date);
         request.setAttribute("listF", listF);
         request.getRequestDispatcher("ManagerFlashSale.jsp").forward(request, response);
         
         
     } 
+   
     
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

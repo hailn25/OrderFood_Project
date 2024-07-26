@@ -47,10 +47,14 @@ public class EditAccountControl extends HttpServlet {
             String phone = request.getParameter("phone");
             String address = request.getParameter("address");
 
-            if (oldRoleId.compareTo(roleId) != 0 || oldStatus.compareTo(oldStatus) != 0) {
-                LocalDate updateDate = LocalDate.now();
+//            if (oldRoleId.compareTo(roleId) != 0 || oldStatus.compareTo(oldStatus) != 0) {
+//                LocalDate dateNow = LocalDate.now();
+//                AccountDAO dao = new AccountDAO();
+//                dao.editAccountR(roleId, status, dateNow.toString(), accountId);
+            if (oldRoleId.compareTo(roleId) != 0) {
+                LocalDate dateNow = LocalDate.now();
                 AccountDAO dao = new AccountDAO();
-                dao.editAccountR(roleId, status, updateDate.toString(), accountId);
+                dao.editAccountOnlyRole(roleId, dateNow.toString(), accountId);
 
                 if (roleId.compareTo("4") == 0) {
                     RestaurantDAO dao1 = new RestaurantDAO();
@@ -62,6 +66,20 @@ public class EditAccountControl extends HttpServlet {
                 }
                 request.getRequestDispatcher("managerAccount").forward(request, response);
 
+            } else if (oldStatus.compareTo(status) != 0) {
+                LocalDate dateNow = LocalDate.now();
+                AccountDAO dao = new AccountDAO();
+                dao.editAccountOnlyStatus(status, dateNow.toString(), accountId);
+
+                if (roleId.compareTo("4") == 0) {
+                    RestaurantDAO dao1 = new RestaurantDAO();
+                    dao1.insertRestaurant(name, email, phone, address, accountId);
+                }
+                if (roleId.compareTo("3") == 0) {
+                    ShipperDAO dao2 = new ShipperDAO();
+                    dao2.insertShipper(name, phone, accountId);
+                }
+                request.getRequestDispatcher("managerAccount").forward(request, response);
             } else {
                 AccountDAO dao = new AccountDAO();
                 dao.editAccount(roleId, status, accountId);

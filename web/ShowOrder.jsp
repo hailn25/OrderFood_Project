@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,6 +14,8 @@
         <link rel="stylesheet" href="css/bootstrap.min_1.css">
         <link rel="stylesheet" href="css/templatemo-style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
         <style>
             body {
@@ -114,23 +117,24 @@
     <body>
         <div class="header">
             <div class="button-container">
-                <a href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}" 
-                   class="button-link ${param.orderStatusId == '1' ? 'active' : ''}">
-                    Chờ xác nhận
+                <a href="orderHistory?orderStatusId=1,6&accountId=${sessionScope.account.accountId}" 
+                   class="button-link ${param.orderStatusId == '1,6' ? 'active' : ''}">
+                    <i class="fa fa-times-circle"></i> Chờ xác nhận
                 </a>
                 <a href="orderHistory?orderStatusId=2&accountId=${sessionScope.account.accountId}" 
                    class="button-link ${param.orderStatusId == '2' ? 'active' : ''}">
-                    Đang giao hàng
+                    <i class="fa fa-truck"></i> Đang giao hàng
                 </a>
                 <a href="orderHistory?orderStatusId=3&accountId=${sessionScope.account.accountId}" 
                    class="button-link ${param.orderStatusId == '3' ? 'active' : ''}">
-                    Đã giao
+                    <i class="fa fa-check-circle"></i> Đã giao
                 </a>
                 <a href="orderHistory?orderStatusId=4,8&accountId=${sessionScope.account.accountId}" 
                    class="button-link ${param.orderStatusId == '4,8' ? 'active' : ''}">
-                    Đã huỷ
+                    <i class="fa fa-times-circle"></i> Đã huỷ
                 </a>
             </div>
+
             <nav>
                 <a href="home">Home</a>
                 <a href="profile">Profile</a>
@@ -156,13 +160,13 @@
                         <td>${order.accountName}</td>
                         <td>${order.phone}</td>
                         <td>${order.address}</td> 
-                        <td>${order.createDate}</td>
+                        <td><fmt:formatDate value="${order.createDate}" pattern="dd/MM/yyyy" /></td>
                         <td>${order.status}</td>
                         <td><a href="listOrderProduct?action=view&oid=${order.orderId}">Xem</a></td>
                         <td>
                             <c:choose>
-                                <c:when test="${order.orderStatusId == 1}">
-                                    <form action="orderHistory">
+                                <c:when test="${order.orderStatusId == 1 || order.orderStatusId == 6}">
+                                    <form action="orderHistory" method="post" onsubmit="return confirmCancel(this)">
                                         <input type="hidden" name="cancelOrder" value="true">
                                         <input type="hidden" name="orderId" value="${order.orderId}">
                                         <button type="submit" class="cancel-button">Huỷ</button>
@@ -174,27 +178,40 @@
                 </c:forEach>
             </tbody>
         </table>
-
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="jquery-ui-datepicker/jquery-ui.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script>
-            function formatVND(value) {
-                return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(value * 1000);
-            }
+                                        function confirmCancel(form) {
+                                            var reason = prompt("Vui lòng ghi lý do huỷ đơn hàng:");
+                                            if (reason != null && reason.trim() != "") {
+                                                var reasonInput = document.createElement("input");
+                                                reasonInput.type = "hidden";
+                                                reasonInput.name = "cancelReason";
+                                                reasonInput.value = reason;
+                                                form.appendChild(reasonInput);
+                                                return true;
+                                            }
+                                            return false;
+                                        }
 
-            function formatAll() {
-                document.querySelectorAll('.totalMoney').forEach(function (element) {
-                    let value = parseFloat(element.textContent);
-                    element.textContent = formatVND(value);
-                });
-                document.querySelectorAll('.price').forEach(function (element) {
-                    let value = parseFloat(element.textContent);
-                    element.textContent = formatVND(value);
-                });
-            }
+                                        function formatVND(value) {
+                                            return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(value * 1000);
+                                        }
 
-            window.onload = formatAll;
+                                        function formatAll() {
+                                            document.querySelectorAll('.totalMoney').forEach(function (element) {
+                                                let value = parseFloat(element.textContent);
+                                                element.textContent = formatVND(value);
+                                            });
+                                            document.querySelectorAll('.price').forEach(function (element) {
+                                                let value = parseFloat(element.textContent);
+                                                element.textContent = formatVND(value);
+                                            });
+                                        }
+
+                                        window.onload = formatAll;
         </script>
     </body>
 </html>
+

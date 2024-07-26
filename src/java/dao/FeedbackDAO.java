@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -123,8 +122,6 @@ public class FeedbackDAO {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         FeedbackDAO dao = new FeedbackDAO();
-        //dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
-        //dao.insertReport("huhuhu", "hihi", "2023-04-01", "6", "1", "1");
-        
+        dao.insertFeedback("5", "ngon", "anh3ae.jpg", "6", "2", "2023-04-01");
     }
 }

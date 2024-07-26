@@ -4,7 +4,6 @@
  */
 package controller;
 
-import dal.DBContext;
 import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,21 +35,10 @@ public class DeleteAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            response.setContentType("text/html;charset=UTF-8");
-            String aid = request.getParameter("aid");
-            String status = request.getParameter("status");
-            LocalDate updateDate = LocalDate.now();
-            
-            if (status.compareTo("false") == 0) {
-                AccountDAO dao = new AccountDAO();
-                dao.unbanAccount(updateDate.toString(), aid);
-                response.sendRedirect("managerAccount");
-            } else {
-                AccountDAO dao = new AccountDAO();
-                dao.banAccount(updateDate.toString(), aid);
-                response.sendRedirect("managerAccount");
-            }
-
+            String accountId = request.getParameter("aid");
+            AccountDAO dao = new AccountDAO();
+            dao.deleteAccount(accountId);
+            response.sendRedirect("managerAccount");
         } catch (SQLException ex) {
             Logger.getLogger(DeleteAccountControl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

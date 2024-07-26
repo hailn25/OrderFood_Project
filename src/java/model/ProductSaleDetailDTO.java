@@ -17,6 +17,7 @@ public class ProductSaleDetailDTO {
     private double discount;
     private double salePrice;
     private double price;
+    
     public ProductSaleDetailDTO() {
     }
 
@@ -88,6 +89,14 @@ public class ProductSaleDetailDTO {
 
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override

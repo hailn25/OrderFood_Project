@@ -41,17 +41,22 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
         SliderDAO sliderDAO = new SliderDAO();
         
         List<ProductHome> list = dao.getAllProduct();
         List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
+        List<ProductHome> listBestSellerProduct  = dao.getAllOSTProduct();
+        List<ProductHome> listProduct = dao.getProductHome();
         ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
+        ArrayList<SliderDTO> newSlider = new ArrayList<>();
+        for (SliderDTO s1 : listSlider) {
+            if(sliderDAO.checkBanAccountByRestaurantId(s1.getUpdateBy()) == 1){
+                newSlider.add(s1);
+            }
+        }
         ArrayList<SliderDTO> listSliderDot = new ArrayList<>();
         
-        for (SliderDTO s : listSlider) {
+        for (SliderDTO s : newSlider) {
             if (s.getStatusName().equals("Xác nhận")) {
                 listSliderDot.add(s);
             }
@@ -59,9 +64,9 @@ public class HomeServlet extends HttpServlet {
         
         request.setAttribute("listP", list);
         request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listV", listProductP);
+        request.setAttribute("listV", listProduct);
         request.setAttribute("listB", listBestSellerProduct);
-        request.setAttribute("listSlider", listSlider);
+        request.setAttribute("listSlider", newSlider);
         request.setAttribute("listSliderDot", listSliderDot);
         
         request.getRequestDispatcher("Home.jsp").forward(request, response);
@@ -107,3 +112,6 @@ public class HomeServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
+

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -56,6 +56,13 @@
                                     </a>
                                 </li>
                             </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="Profile.jsp">
+                                        <i class="far fa-user"></i> Tài khoản
+                                    </a>
+                                </li>
+                            </c:if>
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
@@ -92,10 +99,11 @@
                             <th>Họ và tên</th>
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
-                            <th>Ghi chú</th>
                             <th>Ngày đặt</th>
-                            <th>Tổng tiền </th>
+<!--                            <th>Tổng tiền </th>-->
                             <th>Trạng thái đơn hàng </th>
+                            <th>Lý do</th>
+                            <th>Thời gian huỷ </th>
                             <th>Hoạt Động </th>
 
                         </tr>
@@ -105,21 +113,15 @@
                             <tr>
                                 <td>${o.orderId}</td>
                                 <td>${o.name}</td>
-
                                 <td>${o.phone}</td>
                                 <td>${o.address}</td>
-                                <td>${o.note}</td>
-                                <td>${o.createDate}</td>
-                                <td>${o.totalMoney}</td>
+                                <td><fmt:formatDate value="${o.createDate}" pattern="dd-MM-yyyy" /></td>
+<!--                                <td>${o.totalMoney}</td>-->
+                                <td>${o.status} </td>
+                                <td>${o.issueDescription} </td>
+                                <td><fmt:formatDate value="${o.issueDate}" pattern="dd-MM-yyyy" /></td>
                                 <td>
-                                    ${o.status}
-
-                                </td>
-
-                                <td>
-                                   
                                     <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
-
                                 </td>
 
                             </tr>

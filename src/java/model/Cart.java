@@ -32,7 +32,13 @@ public class Cart {
         }
         return null;
     }
-
+    public List<Integer> getAllProductIdOfCart () {
+        List<Integer> list = new ArrayList<Integer>();
+         for (Item i : items) {
+           list.add(i.getProduct().getProductId());
+        }
+        return list;
+    }
     public int getQuantityById(int id) {
         return getItemById(id).getQuantity();
     }
@@ -81,3 +87,5 @@ public class Cart {
 
     
 }
+
+

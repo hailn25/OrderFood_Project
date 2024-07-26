@@ -20,12 +20,12 @@ public class Voucher {
     private int status;
     private float discount;
     private int voucherCategoryId;
-    private int restauranId;
+    private int restaurantId;
 
     public Voucher() {
     }
 
-    public Voucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId, int restauranId) {
+    public Voucher(int voucherId, String voucherName, String description, int quantity, Date releaseDate, Date finishDate, int status, float discount, int voucherCategoryId, int restaurantId) {
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.description = description;
@@ -35,7 +35,7 @@ public class Voucher {
         this.status = status;
         this.discount = discount;
         this.voucherCategoryId = voucherCategoryId;
-        this.restauranId = restauranId;
+        this.restaurantId = restaurantId;
     }
 
     public int getVoucherId() {
@@ -110,18 +110,19 @@ public class Voucher {
         this.voucherCategoryId = voucherCategoryId;
     }
 
-    public int getRestauranId() {
-        return restauranId;
+    public int getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestauranId(int restauranId) {
-        this.restauranId = restauranId;
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     @Override
     public String toString() {
-        return "Voucher{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + ", restauranId=" + restauranId + '}';
+        return "Voucher{" + "voucherId=" + voucherId + ", voucherName=" + voucherName + ", description=" + description + ", quantity=" + quantity + ", releaseDate=" + releaseDate + ", finishDate=" + finishDate + ", status=" + status + ", discount=" + discount + ", voucherCategoryId=" + voucherCategoryId + ", restaurantId=" + restaurantId + '}';
     }
 
-    
 }
+
+

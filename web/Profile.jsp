@@ -180,11 +180,11 @@
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="voucherList?accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Mã giảm giá</span>
                                             </a>
                                         </li>                                 
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
+                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1,6&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Đơn hàng</span>
                                             </a>
@@ -194,7 +194,7 @@
                                 <c:when test="${sessionScope.account.roleId == 4}">
                                     <ul class="nav">
                                         <li class="nav-item">
-                                            <a class="nav-link px-3 active" href="revenueRestaurant">
+                                            <a class="nav-link px-3 active" href="HomeOfRestaurant.jsp">
                                                 <i class="fa fa-fw fa-bar-chart mr-1"></i>
                                                 <span>Trang chủ</span>
                                             </a>
@@ -208,13 +208,13 @@
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="SettingBanner.jsp">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
+                                                <span>Thiết lập quảng cáo</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Thiết lập mã giảm giá</span>
                                             </a>
                                         </li>
                                     </ul>

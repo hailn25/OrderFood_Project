@@ -5,6 +5,7 @@
 package controller;
 
 import dao.OrderDAO;
+import dao.ShipperDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -36,7 +37,7 @@ public class ManagerShipperActions extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
@@ -51,11 +52,13 @@ public class ManagerShipperActions extends HttpServlet {
         switch (action) {
             case "accept":
                 orderDAO.updateOrderStatus(orderId, 2);
-               int acc =   account.getAccountId();
-               orderDAO.insertShipper(1, orderId);
+                int acc = account.getAccountId();
+                ShipperDAO shipper = new ShipperDAO();
+                int shipperId = shipper.getShipperId(acc);
+                orderDAO.insertShipper(shipperId, orderId);
                 break;
             case "refuse":
-                orderDAO.updateOrderStatus(orderId, 5);
+                request.getRequestDispatcher("cancelOrderForm").forward(request, response);
                 break;
             case "finish":
                 orderDAO.updateOrderStatus(orderId, 3);
@@ -63,11 +66,11 @@ public class ManagerShipperActions extends HttpServlet {
                 request.getRequestDispatcher("managerShipperSuccess").forward(request, response);
                 return;
             default:
-               
+
                 break;
         }
 
-        ArrayList<OrderDTO> listOrder = orderDAO.getAllOrder(1);
+        ArrayList<OrderDTO> listOrder = orderDAO.getAllOrder(orderId);
         request.setAttribute("list", listOrder);
         request.getRequestDispatcher("managerShipper").forward(request, response);
 

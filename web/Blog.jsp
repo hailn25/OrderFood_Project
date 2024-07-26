@@ -121,15 +121,6 @@
 
                 <!-- Sidebar Start -->
                 <div class="col-lg-4">
-                    <!-- Search Form Start -->
-                    <div class="mb-5">
-                        <div class="input-group">
-                            <input type="text" class="form-control p-3" placeholder="Từ khoá">
-                            <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
-                        </div>
-                    </div>
-                    <!-- Search Form End -->
-
                     <!-- Recent Post Start -->
                     <div class="mb-5">
                         <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Bài viết gần đây</h3>
@@ -184,3 +175,5 @@
     </body>
 
 </html>
+
+

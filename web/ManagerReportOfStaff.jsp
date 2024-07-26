@@ -11,7 +11,7 @@
 
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
 
-
+        <title>4FOODHD</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -262,3 +262,6 @@
 
     </body>
 </html>
+
+
+

@@ -21,11 +21,12 @@ public class RestaurantDTO {
     private String email;
     private String phone;
     private int quantityOfProduct;
+    private int status;
 
     public RestaurantDTO() {
     }
 
-    public RestaurantDTO(int restaurantId, String name, String address, double rateStar, String imageAvatar, Date createDate, String email, String phone, int quantityOfProduct) {
+    public RestaurantDTO(int restaurantId, String name, String address, double rateStar, String imageAvatar, Date createDate, String email, String phone, int quantityOfProduct, int status) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.address = address;
@@ -35,15 +36,18 @@ public class RestaurantDTO {
         this.email = email;
         this.phone = phone;
         this.quantityOfProduct = quantityOfProduct;
+        this.status = status;
     }
 
-    public RestaurantDTO(int restaurantId, String name, String address, double rateStar, String imageAvatar) {
+    public RestaurantDTO(int restaurantId, String name, String address, double rateStar, String imageAvatar, int status) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.address = address;
         this.rateStar = rateStar;
         this.imageAvatar = imageAvatar;
+        this.status = status;
     }
+    
     public int getRestaurantId() {
         return restaurantId;
     }
@@ -116,11 +120,22 @@ public class RestaurantDTO {
         this.quantityOfProduct = quantityOfProduct;
     }
 
-    
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "RestaurantDTO{" + "restaurantId=" + restaurantId + ", name=" + name + ", address=" + address + ", rateStar=" + rateStar + ", imageAvatar=" + imageAvatar + ", createDate=" + createDate + ", email=" + email + ", phone=" + phone + ", quantityOfProduct=" + quantityOfProduct + '}';
+        return "RestaurantDTO{" + "restaurantId=" + restaurantId + ", name=" + name + ", address=" + address + ", rateStar=" + rateStar + ", imageAvatar=" + imageAvatar + ", createDate=" + createDate + ", email=" + email + ", phone=" + phone + ", quantityOfProduct=" + quantityOfProduct + ", status=" + status + '}';
     }
     
     
+    
+    
 }
+
+

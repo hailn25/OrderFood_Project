@@ -4,9 +4,10 @@
  */
 package controller;
 
-import dao.OrderDAO;
 import dao.ProductDAO;
+import dao.ProductSaleDAO;
 import dao.RestaurantDAO;
+import dao.VoucherDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,19 +16,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
-import model.OrderDetailDTO_Huyvq;
-import model.Product;
 
 /**
  *
  * @author Vu Huy
  */
-@WebServlet(name = "managerOrderOfCustomer_1", urlPatterns = {"/managerOrderOfCustomer_1"})
-public class ManagerOrderOfCustomerControl_1 extends HttpServlet {
+@WebServlet(name = "ViewDetailFlashSaleProductControl", urlPatterns = {"/viewDetailFlashSaleProduct"})
+public class ViewDetailFlashSaleProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,20 +39,24 @@ public class ManagerOrderOfCustomerControl_1 extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
             Account a = (Account) session.getAttribute("account");
             int accountId = a.getAccountId();
             RestaurantDAO dao2 = new RestaurantDAO();
             int restaurantId = dao2.getRestaurantIdByAccountId(accountId);
-
-            OrderDAO dao = new OrderDAO();
-
-            ArrayList<OrderDetailDTO_Huyvq> listO = dao.getOrderStatusByRestaurantId_1(restaurantId);
-
-            request.setAttribute("listO", listO);
-            request.getRequestDispatcher("ManagerOrderOfCustomer.jsp").forward(request, response);
+            
+            ProductSaleDAO dao = new ProductSaleDAO();
+            ProductDAO dao1 = new ProductDAO();
+            int pid = Integer.parseInt(request.getParameter("pid"));
+            int stock = dao1.getQuantityProduct(pid);
+            double price = dao1.getPriceByProductId(pid);
+            request.setAttribute("stock", stock);
+            request.setAttribute("price", price);
+            request.setAttribute("detail", dao.getDetailFlashSaleProductByRestaurantId(restaurantId, pid));
+            request.getRequestDispatcher("ViewDetailFlashsale.jsp").forward(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(ManagerOrderOfCustomerControl_1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ViewDetailFlashSaleProductControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

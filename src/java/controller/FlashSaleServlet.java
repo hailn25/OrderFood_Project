@@ -82,10 +82,7 @@ public class FlashSaleServlet extends HttpServlet {
         request.getRequestDispatcher("FlashSale.jsp").forward(request, response);
 
     }
-    public static void main(String[] args) throws SQLException {
-             ProductSaleDAO psdao = new ProductSaleDAO();
-             System.out.println(psdao.getProductIsFlashSale("2024-07-15 ", 1));
-    }
+   
   
    
 

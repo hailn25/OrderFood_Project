@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,7 @@ public class ListOrderDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-
-    public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
+public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
         Map<Integer, ListOrder> orderMap = new HashMap<>();
         if (orderStatusIds == null || orderStatusIds.isEmpty()) {
             return new ArrayList<>(orderMap.values());
@@ -112,6 +110,7 @@ public class ListOrderDAO {
         return new ArrayList<>(orderMap.values());
     }
 
+    
     public List<OrderDTO> getListOrderById_V1(int orderStatusId, int accountId) {
         List<OrderDTO> listOrderById_V1 = new ArrayList<>();
         try {
@@ -183,14 +182,12 @@ public class ListOrderDAO {
             }
         }
     }
+    
 
     public static void main(String[] args) throws ClassNotFoundException {
-    ListOrderDAO dao = new ListOrderDAO();
-    List<Integer> orderStatusIds = Arrays.asList(1, 2); // Thay đổi các giá trị theo ý bạn
-    int accountId = 6;
-    List<ListOrder> orders = dao.getListOrderByIds(orderStatusIds, accountId);
-    for (ListOrder order : orders) {
-        System.out.println(order);
+        ListOrderDAO dao = new ListOrderDAO();
+        System.out.println(dao);
     }
 }
-}
+
+

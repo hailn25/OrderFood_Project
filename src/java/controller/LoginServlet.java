@@ -37,6 +37,8 @@ public class LoginServlet extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
+
+            
 //            String hashedPassword = EncodePassword.toSHA1(password);
             if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
                 request.setAttribute("err", "Vui lòng nhập cả email và mật khẩu");
@@ -51,28 +53,32 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("err", "Bạn đã nhập sai password hoặc email");
                 request.setAttribute("email", email);
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
-            } else if (a.isStatus() == false) {
+            } else if (a.getStatus() == 0) {
                 request.setAttribute("err", "Tài khoản của bạn đã bị cấm");
                 request.getRequestDispatcher("Login.jsp").forward(request, response);
             } else {
                 if (a.getRoleId() == 2) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
+                    session.setMaxInactiveInterval(60 * 60);
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("home").forward(request, response);
                 } else if (a.getRoleId() == 1) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
+                    session.setMaxInactiveInterval(60 * 60);
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("HomeOfAdmin.jsp").forward(request, response);
                 } else if (a.getRoleId() == 3) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
+                    session.setMaxInactiveInterval(60 * 60);
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("managerShipper").forward(request, response);
                 } else if (a.getRoleId() == 4) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
+                    session.setMaxInactiveInterval(60 * 60);
                     session.setAttribute("account", a);
 
                     request.getRequestDispatcher("HomeOfRestaurant.jsp").forward(request, response);
@@ -80,6 +86,7 @@ public class LoginServlet extends HttpServlet {
                 } else if (a.getRoleId() == 5) {
                     acc.UpdateLastDateLogin(email);
                     HttpSession session = request.getSession();
+                    session.setMaxInactiveInterval(60 * 60);
                     session.setAttribute("account", a);
                     request.getRequestDispatcher("ManagerStaff.jsp").forward(request, response);
                 }
