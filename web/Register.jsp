@@ -48,7 +48,7 @@
 
                                         <div class="form-outline mb-4">
                                             <small class="form-text" style="color: red;">* Bắt buộc</small>
-                                            <input name="repassword"  type="password" id="inputPassword" class="form-control" placeholder="Nhập lại mật khẩu" required="">
+                                            <input name="repassword"  type="password" id="inputRePassword" class="form-control" placeholder="Nhập lại mật khẩu" required="">
                                         </div>
 
                                         <div class="form-outline mb-4">
@@ -107,6 +107,12 @@
                     document.getElementById("errorMessage").innerHTML = "Vui lòng nhập đúng định dạng email";
                     return false;
                 }
+                passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
+                if (!password.value.match(passwordPattern)) {
+                    document.getElementById("errorMessage").innerHTML = "Mật khẩu phải có ít nhất 6 ký tự, bao gồm một ký tự viết hoa và một ký tự đặc biệt";
+                    return false;
+                }
+
 
                 if (password.value == "" || password.value.trim().length == 0) {
                     document.getElementById("errorMessage").innerHTML = "Mật khẩu không được để trống";
@@ -131,15 +137,14 @@
 
                 var namePattern = /^[a-zA-ZÀ-Ỹà-ỹ\s]+$/u;
 
-                // Kiểm tra ký tự đặc biệt hoặc số trong họ và tên
                 if (!namePattern.test(fullname.value)) {
                     document.getElementById("errorMessage").innerHTML = "Họ và tên không được chứa ký tự đặc biệt hoặc số";
                     return false;
                 }
 
-                var phonePattern = /^\d{10}$/;
+                var phonePattern = /^0\d{9}$/;
                 if (!phonePattern.test(phonenumber.value)) {
-                    document.getElementById("errorMessage").innerHTML = "Số điện thoại phải có 10 chữ số và không chứa ký tự khác hoặc khoảng trắng";
+                    document.getElementById("errorMessage").innerHTML = "Số điện thoại phải bắt đầu bằng số 0, có 10 chữ số và không chứa ký tự khác hoặc khoảng trắng";
                     return false;
                 }
                 if ((address.value == "" && address.value.length != 0) || (address.value.trim().length == 0 && address.value.length != 0)) {

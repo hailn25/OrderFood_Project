@@ -49,16 +49,16 @@ public class ShopControl extends HttpServlet {
             request.setAttribute("listProductDTO", listProductDTO);
         }
 
-        if (request.getParameter("restaurantId") != null) {
-            try {
-                int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
-                listProductDTO = daofunction.getListProductByRestaurantId(restaurantId);
-                request.setAttribute("listProductDTO", listProductDTO);
-
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (request.getParameter("restaurantId") != null) {
+//            try {
+//                int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
+//                listProductDTO = daofunction.getListProductByRestaurantId(restaurantId);
+//                request.setAttribute("listProductDTO", listProductDTO);
+//
+//            } catch (NumberFormatException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         int itemsPerPage = 9;
         int currentPage = 1;

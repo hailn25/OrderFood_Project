@@ -37,16 +37,18 @@ public class SearchListManagerToFlashSaleControl extends HttpServlet {
         try {
             ProductDAO dao = new ProductDAO();
             String productName = request.getParameter("productName");
+            int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
 
             if (productName != null) {
                 int lengthProductName = Validation.removeAllBlank(productName).length();
                 if (lengthProductName > 0) {
                     productName = Validation.removeUnnecessaryBlank(productName);
-                    int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
                     request.setAttribute("listP", dao.getSearchProductToFlashsaleByRestaurantId(restaurantId, productName));
                     request.setAttribute("restaurantId", restaurantId);
                 } else {
                     request.setAttribute("error", "Tên tìm kiếm không hợp lệ!");
+                    request.setAttribute("restaurantId", restaurantId);
+                    request.getRequestDispatcher("ListProductToSelect.jsp").forward(request, response);
                 }
             }
             request.getRequestDispatcher("ListProductToSelect.jsp").forward(request, response);

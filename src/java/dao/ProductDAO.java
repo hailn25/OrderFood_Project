@@ -202,7 +202,7 @@ public class ProductDAO {
     public void updatePriceSale_on(String productId) {
         try {
             String sql = "update [dbo].[Product]\n"
-                    + "set  [Price] = [Price] * 0.9, [IsSale] = 1\n"
+                    + "set  [Price] = [Price] * 0.8, [IsSale] = 1\n"
                     + "where [ProductId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -218,7 +218,7 @@ public class ProductDAO {
     public void updatePriceSale_off(String productId) {
         try {
             String sql = "update [dbo].[Product]\n"
-                    + "set  [Price] = [Price] * (1/0.9), [IsSale] = 0\n"
+                    + "set  [Price] = [Price] * (1/0.8), [IsSale] = 0\n"
                     + "where [ProductId] = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -407,7 +407,7 @@ public class ProductDAO {
         String sql = """
                      SELECT    distinct    Product.*
                      FROM            Product 
-                     WHERE [RestaurantId] = ? and ( [Status] = 1  or [Status] = 4 )""";
+                     WHERE [RestaurantId] = ? and ( [Status] = 1  or [Status] = 4 ) and IsSale = 0""";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, restaurantId);
@@ -453,6 +453,22 @@ public class ProductDAO {
         try {
             String sql = "update Product\n"
                     + "set Status = 1\n"
+                    + "where ProductId	= ?";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void changeStatusWhenConfirmFlashSaleOfStaff(int productId) {
+        try {
+            String sql = "update Product\n"
+                    + "set Status = 2\n"
                     + "where ProductId	= ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);

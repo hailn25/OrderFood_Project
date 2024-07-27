@@ -7,7 +7,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Edit Product - Dashboard Admin Template</title>
+        <title>4FOODHD</title>
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:400,700"
@@ -45,8 +45,25 @@
                                         <input id="restaurantName" name="restaurantName" type="text" required value="${detail.name}" class="form-control read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="voucherName">TimeFrame</label>
-                                        <input id="voucherName" name="voucherName" type="text" required value="${detail.timeFrame}" class="form-control read-only" readonly/>
+                                        <label for="voucherName">Khung thời gian</label>
+                                        <c:set var="timeFrameDisplay">
+                                            <c:choose>
+                                                <c:when test="${detail.timeFrame == 1}">
+                                                    10h --> 13h
+                                                </c:when>
+                                                <c:when test="${detail.timeFrame == 2}">
+                                                    13h --> 16h
+                                                </c:when>
+                                                <c:when test="${detail.timeFrame == 3}">
+                                                    16h --> 19h
+                                                </c:when>
+                                                <c:when test="${detail.timeFrame == 4}">
+                                                    19h --> 22h
+                                                </c:when>
+                                            </c:choose>
+                                        </c:set>
+
+                                        <input id="voucherName" name="voucherName" type="text" required value="${timeFrameDisplay}" class="form-control read-only" readonly/>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="description">Mô tả</label>
@@ -93,6 +110,6 @@
         <!-- https://jqueryui.com/download/ -->
         <script src="js/bootstrap.min.js"></script>
         <!-- https://getbootstrap.com/ -->
-        
+
     </body>
 </html>

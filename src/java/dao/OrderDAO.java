@@ -266,12 +266,13 @@ public class OrderDAO {
 
     public OrderDetailDTO_Huyvq getOrderDetailById(int orderDetailId) throws SQLException, Exception {
 
-        String sql = "SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL\n"
-                + "FROM            [Order] INNER JOIN\n"
-                + "                         OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN\n"
-                + "                         OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN\n"
-                + "                         Product ON OrderDetail.ProductId = Product.ProductId\n"
-                + "WHERE OrderDetail.OrderDetailId = ?";
+        String sql = """
+                     SELECT        OrderDetail.OrderDetailId, Product.Name, OrderDetail.Quantity, OrderDetail.TotalMoney, OrderStatus.OrderStatusId, Product.ImageURL
+                     FROM            [Order] INNER JOIN
+                                              OrderDetail ON [Order].OrderId = OrderDetail.OrderId INNER JOIN
+                                              OrderStatus ON [Order].OrderStatusId = OrderStatus.OrderStatusId INNER JOIN
+                                              Product ON OrderDetail.ProductId = Product.ProductId
+                     WHERE OrderDetail.OrderDetailId = ?""";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, orderDetailId);
@@ -306,7 +307,7 @@ public class OrderDAO {
                          INNER JOIN 
                              Product ON OrderDetail.ProductId = Product.ProductId
                          WHERE 
-                             Product.RestaurantId = ?
+                             Product.RestaurantId = ? AND [Order].OrderStatusId IN (1,2,3,4,5,6,7)
                          GROUP BY 
                              [Order].OrderId, 
                              [Order].Name, 
@@ -592,11 +593,12 @@ public class OrderDAO {
     }
 
     public void confirmOrderOfCustomer(String orderDetailId) throws ClassNotFoundException, SQLException {
-        String sql = "UPDATE o\n"
-                + "SET o.OrderStatusId = 1\n"
-                + "FROM [Order] o\n"
-                + "INNER JOIN OrderDetail od ON o.OrderId = od.OrderId\n"
-                + "WHERE od.OrderDetailId = ?;";
+        String sql = """
+                     UPDATE o
+                     SET o.OrderStatusId = 1
+                     FROM [Order] o
+                     INNER JOIN OrderDetail od ON o.OrderId = od.OrderId
+                     WHERE o.OrderId = ?;""";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setString(1, orderDetailId);
@@ -608,7 +610,7 @@ public class OrderDAO {
                 + "SET o.OrderStatusId = 7\n"
                 + "FROM [Order] o\n"
                 + "INNER JOIN OrderDetail od ON o.OrderId = od.OrderId\n"
-                + "WHERE od.OrderDetailId = ?;";
+                + "WHERE o.OrderId = ?;";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, orderDetailId);

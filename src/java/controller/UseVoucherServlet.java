@@ -30,7 +30,7 @@ public class UseVoucherServlet extends HttpServlet {
 
     }
 
-    @Override
+  @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -53,13 +53,18 @@ public class UseVoucherServlet extends HttpServlet {
         double shippingDiscount = 0;
         double subtotal = 0;
         double voucherDiscount = 0;
+        double subtotal1 = 0;
 
-        // Apply restaurant-specific voucher
+        List<Item> items = cart.getItems();
+        for (Item item : items) {
+            double price = item.getProduct().getPrice();
+            subtotal += price * item.getQuantity();
+        }
+
         if (voucherRIdStr != null && !voucherRIdStr.isEmpty()) {
             int voucherRId = Integer.parseInt(voucherRIdStr);
             Voucher voucherR = voucherDAO.getDiscountByVoucherRId(voucherRId);
             int restaurantId = voucherR.getRestaurantId();
-            List<Item> items = cart.getItems();
             for (Item item : items) {
                 double price = item.getProduct().getPrice();
                 if (item.getProduct().getRestaurantId() == restaurantId) {
@@ -69,29 +74,26 @@ public class UseVoucherServlet extends HttpServlet {
                 } else {
                     item.setDiscountedPrice(price);
                 }
-                subtotal += item.getDiscountedPrice() * item.getQuantity();
+                subtotal1 += item.getDiscountedPrice() * item.getQuantity();
             }
-
             voucherDAO.updateQuantity(voucherRId);
-
         } else {
-            List<Item> items = cart.getItems();
             for (Item item : items) {
                 item.setDiscountedPrice(item.getProduct().getPrice());
-                subtotal += item.getDiscountedPrice() * item.getQuantity();
+                subtotal1 += item.getDiscountedPrice() * item.getQuantity();
             }
         }
 
-        // Apply free shipping voucher
         if (voucherFreeStr != null && !voucherFreeStr.isEmpty()) {
             int voucherFreeId = Integer.parseInt(voucherFreeStr);
             int shippingDiscountRate = voucherDAO.getDiscountByVoucherId(voucherFreeId);
-            shippingDiscount = shippingFee * (shippingDiscountRate / 100.0); // Chia bằng 100.0 để có phép chia chính xác
+            shippingDiscount = shippingFee * (shippingDiscountRate / 100.0);
             voucherDAO.updateQuantity(voucherFreeId);
         }
 
         double total = subtotal + shippingFee - shippingDiscount - voucherDiscount;
         request.setAttribute("subtotal", subtotal);
+        request.setAttribute("subtotal1", subtotal1);
         request.setAttribute("shippingFee", shippingFee);
         request.setAttribute("shippingDiscount", shippingDiscount);
         request.setAttribute("voucherDiscount", voucherDiscount);
@@ -101,8 +103,12 @@ public class UseVoucherServlet extends HttpServlet {
         request.getRequestDispatcher("Checkout_2.jsp").forward(request, response);
     }
 
+
     @Override
     public String getServletInfo() {
         return "Short description";
     }
 }
+
+
+

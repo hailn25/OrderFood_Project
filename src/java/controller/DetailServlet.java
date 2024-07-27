@@ -52,7 +52,7 @@ public class DetailServlet extends HttpServlet {
 
         // Fetch other necessary details    
         List<CategoryListDetail> listCategoryListDetail = dao.getCategoryListDetail();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
+        List<ProductHome> listBestSellerProduct = dao.getAllOSTProduct();
 
         // Fetch feedback for the product
         List<Feedback> listFeedback = fb.getFeedbackByProductId(Integer.parseInt(id));
@@ -109,4 +109,6 @@ public class DetailServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
 

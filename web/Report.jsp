@@ -10,14 +10,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Form Tố Cáo</title>
+        <title>4FOODHD</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
     <body>
         <!-- Header Section -->
         <header class="text-white py-3" style="background-color: #81C408">
             <div class="container">
-                <h1 class="mb-0" style="color: red">Tố Cáo Của Hàng</h1>
+                <h1 class="mb-0" style="color: white; font-weight: bold">Tố Cáo Của Hàng</h1>
                 <p class="lead mb-0">Điền vào mẫu dưới đây để gửi tố cáo</p>
             </div>
         </header>
@@ -43,7 +43,7 @@
 
                             <form id="reportForm" action="insertReport" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label>Restaurant Name</label>
+                                    <label>Nhà Hàng</label>
                                     <input type="text" class="form-control" value="${restaurantName}" readonly>
                                 </div>
                                 
@@ -68,7 +68,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="createDate">Date:</label>
+                                    <label for="createDate">Ngày</label>
                                     <input type="text" class="form-control" id="displayDate" readonly>
                                     <input type="hidden" id="createDate" name="createDate">
                                 </div>
@@ -83,7 +83,7 @@
                                 </div>
 
                                 <div class="form-group text-center">
-                                    <a onclick="window.history.back()" class="btn btn-secondary mr-2">Quay lại</a>
+                                    <a href="restaurant?restaurantId=${restaurantId}&page=${1}" class="btn btn-secondary mr-2">Quay lại</a>
                                     <button type="submit" class="btn btn-danger">Gửi tố cáo</button>
                                 </div>
 

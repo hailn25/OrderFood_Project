@@ -35,7 +35,6 @@ public class VoucherListControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
         int accountId = 0;
         if (request.getParameter("accountId") != null) {
             accountId = Integer.parseInt(request.getParameter("accountId"));

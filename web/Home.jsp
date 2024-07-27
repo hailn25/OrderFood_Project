@@ -170,8 +170,6 @@
                     </c:forEach>
             </ul>
         </div>
-        <!-- Hero End -->
-        <!-- Fruits Shop Start-->
         <div class="container-fluid fruite py-5">
             <div class="container py-5">
                 <div class="tab-class text-center">
@@ -199,11 +197,13 @@
                             <div class="col-lg-12">
                                 <div class="row g-4" id="product-container">
                                     <c:forEach items="${listP}" var="p" varStatus="status">
-                                        <c:if test="${p.quantity > 0 && p.status}">
+                                        <c:if test="${p.quantity > 0 && (p.status == 1 || p.status == 3 || p.status == 4) && p.statusAccount != 0}">
                                             <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
                                                 <div class="rounded position-relative fruite-item">
                                                     <div class="fruite-img">
-                                                        <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
+                                                        <a href="detail?pid=${p.id}">
+                                                            <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
+                                                        </a>
                                                     </div>
                                                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${p.categoryName}</div>
                                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
@@ -214,7 +214,6 @@
                                                             <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6>   
                                                             <div style="display: flex;">
                                                                 <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
-                                                                    <input type="hidden" name="productId" value="${p.id}">
                                                                     <input type="hidden" name="productId" value="${p.id}">
                                                                     <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
                                                                         <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
@@ -243,40 +242,55 @@
                 </div>
             </div>      
         </div>
-        <!-- Fruits Shop End-->
-        <!-- Vesitable Shop Start-->
+
         <div class="container-fluid vesitable py-5">
             <div class="container py-5" id="Block">
                 <h1 class="mb-0">Sản phẩm</h1>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
                     <c:forEach var="v" items="${listV}">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img">
-                                <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="${v.name}">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${v.cateName}</div>
-                            <div class="p-4 d-flex flex-column justify-content-between rounded-bottom flex-grow-1">
-                                <div>
-                                    <h4><a href="detail?pid=${v.id}" style="color: black;" class="product-name">${v.name}</a></h4>
+                        <c:if test="${v.quantity > 0 && (v.status == 1 || v.status == 3 || v.status == 4) && v.statusAccount != 0}">
+                            <div style="height: 450px" class="border border-primary rounded position-relative vesitable-item">
+                                <div class="vesitable-img">
+                                    <a href="detail?pid=${v.id}">
+                                        <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="">
+                                    </a>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <h6 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${v.id}">${v.price}</h6>
-                                    <form id="${v.id}" onsubmit="addToCart(${v.id}); return false;">
-                                        <input type="hidden" name="productId" value="${v.id}">
-                                        <input type="hidden" name="productId" value="${v.id}">
-                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                        </button>
-                                    </form>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${v.categoryName}</div>
+                                <div class="p-4 d-flex flex-column justify-content-between rounded-bottom flex-grow-1">
+                                    <div>
+                                        <h4><a href="detail?pid=${v.id}" style="color: black;" class="product-name">${v.name}</a></h4>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <h6 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${v.id}">${v.price}</h6>
+                                        <div style="display: flex;">
+                                            <form id="${v.id}" onsubmit="addToCart(${v.id}); return false;">
+                                                <input type="hidden" name="productId" value="${v.id}">
+                                                <button type="submit" class="text-primary" style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                </button>
+                                            </form>
+                                            <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                <a href="restaurant?restaurantId=${v.restaurantId}&page=${1}">
+                                                    <img src="img/${v.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
                     </c:forEach>
                 </div>
             </div>
         </div>
-        <!-- Vesitable Shop End -->
-        <!-- Bestsaler Product Start -->
+
+
+
+
+
+
+
+
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="text-center mx-auto mb-5" style="max-width: 700px;">
@@ -284,37 +298,41 @@
                 </div>
                 <div class="row g-4">
                     <c:forEach items="${listB}" var="b">
-                        <div class="col-lg-6 col-xl-4" id="Block">
-                            <div class="p-4 rounded bg-light">
-                                <div class="row align-items-center" >
-                                    <div class="col-6">
-                                        <img src="img/${b.image}" class="img-fluid rounded-circle w-100" alt="${b.name}">
-                                    </div>
-                                    <div class="col-6">
-                                        <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
-                                        <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${b.id}">${b.price}</h6>
-                                        <div style="display: flex;">
-                                            <form id="${b.id}" onsubmit="addToCart(${b.id}); return false;">
-                                                <input type="hidden" name="productId" value="${b.id}">
-                                                <input type="hidden" name="productId" value="${b.id}">
-                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                </button>
-                                            </form>
-                                            <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                <a href="restaurant?restaurantId=${b.restaurantId}&page=${1}">
-                                                    <img src="img/${b.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                </a>
+                        <c:if test="${b.quantity > 0 && (b.status == 1 || b.status == 3 || b.status == 4) && b.statusAccount != 0}">
+                            <div class="col-lg-6 col-xl-4" id="Block">
+                                <div class="p-4 rounded bg-light">
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <a href="detail?pid=${b.id}">
+                                                <img src="img/${b.image}" class="img-fluid w-100 rounded-top" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="detail?pid=${b.id}" class="h5">${b.name}</a>
+                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${b.id}">${b.price}</h6>
+                                            <div style="display: flex;">
+                                                <form id="${b.id}" onsubmit="addToCart(${b.id}); return false;">
+                                                    <input type="hidden" name="productId" value="${b.id}">
+                                                    <button type="submit" class="text-primary" style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                    </button>
+                                                </form>
+                                                <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                    <a href="restaurant?restaurantId=${b.restaurantId}&page=${1}">
+                                                        <img src="img/${b.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
                     </c:forEach>
                 </div>
             </div>
         </div>
+
         <script>
             function toggleCategories() {
                 var items = document.getElementsByClassName('category-item');
@@ -462,13 +480,14 @@
             });
         </script>
         <script>
-            document.getElementById("searchForm").addEventListener("submit", function (event) {
-                var searchInput = document.getElementById("searchInput").value.trim();
-                if (searchInput === "") {
+            document.getElementById('searchForm').addEventListener('submit', function (event) {
+                var searchInput = document.getElementById('searchInput').value;
+                var errorMessage = document.getElementById('error-message');
+                if (!searchInput || /\s/.test(searchInput) || /\d/.test(searchInput) || /[!@#$%^&*(),.?":{}|<>]/.test(searchInput)) {
                     event.preventDefault();
-                    document.getElementById("error-message").style.display = "block";
+                    errorMessage.style.display = 'block';
                 } else {
-                    document.getElementById("error-message").style.display = "none";
+                    errorMessage.style.display = 'none';
                 }
             });
         </script>
@@ -524,4 +543,6 @@
     </body>
 
 </html>
+
+
 

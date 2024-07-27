@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
+        <title>4FOODHD</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
@@ -100,7 +100,7 @@
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
                             <th>Ngày đặt</th>
-<!--                            <th>Tổng tiền </th>-->
+                            <!--                            <th>Tổng tiền </th>-->
                             <th>Trạng thái đơn hàng </th>
                             <th>Lý do</th>
                             <th>Thời gian huỷ </th>

@@ -85,14 +85,15 @@ public class InsertReportControll extends HttpServlet {
 
             try {
                 feedbackDAO.insertReport(description, imageURL, createDate, accountId, String.valueOf(restaurantId), status);
-                request.setAttribute("successMessage", "Report has been submitted successfully!");
+                request.setAttribute("successMessage", "Gửi tố cáo thành công!");
             } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace();
-                request.setAttribute("errorMessage", "Error occurred: " + ex.getMessage());
+                request.setAttribute("errorMessage", "Lỗi: " + ex.getMessage());
             }
         } else {
-            request.setAttribute("errorMessage", "Restaurant information is missing.");
+            request.setAttribute("errorMessage", "Thông tin nhà hàng bị thiếu.");
         }
+        request.setAttribute("restaurantId", restaurantIdParam);
         request.getRequestDispatcher("Report.jsp").forward(request, response);
     }
 

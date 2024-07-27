@@ -136,7 +136,7 @@
             <div class="container-fluid page-header py-5">
                 <h1 class="text-center text-white display-6">Chi tiết sản phẩm </h1>
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="home" style="color: white">Home</a></li>
+                    <li class="breadcrumb-item"><a href="home" style="color: white">Trang chủ</a></li>
                     <!--                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
                                         <li class="breadcrumb-item active text-white">Shop Detail</li>-->
                 </ol>
@@ -159,7 +159,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${detail.name}</h4>
-                                <p class="mb-3">Category: ${detail.categoryName}</p>
+                                <p class="mb-3">Danh mục: ${detail.categoryName}</p>
                                 <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
                                 <div class="d-flex mb-4">
                                     <c:forEach begin="1" end="5" var="i">
@@ -177,7 +177,7 @@
                                     </c:forEach>
                                 </div>
                                 <p class="mb-4">${detail.decription}</p>
-                                <p class="mb-4">Quantity: ${detail.quantity}</p>
+                                <p class="mb-4">Số lượng: ${detail.quantity}</p>
                                 <div style="margin-bottom: 30px">
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
@@ -218,7 +218,7 @@
                                     <div class="nav nav-tabs mb-3">
                                         <button class="nav-link border-white border-bottom-0" type="button" role="tab"
                                                 id="nav-mission-tab" onclick="toggleReviews()"
-                                                aria-controls="nav-mission" aria-selected="false">Reviews</button>
+                                                aria-controls="nav-mission" aria-selected="false">Đánh giá</button>
                                     </div>
                                 </nav>
                                 <div class="tab-content mb-5">
@@ -273,7 +273,7 @@
                                                 <div class="d-flex mb-2">
                                                     <h5 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${listProductByIsSale.id}">${listProductByIsSale.price}</h5>
                                                     <h5 class="text-danger text-decoration-line-through" style="display: flex; align-items: center; font-family: sans-serif;" id="price-${listProductByIsSale.id}">
-                                                        <c:out value="${listProductByIsSale.price * 1.11111111}"/>
+                                                        <c:out value="${listProductByIsSale.price * 1.25}"/>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -293,32 +293,36 @@
                     <div class="vesitable">
                         <div class="owl-carousel vegetable-carousel justify-content-center">
                             <c:forEach var="relatedProduct" items="${listSameCategoryProducts}">
-                                <div class="border border-primary rounded position-relative vesitable-item">
-                                    <div class="vesitable-img">
-                                        <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="${relatedProduct.name}">
-                                    </div>
-                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
-                                    <div class="p-4 pb-0 rounded-bottom">
-                                        <h4>${relatedProduct.name}</h4>
-                                        <p class="description">${relatedProduct.decription}</p>
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${relatedProduct.id}">${relatedProduct.price}</h6>   
-                                            <div style="display: flex;">
-                                                <form action="addtocart" method="post" >
-                                                    <input type="hidden" name="productId" value="${relatedProduct.id}">
-                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                    </button>
-                                                </form>
-                                                <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
-                                                    <a href="restaurant?restaurantId=${relatedProduct.restaurantId}&page=${1}">
-                                                        <img src="img/${relatedProduct.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
-                                                    </a>
+                                <c:if test="${relatedProduct.quantity > 0 && (relatedProduct.status == 1 || relatedProduct.status == 3 || relatedProduct.status == 4) && relatedProduct.statusAccount != 0}">
+                                    <div class="border border-primary rounded position-relative vesitable-item">
+                                        <div class="vesitable-img">
+                                            <a href="detail?pid=${relatedProduct.id}">
+                                                <img src="img/${relatedProduct.image}" class="img-fluid w-100 rounded-top" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${relatedProduct.categoryName}</div>
+                                        <div class="p-4 pb-0 rounded-bottom">
+                                            <h4><a href="detail?pid=${relatedProduct.id}" style="color: black;" class="product-name">${relatedProduct.name}</a></h4>
+                                            <p class="description">${relatedProduct.decription}</p>
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${relatedProduct.id}">${relatedProduct.price}</h6>   
+                                                <div style="display: flex;">
+                                                    <form action="addtocart" method="post" >
+                                                        <input type="hidden" name="productId" value="${relatedProduct.id}">
+                                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                        </button>
+                                                    </form>
+                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
+                                                        <a href="restaurant?restaurantId=${relatedProduct.restaurantId}&page=${1}">
+                                                            <img src="img/${relatedProduct.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>
@@ -501,3 +505,5 @@
             </script>
     </body>
 </html>
+
+

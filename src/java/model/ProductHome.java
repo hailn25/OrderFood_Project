@@ -20,19 +20,20 @@ public class ProductHome {
     private int categoryId;
     private String categoryName;
     private int restaurantId;
+    private int statusAccount;
     private String restaurantName;
     private String imageRestaurant;
     private boolean isSale;
     private int quantity;
     private Date createDate;
     private Date updateDate;
-    private boolean status;
+    private int status;
     private double rateStar;
 
     public ProductHome() {
     }
 
-    public ProductHome(int id, String name, double price, String decription, String image, int categoryId, String categoryName, int restaurantId, String restaurantName, String imageRestaurant, boolean isSale, int quantity, Date createDate, Date updateDate, boolean status, double rateStar) {
+    public ProductHome(int id, String name, double price, String decription, String image, int categoryId, String categoryName, int restaurantId, int statusAccount, String restaurantName, String imageRestaurant, boolean isSale, int quantity, Date createDate, Date updateDate, int status, double rateStar) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -41,6 +42,7 @@ public class ProductHome {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.restaurantId = restaurantId;
+        this.statusAccount = statusAccount;
         this.restaurantName = restaurantName;
         this.imageRestaurant = imageRestaurant;
         this.isSale = isSale;
@@ -115,6 +117,14 @@ public class ProductHome {
         this.restaurantId = restaurantId;
     }
 
+    public int getStatusAccount() {
+        return statusAccount;
+    }
+
+    public void setStatusAccount(int statusAccount) {
+        this.statusAccount = statusAccount;
+    }
+
     public String getRestaurantName() {
         return restaurantName;
     }
@@ -132,7 +142,7 @@ public class ProductHome {
     }
 
     public boolean isIsSale() {
-return isSale;
+        return isSale;
     }
 
     public void setIsSale(boolean isSale) {
@@ -163,11 +173,11 @@ return isSale;
         this.updateDate = updateDate;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -181,7 +191,8 @@ return isSale;
 
     @Override
     public String toString() {
-        return "ProductHome{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryId=" + categoryId + ", categoryName=" + categoryName + ", restaurantId=" + restaurantId + ", restaurantName=" + restaurantName + ", imageRestaurant=" + imageRestaurant + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
+        return "ProductHome{" + "id=" + id + ", name=" + name + ", price=" + price + ", decription=" + decription + ", image=" + image + ", categoryId=" + categoryId + ", categoryName=" + categoryName + ", restaurantId=" + restaurantId + ", statusAccount=" + statusAccount + ", restaurantName=" + restaurantName + ", imageRestaurant=" + imageRestaurant + ", isSale=" + isSale + ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status + ", rateStar=" + rateStar + '}';
     }
-
 }
+
+

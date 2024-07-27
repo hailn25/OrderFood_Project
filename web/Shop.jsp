@@ -31,6 +31,48 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <style>
+            @keyframes shake {
+                0% {
+                    transform: translateX(0);
+                }
+                25% {
+                    transform: translateX(-5px);
+                }
+                50% {
+                    transform: translateX(5px);
+                }
+                75% {
+                    transform: translateX(-5px);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
+            #show-more-btn {
+                border: none;
+                color: #fff;
+                background-color: #81C408;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                transition: all 0.3s ease;
+            }
+
+            #show-more-btn:hover {
+                background-color: #81C008;
+                color: #fff;
+                animation: shake 0.5s;
+            }
+
+            .d-none {
+                display: none;
+            }
+        </style>
     </head>
 
     <body>
@@ -111,22 +153,25 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <h4>Phân Loại</h4>
-                                            <ul class="list-unstyled fruite-categorie">
-                                                <c:forEach items="${listTotalQuantityByCategory}" var="c">
-                                                    <li>
-                                                        <div class="d-flex justify-content-between fruite-name">
-                                                            <a href="shop?categoryName=${c.name}"><i class="fas fa-utensils" style="margin-right: 5px;"></i>${c.name}</a>
+                                            <ul class="list-unstyled fruite-categorie" id="category-list">
+                                                <c:forEach items="${listTotalQuantityByCategory}" var="c" varStatus="status">
+                                                    <li class="<c:if test="${status.index >= 2}">d-none</c:if>">
+                                                            <div class="d-flex justify-content-between fruite-name">
+                                                                <a href="shop?categoryName=${c.name}">
+                                                                <i class="fas fa-utensils" style="margin-right: 5px;"></i>${c.name}
+                                                            </a>
                                                             <span>(${c.totalQuantity})</span>
                                                         </div>
                                                     </li>
                                                 </c:forEach>
                                             </ul>
+                                            <button id="show-more-btn" class="<c:if test="${fn:length(listTotalQuantityByCategory) <= 2}">d-none</c:if>">Xem thêm</button>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-lg-12">
-                                        <h4 class="mb-3">Nhà hàng nổi bật</h4>
-                                        <c:forEach items="${listRestaurantDTO}" var="r" >
+                                        <div class="col-lg-12">
+                                            <h4 class="mb-3">Nhà hàng nổi bật</h4>
+                                        <c:forEach items="${listRestaurantDTO}" var="r">
                                             <c:if test="${r.status == 1}">
                                                 <div class="d-flex align-items-center justify-content-start" style="margin: 10px;">
                                                     <div class="rounded me-4" style="width: 100px; height: 100px;">
@@ -194,7 +239,7 @@
                                                                 <div style="display: flex; justify-content: space-between;">
                                                                     <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>   
                                                                     <div style="display: flex;">
-                                                                        <form id="${p.producId}" onsubmit="addToCart(${p.producId}); return false;">
+                                                                        <form action="addtocart" method="post" >
                                                                             <input type="hidden" name="productId" value="${p.producId}">
                                                                             <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
                                                                                 <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
@@ -256,85 +301,82 @@
         <script src="lib/lightbox/js/lightbox.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
         <!-- Template Javascript -->
+        <script src="js/main.js"></script>
         <script>
-                                                                            function addToCart(productId) {
-                                                                                var xhr = new XMLHttpRequest();
-                                                                                var url = "addtocart";
+                                        function updateAmount() {
+                                            var rangeInput = document.getElementById('rangeInput');
+                                            var amount = document.getElementById('amount');
+                                            var value = rangeInput.value;
 
+                                            // Định dạng giá trị với dấu chấm phân tách hàng nghìn
+                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
 
-                                                                                xhr.open("POST", url, true);
+                                            amount.value = formattedValue;
+                                            amount.innerText = formattedValue;
+                                        }
 
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const prices = document.querySelectorAll('[id^="price-"]');
 
-                                                                                xhr.onload = function () {
-                                                                                    if (xhr.status >= 200 && xhr.status < 10000) {
+                                            prices.forEach(priceElement => {
+                                                const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                                                const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                                                                                        alert("Đã thêm vào giỏ hàng thành công!");
-                                                                                    } else {
-                                                                                        // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
-                                                                                        alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
-                                                                                    }
-                                                                                };
+                                                // Định dạng giá thành VND
+                                                const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
+                                                // Cập nhật nội dung của thẻ h6
+                                                priceElement.textContent = formattedPrice + " VNĐ";
+                                            });
+                                        });
 
-                                                                                xhr.onerror = function () {
-                                                                                    alert("Đã xảy ra lỗi khi gửi yêu cầu.");
-                                                                                };
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            // Định dạng giá trị của minPrice khi trang được tải
+                                            var minPrice = ${not empty minPrice ? minPrice : 0};
+                                            var formattedMinPrice = (minPrice).toLocaleString('vi-VN');
+                                            document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
 
-                                                                                // Gửi yêu cầu với dữ liệu sản phẩm
-                                                                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                                                                                xhr.send("productId=" + productId);
-                                                                            }
-        </script>
-        <script>
-            function updateAmount() {
-                var rangeInput = document.getElementById('rangeInput');
-                var amount = document.getElementById('amount');
-                var value = rangeInput.value;
+                                            // Định dạng giá trị của thanh trượt khi trang được tải
+                                            var rangeInput = document.getElementById('rangeInput');
+                                            var amount = document.getElementById('amount');
+                                            var value = rangeInput.value;
+                                            var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                            amount.value = formattedValue;
+                                            amount.innerText = formattedValue;
+                                        });
 
-                // Định dạng giá trị với dấu chấm phân tách hàng nghìn
-                var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
+                                        function submitForm() {
+                                            var rangeInput = document.getElementById('rangeInput').value;
+                                            var hiddenRangeInput = document.getElementById('hiddenRangeInput');
+                                            hiddenRangeInput.value = rangeInput;
+                                            var categoryName =
+                                                    document.getElementById('rangeForm').submit();
+                                        }
 
-                amount.value = formattedValue;
-                amount.innerText = formattedValue;
-            }
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const categoryList = document.getElementById('category-list');
+                                            const showMoreBtn = document.getElementById('show-more-btn');
+                                            const hiddenItems = categoryList.querySelectorAll('li.d-none');
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const prices = document.querySelectorAll('[id^="price-"]');
+                                            let isExpanded = false;
 
-                prices.forEach(priceElement => {
-                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
-
-                    // Định dạng giá thành VND
-                    const formattedPrice = (priceValue).toLocaleString('vi-VN');
-
-                    // Cập nhật nội dung của thẻ h6
-                    priceElement.textContent = formattedPrice + " VNĐ";
-                });
-            });
-
-            document.addEventListener('DOMContentLoaded', function () {
-                // Định dạng giá trị của minPrice khi trang được tải
-                var minPrice = ${not empty minPrice ? minPrice : 0};
-                var formattedMinPrice = (minPrice).toLocaleString('vi-VN');
-                document.getElementById('formattedMinPrice').innerText = formattedMinPrice + ' VND';
-
-                // Định dạng giá trị của thanh trượt khi trang được tải
-                var rangeInput = document.getElementById('rangeInput');
-                var amount = document.getElementById('amount');
-                var value = rangeInput.value;
-                var formattedValue = (value * 1).toLocaleString('vi-VN') + ' VND - 1.000.000 VND';
-                amount.value = formattedValue;
-                amount.innerText = formattedValue;
-            });
-
-            function submitForm() {
-                var rangeInput = document.getElementById('rangeInput').value;
-                var hiddenRangeInput = document.getElementById('hiddenRangeInput');
-                hiddenRangeInput.value = rangeInput;
-                var categoryName =
-                        document.getElementById('rangeForm').submit();
-            }
+                                            if (hiddenItems.length > 0) {
+                                                showMoreBtn.addEventListener('click', function () {
+                                                    if (!isExpanded) {
+                                                        hiddenItems.forEach(function (item) {
+                                                            item.classList.remove('d-none');
+                                                        });
+                                                        showMoreBtn.textContent = 'Thu gọn'; // Change button text to "Show Less"
+                                                    } else {
+                                                        hiddenItems.forEach(function (item) {
+                                                            item.classList.add('d-none');
+                                                        });
+                                                        showMoreBtn.textContent = 'Xem thêm'; // Change button text to "Show More"
+                                                    }
+                                                    isExpanded = !isExpanded; // Toggle the state
+                                                });
+                                            }
+                                        });
         </script>
     </body>
 

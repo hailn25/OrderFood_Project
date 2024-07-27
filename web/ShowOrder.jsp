@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Order Details - Dashboard Admin Template</title>
+        <title>4FOODHD</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
         <link rel="stylesheet" href="css/fontawesome.min.css">
         <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css">
@@ -117,9 +117,9 @@
     <body>
         <div class="header">
             <div class="button-container">
-                <a href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}" 
-                   class="button-link ${param.orderStatusId == '1' ? 'active' : ''}">
-                    <i class="fa fa-hourglass-start"></i> Chờ xác nhận
+                <a href="orderHistory?orderStatusId=1,6&accountId=${sessionScope.account.accountId}" 
+                   class="button-link ${param.orderStatusId == '1,6' ? 'active' : ''}">
+                    <i class="fa fa-times-circle"></i> Chờ xác nhận
                 </a>
                 <a href="orderHistory?orderStatusId=2&accountId=${sessionScope.account.accountId}" 
                    class="button-link ${param.orderStatusId == '2' ? 'active' : ''}">
@@ -165,7 +165,7 @@
                         <td><a href="listOrderProduct?action=view&oid=${order.orderId}">Xem</a></td>
                         <td>
                             <c:choose>
-                                <c:when test="${order.orderStatusId == 1}">
+                                <c:when test="${order.orderStatusId == 1 || order.orderStatusId == 6}">
                                     <form action="orderHistory" method="post" onsubmit="return confirmCancel(this)">
                                         <input type="hidden" name="cancelOrder" value="true">
                                         <input type="hidden" name="orderId" value="${order.orderId}">

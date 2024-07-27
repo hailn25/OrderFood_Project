@@ -50,6 +50,14 @@
                 object-fit: cover;
             }
 
+            .no-results-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                text-align: center;
+            }
         </style>
     </head>
 
@@ -83,48 +91,69 @@
             <div class="row g-5">
                 <!-- Blog list Start -->
                 <div class="col-lg-8">
-                    <div class="blog-item mb-5">
-                        <c:forEach var="b" items="${paginatedList}">
-                            <c:if test="${b.status == true}">
-                                <div class="row g-0 bg-light overflow-hidden" style="margin: 30px 0px;">
-                                    <div class="col-12 col-sm-5 h-100">
-                                        <img class="img-fluid h-100" src="img/${b.imageURL}" style="object-fit: cover;">
-                                    </div>
-                                    <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                                        <div class="p-4">
-                                            <div class="d-flex mb-3">
-                                                <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Người đăng: ${b.nameUpdateBy}</small>
-                                                <small><i class="bi bi-calendar-date me-2"></i>${b.createDate}</small>
+                    <c:choose>
+                        <c:when test="${not empty paginatedList}">
+                            <div class="blog-item mb-5">
+                                <c:forEach var="b" items="${paginatedList}">
+                                    <c:if test="${b.status == true}">
+                                        <div class="row g-0 bg-light overflow-hidden" style="margin: 30px 0px;">
+                                            <div class="col-12 col-sm-5 h-100">
+                                                <img class="img-fluid h-100" src="img/${b.imageURL}" style="object-fit: cover;">
                                             </div>
-                                            <h5 class="text-uppercase mb-3 title">${b.title}</h5>
-                                            <p class="summary">${b.summary}</p>
-                                            <a class="text-primary text-uppercase" href="blogDetail?blogId=${b.blogId}">Đọc thêm<i class="bi bi-chevron-right"></i></a>
+                                            <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
+                                                <div class="p-4">
+                                                    <div class="d-flex mb-3">
+                                                        <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Người đăng: ${b.nameUpdateBy}</small>
+                                                        <small><i class="bi bi-calendar-date me-2"></i>${b.createDate}</small>
+                                                    </div>
+                                                    <h5 class="text-uppercase mb-3 title">${b.title}</h5>
+                                                    <p class="summary">${b.summary}</p>
+                                                    <a class="text-primary text-uppercase" href="blogDetail?blogId=${b.blogId}">Đọc thêm<i class="bi bi-chevron-right"></i></a>
+                                                </div>
+                                            </div>
                                         </div>
+                                    </c:if>
+                                </c:forEach>
+
+                                <div class="col-12">
+                                    <div class="pagination d-flex justify-content-center mt-5">
+                                        <a href="blog?page=${1}" class="rounded">&laquo;</a>
+                                        <c:forEach var="i" begin="1" end="${totalPages}">
+                                            <a href="blog?page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
+                                        </c:forEach>
+                                        <a href="blog?page=${totalPages}" class="rounded" >&raquo;</a>
                                     </div>
                                 </div>
-                            </c:if>
-                        </c:forEach>
-
-                        <div class="col-12">
-                            <div class="pagination d-flex justify-content-center mt-5">
-                                <a href="blog?page=${1}" class="rounded">&laquo;</a>
-                                <c:forEach var="i" begin="1" end="${totalPages}">
-                                    <a href="blog?page=${i}" class="${currentPage == i ? 'active rounded' : 'rounded'}">${i}</a>
-                                </c:forEach>
-                                <a href="blog?page=${totalPages}" class="rounded" >&raquo;</a>
                             </div>
-                        </div>
-                    </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-results-container">
+                                <img src="img/cantfindblog.jpg" width="100px" height="100px" alt="Không tìm thấy ảnh"/>
+                                <h3 style="display: flex; align-items: center;">Không tìm thấy bài viết</h3>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <!-- Blog list End -->
 
                 <!-- Sidebar Start -->
                 <div class="col-lg-4">
+                    <div class="mb-5">
+                        <c:if test="${not empty error}">
+                            <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                        </c:if>
+                        <form action="blog" method="POST">
+                            <div class="input-group">
+                                <input type="text" class="form-control p-3" name="blogName" required="" placeholder="Từ khoá">
+                                <button class="btn btn-primary px-4" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
                     <!-- Recent Post Start -->
                     <div class="mb-5">
                         <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Bài viết gần đây</h3>
-                        <c:forEach var="b" items="${listBlogDTO}">
+                        <c:forEach var="b" items="${listBlogDTO1}">
                             <c:if test="${b.status == true}">
                                 <div class="d-flex overflow-hidden mb-3">
                                     <img class="img-fluid" src="img/${b.imageURL}" style="width: 100px; height: 100px; object-fit: cover;" alt="Không thể tải ảnh">

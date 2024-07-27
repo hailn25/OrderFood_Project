@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Đổi mật khẩu</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">   
+        <title>4FOODHD</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
@@ -115,7 +115,7 @@
     </head>
     <body>
         <div class="container">
-             <c:choose>
+            <c:choose>
                 <c:when test="${sessionScope.account.roleId == 2}">
                     <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #81C408;">
                         <h1 class="navbar-brand mb-0 h4">Đổi mật khẩu</h1>

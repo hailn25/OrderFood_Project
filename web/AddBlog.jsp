@@ -45,7 +45,6 @@
     <body style="background-color: #F6F6F6">
 
 
-
         <div class="container tm-mt-big tm-mb-big">
             <div class="row">
                 <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
@@ -81,10 +80,6 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                                    <div class="form-group mb-3">
-                                        <label for="datesubmit">Ngày đăng </label>
-                                        <input type="date" name="datesubmit" required="" id="datesubmit" class="form-control">
-                                    </div>
                                     <div class="tm-product-img-preview mx-auto">
                                         <img id="preview" src="" class="img-fluid d-block mx-auto" style="display:none;"/>
                                     </div>
@@ -135,3 +130,5 @@
         </script>
     </body>
 </html>
+
+

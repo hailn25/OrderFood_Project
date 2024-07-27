@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Verify</title>
+        <title>4FOODHD</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
@@ -48,11 +48,11 @@
                         <form method="post" action="${authenticationfor}">
                             <div class="form-group d-flex justify-content-center align-items-center">
                                 <input type="text" class="form-control col-md-6 " name="verify" required>
-                                <input class="btn btn-primary" type="submit" value="Verify" style="margin-left: 20px">
+                                <input class="btn btn-primary" type="submit" value="Xác minh" style="margin-left: 20px">
                             </div>
-                                <button class="btn btn-success"  style="margin-left: 50px">
-                                    <a href="${authenticationfor}" style=" color: #000">Trở về trang trước</a>
-                                </button>
+                            <button class="btn btn-success"  style="margin-left: 50px">
+                                <a href="${authenticationfor}" style=" color: #000">Trở về trang trước</a>
+                            </button>
                         </form>
                     </div>
                 </div>

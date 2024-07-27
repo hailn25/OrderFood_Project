@@ -100,34 +100,37 @@
                             </table>
                         </div>
                         <div class="border p-4 mt-4" style="margin-bottom: 50px">
-                            <h2 class="mb-4">Tổng thanh toán</h2>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted-foreground">Tổng tiền hàng</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${subtotal}" maxFractionDigits="0" /> VNĐ</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted-foreground">Phí vận chuyển</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" maxFractionDigits="0" /> VNĐ</span>
-                            </div>
-                            <c:if test="${shippingDiscount != 0}">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted-foreground">Giảm giá phí vận chuyển</span>
-                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${shippingDiscount}" maxFractionDigits="0" /> VNĐ</span>
-                                </div>
-                            </c:if>
-                            <c:if test="${voucherDiscount != 0}">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted-foreground">Giảm giá voucher</span>
-                                    <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" maxFractionDigits="0" /> VNĐ</span>
-                                </div>
-                            </c:if>
-                            <hr>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted-foreground">Tổng đơn hàng</span>
-                                <span class="text-muted-foreground"><fmt:formatNumber value="${total}" maxFractionDigits="0" /> VNĐ</span>
-                                <input type="hidden" name="cost" value="${total}" />
-                            </div>
-                        </div>
+                      <div class="border p-4 mt-4" style="margin-bottom: 50px">
+    <h2 class="mb-4">Tổng thanh toán</h2>
+    <div class="d-flex justify-content-between mb-2">
+        <span class="text-muted-foreground">Tổng tiền hàng</span>
+        <span class="text-muted-foreground"><fmt:formatNumber value="${subtotal}" maxFractionDigits="0" /> VNĐ</span>
+    </div>
+    <div class="d-flex justify-content-between mb-2">
+        <span class="text-muted-foreground">Phí vận chuyển</span>
+        <span class="text-muted-foreground"><fmt:formatNumber value="${shippingFee}" maxFractionDigits="0" /> VNĐ</span>
+    </div>
+    <c:if test="${shippingDiscount != 0}">
+        <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted-foreground">Giảm giá phí vận chuyển</span>
+            <span class="text-muted-foreground">- <fmt:formatNumber value="${shippingDiscount}" maxFractionDigits="0" /> VNĐ</span>
+        </div>
+    </c:if>
+    <c:if test="${voucherDiscount != 0}">
+        <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted-foreground">Giảm giá voucher</span>
+            <span class="text-muted-foreground">- <fmt:formatNumber value="${voucherDiscount}" maxFractionDigits="0" /> VNĐ</span>
+        </div>
+    </c:if>
+    <hr>
+    <div class="d-flex justify-content-between mb-2">
+        <span class="text-muted-foreground">Tổng đơn hàng</span>
+        <span class="text-muted-foreground"><fmt:formatNumber value="${total}" maxFractionDigits="0" /> VNĐ</span>
+    </div>
+   
+    <input type="hidden" name="cost" value="${total}" />
+</div>
+
 
                         <div class="row mt-4">
                             <div class="col-md-12">
@@ -269,3 +272,4 @@
 
     </body>
 </html>
+

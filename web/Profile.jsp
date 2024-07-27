@@ -13,7 +13,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Thông tin cá nhân</title>
+        <title>4FOODHD</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
@@ -184,7 +184,7 @@
                                             </a>
                                         </li>                                 
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
+                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1,6&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Đơn hàng</span>
                                             </a>

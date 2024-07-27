@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Chọn Voucher</title>
+        <title>4FOODHD</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
         <style>
@@ -59,7 +59,6 @@
             <div class="card shadow-lg w-75">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2 class="h5 mb-0">Chọn Voucher</h2>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="toggleDarkMode()">Dark Mode</button>
                 </div>
                 <div class="card-body">
                     <div class="mb-4">
@@ -80,7 +79,7 @@
                                             <p class="small text-muted mb-0">${l.description}</p>
                                             <p class="small text-muted">HSD: ${l.finishDate}</p>
                                         </div>
-                                        <span class="badge bg-danger ms-3">x ${1}</span>
+                                        <span class="badge bg-danger ms-3">x 1</span>
                                         <input type="radio" name="voucherFree" value="${l.voucherId}" class="form-check-input ms-3">
                                     </label>
                                 </c:forEach>
@@ -97,7 +96,7 @@
                                             <p class="small text-muted mb-0">${lV.description}</p>
                                             <p class="small text-muted">HSD: ${lV.finishDate}</p>
                                         </div>
-                                        <span class="badge bg-danger ms-3">x ${1}</span>
+                                        <span class="badge bg-danger ms-3">x 1</span>
                                         <input type="radio" name="voucherR" value="${lV.voucherId}" class="form-check-input ms-3">
                                     </label>
                                 </c:forEach>

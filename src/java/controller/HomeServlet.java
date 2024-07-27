@@ -41,13 +41,12 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ProductHomeDAO dao = new ProductHomeDAO();
-        FeedbackDAO dao1 = new FeedbackDAO();
         SliderDAO sliderDAO = new SliderDAO();
         
         List<ProductHome> list = dao.getAllProduct();
         List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct  = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
+        List<ProductHome> listBestSellerProduct  = dao.getAllOSTProduct();
+        List<ProductHome> listProduct = dao.getProductHome();
         ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
         ArrayList<SliderDTO> newSlider = new ArrayList<>();
         for (SliderDTO s1 : listSlider) {
@@ -65,7 +64,7 @@ public class HomeServlet extends HttpServlet {
         
         request.setAttribute("listP", list);
         request.setAttribute("listC", listAllCategory);
-        request.setAttribute("listV", listProductP);
+        request.setAttribute("listV", listProduct);
         request.setAttribute("listB", listBestSellerProduct);
         request.setAttribute("listSlider", newSlider);
         request.setAttribute("listSliderDot", listSliderDot);
@@ -113,6 +112,8 @@ public class HomeServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
 
 
 

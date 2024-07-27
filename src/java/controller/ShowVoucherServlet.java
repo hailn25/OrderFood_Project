@@ -45,7 +45,7 @@ public class ShowVoucherServlet extends HttpServlet {
     session.setMaxInactiveInterval(180);
 
     if (account == null) {
-        response.sendRedirect("login");
+        response.sendRedirect("Login.jsp");
         return;
     }
 

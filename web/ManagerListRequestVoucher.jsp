@@ -8,6 +8,7 @@
 <html lang="en">
     <head>
         <!--cai nay cua ProGear-->
+        <title>4FOODHD</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--day la icon edit, delete-->
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"> <!--day la table cua bang manager-->
         <link rel="stylesheet" href="css/fontawesome.min.css" />

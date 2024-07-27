@@ -8,7 +8,7 @@
         <meta name="keywords" content="Cake, unica, creative, html">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Cake | Template</title>
+        <title>4FOODHD</title>
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
               rel="stylesheet">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <div class="col-lg-6 col-6 text-left" style="margin: 35px 180px;">
                 <form action="search">
                     <div class="input-group">
@@ -166,49 +166,49 @@
                 <div class="row">
                     <c:forEach begin="1" end="4">
                         <div class="col-lg-3 col-md-6 col-sm-6" style=" border-radius: 5px;">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="img/shop/product-1.jpg " style="margin-bottom: 10 px; hight: 80%;border-radius: 5px">
-                                <div class="card-img-overlay ps-0" style="color: white"><span class="badge bg-danger p-2 ms-3"><i class="fas fa-tag me-2 fs-0"></i><span class="fs-0" style="color: white">20% off</span></span><span class="badge bg-primary ms-2 me-1 p-2"><i class="fas fa-clock me-1 fs-0"></i><span class="fs-0">Fast</span></span></div>
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="img/shop/product-1.jpg " style="margin-bottom: 10 px; hight: 80%;border-radius: 5px">
+                                    <div class="card-img-overlay ps-0" style="color: white"><span class="badge bg-danger p-2 ms-3"><i class="fas fa-tag me-2 fs-0"></i><span class="fs-0" style="color: white">20% off</span></span><span class="badge bg-primary ms-2 me-1 p-2"><i class="fas fa-clock me-1 fs-0"></i><span class="fs-0">Fast</span></span></div>
 
-                            </div>
-                            <div class="card-body ps-0">
-                                <div class="d-flex align-items-center mb-3"><img class="img-fluid" src="img/shop/product-1.jpg" alt="" / style="width: 27%; margin-right: 20px; border-radius: 5px">
-                                    <div class="flex-1 ms-3">
-                                        <h5 class="mb-0 fw-bold text-1000" style="font-weight: bold; font-size: 20px;">Food world</h5>
-                                        <span class="text-warning fs--1 me-1"><i class="fas fa-star"></i></span>
-                                        <span class="mb-0 text-primary" style="color: yellow;">46</span>
-                                    </div>
-                                </div><span class="badge bg-soft-danger p-2" style="border-radius: 5px ;background-color: #EEB4B4; font-size: 20px"><span class="fw-bold fs-1 text-danger">Opens Tomorrow</span></span>
+                                </div>
+                                <div class="card-body ps-0">
+                                    <div class="d-flex align-items-center mb-3"><img class="img-fluid" src="img/shop/product-1.jpg" alt="" / style="width: 27%; margin-right: 20px; border-radius: 5px">
+                                        <div class="flex-1 ms-3">
+                                            <h5 class="mb-0 fw-bold text-1000" style="font-weight: bold; font-size: 20px;">Food world</h5>
+                                            <span class="text-warning fs--1 me-1"><i class="fas fa-star"></i></span>
+                                            <span class="mb-0 text-primary" style="color: yellow;">46</span>
+                                        </div>
+                                    </div><span class="badge bg-soft-danger p-2" style="border-radius: 5px ;background-color: #EEB4B4; font-size: 20px"><span class="fw-bold fs-1 text-danger">Opens Tomorrow</span></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </c:forEach>
 
                     <c:forEach begin="1" end="4">
-                          <div class="col-lg-3 col-md-6 col-sm-6" style=" border-radius: 5px;">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="img/shop/product-1.jpg " style="margin-bottom: 10 px; hight: 80%;border-radius: 5px">
-                                <div class="card-img-overlay ps-0" style="color: white"><span class="badge bg-danger p-2 ms-3"><i class="fas fa-tag me-2 fs-0"></i><span class="fs-0" style="color: white">20% off</span></span><span class="badge bg-primary ms-2 me-1 p-2"><i class="fas fa-clock me-1 fs-0"></i><span class="fs-0">Fast</span></span></div>
+                        <div class="col-lg-3 col-md-6 col-sm-6" style=" border-radius: 5px;">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="img/shop/product-1.jpg " style="margin-bottom: 10 px; hight: 80%;border-radius: 5px">
+                                    <div class="card-img-overlay ps-0" style="color: white"><span class="badge bg-danger p-2 ms-3"><i class="fas fa-tag me-2 fs-0"></i><span class="fs-0" style="color: white">20% off</span></span><span class="badge bg-primary ms-2 me-1 p-2"><i class="fas fa-clock me-1 fs-0"></i><span class="fs-0">Fast</span></span></div>
 
-                            </div>
-                            <div class="card-body ps-0">
-                                <div class="d-flex align-items-center mb-3">
-                                    <img class="img-fluid" src="img/shop/product-1.jpg" alt="" style="width: 27%; margin-right: 20px; border-radius: 5px;">
-                                    <div class="flex-1 ms-3">
-                                        <h5 class="mb-0 fw-bold text-1000" style="font-weight: bold; font-size: 20px;">Food world</h5>
-                                        <span class="text-warning fs--1 me-1"><i class="fas fa-star"></i></span>
-                                        <span class="mb-0 text-primary" style="color: yellow;">46</span>
-                                    </div>
                                 </div>
-                                <span class="badge bg-soft-danger p-2" style="border-radius: 5px; background-color:#B4EEB4; font-size: 20px;">
-                                    <span class="fw-bold fs-1 " style="color: green;">Opens Now</span>
+                                <div class="card-body ps-0">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img class="img-fluid" src="img/shop/product-1.jpg" alt="" style="width: 27%; margin-right: 20px; border-radius: 5px;">
+                                        <div class="flex-1 ms-3">
+                                            <h5 class="mb-0 fw-bold text-1000" style="font-weight: bold; font-size: 20px;">Food world</h5>
+                                            <span class="text-warning fs--1 me-1"><i class="fas fa-star"></i></span>
+                                            <span class="mb-0 text-primary" style="color: yellow;">46</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-soft-danger p-2" style="border-radius: 5px; background-color:#B4EEB4; font-size: 20px;">
+                                        <span class="fw-bold fs-1 " style="color: green;">Opens Now</span>
 
-                                </span>
+                                    </span>
+                                </div>
+
+
                             </div>
-
-
                         </div>
-                    </div>
                     </c:forEach>
 
                 </div>
@@ -232,7 +232,7 @@
                                     <div class="product__item__text">
                                         <h6><a href="#">Dozen Cupcakes</a></h6>
                                         <div class="product__item__price">$32.00</div>
-                                         <div class="d-grid gap-2"><a class="btn btn-lg btn-danger" href="#!" role="button">Order now</a></div>                                    </div>
+                                        <div class="d-grid gap-2"><a class="btn btn-lg btn-danger" href="#!" role="button">Order now</a></div>                                    </div>
                                 </div>
                             </div>
                         </c:forEach>    

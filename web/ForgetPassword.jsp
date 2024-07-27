@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>4FOODHD</title>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
@@ -35,7 +35,7 @@
                             <form method="post" action="forget">
                                 <div class="form-group d-flex justify-content-center align-items-center">
                                     <input type="email" class="form-control col-md-6 " name="email" required>
-                                    <input class="btn btn-primary" type="submit" value="Send" style="margin-left: 20px">
+                                    <input class="btn btn-primary" type="submit" value="Gửi" style="margin-left: 20px">
                                 </div>
                                 <button class="btn btn-success"  style="margin-left: 20px">
                                     <a href="login" style=" color: #000">Trở về trang trước</a>
@@ -72,7 +72,7 @@
                             <form method="post" action="forget">
                                 <div class="form-group d-flex justify-content-center align-items-center">
                                     <input type="text" class="form-control col-md-6 " name="code" required>
-                                    <input class="btn btn-primary" type="submit" value="Verify" style="margin-left: 20px">
+                                    <input class="btn btn-primary" type="submit" value="Xác minh" style="margin-left: 20px">
                                 </div>
                                 <button class="btn btn-success"  style="margin-left: 20px">
                                     <a href="login" style=" color: #000">Trở về trang trước</a>
@@ -98,7 +98,7 @@
                         <h4>Tạo mật khẩu</h4>
                         <ul>
                             <li>Bạn cần tạo mật khẩu mới cho lần đăng nhập tiếp theo</li>
-                            <li>Vui lòng làm theo các hướng dẫn bên dưới để tạo mậ khẩu</li>
+                            <li>Vui lòng làm theo các hướng dẫn bên dưới để tạo mật khẩu</li>
                         </ul>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                                         <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
                                     </div>
                                     <div class="form-outline mb-4" style="width: 400px ; margin: auto">
-                                        <input name="repassword"  type="password" id="inputPassword" class="form-control" placeholder="Repeat Password" required="">
+                                        <input name="repassword"  type="password" id="inputRePassword" class="form-control" placeholder="Repeat Password" required="">
                                     </div>
 
                                     <button class="btn btn-primary btn-block" type="submit" style="width: 120px ; margin: auto">Submit</button>
@@ -125,10 +125,16 @@
                                             document.getElementById("errorMessage").innerHTML = err;
                                         }
                                     }
+
+
                                     function validateForm() {
                                         var password = document.getElementsByName("password")[0];
                                         var repassword = document.getElementsByName("repassword")[0];
-
+                                        passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{6,}$/;
+                                        if (!password.value.match(passwordPattern)) {
+                                            document.getElementById("errorMessage").innerHTML = "Mật khẩu phải có ít nhất 6 ký tự, bao gồm một ký tự viết hoa và một ký tự đặc biệt";
+                                            return false;
+                                        }
                                         if (password.value == "" || password.value.trim().length == 0) {
                                             document.getElementById("errorMessage").innerHTML = "Mật khẩu không được để trống";
                                             password.value = "";

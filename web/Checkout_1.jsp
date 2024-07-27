@@ -10,7 +10,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>4FOODHD</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,42 +52,42 @@
                                     <div class="col-md-12">
                                         <label class="form-label my-3">Họ và Tên <sup>*</sup></label>
                                         <input type="text" class="form-control" name="name" ">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label my-3">Địa chỉ <sup>*</sup></label>
+                                        <input type="text" class="form-control" name="address" ">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label my-3">Email <sup>*</sup></label>
+                                        <input type="email" class="form-control" name="email" ">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
+                                        <input type="tel" class="form-control" name="phone" ">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="5" placeholder="Ghi chú"></textarea>
+                                    </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <label class="form-label my-3">Địa chỉ <sup>*</sup></label>
-                                    <input type="text" class="form-control" name="address" ">
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="form-label my-3">Email <sup>*</sup></label>
-                                    <input type="email" class="form-control" name="email" ">
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="form-label my-3">Số điện thoại <sup>*</sup></label>
-                                    <input type="tel" class="form-control" name="phone" ">
-                                </div>
-                               
-                                <div class="col-12">
-                                    <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="5" placeholder="Ghi chú"></textarea>
-                                </div>
-                            </div>
 
 
-                    </div>
-                    <!-- Order Summary -->
-                    <div class="col-md-5">
-                        <h2>Giỏ hàng</h2>
-                        <div class="table-responsive">
-                            <table class="table" ">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sản phẩm</th>
-                                        <th scope="col">Tên</th>
-                                        <th scope="col">Giá</th>
-                                        <th scope="col">Số lượng</th>
-                                        <th scope="col">Tổng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        </div>
+                        <!-- Order Summary -->
+                        <div class="col-md-5">
+                            <h2>Giỏ hàng</h2>
+                            <div class="table-responsive">
+                                <table class="table" ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sản phẩm</th>
+                                            <th scope="col">Tên</th>
+                                            <th scope="col">Giá</th>
+                                            <th scope="col">Số lượng</th>
+                                            <th scope="col">Tổng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
                                     <c:set var="cartItems" value="${sessionScope.cart.items}" />
                                     <c:forEach var="item" items="${cartItems}">
@@ -202,31 +202,31 @@
         <script src="js/script.js"></script>
         <!-- Custom JavaScripts -->
         <script>
-                                       function cancelOrder() {
-                                           if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
-                                               // Reset the cart (optional)
-                                               resetCart();
-                                               // Redirect to home page
-                                               window.location.href = "home";
-                                           }
-                                       }
+                                function cancelOrder() {
+                                    if (confirm("Bạn có chắc chắn muốn hủy đơn hàng?")) {
+                                        // Reset the cart (optional)
+                                        resetCart();
+                                        // Redirect to home page
+                                        window.location.href = "home";
+                                    }
+                                }
 
-                                       function resetCart() {
-                                           // AJAX request to reset the cart if needed
-                                           // Example: Clear session or reset cart variables
-                                           // Here, we assume a session attribute 'cart' exists and can be cleared
-                                           fetch('resetCart', {
-                                               method: 'POST'
-                                           }).then(response => {
-                                               if (response.ok) {
-                                                   console.log('Cart reset successfully.');
-                                               } else {
-                                                   console.error('Failed to reset cart.');
-                                               }
-                                           }).catch(error => {
-                                               console.error('Error resetting cart:', error);
-                                           });
-                                       }
+                                function resetCart() {
+                                    // AJAX request to reset the cart if needed
+                                    // Example: Clear session or reset cart variables
+                                    // Here, we assume a session attribute 'cart' exists and can be cleared
+                                    fetch('resetCart', {
+                                        method: 'POST'
+                                    }).then(response => {
+                                        if (response.ok) {
+                                            console.log('Cart reset successfully.');
+                                        } else {
+                                            console.error('Failed to reset cart.');
+                                        }
+                                    }).catch(error => {
+                                        console.error('Error resetting cart:', error);
+                                    });
+                                }
         </script>
 
 

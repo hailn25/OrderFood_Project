@@ -192,6 +192,7 @@
                                 <div class="col-lg-12">
                                     <div class="row g-4" id="product-container">
                                     <c:forEach items="${listPS}" var="p">
+                                        <c:if test="${p.quantity > 0}">
                                         <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
@@ -211,15 +212,14 @@
                                                         <c:out value="${p.price}"/>
                                                     </h5>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <p style="display: flex; align-items: center;font-family: sans-serif;"id="price-${p.productId}">${p.salePrice}</p>
-                                                        <form id="${p.productId}" onsubmit="addToCart(${p.productId}); return false;">
-                                                            <input type="hidden" name="productId" value="${p.productId}">
-                                                            <button type="submit" class="text-primary " style="margin-right: 0px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                                <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                            </button>
-                                                        </form>
-
+                                                        <p style="display: flex; align-items: center;font-family: sans-serif;"><fmt:formatNumber value="${p.salePrice}" type="number" maxFractionDigits="0"/> VNĐ</p> 
                                                         <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 5px; ">
+                                                            <form id="${p.productId}" onsubmit="addToCart(${p.productId}); return false;">
+                                                                <input type="hidden" name="productId" value="${p.productId}">
+                                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                </button>
+                                                            </form>
                                                             <a href="restaurant?restaurantId=${p.restaurantId}&page=${1}">
                                                                 <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
                                                             </a>
@@ -228,7 +228,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        </c:if>
                                     </c:forEach>
                                 </div>
                             </div>

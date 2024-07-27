@@ -248,9 +248,10 @@
                                 </td>
                                 <td>
                                     <a href="viewDetailRequestFlashSale?vid=${f.productId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
-                                    <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
-                                    <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
-
+                                    <c:if test = "${f.isFlashSale == 0}"> 
+                                        <a href="changeStatusFlashSale?changeStatus=${1}&pid=${f.productId}" class="btn btn-green" title="Xác nhận"><i class="fas fa-check"></i></a>
+                                        <a href="changeStatusFlashSale?changeStatus=${2}&pid=${f.productId}" class="btn btn-red" title="Từ chối" onclick="confirmDelete(event)"><i class="fas fa-times"></i></a>
+                                    </c:if> 
                                 </td>
 
                             </tr>

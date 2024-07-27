@@ -5,6 +5,8 @@
 
 package controller;
 
+import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
+import dao.ProductDAO;
 import dao.ProductSaleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,6 +40,8 @@ public class ChangeStatusFlashSale extends HttpServlet {
         int changeStatus = Integer.parseInt(request.getParameter("changeStatus"));
         int productId = Integer.parseInt(request.getParameter("pid"));
         dao.ChangeStatusFlashSale(changeStatus, productId);
+        ProductDAO dao1 = new ProductDAO();
+        dao1.changeStatusWhenConfirmFlashSaleOfStaff(productId);
         request.getRequestDispatcher("managerProductFlashSale").forward(request, response);
     } 
 

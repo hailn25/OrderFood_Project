@@ -133,20 +133,21 @@ public class ProductSaleDAO {
     public List<ProductSaleDTO1> ListProductFlashSale(String date) throws SQLException {
         List<ProductSaleDTO1> list = new ArrayList<>();
         try {
-            String sql = "SELECT ps.ProductID,\n"
-                    + "       p.Name,\n"
-                    + "       ps.IsFlashSale,\n"
-                    + "       p.ImageURL,\n"
-                    + "       ps.Quantity,\n"
-                    + "       ps.Discount,\n"
-                    + "       ps.SalePrice,\n"
-                    + "       p.Price,\n"
-                    + "       ps.TimeFrame,\n"
-                    + "       ps.StartTime,\n"
-                    + "       ps.EndTime\n"
-                    + "FROM Product p\n"
-                    + "JOIN Product_Sale ps ON ps.ProductID = p.ProductID\n"
-                    + "WHERE CAST(ps.StartTime AS DATE) = ?";
+            String sql = """
+                         SELECT ps.ProductID,
+                                                         p.Name,
+                                                         ps.IsFlashSale,
+                                                         p.ImageURL,
+                                                         ps.Quantity,
+                                                         ps.Discount,
+                                                         ps.SalePrice,
+                                                         p.Price,
+                                                         ps.TimeFrame,
+                                                         ps.StartTime,
+                                                         ps.EndTime
+                                                  FROM Product p
+                                                  JOIN Product_Sale ps ON ps.ProductID = p.ProductID
+                                                  WHERE CAST(ps.StartTime AS DATE) = ? and ps.IsFlashSale in (1,2,3,0)""";
             conn = new DBContext().getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, date);
@@ -347,9 +348,8 @@ public class ProductSaleDAO {
     public void deleteFlashSaleProduct(int productId) throws SQLException {
         try {
             String sql = """
-                         update [dbo].[Product_Sale]
-                         set [IsFlashSale] = 4
-                         where ProductID = ?""";
+                         DELETE [dbo].[Product_Sale]
+                         WHERE ProductID = ?""";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, productId);

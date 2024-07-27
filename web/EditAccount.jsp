@@ -6,7 +6,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Edit Product - Dashboard Admin Template</title>
+        <title>4FOODHD</title>
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:400,700"
@@ -80,10 +80,22 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <c:if test="${roleId == 2}">
+                                        <c:if test="${roleId == 2 && status == 1}">
                                             <div class=" form-group mb-3 col-xs-12 col-sm-6">
                                                 <label for="role">Vai trò</label>
                                                 <select class="custom-select tm-select-accounts select" name="role" required>
+                                                    <!--<option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>-->
+                                                    <option value="2" ${2 == roleId ? "selected" : ""}>Khách hàng</option>
+                                                    <option value="3" ${3 == roleId ? "selected" : ""}>Shipper</option>
+                                                    <option value="4" ${4 == roleId ? "selected" : ""}>Nhà hàng</option>
+                                                    <option value="5" ${5 == roleId ? "selected" : ""}>Nhân viên</option>
+                                                </select>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${roleId == 2 && status == 0}">
+                                            <div class=" form-group mb-3 col-xs-12 col-sm-6">
+                                                <label for="role">Vai trò</label>
+                                                <select class="read-only custom-select tm-select-accounts select" name="role" required>
                                                     <!--<option value="${o.roleId}" ${o.roleId == roleId ? "selected" : ""}>${o.roleName}</option>-->
                                                     <option value="2" ${2 == roleId ? "selected" : ""}>Khách hàng</option>
                                                     <option value="3" ${3 == roleId ? "selected" : ""}>Shipper</option>

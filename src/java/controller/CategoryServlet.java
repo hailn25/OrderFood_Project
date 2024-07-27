@@ -45,8 +45,8 @@ public class CategoryServlet extends HttpServlet {
         SliderDAO sliderDAO = new SliderDAO();
         List<ProductHome> list = dao.getProductByCID(cateID);
         List<CategoryListDetail> listAllCategory = dao.getAllCategory();
-        List<ProductHome> listBestSellerProduct = dao.getAllBestSellerProduct();
-        List<ListProduct> listProductP = dao.getListProductP();
+        List<ProductHome> listBestSellerProduct = dao.getAllOSTProduct();
+        List<ProductHome> listProduct = dao.getProductHome();
         ArrayList<SliderDTO> listSlider = sliderDAO.getAllSliderDTO();
         ArrayList<SliderDTO> newSlider = new ArrayList<>();
         for (SliderDTO s1 : listSlider) {
@@ -64,7 +64,7 @@ public class CategoryServlet extends HttpServlet {
 
         request.setAttribute("listC", listAllCategory);
         request.setAttribute("listP", list);
-        request.setAttribute("listV", listProductP);
+        request.setAttribute("listV", listProduct);
         request.setAttribute("listB", listBestSellerProduct);
         request.setAttribute("listSlider", newSlider);
         request.setAttribute("listSliderDot", listSliderDot);
@@ -113,6 +113,8 @@ public class CategoryServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
 
 
 

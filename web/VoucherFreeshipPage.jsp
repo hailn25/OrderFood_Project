@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-
+        <title>4FOODHD</title>
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/bootstrap.min.css" rel="stylesheet">

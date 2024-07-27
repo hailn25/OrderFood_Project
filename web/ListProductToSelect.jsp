@@ -4,6 +4,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <title>4FOODHD</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
@@ -81,6 +82,9 @@
                             <input type="hidden" name="restaurantId" value="${restaurantId}">
                         </div>
                         <div class="mb-4">
+                            <c:if test="${not empty error}">
+                                <div id="error-message" class="alert alert-danger mt-3">${error}</div>
+                            </c:if>
                             <div class="input-group">
                                 <input name="productName" type="search" class="form-control" placeholder="Tên sản phẩm">
                                 <button type="submit" class="btn btn-outline-secondary">TÌM KIẾM</button>
