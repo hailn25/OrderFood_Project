@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-       <title>4FOODHD</title>
+        <title>4FOODHD</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
@@ -112,7 +112,7 @@
         <script type="text/javascript">
             window.onload = function () {
                 var error = "<%= (String) request.getAttribute("error") %>";
-                if (error !== "") {
+                if (error !== null) {
                     alert(error);
                 }
             };
@@ -126,25 +126,29 @@
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-bold text-foreground">Đoạn chat</h2>
                 </div>
-                <form class="flex items-center" action="searchMessageUser" method="POST">
-                    <input type="text" name="searchMessage" placeholder="Tìm kiếm tin nhắn" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
-                    <button type="submit" class="ml-2 p-2 mb-4 border border-border rounded bg-primary text-white focus:ring-2 focus:ring-primary">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
+                <!--                <form class="flex items-center" action="searchMessageUser" method="POST">
+                                    <input type="text" name="searchMessage" placeholder="Tìm kiếm tin nhắn" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+                                    <button type="submit" class="ml-2 p-2 mb-4 border border-border rounded bg-primary text-white focus:ring-2 focus:ring-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>-->
+
+                <input type="text" id="searchBar" placeholder="Tìm kiếm tin nhắn" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
+
                 <!--                <div class="mb-4">
                                     <h3 class="text-sm font-semibold text-foreground">Hộp thư</h3>
                                     <h3 class="text-sm font-semibold text-foreground">Cộng đồng</h3>
                                 </div>-->
-                <div class="space-y-2 overflow-y-auto">
+                <div class="space-y-2 overflow-y-auto" id="restaurantList">
+<!--                    <input type="hidden" value="${error}" name="error"/>-->
                     <c:forEach items="${listRestaurantName}" var="r">
-                        <a href="messageUser1?userId=${sessionScope.account.accountId}&restaurantId=${r.restaurantId}" class="flex items-center space-x-2 p-2 rounded hover:bg-muted cursor-pointer">
+                        <a href="messageUser1?userId=${sessionScope.account.accountId}&restaurantId=${r.restaurantId}" class="restaurant-item flex items-center space-x-2 p-2 rounded hover:bg-muted cursor-pointer">
                             <img src="img/${r.restaurantImageURL}" alt="Không thể tải ảnh" class="w-10 h-10 rounded-full" />
                             <div class="flex-1">
                                 <h4 class="text-sm font-semibold text-foreground">${r.restaurantName}</h4>
                                 <!--                                <p class="text-xs text-muted-foreground">có code k gửi hình e xem phát</p>-->
                             </div>
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                            <!--                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>-->
                         </a>
                     </c:forEach>
                 </div>
@@ -213,6 +217,20 @@
                 var lastMessage = document.getElementById("lastMessage");
                 if (lastMessage) {
                     lastMessage.scrollIntoView({behavior: "smooth"});
+                }
+            });
+
+            document.getElementById('searchBar').addEventListener('input', function () {
+                var input = document.getElementById('searchBar').value.toLowerCase();
+                var items = document.getElementsByClassName('restaurant-item');
+
+                for (var i = 0; i < items.length; i++) {
+                    var itemName = items[i].querySelector('h4').textContent.toLowerCase();
+                    if (itemName.includes(input)) {
+                        items[i].style.display = 'flex'; 
+                    } else {
+                        items[i].style.display = 'none'; 
+                    }
                 }
             });
         </script>

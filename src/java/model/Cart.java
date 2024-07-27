@@ -6,6 +6,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,6 +25,13 @@ public class Cart {
         this.items = items;
     }
 
+    public HashMap<Integer, Integer> getMaxquantityEachProductId(){
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (Item i : items) {
+            map.put(i.getProduct().getProductId(), i.getProduct().getQuantity());
+        }
+        return map;
+    }
     private Item getItemById(int id) {
         for (Item i : items) {
             if (i.getProduct().getProductId() == id) {
@@ -85,7 +93,6 @@ public class Cart {
         this.items = items;
     }
 
-    
 }
 
 

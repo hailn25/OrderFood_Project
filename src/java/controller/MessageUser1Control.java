@@ -38,16 +38,20 @@ public class MessageUser1Control extends HttpServlet {
         MessageDAO messsageDAO = new MessageDAO();
         int userId = 0;
         int restaurantId = 0;
-        String error = request.getParameter("error");
+        String error =  "";
+        if (request.getParameter("error") != null) {
+            error = request.getParameter("error");
+        } else {
+            error = "Chào mừng bạn đến với tin nhắn!";
+        }
         if (request.getParameter("userId") != null && request.getParameter("restaurantId") != null) {
             userId = Integer.parseInt(request.getParameter("userId"));
             restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
         }
 
-        request.setAttribute("error", error);
         request.setAttribute("userId", userId);
         request.setAttribute("restaurantId", restaurantId);
-
+        request.setAttribute("error", error);
         ArrayList<RestaurantName> listRestaurantName = messsageDAO.getListRestaurantName(userId);
         request.setAttribute("listRestaurantName", listRestaurantName);
         ArrayList<MessageUser> listMessageUser = messsageDAO.getMessageUser(userId, restaurantId);

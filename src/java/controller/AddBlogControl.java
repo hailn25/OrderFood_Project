@@ -54,11 +54,19 @@ public class AddBlogControl extends HttpServlet {
         String img = null;
         String error = "Thông tin không hợp lệ";
 
+// Kiểm tra nếu chỉ chứa số hoặc ký tự đặc biệt
+        String regex = "^[^a-zA-Z]*$";
+
         int lengthTitle = Validation.removeAllBlank(title).length();
         int lengthContent = Validation.removeAllBlank(content).length();
         int lengthSummary = Validation.removeAllBlank(summary).length();
-        if (lengthTitle == 0 || lengthContent == 0 || lengthSummary == 0 || request.getParameter("status") == null) {
+
+        if (lengthTitle == 0 || lengthContent == 0 || lengthSummary == 0
+                || request.getParameter("status") == null) {
             request.setAttribute("error", error);
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        } else if (title.matches(regex) || content.matches(regex) || summary.matches(regex)) {
+            request.setAttribute("error", "Thông tin không được chỉ chứa số hoặc chỉ chứa ký tự đặc biệt!");
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
         } else {
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
@@ -82,6 +90,7 @@ public class AddBlogControl extends HttpServlet {
                 request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
             }
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
