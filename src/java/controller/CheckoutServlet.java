@@ -118,7 +118,7 @@ public class CheckoutServlet extends HttpServlet {
 
         OrderDAO dao = new OrderDAO();
         int accountId = account.getAccountId();
-        dao.insertNewOrder(1, accountId, Double.parseDouble(total), name, email, phone, address, note);
+        dao.insertNewOrder(6, accountId, Double.parseDouble(total), name, email, phone, address, note);
         VoucherDAO voucher = new VoucherDAO();
         
         int orderId = dao.getOrderID();

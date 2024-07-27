@@ -80,7 +80,7 @@
                                             <p class="small text-muted mb-0">${l.description}</p>
                                             <p class="small text-muted">HSD: ${l.finishDate}</p>
                                         </div>
-                                        <span class="badge bg-danger ms-3">x ${l.quantity}</span>
+                                        <span class="badge bg-danger ms-3">x ${1}</span>
                                         <input type="radio" name="voucherFree" value="${l.voucherId}" class="form-check-input ms-3">
                                     </label>
                                 </c:forEach>
@@ -97,7 +97,7 @@
                                             <p class="small text-muted mb-0">${lV.description}</p>
                                             <p class="small text-muted">HSD: ${lV.finishDate}</p>
                                         </div>
-                                        <span class="badge bg-danger ms-3">x ${lV.quantity}</span>
+                                        <span class="badge bg-danger ms-3">x ${1}</span>
                                         <input type="radio" name="voucherR" value="${lV.voucherId}" class="form-check-input ms-3">
                                     </label>
                                 </c:forEach>

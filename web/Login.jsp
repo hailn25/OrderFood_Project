@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>4FOODHD</title>
+        <title>Login</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <style>
@@ -94,7 +94,7 @@
                                     <p class="small mb-4"><a class="text-muted" href="ForgetPassword.jsp">Quên mật khẩu?</a></p>
                                     <div class="g-recaptcha" data-sitekey="6LdV8_wpAAAAADnLoLkLtmiDn9vmPCVFISEsxn9a"></div>
                                     <div style="color:red" id="error"></div>
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit" >Đăng nhập</button>
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="checkCaptcha(event)">Đăng nhập</button>
                                     <hr class="my-4">
                                     <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/Order_Food/logingoogle&response_type=code&client_id=1020017167169-f4va8u548gpbnn9ntap6cggkc4mrmnv4.apps.googleusercontent.com&approval_prompt=force" style="text-decoration: none;">
                                         <button type="button" class="btn btn-google btn-lg btn-block" style="color: white;">Đăng nhập bằng Google</button>

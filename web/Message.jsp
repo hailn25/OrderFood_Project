@@ -113,9 +113,8 @@
         <div class="flex h-screen bg-zinc-100 dark:bg-zinc-900">
             <div class="w-1/4 bg-card p-4 border-r border-border">
                 <div class="flex items-center justify-between mb-4">
-                      <button onclick="window.history.back();" class="p-2 rounded bg-primary text-primary-foreground">Back</button>
                     <h2 class="text-lg font-bold text-foreground">Đoạn chat</h2>
-                   
+
                 </div>
                 <form class="flex items-center" action="searchUserMessage" >
                     <input type="text" name="searchMessage" placeholder="Tìm kiếm tin nhắn" class="w-full p-2 mb-4 border border-border rounded bg-input text-foreground focus:ring-2 focus:ring-primary" />
@@ -139,14 +138,9 @@
             <div class="flex-1 flex flex-col">
                 <div class="flex items-center justify-between p-4 border-b border-border bg-card">
                     <div class="flex items-center space-x-2">
-<!--                        <img src="https://placehold.co/40x40" alt="Group avatar" class="w-10 h-10 rounded-full" />-->
-                        <h3 class="text-lg font-bold text-foreground">4FOODHD</h3>
+                        <a href="revenueRestaurant" class="text-lg font-bold text-foreground">4FOODHD</a>
                     </div>
-                    <div class="flex space-x-2">
-                        <button class="p-2 rounded-full bg-muted text-muted-foreground">
-                            <img aria-hidden="true" alt="info-icon" src="https://openui.fly.dev/openui/24x24.svg?text=ℹ️" />
-                        </button>
-                    </div>
+
                 </div>
 
 
@@ -178,7 +172,7 @@
 
 
 
-                <form action="messageRestaurantInsert" >
+                <form action="messageRestaurantInsert" onsubmit="return validateMessage()">
                     <div class="p-4 border-t border-border bg-card">
                         <input type="hidden" name="senderId" value="${aid}"/>
                         <input type="hidden" name="receiverId" value="${sessionScope.account.accountId}"/>
@@ -193,6 +187,16 @@
         </div>
 
         <script>
+            function validateMessage() {
+                var messageInput = document.querySelector('input[name="message"]');
+                var message = messageInput.value.trim();
+
+                if (message === "") {
+                    alert("Tin nhắn không được để trống hoặc bị khoảng trắng.");
+                    return false; // Ngăn chặn gửi form
+                }
+                return true; // Cho phép gửi form
+            }
             document.addEventListener("DOMContentLoaded", function () {
                 var lastMessage = document.getElementById("lastMessage");
                 if (lastMessage) {

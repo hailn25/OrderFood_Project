@@ -120,36 +120,36 @@ public class VoucherDAO {
             return listVoucher;
         }
 
-        StringBuilder listStr = new StringBuilder("( ");
+        // Build the string for the IN clause
+        StringBuilder listStr = new StringBuilder("(");
         for (int i = 0; i < list.size(); i++) {
             if (i > 0) {
                 listStr.append(", ");
             }
-            listStr.append(list.get(i));
+            listStr.append("?");
         }
-        listStr.append(" )");
+        listStr.append(")");
 
-        String query = "SELECT \n"
-                + "    Voucher.VoucherId, \n"
-                + "    Voucher.VoucherName, \n"
-                + "    Voucher.Description, \n"
-                + "    Voucher.Quantity, \n"
-                + "    Voucher.ReleaseDate, \n"
-                + "    Voucher.FinishDate, \n"
-                + "    Voucher.Status, \n"
-                + "    Voucher.Discount, \n"
-                + "    Voucher.VoucherCategoryId, \n"
-                + "    Voucher.RestaurantId\n"
-                + "FROM \n"
-                + "    Voucher\n"
-                + "LEFT JOIN \n"
-                + "    AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId AND AccountVoucher.AccountId = ?\n"
-                + "WHERE \n"
-                + "    Voucher.VoucherCategoryId = 2\n"
-                + "    AND Voucher.RestaurantId IN " + listStr.toString();
+        // Update the query to include placeholders for the IN clause
+        String query = "SELECT Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, "
+                + "Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, "
+                + "Voucher.VoucherCategoryId, Voucher.RestaurantId "
+                + "FROM Voucher "
+                + "LEFT JOIN AccountVoucher ON Voucher.VoucherId = AccountVoucher.VoucherId "
+                + "WHERE Voucher.VoucherCategoryId = 2 "
+                + "AND Voucher.RestaurantId IN " + listStr.toString() + " "
+                + "AND AccountVoucher.AccountId = ? "
+                + "GROUP BY Voucher.VoucherId, Voucher.VoucherName, Voucher.Description, Voucher.Quantity, "
+                + "Voucher.ReleaseDate, Voucher.FinishDate, Voucher.Status, Voucher.Discount, "
+                + "Voucher.VoucherCategoryId, Voucher.RestaurantId";
 
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, accountId);
+            // Set the IN clause parameters
+            for (int i = 0; i < list.size(); i++) {
+                ps.setInt(i + 1, list.get(i));
+            }
+            // Set the AccountId parameter
+            ps.setInt(list.size() + 1, accountId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -166,7 +166,6 @@ public class VoucherDAO {
 
                     Voucher voucher = new Voucher(voucherId, voucherName, description, quantity, releaseDate,
                             finishDate, status, discount, voucherCategoryId, rId);
-                    // Không cần setQuantity(voucherCount) vì không có VoucherCount trong câu truy vấn
                     listVoucher.add(voucher);
                 }
             }
@@ -768,9 +767,8 @@ public class VoucherDAO {
         Connection con = null;
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE [dbo].[Voucher]\n"
-                    + "SET [Quantity] = [Quantity] - 1\n"
-                    + "WHERE [VoucherId] = ?";
+            String sql = "Delete [AccountVoucher] \n"
+                    + "where VoucherId = ?";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, voucherId);
