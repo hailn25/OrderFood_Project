@@ -407,7 +407,7 @@ public class ProductDAO {
         String sql = """
                      SELECT    distinct    Product.*
                      FROM            Product 
-                     WHERE [RestaurantId] = ? and ( [Status] = 1  or [Status] = 4 ) and IsSale = 0""";
+                     WHERE [RestaurantId] = ? and ( [Status] = 1  or [Status] = 4 ) and IsSale = 0 and quantity > 0""";
         conn = new DBContext().getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, restaurantId);

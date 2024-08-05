@@ -23,24 +23,25 @@ public class RevenueDAO {
     ResultSet rs = null;
 
     public double getTotalMoneyByMonth(int restaurantId, int month, int year) {
-        String sql = "SELECT \n"
-                + "    MONTH(o.FinishDate) AS Month,\n"
-                + "    YEAR(o.FinishDate) AS Year,\n"
-                + "    SUM(od.TotalMoney) AS TotalMoney\n"
-                + "FROM \n"
-                + "    [Order] o\n"
-                + "JOIN \n"
-                + "    OrderDetail od ON o.OrderId = od.OrderId\n"
-                + "JOIN \n"
-                + "    Product p ON od.ProductId = p.ProductId\n"
-                + "WHERE \n"
-                + "    o.OrderStatusId = 3\n"
-                + "    AND p.RestaurantId = ?\n"
-                + "	AND MONTH(o.FinishDate) = ?\n"
-                + "	AND YEAR(o.FinishDate) = ?\n"
-                + "GROUP BY \n"
-                + "    MONTH(o.FinishDate), \n"
-                + "    YEAR(o.FinishDate)";
+        String sql = """
+                     SELECT 
+                         MONTH(o.FinishDate) AS Month,
+                         YEAR(o.FinishDate) AS Year,
+                         SUM(od.TotalMoney) AS TotalMoney
+                     FROM 
+                         [Order] o
+                     JOIN 
+                         OrderDetail od ON o.OrderId = od.OrderId
+                     JOIN 
+                         Product p ON od.ProductId = p.ProductId
+                     WHERE 
+                         o.OrderStatusId = 3
+                         AND p.RestaurantId = ?
+                     \tAND MONTH(o.FinishDate) = ?
+                     \tAND YEAR(o.FinishDate) = ?
+                     GROUP BY 
+                         MONTH(o.FinishDate), 
+                         YEAR(o.FinishDate)""";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -115,13 +116,11 @@ public class RevenueDAO {
         return 0;
     }
 
-    public double getRevenueSliderOfWeb() {
+    public double getRevenueSliderOfWeb(int month, int year) {
         try {
-            String sql = """
-                                     select count(SliderId)
-                                     from Slider
-                                     where SliderStatusId = 3""";
-
+            String sql = "select count(SliderId)\n"
+                    + "from Slider\n"
+                    + "where SliderStatusId = 3 AND MONTH(UpdateDate) = ? AND YEAR(UpdateDate) = ?";
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -567,9 +566,5 @@ public class RevenueDAO {
         }
         return 0;
     }
-    
-    
+
 }
-
-
-

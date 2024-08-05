@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Account;
 import model.Voucher;
 import utils.Validation;
@@ -69,45 +67,52 @@ public class EditVoucher extends HttpServlet {
             String description = request.getParameter("description");
             int quantity = Integer.parseInt(request.getParameter("quantity"));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            int voucherCategoryId = Integer.parseInt(request.getParameter("voucherCategoryId"));
+         
             Date releaseDate = dateFormat.parse(request.getParameter("releaseDate"));
             Date finishDate = dateFormat.parse(request.getParameter("finishDate"));
             float discount = Float.parseFloat(request.getParameter("discount"));
             int restaurantId = Integer.parseInt(request.getParameter("restaurantId"));
             int status = Integer.parseInt(request.getParameter("status"));
             Date today = new Date();
+
             if (releaseDate.before(today) || finishDate.before(today) || finishDate.before(releaseDate)) {
                 String error = "Ngày phát hành và ngày kết thúc phải lớn hơn ngày hôm nay và ngày kết thúc phải lớn hơn ngày phát hành.";
                 request.setAttribute("error", error);
-                request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, voucherCategoryId, restaurantId));
+                request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, 1, restaurantId));
                 request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
                 return;
             }
+
             String error = "Thông tin không hợp lệ";
             int lengthVoucherName = Validation.removeAllBlank(voucherName).length();
             int lengthDescription = Validation.removeAllBlank(description).length();
 
-            if (lengthVoucherName == 0 || lengthDescription == 0 || request.getParameter("status") == null || quantity <= 0 || discount > 100) {
+            if (lengthVoucherName == 0 || lengthDescription == 0 || request.getParameter("status") == null || quantity <= 0 || discount >= 100 || discount <= 0) {
                 if (lengthVoucherName == 0) {
                     error = "Tên mã giảm giá không được để trống";
                 } else if (lengthDescription == 0) {
                     error = "Nội dung không được để trống";
                 } else if (quantity <= 0) {
                     error = "Số lượng phải lớn hơn 0";
-                } else if (discount > 100) {
-                    error = "Giảm giá không được vượt quá 100%";
+                } else if (discount >= 100 || discount <= 0) {
+                    error = "Giảm giá không nhỏ hơn 0 % hoặc vượt quá 100%";
                 } else if (request.getParameter("status") == null) {
                     error = "Vui lòng chọn trạng thái";
                 }
 
                 request.setAttribute("error", error);
-                request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, voucherCategoryId, restaurantId));
+                request.setAttribute("voucher", new Voucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, 1, restaurantId));
                 request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
             } else {
-                voucherDAO.editVoucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, voucherCategoryId);
+                voucherDAO.editVoucher(voucherId, voucherName, description, quantity, releaseDate, finishDate, status, discount, 1);
                 response.sendRedirect("managerVoucher");
             }
         } catch (ParseException ex) {
+            request.setAttribute("error", "Định dạng ngày không hợp lệ");
+            request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
+        } catch (NumberFormatException ex) {
+            request.setAttribute("error", "Dữ liệu không hợp lệ");
+            request.getRequestDispatcher("EditVoucher.jsp").forward(request, response);
         }
     }
 
@@ -116,3 +121,5 @@ public class EditVoucher extends HttpServlet {
         return "Short description";
     }
 }
+
+

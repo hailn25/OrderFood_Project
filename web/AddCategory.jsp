@@ -46,7 +46,7 @@
                             <div class="row tm-edit-product-row">
                                 <div class="col-xl-12 col-lg-12 col-md-12">
                                     <div class="form-group mb-3">
-                                        <label for="name">Tên loại sản phảm</label>
+                                        <label for="name">Tên loại sản phẩm</label>
                                         <input id="name" name="name" type="text" required" class="form-control validate" />
                                     </div>
                                 </div>

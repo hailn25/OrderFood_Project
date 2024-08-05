@@ -164,22 +164,66 @@ public class ProductHomeDAO {
 
     public List<ProductHome> getAllOSTProduct() {
         List<ProductHome> listBestSellerProduct = new ArrayList<>();
-        String query = "select top 9 p.ProductId, p.Name,p.Price, p.Description, p.ImageURL, c.CategoryId, c.Name, r.RestaurantId, a.Status, r.Name, a.ImageAvatar , p.IsSale, p.Quantity, p.CreateDate, p.UpdateDate, p.Status, r.RateStar\n"
-                + "from Account a\n"
-                + "INNER JOIN Restaurant r\n"
-                + "on a.AccountId = r.AccountId\n"
-                + "INNER JOIN Product p\n"
-                + "on r.RestaurantId = p.RestaurantId\n"
-                + "INNER JOIN Category c\n"
-                + "on p.CategoryId = c.CategoryId\n"
-                + "order by r.RateStar desc";
+        String query = "WITH RankedProducts AS (\n"
+                + "    SELECT \n"
+                + "        p.ProductId,\n"
+                + "        p.Name,\n"
+                + "        p.Price,\n"
+                + "        p.Description,\n"
+                + "        p.ImageURL,\n"
+                + "        c.CategoryId,\n"
+                + "        c.Name AS CategoryName,\n"
+                + "        r.RestaurantId,\n"
+                + "        a.Status AS AccountStatus,\n"
+                + "        r.Name AS RestaurantName,\n"
+                + "        a.ImageAvatar,\n"
+                + "        p.IsSale,\n"
+                + "        p.Quantity,\n"
+                + "        p.CreateDate,\n"
+                + "        p.UpdateDate,\n"
+                + "        p.Status AS ProductStatus,\n"
+                + "        r.RateStar,\n"
+                + "        ROW_NUMBER() OVER (PARTITION BY r.RestaurantId ORDER BY p.ProductId) AS rn\n"
+                + "    FROM \n"
+                + "        Account a\n"
+                + "    INNER JOIN \n"
+                + "        Restaurant r ON a.AccountId = r.AccountId\n"
+                + "    INNER JOIN \n"
+                + "        Product p ON r.RestaurantId = p.RestaurantId\n"
+                + "    INNER JOIN \n"
+                + "        Category c ON p.CategoryId = c.CategoryId\n"
+                + ")\n"
+                + "SELECT \n"
+                + "    ProductId,\n"
+                + "    Name,\n"
+                + "    Price,\n"
+                + "    Description,\n"
+                + "    ImageURL,\n"
+                + "    CategoryId,\n"
+                + "    CategoryName,\n"
+                + "    RestaurantId,\n"
+                + "    AccountStatus,\n"
+                + "    RestaurantName,\n"
+                + "    ImageAvatar,\n"
+                + "    IsSale,\n"
+                + "    Quantity,\n"
+                + "    CreateDate,\n"
+                + "    UpdateDate,\n"
+                + "    ProductStatus,\n"
+                + "    RateStar\n"
+                + "FROM \n"
+                + "    RankedProducts\n"
+                + "WHERE \n"
+                + "    rn <= 3\n"
+                + "ORDER BY \n"
+                + "    RestaurantId, rn;";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 listBestSellerProduct.add(new ProductHome(rs.getInt(1),
-                         rs.getString(2),
+                        rs.getString(2),
                         rs.getDouble(3),
                         rs.getString(4),
                         rs.getString(5),

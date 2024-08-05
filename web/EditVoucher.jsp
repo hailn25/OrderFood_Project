@@ -50,11 +50,11 @@
 
                             <div class="col-xl-6 col-lg-6 col-md-12">
                                 <div class="form-group mb-3">
-                                    <label for="voucherCategoryId">Loại Voucher</label><br>
+<!--                                    <label for="voucherCategoryId">Loại Voucher</label><br>
                                     <input type="radio" id="status1" name="voucherCategoryId" value="1" ${voucher.voucherCategoryId == 1 ? 'checked' : ''} />
                                     <label for="status1">FreeShip</label><br>
-                                    <input type="radio" id="status0" name="voucherCategoryId" value="0" ${voucher.voucherCategoryId == 0 ? 'checked' : ''} />
-                                    <label for="status0">Voucher Nhà Hàng</label>
+                                    <input type="radio" id="status0" name="voucherCategoryId" value="2" ${voucher.voucherCategoryId == 0 ? 'checked' : ''} />
+                                    <label for="status0">Voucher Nhà Hàng</label>-->
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="releaseDate">Ngày phát hành</label>
@@ -68,7 +68,7 @@
                                     <label for="status">Trạng thái</label><br>
                                     <input type="radio" id="status1" name="status" value="1" ${voucher.status == 1 ? 'checked' : ''} />
                                     <label for="status1" style="color: white; margin: 0px 10px">Đang hiển thị</label>
-                                    <input type="radio" id="status0" name="status" value="0" ${voucher.status == 0 ? 'checked' : ''} />
+                                    <input type="radio" id="status0" name="status" value="2" ${voucher.status == 0 ? 'checked' : ''} />
                                     <label for="status0" style="color: white; margin: 0px 10px">Ẩn</label>
                                 </div>
                                      <input type="hidden" name="restaurantId" value="${voucher.restaurantId}" />
@@ -100,3 +100,4 @@
     <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
+

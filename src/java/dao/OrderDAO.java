@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
@@ -15,6 +16,7 @@ import model.Cart;
 import model.Item;
 import model.Order;
 import model.OrderDTO;
+import model.OrderDetail;
 import model.OrderDetailDTO;
 import model.OrderDetailDTO_Huyvq;
 import model.OrderDetailDTO_Huyvq_1;
@@ -68,6 +70,8 @@ public class OrderDAO {
             e.printStackTrace();
         }
     }
+
+   
 
     public ArrayList<OrderDetailDTO> getOrderDetailByOidD(int orderId) {
         ArrayList<OrderDetailDTO> listOrderDetails = new ArrayList<>();
@@ -191,6 +195,74 @@ public class OrderDAO {
         return 0;
     }
 
+    public int getQuantityOrder(int orderId) {
+        String sql = " select  [Quantity] from [OrderDetail] where [OrderId] =?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
+        List<OrderDetail> listOrderDetail = new ArrayList<>();
+        String sql = "SELECT * FROM OrderDetail WHERE OrderId = ?";
+        try {
+            try {
+                conn = new DBContext().getConnection();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderDetail od = new OrderDetail();
+
+                od.setOderId(rs.getInt("OrderId"));
+                od.setProductId(rs.getInt("ProductId"));
+                od.setQuantity(rs.getInt("Quantity"));
+                listOrderDetail.add(od);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listOrderDetail;
+    }
+
+   
+
+    public int getProductIdOrder(int orderId) {
+        String sql = " select  [ProductId] from [OrderDetail] where [OrderId] =?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
     public int getOrderID() {
         String sql = "SELECT top 1 * FROM [dbo].[Order]  ORDER BY  [OrderId ]DESC";
         try {
@@ -261,6 +333,42 @@ public class OrderDAO {
             ps.executeUpdate();
         } catch (Exception e) {
 
+        }
+    }
+
+    public void updateQuantityCancelOrder(int pid, int quantity) {
+        String sql = "UPDATE [dbo].[Product] SET [quantity] = [quantity] + ? WHERE [ProductId] = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            try {
+                conn = new DBContext().getConnection();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, pid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+        } finally {
+            
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace(); 
+                }
+            }
         }
     }
 
@@ -338,7 +446,6 @@ public class OrderDAO {
         }
         return list;
     }
-
 
     public ArrayList<OrderDetailDTO_Huyvq> getOrderStatusByRestaurantId_1(int restaurantId) throws SQLException, Exception {
         ArrayList<OrderDetailDTO_Huyvq> list = new ArrayList<>();
@@ -938,6 +1045,7 @@ public class OrderDAO {
         }
         return listOrderDetailsByAccountId;
     }
+
     public ArrayList<OrderDTO> getAllOrderSucess(int orderStatusId, int shipperId) {
         ArrayList<OrderDTO> listOrders = new ArrayList<>();
         try {
@@ -971,9 +1079,69 @@ public class OrderDAO {
         }
         return listOrders;
     }
-    public static void main(String[] args) throws Exception {
-        OrderDAO db = new OrderDAO();
-        db.insertShipper(1, 81);
 
+    public boolean processRefund(int orderId, String paymentBy) throws ClassNotFoundException {
+        String sql = "UPDATE OrderDetail SET PaymentStatus = 'Refunded' WHERE OrderDetailId = ?";
+        try (Connection connection = new DBContext().getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, orderId);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+ public List<Integer> getAllQuantities(List<OrderDetail> listOrderDetail) {
+        List<Integer> quantities = new ArrayList<>();
+        for (OrderDetail od : listOrderDetail) {
+            quantities.add(od.getQuantity());
+        }
+        return quantities;
+    }
+
+    public List<Integer> getAllProductIds(List<OrderDetail> listOrderDetail) {
+        List<Integer> productIds = new ArrayList<>();
+        for (OrderDetail od : listOrderDetail) {
+            productIds.add(od.getProductId());
+        }
+        return productIds;
+    }
+   public static void main(String[] args) {
+        OrderDAO od = new OrderDAO();
+        int orderId = 79;
+
+        List<OrderDetail> listOrderDetail = od.getOrderDetailsByOrderId(orderId);
+        List<Integer> quantities = od.getAllQuantities(listOrderDetail);
+        List<Integer> productIds = od.getAllProductIds(listOrderDetail);
+
+        // In ra danh sách OrderDetail
+        System.out.println("Order Details:");
+        for (OrderDetail odDetail : listOrderDetail) {
+            System.out.println(odDetail);
+        }
+
+        // In ra danh sách productIds
+        System.out.println("Product IDs:");
+        for (Integer productId : productIds) {
+            System.out.println(productId);
+        }
+
+        // In ra danh sách quantities
+        System.out.println("Quantities:");
+        for (Integer quantity : quantities) {
+            System.out.println(quantity);
+        }
+
+        // Cập nhật số lượng sản phẩm
+        for (int i = 0; i < productIds.size(); i++) {
+            int pid = productIds.get(i);
+            int quantity = quantities.get(i);
+            System.out.println("Updating product ID: " + pid + " with quantity: " + quantity);
+            od.updateQuantityCancelOrder(pid, quantity);
+        }
     }
 }
+
+

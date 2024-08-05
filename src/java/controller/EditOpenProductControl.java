@@ -49,7 +49,7 @@ public class EditOpenProductControl extends HttpServlet {
             try {
                 price = Double.parseDouble(priceStr);
                 quantity = Integer.parseInt(quantityStr);
-                if (price <= 0 || quantity <= 0) {
+                if (price <= 0 || quantity < 0) {
                     isNumeric = false;
                 }
             } catch (NumberFormatException e) {
@@ -77,35 +77,29 @@ public class EditOpenProductControl extends HttpServlet {
                 img = request.getParameter("OldImage");
             }
 
-            if (lengthName >= 2 && lengthName <= 30 && lengthDescription >= 4 && lengthDescription <= 500 && isNumeric) {
+            name = Validation.removeUnnecessaryBlank(name);
+            priceStr = Validation.removeAllBlank(priceStr);
+            quantityStr = Validation.removeAllBlank(quantityStr);
+            description = Validation.removeUnnecessaryBlank(description);
 
-                name = Validation.removeUnnecessaryBlank(name);
-                priceStr = Validation.removeAllBlank(priceStr);
-                quantityStr = Validation.removeAllBlank(quantityStr);
-                description = Validation.removeUnnecessaryBlank(description);
+            ProductDAO dao = new ProductDAO();
 
-                ProductDAO dao = new ProductDAO();
+            // Lấy giá trị isSale hiện tại của sản phẩm
+            String currentIsSale = dao.getCurrentIsSale(id);
 
-                // Lấy giá trị isSale hiện tại của sản phẩm
-                String currentIsSale = dao.getCurrentIsSale(id);
+            // Cập nhật sản phẩm
+            dao.editProduct(name, priceStr, description, img, category, isSale, quantityStr, status, Date.valueOf(updateDate), id);
 
-                // Cập nhật sản phẩm
-                dao.editProduct(name, priceStr, description, img, category, isSale, quantityStr, status, Date.valueOf(updateDate), id);
-
-                // Kiểm tra điều kiện và cập nhật giá bán nếu cần
-                if (!isSale.equals(currentIsSale)) {
-                    if (isSale.equals("1")) {
-                        dao.updatePriceSale_on(id);
-                    } else if (isSale.equals("0")) {
-                        dao.updatePriceSale_off(id);
-                    }
+            // Kiểm tra điều kiện và cập nhật giá bán nếu cần
+            if (!isSale.equals(currentIsSale)) {
+                if (isSale.equals("1")) {
+                    dao.updatePriceSale_on(id);
+                } else if (isSale.equals("0")) {
+                    dao.updatePriceSale_off(id);
                 }
-
-                response.sendRedirect("managerOpenProduct");
-            } else {
-                request.setAttribute("error", "Nhập không hợp lệ!");
-                request.getRequestDispatcher("loadOpenProduct?pid=" + id + "&cid=" + category + "&status=" + status).forward(request, response);
             }
+
+            response.sendRedirect("managerOpenProduct");
 
         } catch (SQLException ex) {
             Logger.getLogger(EditOpenProductControl.class.getName()).log(Level.SEVERE, null, ex);

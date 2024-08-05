@@ -292,7 +292,7 @@
                     <i class="fas fa-clock icon icon-orders-pending"></i>
                     <div>
                         <h2 class="default-text">${totalPendingOrders}</h2>
-                        <p>Đơn hàng đang chờ xác nhận</p>
+                        <p>Đơn hàng đang giao</p>
                     </div>
                 </div>
                 <div class="info-square">

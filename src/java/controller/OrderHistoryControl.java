@@ -62,17 +62,18 @@ public class OrderHistoryControl extends HttpServlet {
 
             boolean isUpdated = false;
             try {
-                isUpdated = listOrderDAO.updateOrderStatus(accountId, orderId);
+                // Cập nhật trạng thái đơn hàng và cộng số lượng sản phẩm
+                isUpdated = listOrderDAO.updateOrderStatusAndProductQuantity(accountId, orderId);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(OrderHistoryControl.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             if (isUpdated) {
                 // Thông báo cập nhật thành công
-                request.setAttribute("message", "Order has been canceled successfully.");
+                request.setAttribute("message", "Đơn hàng đã được hủy thành công.");
             } else {
                 // Thông báo cập nhật thất bại
-                request.setAttribute("message", "Failed to cancel the order.");
+                request.setAttribute("message", "Không thể hủy đơn hàng.");
             }
         }
 
@@ -125,5 +126,6 @@ public class OrderHistoryControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
 
 

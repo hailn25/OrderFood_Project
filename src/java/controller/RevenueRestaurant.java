@@ -61,7 +61,6 @@ public class RevenueRestaurant extends HttpServlet {
             int currentMonth = date.getMonthValue();
             int monthBecomeRestaurant = dao.getMonthBecomeRestaurant(accountId);
 
-//            double thang1 = dao.getTotalMoneyByMonth(restaurantId, 1, year) - dao.getRevenueSliderOfRestaurant(accountId, year, 1);
             double thang1 = (currentMonth >= 1 && monthBecomeRestaurant <= 1) ? dao.getTotalMoneyByMonth(restaurantId, 1, year) - dao.getRevenueSliderOfRestaurant(restaurantId, year, 1) - 1000000 : 0;
             double thang2 = (currentMonth >= 2 && monthBecomeRestaurant <= 2) ? dao.getTotalMoneyByMonth(restaurantId, 2, year) - dao.getRevenueSliderOfRestaurant(restaurantId, year, 2) - 1000000 : 0;
             double thang3 = (currentMonth >= 3 && monthBecomeRestaurant <= 3) ? dao.getTotalMoneyByMonth(restaurantId, 3, year) - dao.getRevenueSliderOfRestaurant(restaurantId, year, 3) - 1000000 : 0;

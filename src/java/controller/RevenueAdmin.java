@@ -45,18 +45,18 @@ public class RevenueAdmin extends HttpServlet {
         int quantityOfRestaurant = dao2.getQuantityOfRestaurant();
         int quantityOfProduct = dao3.getQuantityOfProduct();
         
-        double t1 = (currentMonth >= 1) ? dao.getRevenueOfWeb(1, year) + (dao.AccountValid1(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t2 = (currentMonth >= 2) ? dao.getRevenueOfWeb(2, year) + (dao.AccountValid2(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t3 = (currentMonth >= 3) ? dao.getRevenueOfWeb(3, year) + (dao.AccountValid3(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t4 = (currentMonth >= 4) ? dao.getRevenueOfWeb(4, year) + (dao.AccountValid4(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t5 = (currentMonth >= 5) ? dao.getRevenueOfWeb(5, year) + (dao.AccountValid5(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t6 = (currentMonth >= 6) ? dao.getRevenueOfWeb(6, year) + (dao.AccountValid6(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t7 = (currentMonth >= 7) ? dao.getRevenueOfWeb(7, year) + (dao.AccountValid7(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t8 = (currentMonth >= 8) ? dao.getRevenueOfWeb(8, year) + (dao.AccountValid8(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t9 = (currentMonth >= 9) ? dao.getRevenueOfWeb(9, year) + (dao.AccountValid9(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t10 = (currentMonth >= 10) ? dao.getRevenueOfWeb(10, year) + (dao.AccountValid10(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t11 = (currentMonth >= 11) ? dao.getRevenueOfWeb(11, year) + (dao.AccountValid11(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
-        double t12 = (currentMonth >= 12) ? dao.getRevenueOfWeb(12, year) + (dao.AccountValid12(year) * 1000000) + dao.getRevenueSliderOfWeb() : 0;
+        double t1 = (currentMonth >= 1) ? dao.getRevenueOfWeb(1, year) + (dao.AccountValid1(year) * 1000000) + dao.getRevenueSliderOfWeb(1, year) : 0;
+        double t2 = (currentMonth >= 2) ? dao.getRevenueOfWeb(2, year) + (dao.AccountValid2(year) * 1000000) + dao.getRevenueSliderOfWeb(2, year) : 0;
+        double t3 = (currentMonth >= 3) ? dao.getRevenueOfWeb(3, year) + (dao.AccountValid3(year) * 1000000) + dao.getRevenueSliderOfWeb(3, year) : 0;
+        double t4 = (currentMonth >= 4) ? dao.getRevenueOfWeb(4, year) + (dao.AccountValid4(year) * 1000000) + dao.getRevenueSliderOfWeb(4, year) : 0;
+        double t5 = (currentMonth >= 5) ? dao.getRevenueOfWeb(5, year) + (dao.AccountValid5(year) * 1000000) + dao.getRevenueSliderOfWeb(5, year) : 0;
+        double t6 = (currentMonth >= 6) ? dao.getRevenueOfWeb(6, year) + (dao.AccountValid6(year) * 1000000) + dao.getRevenueSliderOfWeb(6, year) : 0;
+        double t7 = (currentMonth >= 7) ? dao.getRevenueOfWeb(7, year) + (dao.AccountValid7(year) * 1000000) + dao.getRevenueSliderOfWeb(7, year) : 0;
+        double t8 = (currentMonth >= 8) ? dao.getRevenueOfWeb(8, year) + (dao.AccountValid8(year) * 1000000) + dao.getRevenueSliderOfWeb(8, year) : 0;
+        double t9 = (currentMonth >= 9) ? dao.getRevenueOfWeb(9, year) + (dao.AccountValid9(year) * 1000000) + dao.getRevenueSliderOfWeb(9, year) : 0;
+        double t10 = (currentMonth >= 10) ? dao.getRevenueOfWeb(10, year) + (dao.AccountValid10(year) * 1000000) + dao.getRevenueSliderOfWeb(10, year) : 0;
+        double t11 = (currentMonth >= 11) ? dao.getRevenueOfWeb(11, year) + (dao.AccountValid11(year) * 1000000) + dao.getRevenueSliderOfWeb(11, year) : 0;
+        double t12 = (currentMonth >= 12) ? dao.getRevenueOfWeb(12, year) + (dao.AccountValid12(year) * 1000000) + dao.getRevenueSliderOfWeb(12, year) : 0;
 
         double totalRevenue = t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9 + t10 + t11 + t12;
 

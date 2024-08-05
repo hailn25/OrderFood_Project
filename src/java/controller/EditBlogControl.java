@@ -87,13 +87,17 @@ public class EditBlogControl extends HttpServlet {
         String img = null;
         String error = "Thông tin không hợp lệ";
 
+        String regex = "^[^a-zA-Z]*$";
         int lengthTitle = Validation.removeAllBlank(title).length();
         int lengthContent = Validation.removeAllBlank(content).length();
         int lengthSummary = Validation.removeAllBlank(summary).length();
         if (lengthTitle == 0 || lengthContent == 0 || lengthSummary == 0 || request.getParameter("status") == null) {
             request.setAttribute("error", error);
             request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
-        } else {
+        } else if (title.matches(regex) || content.matches(regex) || summary.matches(regex)) {
+            request.setAttribute("error", "Thông tin không được chỉ chứa số hoặc chỉ chứa ký tự đặc biệt!");
+            request.getRequestDispatcher("AddBlog.jsp").forward(request, response);
+        }else {
 //            boolean status = Boolean.parseBoolean(request.getParameter("status"));
 //            if (fileName != null && !fileName.isEmpty()) {
 //                String uploadPath = getServletContext().getRealPath("/") + "img" + File.separator + fileName;
@@ -145,5 +149,6 @@ public class EditBlogControl extends HttpServlet {
     }// </editor-fold>
 
 }
+
 
 

@@ -172,8 +172,7 @@ public class ReportDAO {
 
     public void deleteReportOfStaff(int restaurantId) throws SQLException, ClassNotFoundException {
         try {
-            String sql = "update Report\n"
-                    + "set ReportStatusId = 4\n"
+            String sql = "delete Report\n"
                     + "where RestaurantId = ?";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);

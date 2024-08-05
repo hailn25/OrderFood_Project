@@ -117,11 +117,11 @@
                 text-transform: uppercase;
             }
         </style>
-        
+
     </head>
     <body>
 
-         <!-- Navbar start -->
+        <!-- Navbar start -->
         <div class="container-fluid fixed-top">
             <div class="container topbar bg-primary d-none d-lg-block">
                 <div class="d-flex justify-content-between">
@@ -176,6 +176,10 @@
                                         <c:when test="${o.hasVoucher}">
                                             <!-- Nút "Đã lấy" hiển thị khi người dùng đã có voucher -->
                                             <button class="button-margin-top bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã lấy</button>
+                                        </c:when>
+                                        <c:when test="${o.quantity == 0}">
+                                            <!-- Nút "Đã lấy" hiển thị khi người dùng đã có voucher -->
+                                            <button class="button-margin-top bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã hết</button>
                                         </c:when>
                                         <c:otherwise>
                                             <!-- Nút "Lưu" hiển thị khi người dùng chưa có voucher -->

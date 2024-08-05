@@ -74,7 +74,7 @@ public class InsertFeedbackControll extends HttpServlet {
             request.setAttribute("productName", productName);
             request.setAttribute("productId", productId); // Include the productId in the request
         } else {
-            request.setAttribute("errorMessage", "Product ID is missing.");
+            request.setAttribute("errorMessage", "ID sản phẩm bị thiếu.");
         }
         request.getRequestDispatcher("Feedback.jsp").forward(request, response);
     }

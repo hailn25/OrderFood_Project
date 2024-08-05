@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setLocale value="en_US" />
+<fmt:formatDate value="<%= new java.util.Date() %>" pattern="yyyy-MM-dd" var="today" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -242,18 +244,19 @@
                                     <th>Chi tiết</th>
                                     <th>Ngày bắt đầu</th>
                                     <th>Ngày kết thúc</th>
-                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="voucher" items="${listVoucher}">
-                                    <tr>
-                                        <td>${voucher.voucherName}</td>
-                                        <td>1</td>
-                                        <td>${voucher.description}</td>
-                                        <td><fmt:formatDate value="${voucher.releaseDate}" pattern="dd/MM/yyyy" /></td>
-                                        <td><fmt:formatDate value="${voucher.finishDate}" pattern="dd/MM/yyyy" /></td>
-                                    </tr>
+                                    <c:if test="${voucher.finishDate >= today}">
+                                        <tr>
+                                            <td>${voucher.voucherName}</td>
+                                            <td>1</td>
+                                            <td>${voucher.description}</td>
+                                            <td><fmt:formatDate value="${voucher.releaseDate}" pattern="dd/MM/yyyy" /></td>
+                                            <td><fmt:formatDate value="${voucher.finishDate}" pattern="dd/MM/yyyy" /></td>
+                                        </tr>
+                                    </c:if>
                                 </c:forEach>
                             </tbody>
                         </table>
@@ -282,3 +285,4 @@
     </script>
 </body>
 </html>
+

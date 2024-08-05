@@ -243,13 +243,13 @@
     <div class="status-filter-container">
         <h4>Lọc theo trạng thái:</h4>
         <div class="status-filter">
-            <label><input type="checkbox" class="status-checkbox" value="Đang chờ xác nhận của nhà hàng"> Đang chờ xác nhận của nhà hàng</label>
+            <!--<label><input type="checkbox" class="status-checkbox" value="Đang chờ xác nhận của nhà hàng"> Đang chờ xác nhận của nhà hàng</label>-->
             <label><input type="checkbox" class="status-checkbox" value="Đang chờ xác nhận của shipper"> Đang chờ xác nhận của shipper</label>
             <label><input type="checkbox" class="status-checkbox" value="Đang giao hàng"> Đang giao hàng</label>
             <label><input type="checkbox" class="status-checkbox" value="Giao hàng thành công"> Giao hàng thành công</label>
             <label><input type="checkbox" class="status-checkbox" value="Shipper không nhận đơn"> Shipper không nhận đơn</label>
             <label><input type="checkbox" class="status-checkbox" value="Người mua không nhận hàng"> Người mua không nhận hàng</label>
-            <label><input type="checkbox" class="status-checkbox" value="Nhà hàng không nhận đơn"> Nhà hàng không nhận đơn</label>
+            <!--<label><input type="checkbox" class="status-checkbox" value="Nhà hàng không nhận đơn"> Nhà hàng không nhận đơn</label>-->
         </div>
     </div>
     <div class="container">

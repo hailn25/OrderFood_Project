@@ -117,7 +117,7 @@
                                 <td>${o.address}</td>
                                 <td>${o.note}</td>
                                 <td><fmt:formatDate value="${o.createDate}" pattern="dd-MM-yyyy" /></td>
-                                <td>${o.totalMoney}</td>
+                              <td>  <fmt:formatNumber value="${o.totalMoney}" pattern="###,### VNĐ" /></td>
                                 <td>
                                     ${o.status}
 
@@ -145,3 +145,4 @@
         </script>
     </body>
 </html>
+

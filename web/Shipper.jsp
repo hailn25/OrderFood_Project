@@ -115,7 +115,8 @@
                                 <td>${o.address}</td>
 <!--                                <td>${o.note}</td>-->
                                 <td><fmt:formatDate value="${o.createDate}" pattern="dd-MM-yyyy" /></td>
-                                <td>${o.totalMoney}</td>
+                                <td>  <fmt:formatNumber value="${o.totalMoney}" pattern="###,### VNĐ" /></td>
+                                 
                                 <td>${o.status}</td>
                                 <td>
                                     <a href="managerActions?action=accept&oid=${o.orderId}" class="accept" data-toggle="modal" onclick="return confirm('Bạn có chắc chắn xác nhận đơn không?');"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xác nhận đơn hàng">&#xe5ca;</i></a>

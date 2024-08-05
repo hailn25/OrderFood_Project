@@ -51,7 +51,8 @@ public class InsertMessageUserControl extends HttpServlet {
             int lengthProductName = Validation.removeAllBlank(messageContent).length();
             if (lengthProductName > 0) {
                 messageContent = Validation.removeUnnecessaryBlank(messageContent);
-                 messageDAO.insertMessageUser(senderId, receiverId, messageContent);
+                messageDAO.insertMessageUser(senderId, receiverId, messageContent);
+                error = "Tin nhắn gửi thành công";
             } else {
                 error = "Tin nhắn không hợp lệ";
             }

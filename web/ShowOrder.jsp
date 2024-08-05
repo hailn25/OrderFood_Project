@@ -14,8 +14,6 @@
         <link rel="stylesheet" href="css/bootstrap.min_1.css">
         <link rel="stylesheet" href="css/templatemo-style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 
         <style>
             body {
@@ -112,6 +110,20 @@
                 margin: 20px 0;
                 color: #343a40;
             }
+
+            .cancel-button {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .cancel-button:hover {
+                background-color: #c82333;
+            }
         </style>
     </head>
     <body>
@@ -133,17 +145,22 @@
                    class="button-link ${param.orderStatusId == '4,8' ? 'active' : ''}">
                     <i class="fa fa-times-circle"></i> Đã huỷ
                 </a>
+                <a href="orderHistory?orderStatusId=3,4,8&accountId=${sessionScope.account.accountId}" 
+                   class="button-link ${param.orderStatusId == '3,4,8' ? 'active' : ''}">
+                    <i class="fa fa-globe"></i> Tất cả
+                </a>
             </div>
 
             <nav>
-                <a href="home">Home</a>
-                <a href="profile">Profile</a>
-                <a href="logout">Logout</a>
+                <button onclick="window.location.href = 'home'">Trang chủ</button>
+                <button onclick="window.location.href = 'profile'">Thông tin cá nhân</button>
+                <button onclick="window.location.href = 'logout'">Đăng xuất</button>
             </nav>
         </div>
         <table>
             <thead>
                 <tr>
+                    <th>STT</th>
                     <th>Họ và tên</th>
                     <th>Số điện thoại</th>
                     <th>Địa chỉ</th>
@@ -151,18 +168,22 @@
                     <th>Trạng thái</th>
                     <th></th>
                     <th></th>
-
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="order" items="${listOrders}">
-                    <tr>               
+                <c:forEach var="order" items="${listOrders}" varStatus="status">
+                    <tr>        
+                        <td>${status.index + 1}</td>
                         <td>${order.accountName}</td>
                         <td>${order.phone}</td>
                         <td>${order.address}</td> 
                         <td><fmt:formatDate value="${order.createDate}" pattern="dd/MM/yyyy" /></td>
                         <td>${order.status}</td>
-                        <td><a href="listOrderProduct?action=view&oid=${order.orderId}">Xem</a></td>
+                        <td>
+                            <button type="button" class="btn-view" onclick="window.location.href = 'listOrderProduct?action=view&oid=${order.orderId}'">
+                                Xem
+                            </button>
+                        </td>
                         <td>
                             <c:choose>
                                 <c:when test="${order.orderStatusId == 1 || order.orderStatusId == 6}">
@@ -183,13 +204,9 @@
         <script src="js/bootstrap.min.js"></script>
         <script>
                                         function confirmCancel(form) {
-                                            var reason = prompt("Vui lòng ghi lý do huỷ đơn hàng:");
-                                            if (reason != null && reason.trim() != "") {
-                                                var reasonInput = document.createElement("input");
-                                                reasonInput.type = "hidden";
-                                                reasonInput.name = "cancelReason";
-                                                reasonInput.value = reason;
-                                                form.appendChild(reasonInput);
+                                            if (confirm("Bạn có chắc chắn muốn huỷ đơn hàng không?")) {
+                                                // Hiển thị thông báo thành công
+                                                alert("Đơn hàng đã được hủy thành công.");
                                                 return true;
                                             }
                                             return false;
@@ -214,4 +231,5 @@
         </script>
     </body>
 </html>
+
 

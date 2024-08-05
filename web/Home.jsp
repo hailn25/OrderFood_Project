@@ -119,6 +119,20 @@
                 animation-timeline: view();
                 animation-range: entry 0% cover 40%;
             }
+
+            .category-label-left {
+                top: 10px;
+                left: 10px;
+            }
+
+            .category-label-right {
+                top: 10px;
+                right: 10px;
+            }
+
+            .btn-red {
+                background-color: red;
+            }
         </style>
 
     </head>
@@ -135,11 +149,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body d-flex align-items-center">
-                            <form id="searchForm" action="search" method="get" class="w-75 mx-auto d-flex">
-                                <input type="search" id="searchInput" class="form-control p-3" placeholder="keywords" name="txt" aria-describedby="search-icon-1">
+                            <form id="searchForm" action="search" method="get" class="w-75 mx-auto d-flex" onsubmit="return validateSearch()">
+                                <input type="search" id="searchInput" class="form-control p-3" placeholder="" name="txt" aria-describedby="search-icon-1">
                                 <button type="submit" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                             </form>
-                            <div id="error-message" class="text-danger mt-3" style="display: none;">Tên tìm kiếm không hợp lệ</div>
                         </div>
                     </div>
                 </div>
@@ -181,7 +194,7 @@
                             <ul class="nav nav-pills d-inline-flex text-center mb-5" id="categoryList">
                                 <c:forEach items="${listC}" var="c" varStatus="status">
                                     <li class="nav-item category-item" style="<c:if test='${status.index >= 4}'>display:none;</c:if>">
-                                            <div class="d-flex m-2 py-2 bg-light rounded-pill active" id="Block">
+                                            <div class="d-flex m-2 py-2 bg-light rounded-pill category-button" onclick="setActive(this)">
                                                 <a class="text-dark" style="width: 130px;" href="category?cid=${c.id}">${c.name}</a>
                                         </div>
                                     </li>
@@ -197,28 +210,38 @@
                             <div class="col-lg-12">
                                 <div class="row g-4" id="product-container">
                                     <c:forEach items="${listP}" var="p" varStatus="status">
-                                        <c:if test="${p.quantity > 0 && (p.status == 1 || p.status == 3 || p.status == 4) && p.statusAccount != 0}">
+                                        <c:if test="${p.status == 1 || p.status == 3 || p.status == 4 && p.statusAccount != 0}">
                                             <div class="col-md-6 col-lg-4 col-xl-3 product-item ${status.index >= 8 ? 'd-none' : ''}" id="Block">
                                                 <div class="rounded position-relative fruite-item">
                                                     <div class="fruite-img">
                                                         <a href="detail?pid=${p.id}">
-                                                            <img src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
+                                                            <img style="height: 280px;" src="img/${p.image}" class="img-fluid w-100 rounded-top" alt="">
                                                         </a>
                                                     </div>
-                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${p.categoryName}</div>
+                                                    <div>
+                                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute category-label-left">
+                                                            ${p.categoryName}
+                                                        </div>
+                                                        <c:if test="${p.quantity == 0}">
+                                                            <button class="text-white px-3 py-1 rounded position-absolute category-label-right out-of-stock btn-red" disabled>Hết hàng</button>
+                                                        </c:if>
+                                                    </div>
+
                                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                         <h4>
                                                             <a href="detail?pid=${p.id}" style="color: black;">${p.name}</a>
-                                                        </h4>                                                      
+                                                        </h4>
                                                         <div style="display: flex; justify-content: space-between;">
-                                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6>   
+                                                            <h6 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${p.id}">${p.price}</h6>
                                                             <div style="display: flex;">
-                                                                <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
-                                                                    <input type="hidden" name="productId" value="${p.id}">
-                                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                                    </button>
-                                                                </form>
+                                                                <c:if test="${p.quantity > 0}">
+                                                                    <form id="${p.id}" onsubmit="addToCart(${p.id}); return false;">
+                                                                        <input type="hidden" name="productId" value="${p.id}">
+                                                                        <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                            <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </c:if>
                                                                 <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
                                                                     <a href="restaurant?restaurantId=${p.restaurantId}&page=${1}">
                                                                         <img src="img/${p.imageRestaurant}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
@@ -252,7 +275,7 @@
                             <div style="height: 450px" class="border border-primary rounded position-relative vesitable-item">
                                 <div class="vesitable-img">
                                     <a href="detail?pid=${v.id}">
-                                        <img src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="">
+                                        <img style="height: 280px;"  src="img/${v.image}" class="img-fluid w-100 rounded-top" alt="">
                                     </a>
                                 </div>
                                 <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">${v.categoryName}</div>
@@ -304,7 +327,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-6">
                                             <a href="detail?pid=${b.id}">
-                                                <img src="img/${b.image}" class="img-fluid w-100 rounded-top" alt="">
+                                                <img style="height: 160px;" src="img/${b.image}" class="img-fluid w-100 rounded-top" alt="">
                                             </a>
                                         </div>
                                         <div class="col-6">
@@ -480,18 +503,6 @@
             });
         </script>
         <script>
-            document.getElementById('searchForm').addEventListener('submit', function (event) {
-                var searchInput = document.getElementById('searchInput').value;
-                var errorMessage = document.getElementById('error-message');
-                if (!searchInput || /\s/.test(searchInput) || /\d/.test(searchInput) || /[!@#$%^&*(),.?":{}|<>]/.test(searchInput)) {
-                    event.preventDefault();
-                    errorMessage.style.display = 'block';
-                } else {
-                    errorMessage.style.display = 'none';
-                }
-            });
-        </script>
-        <script>
             function addToCart(productId) {
                 var xhr = new XMLHttpRequest();
                 var url = "addtocart";
@@ -520,6 +531,31 @@
                 xhr.send("productId=" + productId);
             }
         </script>
+        <script>
+            function validateSearch() {
+                var searchInput = document.getElementById('searchInput');
+
+                // Loại bỏ khoảng trắng thừa ở đầu và cuối chuỗi
+                var searchText = searchInput.value.trim();
+
+                // Loại bỏ khoảng trắng thừa giữa các từ
+                searchText = searchText.replace(/\s+/g, ' ');
+
+                // Biểu thức chính quy để kiểm tra các điều kiện không hợp lệ
+                var specialCharPattern = /^[!@#$%^&*(),.?":{}|<>]+$/;
+                var numberPattern = /^\d+$/;
+
+                // Kiểm tra nếu chuỗi tìm kiếm không hợp lệ
+                if (searchText === "" || specialCharPattern.test(searchText) || numberPattern.test(searchText)) {
+                    alert("Tên tìm kiếm không hợp lệ");
+                    return false;
+                } else {
+                    // Cập nhật giá trị đã được xử lý vào input
+                    searchInput.value = searchText;
+                    return true;
+                }
+            }
+        </script>
         <jsp:include page="Footer.jsp"></jsp:include>
 
 
@@ -543,6 +579,7 @@
     </body>
 
 </html>
+
 
 
 

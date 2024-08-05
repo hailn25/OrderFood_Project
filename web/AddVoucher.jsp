@@ -61,24 +61,18 @@
                                         <input id="quantity" name="quantity" type="number" required class="form-control validate" />
                                     </div>
                                   
-                                     <div class="form-group mb-3">
+<!--                                     <div class="form-group mb-3">
                                         <label for="status">Loại Voucher</label><br>
                                         <input type="radio" id="status1" name="voucherCategoryId" value="1">
                                         <label for="status1">FreeShip</label><br>
                                         <input type="radio" id="status0" name="voucherCategoryId" value="0">
                                         <label for="status0">Voucher Nhà Hàng </label>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group mb-3">
                                         <label for="finishDate">Ngày kết thúc</label>
                                         <input id="finishDate" name="finishDate" type="date" required class="form-control validate" />
                                     </div>
-                                    <div class="form-group mb-3">
-                                        <label for="status">Trạng thái</label><br>
-                                        <input type="radio" id="status1" name="status" value="1">
-                                        <label for="status1">Đang hiển thị</label><br>
-                                        <input type="radio" id="status0" name="status" value="0">
-                                        <label for="status0">Ẩn</label>
-                                    </div>
+                                   
                                 </div>
                             </div>
                             <div class="row">
@@ -100,3 +94,4 @@
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
+

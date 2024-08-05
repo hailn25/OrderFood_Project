@@ -31,7 +31,8 @@ public class VoucherDAO {
     public ArrayList<Voucher> getAllVoucher() {
         ArrayList<Voucher> listVoucher = new ArrayList<>();
         try {
-            String sql = "select * from Voucher";
+            String sql = "select * from Voucher\n"
+                    + "where Status in (1,2)";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -251,8 +252,9 @@ public class VoucherDAO {
 
     public void deleteVoucher(int voucherId) {
         try {
-            String sql = "delete from [dbo].[Voucher] \n"
-                    + "where [VoucherId] = ?";
+            String sql = "  Update Voucher\n"
+                    + "  Set [Status] = 3 \n"
+                    + "  Where VoucherId = ?";
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, voucherId);
@@ -412,7 +414,7 @@ public class VoucherDAO {
 
     public List<ListVoucher> getVoucherByAccountId(int accountId) {
         List<ListVoucher> listVoucher = new ArrayList<>();
-        String query = "select av.AccountId ,v.VoucherId, v.VoucherName,v.Description, v.Discount, v.FinishDate, v.ReleaseDate, v.Quantity, v.RestaurantId, v.Status, v.VoucherCategoryId\n"
+        String query = "select av.AccountId ,v.VoucherId, v.VoucherName,v.Description, v.Discount, v.ReleaseDate, v.FinishDate, v.Quantity, v.RestaurantId, v.Status, v.VoucherCategoryId\n"
                 + "from Voucher v\n"
                 + "join AccountVoucher av\n"
                 + "on v.VoucherId = av.VoucherId\n"
@@ -460,7 +462,7 @@ public class VoucherDAO {
                                                            LEFT JOIN Account a ON r.AccountId = a.AccountId
                                                            WHERE v.VoucherCategoryId = 1
                                                            AND v.Status = 1
-                                                           AND v.Quantity > 0 
+                                                           AND v.Quantity >= 0 
                                                            AND v.FinishDate >= CAST(GETDATE() AS DATE);
                      """;
             con = new DBContext().getConnection();
@@ -525,7 +527,7 @@ public class VoucherDAO {
                      LEFT JOIN Account a ON r.AccountId = a.AccountId
                      WHERE v.VoucherCategoryId = 2
                        AND v.Status = 1
-                       AND v.Quantity > 0 
+                       AND v.Quantity >= 0 
                        AND v.FinishDate >= CAST(GETDATE() AS DATE);
                      """;
             con = new DBContext().getConnection();
@@ -798,6 +800,3 @@ public class VoucherDAO {
     }
 
 }
-
-
-

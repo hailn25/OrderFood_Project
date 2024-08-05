@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -29,19 +30,21 @@
 
                                 <div class="form-group mb-3">
                                     <label for="name">Họ và tên</label>
-                                    <input id="name" name="name" type="text" required value="${listV.name}" class="form-control validate">
-                                </div><
+                                    <input id="name" name="name" type="text" readonly required value="${listV.name}" class="form-control validate" style="color: black;">
+
+
+                                </div>
                                 <div class="form-group mb-3">
                                     <label for="phone">Số điện thoại</label>
-                                    <input id="phone" name="phone" type="text" required value="${listV.phone}" class="form-control validate">
+                                    <input id="phone" name="phone" type="text" readonly="" required value="${listV.phone}" class="form-control validate " style="color: black;">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="paymentMethod">Hình thức thanh toán</label>
-                                    <input id="paymentMethod" name="paymentMethod" type="text" required value="${listV.paymentBy}" class="form-control validate">
+                                    <input id="paymentMethod" name="paymentMethod" type="text" readonly=""  required value="${listV.paymentBy}" class="form-control validate" style="color: black;">
                                 </div>
                                 <div class=" form-group mb-3">
                                     <label for="purchaseDate">Ngày mua</label>
-                                    <input id="purchaseDate" name="purchaseDate" type="text" required value="${listV.createDate}" class="form-control validate">
+                                    <input id="purchaseDate" name="purchaseDate" type="text"  readonly="" required value="${listV.createDate}" class="form-control validate" style="color: black;">
                                 </div>
 
                             </div>
@@ -49,19 +52,22 @@
 
                                 <div class="form-group  mb-3">
                                     <label for="email">Email</label>
-                                    <input id="email" name="email" type="text" required value="${listV.email}" class="form-control validate">
+                                    <input id="email" name="email" type="text" required value="${listV.email}"  readonly=""  class="form-control validate"  style="color: black;">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="address">Địa chỉ</label>
-                                    <input id="address" name="address" type="text" required value="${listV.address}" class="form-control validate">
+                                    <input id="address" name="address" type="text" required value="${listV.address}"  readonly="" class="form-control validate"  style="color: black;">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="paymentStatus">Trạng thái thanh toán</label>
-                                    <input id="paymentStatus" name="paymentStatus" type="text" required value="${listV.paymentStatus}" class="form-control validate">
+                                    <input id="paymentStatus" name="paymentStatus"  readonly="" type="text" required value="${listV.paymentStatus}" class="form-control validate"  style="color: black;">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="description">Ghi chú</label>
-                                    <textarea class="form-control tm-small" rows="1" name="description" required>${listV.note}</textarea>
+                                    <textarea class="form-control tm-small" rows="1" name="description" readonly required style="color: black;">
+                                        ${listV.note}
+                                    </textarea>
+
                                 </div>
 
                             </div>
@@ -81,16 +87,20 @@
                                     <c:forEach items="${listOrderDetail}" var="order">
                                         <tr>
                                             <td>${order.productName}</td>
-                                            <td>${order.price}</td>
+                                      
+                                            <td><fmt:formatNumber value="${order.price}" pattern="###,### VNĐ" /></td>
+
                                             <td>${order.quantity}</td>
-                                            <td>${order.price * order.quantity}</td> 
+                                              <td><fmt:formatNumber value="${order.price * order.quantity}" pattern="###,### VNĐ" /></td>
+                                          
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
                         </div>
                         <div class="text-center">
-                            <h1 style="color: white; margin-top: 20px;">Tổng đơn hàng: ${listOrderDetail[0].totalMoney}</h1>
+                          
+                            <h1 style="color: white; margin-top: 20px;">Tổng đơn hàng:    <fmt:formatNumber value="${listOrderDetail[0].totalMoney}" pattern="###,### VNĐ" /></h1>
                         </div>
                         <div class="text-center">
                             <a href="managerShipper" class="btn btn-primary">Thoát</a>
@@ -99,6 +109,9 @@
                 </div>
             </div>
         </div>
+<script>
+
+</script>
 
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="jquery-ui-datepicker/jquery-ui.min.js"></script>

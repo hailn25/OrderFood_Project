@@ -117,7 +117,7 @@
                         <c:when test="${not empty listProductDTO}">
                             <div class="row g-4 justify-content-center">
                                 <c:forEach items="${listProductDTO}" var="p">
-                                    <c:if test="${p.quantity >= 1 and (p.status == 1 or p.status == 3 or p.status == 4)}">
+                                    <c:if test="${p.status == 1 or p.status == 3 or p.status == 4}">
                                         <div class="col-6 col-md-4 col-lg-2-4">
                                             <div class="rounded position-relative fruite-item-restaurant" style="height: 400px;">
                                                 <div class="fruite-img-restaurant">
@@ -126,7 +126,10 @@
                                                     </a>
                                                 </div>
                                                 <c:if test="${p.isSale == true}">
-                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Đang giảm giá</div>
+                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 3px;">Đang giảm giá</div>
+                                                </c:if>
+                                                <c:if test="${p.quantity == 0}">
+                                                    <div class="text-white px-3 py-1 rounded position-absolute" style="top: 10px; left: 140px; background: red;">Hết hàng</div>
                                                 </c:if>
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                     <div style="height: 60px; overflow: hidden;">
@@ -135,12 +138,14 @@
                                                     <div style="display: flex; justify-content: space-between;">
                                                         <h6 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${p.producId}">${p.price}</h6>
                                                         <div style="display: flex;">
-                                                            <form action="addtocart" method="post">
-                                                                <input type="hidden" name="productId" value="${p.producId}">
-                                                                <button type="submit" class="text-primary" style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                                </button>
-                                                            </form>
+                                                            <c:if test="${p.quantity >= 1}">
+                                                                <form id="${p.producId}" onsubmit="addToCart(${p.producId}); return false;">
+                                                                    <input type="hidden" name="productId" value="${p.producId}">
+                                                                    <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
+                                                                        <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </c:if>
                                                             <!--                                                    <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 10px;">
                                                                                                                     <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
                                                                                                                 </div>-->
@@ -194,22 +199,52 @@
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+               <script>
+            function addToCart(productId) {
+                var xhr = new XMLHttpRequest();
+                var url = "addtocart";
+
+
+                xhr.open("POST", url, true);
+
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 10000) {
+
+                        alert("Đã thêm vào giỏ hàng thành công!");
+                    } else {
+                        // Nếu yêu cầu không thành công, hiển thị thông báo lỗi
+                        alert("Đã xảy ra lỗi khi gửi yêu cầu: " + xhr.responseText);
+                    }
+                };
+
+
+                xhr.onerror = function () {
+                    alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+                };
+
+                // Gửi yêu cầu với dữ liệu sản phẩm
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("productId=" + productId);
+            }
+        </script>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const prices = document.querySelectorAll('[id^="price-"]');
+                                                                    document.addEventListener('DOMContentLoaded', function () {
+                                                                        const prices = document.querySelectorAll('[id^="price-"]');
 
-                prices.forEach(priceElement => {
-                    const priceId = priceElement.id.split('-')[1];
-                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                                                                        prices.forEach(priceElement => {
+                                                                            const priceId = priceElement.id.split('-')[1];
+                                                                            const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                    const formattedPrice = (priceValue * 1).toLocaleString('vi-VN');
+                                                                            const formattedPrice = (priceValue * 1).toLocaleString('vi-VN');
 
-                    // Cập nhật nội dung của thẻ h6
-                    priceElement.textContent = formattedPrice + " VNĐ";
-                });
-            });
+                                                                            // Cập nhật nội dung của thẻ h6
+                                                                            priceElement.textContent = formattedPrice + " VNĐ";
+                                                                        });
+                                                                    });
         </script>
     </body>
 
 </html>
+
 

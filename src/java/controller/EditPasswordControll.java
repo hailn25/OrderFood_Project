@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.EncodePassword;
 
 /**
  *
@@ -37,10 +38,11 @@ public class EditPasswordControll extends HttpServlet {
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
-
+        String Encode = EncodePassword.toSHA1(newPassword);
+        String EnCode = EncodePassword.toSHA1(currentPassword);
         // Kiểm tra mật khẩu cũ
         AccountDAO dao = new AccountDAO();
-        boolean isCurrentPasswordCorrect = dao.checkPassword(aid, currentPassword);
+        boolean isCurrentPasswordCorrect = dao.checkPassword(aid, EnCode);
 
         if (!isCurrentPasswordCorrect) {
             // Nếu mật khẩu cũ không đúng, thông báo lỗi cho người dùng
@@ -56,7 +58,7 @@ public class EditPasswordControll extends HttpServlet {
                 dispatcher.forward(request, response);
             } else {
                 // Nếu mật khẩu mới và nhập lại mật khẩu mới khớp, tiến hành cập nhật mật khẩu mới vào cơ sở dữ liệu
-                dao.updatePassword(newPassword, aid);
+                dao.updatePassword(Encode, aid);
 
                 // Set thông báo thành công để hiển thị trên trang
                 request.setAttribute("success", "Đổi mật khẩu thành công.");

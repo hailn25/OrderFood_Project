@@ -115,11 +115,86 @@
 
             .image-preview {
                 max-width: 100%;
-                height: auto;
+                height: 200px;
+                width: 200px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .image-preview {
+                max-width: 100%;
+                height: auto; /* Thay đổi để ảnh không bị cắt */
                 display: block;
                 margin: 0 auto;
             }
         </style>
+        <script>
+            function validateForm() {
+                let isValid = true;
+
+                // Validate sliderTitle
+                const sliderTitle = document.getElementById('sliderTitle');
+                const sliderTitleError = document.getElementById('sliderTitleError');
+                if (sliderTitle.value.trim() === '') {
+                    sliderTitleError.textContent = 'Chi tiết không được để trống.';
+                    isValid = false;
+                } else {
+                    sliderTitleError.textContent = '';
+                }
+
+                // Validate imageAvatar
+                const imageAvatar = document.getElementById('imageAvatar');
+                const imageAvatarError = document.getElementById('imageAvatarError');
+                if (imageAvatar.files.length === 0) {
+                    imageAvatarError.textContent = 'Ảnh không được để trống.';
+                    isValid = false;
+                } else {
+                    imageAvatarError.textContent = '';
+                }
+
+                return isValid;
+            }
+
+            function previewImages(event) {
+                const input = event.target;
+                const previewsContainer = document.getElementById('imagePreviews');
+                previewsContainer.innerHTML = ''; // Xóa các ảnh xem trước trước đó
+
+                if (input.files) {
+                    Array.from(input.files).forEach(file => {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'image-preview';
+                            previewsContainer.appendChild(img);
+                        }
+                        reader.readAsDataURL(file);
+                    });
+                }
+            }
+
+            function validateForm() {
+                let isValid = true;
+                const sliderTitle = document.getElementById('sliderTitle');
+                const sliderTitleError = document.getElementById('sliderTitleError');
+                const sliderTitleValue = sliderTitle.value.trim();
+                if (sliderTitleValue === '') {
+                    sliderTitleError.textContent = 'Chi tiết không được để trống.';
+                    isValid = false;
+                } else if (/^\s*$/.test(sliderTitleValue)) {
+                    sliderTitleError.textContent = 'Chi tiết không được chỉ chứa dấu cách.';
+                    isValid = false;
+                } else if (/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(sliderTitleValue)) {
+                    sliderTitleError.textContent = 'Chi tiết không được chỉ chứa ký hiệu đặc biệt.';
+                    isValid = false;
+                } else {
+                    sliderTitleError.textContent = '';
+                }
+
+                return isValid;
+            }
+        </script>
     </head>
     <body>
         <div class="container">
@@ -239,7 +314,7 @@
 
                                             <form action="settingBanner" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                                                 <div class="form-group">
-                                                    <label for="sliderTitle">Slider Title</label>
+                                                    <label for="sliderTitle">Chi tiết</label>
                                                     <input type="text" class="form-control" id="sliderTitle" name="sliderTitle" required>
                                                     <div class="text-danger" id="sliderTitleError"></div>
                                                 </div>
@@ -264,18 +339,16 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="imageAvatar">Image</label>
-                                                    <input type="file" class="form-control" id="imageAvatar" name="imageAvatar" accept="image/*" onchange="previewImage(event)" required>
+                                                    <label for="imageAvatar">Ảnh</label>
+                                                    <input type="file" class="form-control-file" id="imageAvatar" name="imageAvatar" onchange="previewImages(event)" multiple>
                                                     <div class="text-danger" id="imageAvatarError"></div>
-                                                </div>                                            
-
-                                                <div class="form-group text-center">
-                                                    <img id="imagePreview" class="image-preview" style="display: none;">
                                                 </div>
 
-                                                <div class="form-group text-center">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                <div class="form-group">
+                                                    <div id="imagePreviews"></div>
                                                 </div>
+
+                                                <input type="submit" class="btn btn-primary" value="Gửi">
                                             </form>
                                         </div>
                                     </div>
@@ -286,83 +359,14 @@
                 </div>
             </div>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
-                                                        window.onload = function () {
-                                                            var createDateInput = document.getElementById('createDate');
-                                                            var updateDateInput = document.getElementById('updateDate');
-                                                            var displayDateInput = document.getElementById('displayDate');
-                                                            var currentDate = new Date();
-                                                            var formattedDate = currentDate.toISOString().split('T')[0];
-
-                                                            // Set the date to today's date
-                                                            createDateInput.value = formattedDate;
-                                                            displayDateInput.value = formattedDate;
-                                                            updateDateInput.value = formattedDate;
-                                                        };
-
-                                                        function previewImage(event) {
-                                                            var input = event.target;
-                                                            var reader = new FileReader();
-                                                            reader.onload = function () {
-                                                                var dataURL = reader.result;
-                                                                var output = document.getElementById('imagePreview');
-                                                                output.src = dataURL;
-                                                                output.style.display = 'block'; // Display the image preview
-                                                            };
-                                                            if (input.files && input.files[0]) {
-                                                                reader.readAsDataURL(input.files[0]);
-                                                            }
-                                                        }
-
-                                                        function validateForm() {
-                                                            var isValid = true;
-
-                                                            // Reset errors
-                                                            document.getElementById("sliderTitleError").innerHTML = "";
-                                                            document.getElementById("backLinkError").innerHTML = "";
-                                                            document.getElementById("createDateError").innerHTML = "";
-                                                            document.getElementById("updateDateError").innerHTML = "";
-                                                            document.getElementById("imageAvatarError").innerHTML = "";
-
-                                                            // Validate sliderTitle
-                                                            var sliderTitle = document.getElementById("sliderTitle").value.trim();
-                                                            if (sliderTitle === "") {
-                                                                document.getElementById("sliderTitleError").innerHTML = "Slider Title is required.";
-                                                                isValid = false;
-                                                            }
-
-                                                            // Validate backLink
-                                                            var backLink = document.getElementById("backLink").value.trim();
-                                                            if (backLink === "") {
-                                                                document.getElementById("backLinkError").innerHTML = "Backlink is required.";
-                                                                isValid = false;
-                                                            }
-
-                                                            // Validate createDate
-                                                            var createDate = document.getElementById("createDate").value;
-                                                            if (createDate === "") {
-                                                                document.getElementById("createDateError").innerHTML = "Create Date is required.";
-                                                                isValid = false;
-                                                            }
-
-                                                            // Validate updateDate
-                                                            var updateDate = document.getElementById("updateDate").value;
-                                                            if (updateDate === "") {
-                                                                document.getElementById("updateDateError").innerHTML = "Update Date is required.";
-                                                                isValid = false;
-                                                            }
-
-                                                            // Validate imageAvatar
-                                                            var imageAvatar = document.getElementById("imageAvatar").files.length;
-                                                            if (imageAvatar === 0) {
-                                                                document.getElementById("imageAvatarError").innerHTML = "Image is required.";
-                                                                isValid = false;
-                                                            }
-
-                                                            return isValid;
-                                                        }
+            document.addEventListener('DOMContentLoaded', function () {
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementById('createDate').value = today;
+                document.getElementById('updateDate').value = today;
+            });
         </script>
     </body>
 </html>
+
+

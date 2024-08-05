@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ListOrder;
 import model.OrderDTO;
-import model.ShowOrder;
 
 /**
  *
@@ -28,7 +27,8 @@ public class ListOrderDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
+
+    public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accountId) {
         Map<Integer, ListOrder> orderMap = new HashMap<>();
         if (orderStatusIds == null || orderStatusIds.isEmpty()) {
             return new ArrayList<>(orderMap.values());
@@ -110,7 +110,6 @@ public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accou
         return new ArrayList<>(orderMap.values());
     }
 
-    
     public List<OrderDTO> getListOrderById_V1(int orderStatusId, int accountId) {
         List<OrderDTO> listOrderById_V1 = new ArrayList<>();
         try {
@@ -144,35 +143,66 @@ public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accou
         return listOrderById_V1;
     }
 
-    public boolean updateOrderStatus(int accountId, int orderId) throws ClassNotFoundException {
+    public boolean updateOrderStatusAndProductQuantity(int accountId, int orderId) throws ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement psOrder = null;
+        PreparedStatement psProduct = null;
+        ResultSet rs = null;
+        boolean isUpdated = false;
+
         try {
-            // Câu lệnh SQL cập nhật
-            String query = "update [Order]\n"
-                    + "set OrderStatusId = 8\n"
-                    + "where AccountId = ? and OrderId = ?";
-
-            // Kết nối tới cơ sở dữ liệu
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
-            // Thiết lập các tham số cho câu lệnh
-            ps.setInt(1, accountId);
-            ps.setInt(2, orderId);
+            // Cập nhật trạng thái đơn hàng
+            String updateOrderQuery = "UPDATE [Order] SET [OrderStatusId] = 8 WHERE [AccountId] = ? AND [OrderId] = ?";
+            psOrder = conn.prepareStatement(updateOrderQuery);
+            psOrder.setInt(1, accountId);
+            psOrder.setInt(2, orderId);
+            int rowsUpdated = psOrder.executeUpdate();
+            if (rowsUpdated == 0) {
+                conn.rollback();
+                return false;
+            }
 
-            // Thực thi câu lệnh cập nhật
-            int rowsUpdated = ps.executeUpdate();
+            // Cập nhật số lượng sản phẩm
+            String updateProductQuery = "UPDATE [Product] SET [Quantity] = [Quantity] + ? WHERE [ProductId] = ?";
+            String selectOrderDetailsQuery = "SELECT [ProductId], [Quantity] FROM [OrderDetail] WHERE [OrderId] = ?";
+            psProduct = conn.prepareStatement(selectOrderDetailsQuery);
+            psProduct.setInt(1, orderId);
+            rs = psProduct.executeQuery();
 
-            // Kiểm tra xem có bản ghi nào được cập nhật không
-            return rowsUpdated > 0;
+            while (rs.next()) {
+                int productId = rs.getInt("ProductId");
+                int quantity = rs.getInt("Quantity");
 
+                psProduct = conn.prepareStatement(updateProductQuery);
+                psProduct.setInt(1, quantity);
+                psProduct.setInt(2, productId);
+                psProduct.executeUpdate();
+            }
+
+            conn.commit(); // Hoàn tất transaction
+            isUpdated = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-            // Đóng các tài nguyên
             try {
-                if (ps != null) {
-                    ps.close();
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (psOrder != null) {
+                    psOrder.close();
+                }
+                if (psProduct != null) {
+                    psProduct.close();
                 }
                 if (conn != null) {
                     conn.close();
@@ -181,13 +211,12 @@ public List<ListOrder> getListOrderByIds(List<Integer> orderStatusIds, int accou
                 e.printStackTrace();
             }
         }
+
+        return isUpdated;
     }
-    
 
     public static void main(String[] args) throws ClassNotFoundException {
         ListOrderDAO dao = new ListOrderDAO();
         System.out.println(dao);
     }
 }
-
-

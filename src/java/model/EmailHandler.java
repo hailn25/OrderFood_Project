@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -24,7 +26,8 @@ import javax.naming.NamingException;
  * @author hailt
  */
 public class EmailHandler {
-    public static void sendEmail(String toEmail, String subject ,String text) throws AddressException{
+
+    public static void sendEmail(String toEmail, String subject, String text) throws AddressException {
         try {
             String fromEmail = (String) new InitialContext().lookup("java:comp/env/email");
             String password = (String) new InitialContext().lookup("java:comp/env/password");
@@ -33,32 +36,38 @@ public class EmailHandler {
             prop.put("mail.smtp.port", "587");
             prop.put("mail.smtp.auth", "true");
             prop.put("mail.smtp.starttls.enable", "true");
-            Session session = Session.getInstance(prop , new javax.mail.Authenticator() {
-                 @Override
+            Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
+                @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(fromEmail, password);
                 }
             });
-            
+
             Message mess = new MimeMessage(session);
             mess.setFrom(new InternetAddress(fromEmail));
             mess.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
-            mess.setSubject(subject);
+            try {
+                mess.setSubject(MimeUtility.encodeText(subject, "UTF-8", null));
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(EmailHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             mess.setText(text);
-            mess.setContent(text,"text/html;charset=UTF-8");
+            mess.setContent(text, "text/html;charset=UTF-8");
             Transport.send(mess);
-            
+
         } catch (NamingException ex) {
             Logger.getLogger(EmailHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
             Logger.getLogger(EmailHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    public static String generateCodeVerify(){
+
+    public static String generateCodeVerify() {
         Random rd = new Random();
         int codeVerify = rd.nextInt(899999) + 100000;
-    
-        return  String.valueOf(codeVerify);
+
+        return String.valueOf(codeVerify);
     }
 }

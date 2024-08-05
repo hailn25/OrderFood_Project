@@ -216,6 +216,10 @@
                                         <!-- Nút "Đã lấy" hiển thị khi người dùng đã có voucher -->
                                         <button class="bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã lấy</button>
                                     </c:when>
+                                    <c:when test="${o.quantity == 0}">
+                                        <!-- Nút "Đã lấy" hiển thị khi người dùng đã có voucher -->
+                                        <button class="bg-gray-500 text-primary-foreground px-4 py-2 rounded-lg" disabled>Đã hết</button>
+                                    </c:when>
                                     <c:otherwise>
                                         <!-- Nút "Lưu" hiển thị khi người dùng chưa có voucher -->
                                         <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg" onclick="handleVoucherSave('${o.voucherId}')">Lưu</button>

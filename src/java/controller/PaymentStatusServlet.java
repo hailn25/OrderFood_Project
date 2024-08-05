@@ -196,7 +196,7 @@ public class PaymentStatusServlet extends HttpServlet {
             // Clear session attributes and forward to home page
             session.removeAttribute("cart");
             session.setAttribute("size", 0);
-              request.getRequestDispatcher("Buysuccessfull.jsp").forward(request, response);
+           request.getRequestDispatcher("Buysuccessfull.jsp").forward(request, response);
         } else {
             response.sendRedirect("Login.jsp");
         }
@@ -242,3 +242,4 @@ public class PaymentStatusServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+

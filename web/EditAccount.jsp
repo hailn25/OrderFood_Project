@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -72,11 +74,13 @@
                                     <div class="row">
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="createDate">Ngày tạo tài khoản</label>
-                                            <input id="createDate" name="createDate" type="text" required value="${detail.createDate}" class="form-control validate read-only" readonly/>
+                                            <fmt:formatDate value="${detail.createDate}" pattern="dd-MM-yyyy" var="formattedDate" />
+                                            <input id="createDate" name="createDate" type="text" required value="${formattedDate}" class="form-control validate read-only" readonly/>
                                         </div>
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="lastDateLogin">Ngày đăng nhập cuối</label>
-                                            <input id="lastDateLogin" name="lastDateLogin" type="text" required value="${detail.lastDateLogin}" class="form-control validate read-only" readonly/>
+                                            <fmt:formatDate value="${detail.lastDateLogin}" pattern="dd-MM-yyyy" var="formattedDate" />
+                                            <input id="lastDateLogin" name="lastDateLogin" type="text" required value="${formattedDate}" class="form-control validate read-only" readonly/>
                                         </div>
                                     </div>
                                     <div class="row">

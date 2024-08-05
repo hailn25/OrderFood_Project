@@ -94,7 +94,7 @@
 
                                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                                             <label for="quantity">Số lượng</label>
-                                            <input id="quantity" name="quantity" type="number" min="1" required value="${detail.quantity}" class="form-control validate" />
+                                            <input id="quantity" name="quantity" type="number" min="0" required value="${detail.quantity}" class="form-control validate" />
                                         </div>
                                     </div>
                                 </div>

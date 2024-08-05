@@ -81,7 +81,7 @@
                                 <div class="col-lg-6">
                                     <div class="border rounded">
                                         <a href="#">
-                                            <img src="img/${fsdetail.imageURL}" class="img-fluid rounded" alt="Image">
+                                            <img style="height: 450px; width: 480px" src="img/${fsdetail.imageURL}" class="img-fluid rounded" alt="Image">
                                     </a>
                                 </div>
                             </div>

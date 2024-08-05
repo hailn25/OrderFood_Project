@@ -195,7 +195,7 @@
                             <th>Giảm</th>
                             <th>Giá sau khi giảm</th>
                             <th>Ngày</th>
-                            <th>Khung giờ</th>
+                            <!--<th>Khung giờ</th>-->
                             <th>Trạng thái</th>
                             <th>Ảnh</th>
                             <th>Tác vụ</th>
@@ -211,22 +211,7 @@
                                 <td><fmt:formatNumber value="${o.discount * 100}" type="number" maxFractionDigits="0"/>%</td>
                                 <td><fmt:formatNumber value="${o.salePrice}" type="number" maxFractionDigits="0"/> VNĐ</td>
                                 <td><fmt:formatDate value="${o.date}" pattern="dd-MM-yyyy"/></td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${o.timeFrame == 1}">
-                                            10h --> 13h
-                                        </c:when>
-                                        <c:when test="${o.timeFrame == 2}">
-                                            13h --> 16h
-                                        </c:when>
-                                        <c:when test="${o.timeFrame == 3}">
-                                            16h --> 19h
-                                        </c:when>
-                                        <c:when test="${o.timeFrame == 4}">
-                                            19h --> 22h
-                                        </c:when>
-                                    </c:choose>
-                                </td>
+                                
                                 <td>
                                     <c:choose>
                                         <c:when test="${o.isFlashSale == 0}">
@@ -249,7 +234,7 @@
                                     <img src="img/${o.imageURL}" alt="Không thể tải ảnh">
                                 </td>
                                 <td>
-                                    <a href="viewDetailFlashSaleProduct?pid=${o.productId}" class="btn btn-blue" title="Xem chi tiết"><i class="far fa-eye" ></i></a>
+                                    <a href="viewDetailFlashSaleProduct?pid=${o.productId}" class="" title="Xem chi tiết"><i class="material-symbols-outlined far fa-eye" ></i></a>
                                     <a href="deleteFlashSaleProduct?pid=${o.productId}&quantity=${o.quantity}" onclick="confirmDelete(event)" class="delete" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xoá sản phẩm" style="color: red">&#xE872;</i></a>
                                 </td>
                             </tr>

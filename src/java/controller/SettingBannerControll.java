@@ -1,9 +1,11 @@
 package controller;
 
-import dao.RestaurantDAO;
 import dao.SliderDAO; // Import your DAO class
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -12,9 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.PrintWriter;
+import java.util.Collection;
 import model.Account;
 
 @MultipartConfig
@@ -28,11 +29,10 @@ public class SettingBannerControll extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Manage Banners</title>");
+            out.println("<title>Servlet VoucherControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Manage Banners</h1>");
-            out.println("<p><a href=\"settingBanner.jsp\">Add New Banner</a></p>");
+            out.println("<h1>Servlet VoucherControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -52,31 +52,48 @@ public class SettingBannerControll extends HttpServlet {
         String updateDate = request.getParameter("updateDate");
         String backLink = request.getParameter("backLink");
 
-        Part filePart = request.getPart("imageAvatar");
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        InputStream fileContent = filePart.getInputStream();
-
-        String imagePath = fileName; // Define your upload directory
-
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         int updateBy = account.getAccountId();
 
-        try {
-            // Save the file to the server
-            Files.copy(fileContent, Paths.get(getServletContext().getRealPath("/") + imagePath));
+        // Define the directory to upload files
+        String uploadDir = getServletContext().getRealPath("/") + "uploads";
+        Path uploadPath = Paths.get(uploadDir);
 
-            SliderDAO dao = new SliderDAO();
-            dao.insertSlider(sliderTitle, imagePath, 1, 1, updateBy, createDate, updateDate, backLink);
+        // Create the upload directory if it doesn't exist
+        Files.createDirectories(uploadPath);
+
+        try {
+            // Get all parts of the request
+            Collection<Part> parts = request.getParts();
+
+            // Iterate through all parts and process file uploads
+            for (Part part : parts) {
+                if (part.getContentType() != null && part.getContentType().startsWith("image")) {
+                    String originalFileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                    String uniqueFileName = originalFileName;
+                    Path imagePath = uploadPath.resolve(uniqueFileName);
+                    InputStream fileContent = part.getInputStream();
+
+                    // Save the file to the server
+                    Files.copy(fileContent, imagePath);
+
+                    // Insert slider details into the database
+                    SliderDAO dao = new SliderDAO();
+                    dao.insertSlider(sliderTitle, uniqueFileName, 1, 1, updateBy, createDate, updateDate, backLink);
+                }
+            }
 
             // If insertion is successful, set a success message
-            request.setAttribute("message", "Insert successful.");
-            // Forward to the same page (or another page for success message display)
-            request.getRequestDispatcher("SettingBanner.jsp").forward(request, response);
+            request.setAttribute("message", "Gửi thành công.");
         } catch (SQLException ex) {
-            // If there's an SQL exception, set an error message
-            request.setAttribute("error", "Error inserting slider: " + ex.getMessage());
-            // Forward to the same page (or another page for error message display)
+            // Set an error message for SQL exceptions
+            request.setAttribute("error", "Gửi lỗi: " + ex.getMessage());
+        } catch (IOException ex) {
+            // Set an error message for IO exceptions
+            request.setAttribute("error", "Lỗi lưu ảnh: " + ex.getMessage());
+        } finally {
+            // Forward to the same page for message display
             request.getRequestDispatcher("SettingBanner.jsp").forward(request, response);
         }
     }

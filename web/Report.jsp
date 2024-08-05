@@ -12,6 +12,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>4FOODHD</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            #imagePreview {
+                display: none;
+                height: 200px;
+                width: 150px;
+            }
+        </style>
     </head>
     <body>
         <!-- Header Section -->
@@ -41,12 +48,12 @@
                             </div>
                             <% } %>
 
-                            <form id="reportForm" action="insertReport" method="POST" enctype="multipart/form-data">
+                            <form id="reportForm" action="insertReport" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                                 <div class="form-group">
                                     <label>Nhà Hàng</label>
                                     <input type="text" class="form-control" value="${restaurantName}" readonly>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="description">Mô tả</label>
                                     <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
@@ -75,12 +82,9 @@
 
                                 <div class="custom-file mt-3 mb-3">
                                     <input id="imageURL" name="imageURL" type="file" class="custom-file-input" onchange="previewImage(event)" required>
-                                    <label class="custom-file-label" for="fileInput">Chọn ảnh</label>
+                                    <label class="custom-file-label" for="imageURL">Chọn ảnh</label>
                                 </div>
-
-                                <div class="form-group">
-                                    <img id="imagePreview" src="#" style="display: none; max-height: 300px;">
-                                </div>
+                                <img id="imagePreview"/>
 
                                 <div class="form-group text-center">
                                     <a href="restaurant?restaurantId=${restaurantId}&page=${1}" class="btn btn-secondary mr-2">Quay lại</a>
@@ -96,61 +100,77 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
-                                        document.getElementById('reportForm').addEventListener('submit', function (event) {
-                                            // Kiểm tra các trường nhập liệu
-                                            var description = document.getElementById('description').value.trim();
-                                            var imageURL = document.getElementById('imageURL').value.trim();
-                                            var restaurantId = document.getElementById('restaurantId').value.trim();
-                                            var status = document.getElementById('status').value.trim();
-                                            var createDate = document.getElementById('createDate').value.trim();
-
-                                            var errorMessage = "";
-
-                                            // Kiểm tra từng trường có bị bỏ trống không
-                                            if (description === "") {
-                                                errorMessage += "Mô tả không được để trống.\n";
+                                        function validateImage(fileInput) {
+                                            var filePath = fileInput.value;
+                                            var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                                            if (!allowedExtensions.exec(filePath)) {
+                                                alert('Chỉ được upload các tệp có định dạng .jpg, .jpeg hoặc .png.');
+                                                fileInput.value = '';
+                                                document.getElementById('imagePreview').style.display = 'none';
+                                                return false;
                                             }
-                                            if (imageURL === "") {
-                                                errorMessage += "ImageURL không được để trống.\n";
-                                            }
-                                            if (restaurantId === "") {
-                                                errorMessage += "Restaurant ID không được để trống.\n";
-                                            }
-                                            if (status === "") {
-                                                errorMessage += "Trạng thái không được để trống.\n";
-                                            }
-                                            if (createDate === "") {
-                                                errorMessage += "Ngày tạo không được để trống.\n";
-                                            }
-
-                                            // Nếu có lỗi, ngăn không submit form và hiển thị thông báo lỗi
-                                            if (errorMessage !== "") {
-                                                alert(errorMessage);
-                                                event.preventDefault(); // Ngăn không submit form
-                                            }
-                                        });
+                                            return true;
+                                        }
 
                                         function previewImage(event) {
-                                            var input = event.target;
-                                            var reader = new FileReader();
-                                            reader.onload = function () {
-                                                var dataURL = reader.result;
-                                                var output = document.getElementById('imagePreview');
-                                                output.src = dataURL;
-                                                output.style.display = 'block'; // Hiển thị ảnh mới
-                                            };
-                                            if (input.files && input.files[0]) {
-                                                reader.readAsDataURL(input.files[0]);
+                                            var fileInput = event.target;
+                                            if (validateImage(fileInput)) {
+                                                var reader = new FileReader();
+                                                reader.onload = function () {
+                                                    var output = document.getElementById('imagePreview');
+                                                    output.src = reader.result;
+                                                    output.style.display = 'block';
+                                                };
+                                                reader.readAsDataURL(fileInput.files[0]);
                                             }
                                         }
+
+
 
                                         window.onload = function () {
                                             var dateInput = document.getElementById('createDate');
                                             var displayDateInput = document.getElementById('displayDate');
-                                            var currentDate = new Date().toISOString().split('T')[0];
-                                            dateInput.value = currentDate;
-                                            displayDateInput.value = currentDate;
+                                            var currentDate = new Date();
+
+                                            // Định dạng ngày thành dd/MM/yyyy
+                                            var day = String(currentDate.getDate()).padStart(2, '0');
+                                            var month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                                            var year = currentDate.getFullYear();
+
+                                            var formattedDate = day + '-' + month + '-' + year;
+                                            var isoDate = currentDate.toISOString().split('T')[0];
+
+                                            dateInput.value = isoDate; // Định dạng ISO để gửi lên server
+                                            displayDateInput.value = formattedDate; // Hiển thị định dạng dd/MM/yyyy
                                         }
+        </script>
+        <script>
+            function validateForm() {
+                var description = document.getElementById("description").value.trim();
+                var allNumbers = /^\d+$/;
+                var allSpecialChars = /^[!@#$%^&*(),.?":{}|<>]+$/;
+                var hasAlphanumeric = /[a-zA-Z0-9]/;
+
+                if (!description) {
+                    alert("Mô tả không được để trống hoặc chứa toàn dấu cách.");
+                    return false;
+                }
+
+                if (allNumbers.test(description)) {
+                    alert("Mô tả không được chứa toàn số.");
+                    return false;
+                }
+
+                if (allSpecialChars.test(description) || !hasAlphanumeric.test(description)) {
+                    alert("Mô tả không được chứa toàn ký hiệu đặc biệt.");
+                    return false;
+                }
+
+                return true;
+            }
         </script>
     </body>
 </html>
+
+
+

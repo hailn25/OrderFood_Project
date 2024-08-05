@@ -138,13 +138,35 @@
     </head>
     <body>
         <div class="container">
-            <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4">
-                <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
-                <div class="d-flex align-items-center">
-                    <span class="mr-3">Xin chào, ${account.name}</span>
-                    <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
-                </div>
-            </header>
+            <c:choose>
+                <c:when test="${sessionScope.account.roleId == 2}">
+                    <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #81C408;">
+                        <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">Xin chào, ${account.name}</span>
+                            <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                        </div>
+                    </header>
+                </c:when>
+                <c:when test="${sessionScope.account.roleId == 4}">
+                    <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #567086;">
+                        <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">Xin chào, ${account.name}</span>
+                            <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                        </div>
+                    </header>
+                </c:when>
+                <c:when test="${sessionScope.account.roleId == 3}">
+                    <header class="custom-header d-flex justify-content-between align-items-center py-3 mb-4" style="background-color: #567086;">
+                        <h1 class="navbar-brand mb-0 h4">Thông tin cá nhân</h1>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">Xin chào, ${account.name}</span>
+                            <a href="logout" class="btn btn-outline-danger btn-sm">Out</a>
+                        </div>
+                    </header>
+                </c:when>
+            </c:choose>
             <div class="row flex-lg-nowrap">
                 <div class="col-12 col-lg-auto mb-3" style="width: 250px;">
                     <div class="card p-3">
@@ -172,7 +194,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="#">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Mã giảm giá</span>
                                             </a>
                                         </li>                                 
                                         <li class="nav-item">
@@ -200,13 +222,13 @@
                                         <li class="nav-item">
                                             <a class="nav-link px-3" href="SettingBanner.jsp">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
+                                                <span>Thiết lập quảng cáo</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link px-3" href="Voucher.jsp">
+                                            <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
+                                                <span>Thiết lập mã giảm giá</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -224,19 +246,7 @@
                                                 <i class="fa fa-fw fa-cog mr-1"></i>
                                                 <span>Đổi mật khẩu</span>
                                             </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="SettingBanner.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="#">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
-                                            </a>
-                                        </li>
+                                        </li>                                   
                                     </ul>
                                 </c:when>
                             </c:choose>
@@ -364,3 +374,5 @@
         </script>
     </body>
 </html>
+
+

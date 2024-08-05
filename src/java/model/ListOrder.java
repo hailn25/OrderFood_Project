@@ -6,12 +6,12 @@ package model;
 
 import java.util.Date;
 
-
 /**
  *
  * @author ADMIN
  */
 public class ListOrder {
+
     private int accountId;
     private int orderId;
     private int productId;
@@ -184,5 +184,4 @@ public class ListOrder {
         return "ListOrder{" + "accountId=" + accountId + ", orderId=" + orderId + ", productId=" + productId + ", productName=" + productName + ", price=" + price + ", imageURL=" + imageURL + ", restaurant=" + restaurant + ", accountName=" + accountName + ", phone=" + phone + ", address=" + address + ", note=" + note + ", quantity=" + quantity + ", totalMoney=" + totalMoney + ", orderStatusId=" + orderStatusId + ", status=" + status + ", createDate=" + createDate + '}';
     }
 
-    
 }

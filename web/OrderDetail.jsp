@@ -44,7 +44,11 @@
                                             <td>${orderList.quantity}</td>
                                             <td id="price-${orderList.orderId}">${orderList.price * orderList.quantity}</td>
                                             <c:if test="${orderList.orderStatus == 3}">
-                                                <td><a href="insertFeedback?accountId=${sessionScope.account.accountId}&productId=${orderList.productId}" class="rating-button">Đánh giá</a></td>
+                                                <td>
+                                                    <button type="button" class="rating-button" onclick="window.location.href = 'insertFeedback?accountId=${sessionScope.account.accountId}&productId=${orderList.productId}'">
+                                                        Đánh giá
+                                                    </button>
+                                                </td>
                                             </c:if>
                                         </tr>
                                     </c:forEach>
@@ -52,18 +56,7 @@
                             </table>
                         </div>
                         <div class="text-center">
-                            <h1 style="color: white; margin-top: 20px;">Tổng đơn hàng: 
-                                <script>
-                                    const totalPriceElement = document.createElement('span');
-                                    const totalPriceValue = parseFloat('${listOrderDetailsByAccountId[0].totalPrice}'.replace(/[^0-9.-]+/g, ""));
-                                    const formattedTotalPrice = (totalPriceValue).toLocaleString('vi-VN');
-                                    totalPriceElement.textContent = formattedTotalPrice + " VNĐ";
-                                    document.write(totalPriceElement.outerHTML);
-                                </script>
-                            </h1>
-                        </div>
-                        <div class="text-center">
-                            <a href="orderHistory" class="btn btn-primary">Thoát</a>
+                            <a href="javascript:history.back()" class="btn btn-primary">Thoát</a>
                         </div>
                     </div>
                 </div>
@@ -74,20 +67,22 @@
         <script src="jquery-ui-datepicker/jquery-ui.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const prices = document.querySelectorAll('[id^="price-"]');
+            document.addEventListener('DOMContentLoaded', function () {
+                const prices = document.querySelectorAll('[id^="price-"]');
 
-                                        prices.forEach(priceElement => {
-                                            const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
-                                            const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
+                prices.forEach(priceElement => {
+                    const priceId = priceElement.id.split('-')[1]; // Lấy ID sản phẩm
+                    const priceValue = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")); // Chuyển đổi giá trị thành số
 
-                                            // Định dạng giá thành VND
-                                            const formattedPrice = (priceValue).toLocaleString('vi-VN');
+                    // Định dạng giá thành VND
+                    const formattedPrice = (priceValue).toLocaleString('vi-VN');
 
-                                            // Cập nhật nội dung của thẻ h6
-                                            priceElement.textContent = formattedPrice + " VNĐ";
-                                        });
-                                    });
+                    // Cập nhật nội dung của thẻ h6
+                    priceElement.textContent = formattedPrice + " VNĐ";
+                });
+            });
         </script>
     </body>
 </html>
+
+

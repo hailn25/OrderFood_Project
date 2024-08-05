@@ -6,7 +6,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>4FOODHD</title>
+        <title>Fruitables - Vegetable Website Template</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -22,7 +22,7 @@
 
         <!-- Libraries Stylesheet -->
         <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="lib/owlcarousel/assets/owl.caousel.min.css" rel="stylesheet">
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -138,8 +138,8 @@
                             <div class="col-md-5">
                                 <form action="showVoucher" method="get">
                                     <div class="mt-5">
-                                        <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Sử dụng Voucher</button>
+                                        <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Áp dụng mã giảm giá ">
+                                        <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="submit">Mã giảm giá</button>
                                     </div>
                                 </form>
                             </div>
@@ -147,14 +147,14 @@
                             <div class="col-md-5">
                                 <div class="bg-light rounded">
                                     <div class="p-4">
-                                        <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                                        <h1 class="display-6 mb-4">Tổng  <span class="fw-normal">Thanh Toán </span></h1>
                                         <c:set var="subtotal" value="0"/>
                                         <c:forEach var="i" items="${o.items}">
                                             <c:set var="subtotal" value="${subtotal + (i.quantity * i.price)}"/>
                                         </c:forEach>
                                         <c:set var="shippingFee" value="30000" />
                                         <div class="d-flex justify-content-between mb-4">
-                                            <h5 class="mb-0 me-4">Subtotal:</h5>
+                                            <h5 class="mb-0 me-4">Tổng tiền hàng:</h5>
                                             <span class="subtotal"><fmt:formatNumber value="${subtotal}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-4">
@@ -165,7 +165,7 @@
                                         </div>
 
                                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                            <h5 class="mb-0 ps-4 me-4">Total</h5>
+                                            <h5 class="mb-0 ps-4 me-4">Tổng đơn hàng</h5>
                                             <span class="cart-total"><fmt:formatNumber value="${subtotal + shippingFee}" maxFractionDigits="0" currencySymbol="VND"/> VNĐ</span>
                                         </div>
                                         <form action="checkout" method="get">
@@ -199,13 +199,15 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const quantityInputs = document.querySelectorAll('.quantity-input');
+
                 function formatCurrency(amount) {
                     let formatted = amount.toString().replace(/\D/g, '');
                     formatted = formatted.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
                     return formatted + ' VNĐ';
                 }
+                function updateQuantityAndPrice(quantityInput, newQuantity) {
+                    const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
 
-                function updateQuantityAndPrice(quantityInput, newQuantity, maxQuantity) {
                     if (newQuantity < 1) {
                         confirmDelete(event, 'deleteForm' + quantityInput.dataset.productId);
                         return;
@@ -237,6 +239,7 @@
                             });
                 }
 
+
                 function updatePrice(quantityInput, quantity) {
                     const pricePerItem = parseFloat(quantityInput.dataset.price);
                     const totalPriceElement = quantityInput.closest('tr').querySelector('.total-price');
@@ -259,19 +262,16 @@
                     totalElement.innerText = formatCurrency(total + shippingFee);
                 }
 
-
-
                 quantityInputs.forEach(function (quantityInput) {
-                    const maxQuantity = parseInt(quantityInput.dataset.maxQuantity);
                     const btnPlus = quantityInput.closest('.quantity').querySelector('.btn-plus');
                     const btnMinus = quantityInput.closest('.quantity').querySelector('.btn-minus');
 
                     btnPlus.addEventListener('click', function () {
-                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1, maxQuantity);
+                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) + 1);
                     });
 
                     btnMinus.addEventListener('click', function () {
-                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1, maxQuantity);
+                        updateQuantityAndPrice(quantityInput, parseInt(quantityInput.value) - 1);
                     });
 
                     quantityInput.addEventListener('input', function () {
@@ -279,7 +279,7 @@
                         if (isNaN(newValue) || newValue < 1) {
                             newValue = 1;
                         }
-                        updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                        updateQuantityAndPrice(quantityInput, newValue);
                     });
 
                     quantityInput.addEventListener('keyup', function (event) {
@@ -288,15 +288,15 @@
                             if (isNaN(newValue) || newValue < 1) {
                                 newValue = 1;
                             }
-                            updateQuantityAndPrice(quantityInput, newValue, maxQuantity);
+                            updateQuantityAndPrice(quantityInput, newValue);
                         }
                     });
 
                     updatePrice(quantityInput, parseInt(quantityInput.value));
                 });
             });
-
         </script>
+
         <script>
             function confirmDelete(event, formId) {
                 event.preventDefault(); // Ngăn chặn việc gửi form ngay lập tức
@@ -321,3 +321,4 @@
     </body>
 
 </html>
+

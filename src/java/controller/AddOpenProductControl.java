@@ -42,6 +42,17 @@ public class AddOpenProductControl extends HttpServlet {
             int lengthName = Validation.removeAllBlank(name).length();
             int lengthDescription = Validation.removeAllBlank(description).length();
 
+            // Regular expression for invalid characters
+            String invalidCharsRegex = "[!@#$%^&?_\\-+{}|\\\\:<>?/*]";
+
+            // Kiểm tra xem name và description có chứa kí tự không hợp lệ không
+            boolean nameHasInvalidChars = name.matches(".*" + invalidCharsRegex + ".*");
+            boolean descriptionHasInvalidChars = description.matches(".*" + invalidCharsRegex + ".*");
+
+            // Kiểm tra xem name và description có phải chỉ chứa số không
+            boolean nameIsNumeric = name.matches("\\d+");
+            boolean descriptionIsNumeric = description.matches("\\d+");
+
             double price = 0;
             int quantity = 0;
             boolean isNumeric = true;
@@ -79,7 +90,7 @@ public class AddOpenProductControl extends HttpServlet {
             if (img == null) {
                 request.setAttribute("error", "Chưa chọn ảnh!");
                 request.getRequestDispatcher("managerAddOpenProduct").forward(request, response);
-            } else if (lengthName >= 2 && lengthName <= 30 && lengthDescription >= 4 && lengthDescription <= 500 && isNumeric) {
+            } else if (lengthName >= 2 && lengthName <= 30 && lengthDescription >= 4 && lengthDescription <= 500 && isNumeric && !nameHasInvalidChars && !descriptionHasInvalidChars && !nameIsNumeric && !descriptionIsNumeric) {
                 name = Validation.removeUnnecessaryBlank(name);
                 priceStr = Validation.removeAllBlank(priceStr);
                 quantityStr = Validation.removeAllBlank(quantityStr);
@@ -96,10 +107,20 @@ public class AddOpenProductControl extends HttpServlet {
 
                 // Thêm sản phẩm mới vào cơ sở dữ liệu
                 ProductDAO dao = new ProductDAO();
-                dao.insertProduct(name, priceStr, description, img, category, restaurantId, isSale, quantityStr,  Date.valueOf(updateDate), Date.valueOf(createDate), status);
+                dao.insertProduct(name, priceStr, description, img, category, restaurantId, isSale, quantityStr, Date.valueOf(updateDate), Date.valueOf(createDate), status);
                 request.getRequestDispatcher("managerOpenProduct").forward(request, response);
             } else {
-                request.setAttribute("error", "Nhập không hợp lệ!");
+                String errorMessage = "Nhập không hợp lệ!";
+                if (nameHasInvalidChars) {
+                    errorMessage = "Tên sản phẩm chứa kí tự không hợp lệ!";
+                } else if (descriptionHasInvalidChars) {
+                    errorMessage = "Mô tả sản phẩm chứa kí tự không hợp lệ!";
+                } else if (nameIsNumeric) {
+                    errorMessage = "Tên sản phẩm không được chỉ chứa số!";
+                } else if (descriptionIsNumeric) {
+                    errorMessage = "Mô tả sản phẩm không được chỉ chứa số!";
+                }
+                request.setAttribute("error", errorMessage);
                 request.getRequestDispatcher("managerAddOpenProduct").forward(request, response);
             }
 

@@ -153,66 +153,59 @@
                                 <div class="col-lg-6">
                                     <div class="border rounded">
                                         <a href="#">
-                                            <img src="img/${detail.image}" class="img-fluid rounded" alt="Image">
+                                            <img style="height: 450px; width: 500px" src="img/${detail.image}" class="img-fluid rounded" alt="Image">
                                     </a>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${detail.name}</h4>
                                 <p class="mb-3">Danh mục: ${detail.categoryName}</p>
-                                <h5 style="display: flex; align-items: center;font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
-                                <div class="d-flex mb-4">
-                                    <c:forEach begin="1" end="5" var="i">
-                                        <c:choose>
-                                            <c:when test="${i <= detail.rateStar}">
-                                                <i class="fa fa-star text-secondary"></i>
-                                            </c:when>
-                                            <c:when test="${i - 0.5 == detail.rateStar}">
-                                                <i class="fa fa-star-half-alt text-secondary"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                </div>
+                                <h5 style="display: flex; align-items: center; font-family: sans-serif;" id="price-${detail.id}">${detail.price}</h5>
                                 <p class="mb-4">${detail.decription}</p>
                                 <p class="mb-4">Số lượng: ${detail.quantity}</p>
-                                <div style="margin-bottom: 30px">
-                                    <div class="input-group quantity mt-4" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
+
+                                <c:if test="${detail.quantity > 0}">
+                                    <div style="margin-bottom: 30px">
+                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="1" data-product-id="${detail.id}" data-price="${detail.price}" data-max-quantity="${detail.quantity}">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div style="display: flex; margin: 0 30; ">
-                                    <form id="addToCartForm" action="addtocart" method="post" style="margin-right: 30px">
-                                        <input type="hidden" name="productId" value="${detail.id}">
-                                        <input type="hidden" name="quantity" id="addToCartQuantity" value="1">
-                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
-                                        </button>
-                                    </form>
-                                    <form id="addToCheckout" action="checkout2" method="get">
-                                        <input type="hidden" name="productId" value="${detail.id}">
-                                        <input type="hidden" name="quantityCart" id="checkoutQuantity" value="1">
-                                        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                    <div style="display: flex; margin: 0 30;">
+                                        <form id="addToCartForm" action="addtocart" method="post" style="margin-right: 30px">
+                                            <input type="hidden" name="productId" value="${detail.id}">
+                                            <input type="hidden" name="quantity" id="addToCartQuantity" value="1">
+                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ hàng
+                                            </button>
+                                        </form>
+                                        <form id="addToCheckout" action="checkout3" method="get">
+                                            <input type="hidden" name="productId" value="${detail.id}">
+                                            <input type="hidden" name="quantityCart" id="checkoutQuantity" value="1">
+                                            <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                <i class="fas fa-cart-arrow-down me-2 text-primary"></i>Mua ngay
+                                            </button>
+                                        </form>
+                                    </div>
+                                </c:if>
 
-                                            <i class="fas fa-cart-arrow-down me-2 text-primary"></i>Mua ngay
-
-                                        </button>
-                                    </form>
-                                </div>
+                                <c:if test="${detail.quantity == 0}">
+                                    <div class="alert alert-secondary mt-3" role="alert">
+                                        Sản phẩm này hiện tại hết hàng và không thể thêm vào giỏ hàng.
+                                    </div>
+                                </c:if>
                             </div>
+
                             <div class="col-lg-12">
                                 <nav>
                                     <div class="nav nav-tabs mb-3">
@@ -229,22 +222,22 @@
                                                 <div class="">
                                                     <p class="mb-2" style="font-size: 14px;">${review.date}</p>
                                                     <div class="d-flex justify-content-between">
-                                                        <h5>${review.nameAccount}</h5>
-                                                        <div class="d-flex mb-3">
-                                                            <c:forEach begin="1" end="5" var="i">
-                                                                <c:choose>
-                                                                    <c:when test="${i <= review.rateStar}">
-                                                                        <i class="fa fa-star text-secondary"></i>
-                                                                    </c:when>
-                                                                    <c:when test="${i - 0.5 == review.rateStar}">
-                                                                        <i class="fa fa-star-half-alt text-secondary"></i>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </c:forEach>
-                                                        </div>
+                                                        <h5>${review.nameAccount}</h5>                                                  
+                                                    </div>
+                                                    <div class="d-flex mb-3">
+                                                        <c:forEach begin="1" end="5" var="i">
+                                                            <c:choose>
+                                                                <c:when test="${i <= review.rateStar}">
+                                                                    <i class="fa fa-star text-secondary"></i>
+                                                                </c:when>
+                                                                <c:when test="${i - 0.5 == review.rateStar}">
+                                                                    <i class="fa fa-star-half-alt text-secondary"></i>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <i class="far fa-star"  style="color: rgb(255, 181, 36);"></i>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
                                                     </div>
                                                     <p>${review.feedback}</p>
                                                     <c:if test="${not empty review.imageURL}">
@@ -505,5 +498,6 @@
             </script>
     </body>
 </html>
+
 
 

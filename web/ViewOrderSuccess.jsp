@@ -56,6 +56,13 @@
                                     </a>
                                 </li>
                             </c:if>
+                            <c:if test="${sessionScope.account.roleId == 3}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="Profile.jsp">
+                                        <i class="far fa-user"></i> Tài khoản
+                                    </a>
+                                </li>
+                            </c:if>
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
@@ -108,7 +115,7 @@
                                 <td>${o.address}</td>
 <!--                                <td>${o.note}</td>-->
                                 <td><fmt:formatDate value="${o.createDate}" pattern="dd-MM-yyyy" /></td>
-                                <td>${o.totalMoney}</td>
+                                <td>  <fmt:formatNumber value="${o.totalMoney}" pattern="###,### VNĐ" /></td>
                                 <td>${o.status}</td>
                                 <td>
                                     <a href="managerActions?action=finish&oid=${o.orderId}" class="ok" data-toggle="modal" onclick="return confirmFinish();"><i class="material-symbols-outlined" data-toggle="tooltip" title="Giao thành công">&#xe92f;</i></a>
@@ -117,7 +124,7 @@
                                         <i class="material-symbols-outlined" data-toggle="tooltip" title="Không chấp nhận" style="color: red;">&#xe5cd;</i>
                                     </a>
                                     <a href="viewOrderByShipper?action=view&oid=${o.orderId}" class="view" data-toggle="modal"><i class="material-symbols-outlined" data-toggle="tooltip" title="Xem chi tiết đơn hàng ">&#xe8f4;</i></a>
-                                 
+
 
                                 </td>
                             </tr>
@@ -143,3 +150,4 @@
         </script>
     </body>
 </html>
+

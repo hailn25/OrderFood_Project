@@ -185,92 +185,7 @@
                     </header>
                 </c:when>
             </c:choose>
-            <div class="row flex-lg-nowrap">
-                <div class="col-12 col-lg-auto mb-3" style="width: 250px;">
-                    <div class="card p-3">
-                        <div class="e-navlist e-navlist--active-bg">
-                            <div class="user-profile">
-                                <div class="avatar">
-                                    <img id="avatarImage" src="img/${account.imageAvatar}" alt="Avatar" class="avatar-img">
-                                </div>
-                            </div>
-                            <c:choose>
-                                <c:when test="${sessionScope.account.roleId == 2}">
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3 active" href="home">
-                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
-                                                <span>Trang chủ</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đổi mật khẩu</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="#">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
-                                            </a>
-                                        </li>                                 
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đơn hàng</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </c:when>
-                                <c:when test="${sessionScope.account.roleId == 4}">
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3 active" href="revenueRestaurant">
-                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
-                                                <span>Trang chủ</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đổi mật khẩu</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="SettingBanner.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Setting banner</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="voucher?&accountId=${sessionScope.account.accountId}">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Voucher</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </c:when>
-                                <c:when test="${sessionScope.account.roleId == 3}">
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3 active" href="managerShipper">
-                                                <i class="fa fa-fw fa-bar-chart mr-1"></i>
-                                                <span>Trang chủ</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link px-3" href="ChangePasswordProfile.jsp">
-                                                <i class="fa fa-fw fa-cog mr-1"></i>
-                                                <span>Đổi mật khẩu</span>
-                                            </a>
-                                        </li>                                  
-                                    </ul>
-                                </c:when>
-                            </c:choose>
-                        </div>
-                    </div>
-                </div>
+            <div class="row flex-lg-nowrap">    
                 <div class="col">
                     <div class="row">
                         <div class="col mb-3">
@@ -291,7 +206,14 @@
                                                     ${errorMessage}
                                                 </div>
                                             </c:if>
-                                            <label for="rateStar">Rate Star:</label><br>
+                                            <div class="form-group">
+                                                <label for="productName">Sản phẩm</label>
+                                                <input type="text" class="form-control" id="productName" name="productName" value="${productName}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="feedback">Chi tiết</label>
+                                                <input type="text" class="form-control" id="feedback" name="feedback">
+                                            </div>
                                             <div class="rating">
                                                 <input type="radio" id="star5" name="rateStar" value="5" />
                                                 <label for="star5"></label>
@@ -305,10 +227,6 @@
                                                 <label for="star1"></label>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="feedback">Feedback:</label>
-                                            <input type="text" class="form-control" id="feedback" name="feedback">
-                                        </div>
 
                                         <div class="form-group">
                                             <label for="accountId" style="display: none">Account ID:</label>
@@ -319,13 +237,10 @@
                                             <label for="productId" style="display: none;">ProductID</label>
                                             <input type="hidden" class="form-control" id="productId" name="productId" value="${productId}">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="productName">Product Name</label>
-                                            <input type="text" class="form-control" id="productName" name="productName" value="${productName}" readonly>
-                                        </div>
+
 
                                         <div class="form-group">
-                                            <label for="date">Date:</label>
+                                            <label for="date">Ngày</label>
                                             <input type="text" class="form-control" id="displayDate" readonly>
                                             <input type="hidden" id="date" name="date">
                                         </div>
@@ -339,8 +254,8 @@
                                             <img id="imagePreview" src="#" style="display: none; max-height: 300px;">
                                         </div>
 
-                                        <a href="orderHistory?orderStatusId=1&accountId=${sessionScope.account.accountId}" class="btn btn-secondary mr-2">Quay lại</a>
-                                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                        <a class="btn btn-secondary mr-2" href="javascript:history.back()">Quay lại</a>
+                                        <button type="submit" class="btn btn-primary">Gửi</button>
                                     </form>
                                 </div>
                             </div>
@@ -370,16 +285,19 @@
                                                 window.onload = function () {
                                                     var dateInput = document.getElementById('date');
                                                     var displayDateInput = document.getElementById('displayDate');
-                                                    var currentDate = new Date().toISOString().split('T')[0];
-                                                    dateInput.value = currentDate;
-                                                    displayDateInput.value = currentDate;
+                                                    var currentDate = new Date();
+
+                                                    // Định dạng ngày thành dd/MM/yyyy
+                                                    var day = String(currentDate.getDate()).padStart(2, '0');
+                                                    var month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                                                    var year = currentDate.getFullYear();
+
+                                                    var formattedDate = day + '-' + month + '-' + year;
+                                                    var isoDate = currentDate.toISOString().split('T')[0];
+
+                                                    dateInput.value = isoDate; // Định dạng ISO để gửi lên server
+                                                    displayDateInput.value = formattedDate; // Hiển thị định dạng dd/MM/yyyy
                                                 }
-
-
-
         </script>
     </body>
 </html>
-
-
-

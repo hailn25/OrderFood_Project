@@ -240,7 +240,7 @@
                         <div class="col mb-3">
                             <div class="card">
                                 <div id="personalInfo" class="content-section">
-                                    <div class="card-body">                                 
+                                    <div class="card-body">
                                         <!-- Hiển thị thông báo thành công -->
                                         <c:if test="${not empty success}">
                                             <div class="alert alert-success" role="alert">
@@ -254,7 +254,8 @@
                                                 ${error}
                                             </div>
                                         </c:if>
-                                        <form action="voucher" method="post">
+
+                                        <form action="voucher" method="post" onsubmit="return validateForm()">
                                             <div class="form-group">
                                                 <label for="voucherName">Tên mã giảm giá</label>
                                                 <input type="text" id="voucherName" name="voucherName" class="form-control" required>
@@ -265,7 +266,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="quantity">Số lượng</label>
-                                                <input type="number" id="quantity" name="quantity" class="form-control" required>
+                                                <input type="number" id="quantity" name="quantity" class="form-control" required min="1">
                                             </div>
                                             <div class="form-group">
                                                 <label for="releaseDate">Ngày phát hành</label>
@@ -292,7 +293,6 @@
                                                 <label for="voucherCategoryId" style="display: none;">VoucherCategoryId:</label>
                                                 <input type="hidden" id="voucherCategoryId" name="voucherCategoryId" value="2" class="form-control hidden" required>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="restauranId" class="hidden" style="display: none;">restauranId</label>
                                                 <input type="hidden" id="restauranId" name="restauranId" value="${sessionScope.account.accountId}" class="form-control hidden" required>
@@ -310,7 +310,110 @@
             </div>
         </div>
         <script>
-            document.getElementById('releaseDate').valueAsDate = new Date();
+            document.addEventListener('DOMContentLoaded', function () {
+                // Set releaseDate to tomorrow
+                var releaseDateInput = document.getElementById('releaseDate');
+                var tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                var yyyy = tomorrow.getFullYear();
+                var mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                var dd = String(tomorrow.getDate()).padStart(2, '0');
+                var formattedDate = yyyy + '-' + mm + '-' + dd;
+                releaseDateInput.value = formattedDate;
+            });
+        </script>
+        <script>
+            function validateForm() {
+                const voucherName = document.getElementById("voucherName").value.trim();
+                const description = document.getElementById("description").value.trim();
+                const quantity = document.getElementById("quantity").value;
+                const releaseDate = document.getElementById("releaseDate").value;
+                const finishDate = document.getElementById("finishDate").value;
+                const discount = document.getElementById("discount").value;
+
+                // Kiểm tra Tên mã giảm giá
+                if (voucherName === "") {
+                    alert("Tên mã giảm giá không được để trống.");
+                    return false;
+                }
+
+                // Kiểm tra Chi tiết
+                if (description === "") {
+                    alert("Chi tiết không được để trống.");
+                    return false;
+                }
+
+                // Kiểm tra Số lượng
+                if (quantity <= 0) {
+                    alert("Số lượng phải lớn hơn 0.");
+                    return false;
+                }
+
+                // Kiểm tra Ngày phát hành
+                const today = new Date().toISOString().split("T")[0];
+                if (releaseDate < today) {
+                    alert("Ngày phát hành không được đặt trong quá khứ.");
+                    return false;
+                }
+
+                // Kiểm tra Ngày kết thúc
+                if (finishDate <= releaseDate) {
+                    alert("Ngày kết thúc phải sau ngày phát hành.");
+                    return false;
+                }
+
+                // Kiểm tra Giảm giá
+                if (discount <= 0 || discount > 100) {
+                    alert("Giảm giá phải nằm trong khoảng từ 1 đến 100.");
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
+        <script>
+            function validateForm() {
+                const voucherName = document.getElementById('voucherName').value.trim();
+                const description = document.getElementById('description').value.trim();
+                const quantity = document.getElementById('quantity').value.trim();
+                const releaseDate = document.getElementById('releaseDate').value.trim();
+                const finishDate = document.getElementById('finishDate').value.trim();
+                const discount = document.getElementById('discount').value.trim();
+
+                const specialCharPattern = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
+
+                if (voucherName === "" || specialCharPattern.test(voucherName)) {
+                    alert("Tên mã giảm giá không được để trống, toàn dấu cách hoặc toàn ký hiệu đặc biệt.");
+                    return false;
+                }
+
+                if (description === "" || specialCharPattern.test(description)) {
+                    alert("Chi tiết không được để trống, toàn dấu cách hoặc toàn ký hiệu đặc biệt.");
+                    return false;
+                }
+
+                if (quantity === "" || isNaN(quantity) || quantity <= 0) {
+                    alert("Số lượng phải là một số dương và không được để trống.");
+                    return false;
+                }
+
+                if (releaseDate === "" || new Date(releaseDate) < new Date()) {
+                    alert("Ngày phát hành không được để trống và không được chọn ngày trong quá khứ.");
+                    return false;
+                }
+
+                if (finishDate === "" || new Date(finishDate) < new Date(releaseDate)) {
+                    alert("Ngày kết thúc không được để trống và phải sau ngày phát hành.");
+                    return false;
+                }
+
+                if (discount === "" || isNaN(discount) || discount < 1 || discount > 100) {
+                    alert("Giảm giá phải nằm trong khoảng từ 1 đến 100 và không được để trống.");
+                    return false;
+                }
+
+                return true;
+            }
         </script>
     </body>
 </html>

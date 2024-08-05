@@ -192,7 +192,6 @@
                                 <div class="col-lg-12">
                                     <div class="row g-4" id="product-container">
                                     <c:forEach items="${listPS}" var="p">
-                                        <c:if test="${p.quantity > 0}">
                                         <div class="col-md-6 col-lg-4 col-xl-3" id="Block">
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
@@ -200,6 +199,7 @@
                                                         <img src="img/${p.imageURL}" class="img-fluid w-100 rounded-top" alt="Không thể tải ảnh" style="height: 280px;">
                                                     </a>
                                                 </div>
+                                                <input type="type" name="productId" hidden="" value="${p.productId}">
                                                 <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px; color: red;font-family: cursive">Flash Sale</div>
                                                 <div class="discount-tag position-absolute text-white bg-danger px-2 py-1 rounded" style="top: 10px; right: 10px;">
                                                     -<fmt:formatNumber value="${p.discount * 100}" type="number" maxFractionDigits="0"/>% 
@@ -213,13 +213,19 @@
                                                     </h5>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                                         <p style="display: flex; align-items: center;font-family: sans-serif;"><fmt:formatNumber value="${p.salePrice}" type="number" maxFractionDigits="0"/> VNĐ</p> 
-                                                        <div class="d-flex justify-content-between flex-lg-wrap" style="margin-right: 5px; ">
-                                                            <form id="${p.productId}" onsubmit="addToCart(${p.productId}); return false;">
-                                                                <input type="hidden" name="productId" value="${p.productId}">
-                                                                <button type="submit" class="text-primary " style="margin-right: 5px; border: 2px solid black; border-radius: 8px; height: 40px; width: 40px;" title="Thêm vào giỏ hàng">
-                                                                    <i class="fa fa-shopping-bag" title="Thêm vào giỏ hàng"></i>
-                                                                </button>
-                                                            </form>
+                                                        <div class="d-flex justify-content-between flex-lg-wrap" style="display: flex ">
+                                                            <div>
+                                                                <form id="addToCheckout" action="checkout1" method="get" style="width: 75%;border-radius: 5px ">
+                                                                    <input type="hidden" name="productId" value="${p.productId}">
+                                                                    <input type="hidden" name="quantityCart" value="1">
+                                                                    <input type="hidden" name="discount" value="${p.discount}">
+                                                                    <button style="margin-right: 10px;" type="submit" class="btn border border-secondary rounded-pill px-3 text-primary">
+
+                                                                        <i class="fas fa-cart-arrow-down me-2 text-primary"></i>
+
+                                                                    </button>
+                                                                </form>
+                                                            </div>
                                                             <a href="restaurant?restaurantId=${p.restaurantId}&page=${1}">
                                                                 <img src="img/${p.restaurantImage}" style="height: 40px; width: 40px; border: 2px solid black; border-radius: 8px;">
                                                             </a>
@@ -228,7 +234,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        </c:if>
+
                                     </c:forEach>
                                 </div>
                             </div>
@@ -444,6 +450,26 @@
             window.onload = function () {
                 sendRequestToServlet();
             };
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const quantityInput = document.querySelector('.quantity-input');
+                const addToCheckoutForm = document.getElementById('addToCheckout');
+                const checkoutQuantityInput = document.getElementById('checkoutQuantity');
+
+                quantityInput.addEventListener('input', function () {
+                    let newValue = parseInt(quantityInput.value);
+                    if (isNaN(newValue) || newValue < 1) {
+                        newValue = 1;
+                    }
+                    quantityInput.value = newValue;
+                    checkoutQuantityInput.value = newValue;
+                });
+
+                addToCheckoutForm.addEventListener('submit', function () {
+                    checkoutQuantityInput.value = quantityInput.value;
+                });
+            });
         </script>
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
